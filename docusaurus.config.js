@@ -69,6 +69,12 @@ const config = {
             label: 'Concepts',
           },
           {
+            type: 'doc',
+            docId: 'release notes/intro',
+            position: 'left',
+            label: 'Release Notes',
+          },
+          {
             href: 'https://github.com/sourcenetwork/docs.source.network',
             label: 'GitHub',
             position: 'right',
