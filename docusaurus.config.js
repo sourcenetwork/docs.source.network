@@ -70,7 +70,7 @@ const config = {
           },
           {
             type: 'doc',
-            docId: 'release notes/intro',
+            docId: 'intro',
             position: 'left',
             label: 'Release Notes',
           },
