@@ -54,9 +54,20 @@ const config = {
             type: 'doc',
             docId: 'intro',
             position: 'left',
-            label: 'Tutorial',
+            label: 'Getting Started',
           },
-          {to: '/blog', label: 'Blog', position: 'left'},
+          {
+            type: 'doc',
+            docId: 'intro',
+            position: 'left',
+            label: 'Guides',
+          },
+          {
+            type: 'doc',
+            docId: 'concepts/intro',
+            position: 'left',
+            label: 'Concepts',
+          },
           {
             href: 'https://github.com/sourcenetwork/docs.source.network',
             label: 'GitHub',
