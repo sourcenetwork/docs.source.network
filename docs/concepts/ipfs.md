@@ -22,7 +22,7 @@ As discussed earlier, IPFS is a p2p (peer-to-peer) storage network. The IPFS eco
 
 ## Suggested Reading
 
-For more in-depth knowledge of the IPFS system refer to the [IPFS Concept documentation](https://docs.ipfs.io/concepts/).
+For more in-depth knowledge of the IPFS system refer to the [IPFS Conceptual documentation](https://docs.ipfs.io/concepts/).
 
 
 
