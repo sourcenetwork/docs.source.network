@@ -1,6 +1,26 @@
-# Getting Started
+# DefraDB
 
 ## Overview
 
-The DefraDB is a Peer-to-Peer Edge Database, with the interface of a NoSQL Document Store. DefraDB's data model is backed by MerkleCRDTs for a multi write-master architecture. It is the core data storage system for the Source Ecosystem, built with IPFS technologies like IPLD and LibP2P and featuring Semantic web3 properties. You can read the Technical Overview here.
+DefraDB is a peer-to-peer(P2P) Edge Database with a NoSQL document store interface. DefraDB's data model is the core data storage system for Source Ecosystem. It is:
+- backed by MerkleCRDTs for multi write-master architecture
+- built using IPFS technologies (IPLD, LibP2P) and features Semantic web3 properties.
+
+## Early Access
+DefraDB is currently in a *Early Access Alpha* program, and is not yet ready for production deployments. For support with your use-case and deployment, please contact [Source](https://source.network/) by [email](mailto:hello@source.network).
+
+## Installation
+To install a DefraDB node, you can:
+- download the pre-compiled binaries available from the releases page, or
+    ```
+    go install github.com/sourcenetwork/defradb/cli/defradb
+    ```
+- compile it yourself if you have a local [Go Toolchain](https://golang.org/) installed
+
+    ```
+    git clone git@github.com:sourcenetwork/defradb-early-access.git
+    mv defradb-early-access defradb # Rename the folder
+    cd defradb/cli/defradb
+    go install
+    ```
 
