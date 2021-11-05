@@ -1,3 +1,7 @@
+---
+sidebar_position: 1
+---
+
 # DefraDB
 
 ## Overview
@@ -7,10 +11,10 @@ DefraDB is a peer-to-peer(P2P) Edge Database with a NoSQL document store interfa
 - built using IPFS technologies (IPLD, LibP2P) and features Semantic web3 properties.
 
 ## Early Access
-DefraDB is currently in a *Early Access Alpha* program, and is not yet ready for production deployments. For support with your use-case and deployment, please contact [Source](https://source.network/) by [email](mailto:hello@source.network).
+DefraDB is currently in a *Early Access Alpha* program, and is not currently ready for production deployments. For support with your use-case and deployment, please contact [Source](https://source.network/) by [email](mailto:hello@source.network).
 
 ## Installation
-To install a DefraDB node, you can:
+To install a DefraDB node, you can either:
 - download the pre-compiled binaries available from the releases page, or
     ```
     go install github.com/sourcenetwork/defradb/cli/defradb
@@ -23,4 +27,8 @@ To install a DefraDB node, you can:
     cd defradb/cli/defradb
     go install
     ```
+
+## CLI Documentation
+
+See here for the  generated documentation for the shipped CLI interface here.
 
