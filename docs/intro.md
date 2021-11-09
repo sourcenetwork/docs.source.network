@@ -26,13 +26,13 @@ To install a DefraDB node, you can either:
     cd defradb/cli/defradb
     go install
     ```
-## CLI Documentation
-See here for the  generated documentation for the shipped CLI interface here.
 ## Getting Started
 
-### Prerequisites
+### Before You Begin
 
-- Install `defradb cli` locally or an accessible remote node.
+Before installing DefraDB, review the following pre-requisites.
+
+- Install `defradb cli` locally or in an accessible remote node.
 - Install GraphQL client (e.g. GraphiQL). See download [link](https://www.electronjs.org/apps/graphiql).
 
 ### SetUp
@@ -69,3 +69,26 @@ Once your local environment is successfully setup, you can test your connection 
 :::
 
 Once you've confirmed your node is running correctly, if you're using the GraphiQL client to interact with the database, then make sure you set the GraphQL Endpoint to http://localhost:9181/graphql and the Method to GET.
+
+### Adding a Schema Type
+
+To add a new schema type to the database, you can write the schema to a local file using the GraphQL SDL format, and submit that to the database like so:
+
+- Add this to users.gql file
+```
+type user {
+	name: String 
+	age: Int 
+	verified: Boolean 
+	points: Float
+}
+```
+- then run
+
+```
+defradb client schema add -f users.gql
+```
+
+This will register the type, build a dedicated collection, and generate the typed GraphQL endpoints for querying and mutation.
+
+You can find more examples of schema type definitions in the cli/defradb/examples folder.
