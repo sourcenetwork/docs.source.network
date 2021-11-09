@@ -52,7 +52,7 @@ To choose a storage type you can
 - use `--store` option with the start command, or
 - edit the local config file
 
-{{( note )}}
+{{< note >}}
 
 If you are using BadgerDB, and you encounter the following error: Failed to initiate database:Map log file. Path=.defradb/data/000000.vlog. Error=exec format error
 
