@@ -52,18 +52,20 @@ To choose a storage type you can
 - use `--store` option with the start command, or
 - edit the local config file
 
-{{< note >}}
+:::note 
 
-If you are using BadgerDB, and you encounter the following error: Failed to initiate database:Map log file. Path=.defradb/data/000000.vlog. Error=exec format error
+If you are using BadgerDB, and you encounter the following error: 
+Failed to initiate database:Map log file. Path=.defradb/data/000000.vlog. Error=exec format error
 
-It means terminal client doesn't support Mmap'ed files. This is common with older version of Ubuntu on Windows va WSL. Unfortuently, BadgerDB uses Mmap to interact with the filesystem, so you will need to use a terminal client which supports it.
+It means that the terminal client does not support Mmap'ed files. This is common with older version of Ubuntu on 
+Windows va WSL. Unfortuently, BadgerDB uses Mmap to interact with the filesystem, so you will need to use a terminal client which supports it.
+:::
 
-{{< /note >}}
+:::note
 
-Once your local environment is setup, you can test your connection with:
+Once your local environment is successfully setup, you can test your connection with:
+- `defradb client ping` for a `Success!` response.
 
-defradb client ping
-
-which should respond with Success!
+:::
 
 Once you've confirmed your node is running correctly, if you're using the GraphiQL client to interact with the database, then make sure you set the GraphQL Endpoint to http://localhost:9181/graphql and the Method to GET.
