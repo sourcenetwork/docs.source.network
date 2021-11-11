@@ -1,10 +1,9 @@
 ---
 sidebar_position: 4
 ---
-
 # Query Specification
 
-The purpose of this document is to specify the DefraDB Query language only. The intent, design decisions, and other auxiliary information is a secondary objective, and added only if it is needed by the primary specification objective to add context. See the DefraDB Design Doc for further details on DefraDB as a whole, and the Query Language beyond the concrete specification, such as implementation details.
+This document specifies the DefraDB Query language. Intent, design decisions, and other auxiliary information are added only if needed by the primary specification objective. See DefraDB Design Doc for more details.
 
 ## Query Language Overview
 
