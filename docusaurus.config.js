@@ -58,12 +58,6 @@ const config = {
           },
           {
             type: 'doc',
-            docId: 'intro',
-            position: 'left',
-            label: 'Guides',
-          },
-          {
-            type: 'doc',
             docId: 'concepts/intro',
             position: 'left',
             label: 'Concepts',
