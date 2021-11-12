@@ -89,9 +89,10 @@ defradb client schema add -f users.gql
 
 This registers the type, builds a dedicated collection, and generates the typed GraphQL endpoints for querying and mutation. More examples of schema type definitions are available in the [cli/defradb/examples](https://github.com/sourcenetwork/defradb/blob/master/cli/defradb/examples) folder.
 
-### Query Documentation
+### Query Documents
 
-Once your local node is populated with data, we can query that data.
+Once your local node is populated with data, you can query it.
+
 ```gql
 query {
   user {
@@ -102,9 +103,9 @@ query {
   }
 }
 ```
-This will query all the users, and return the fields _key, age, name, points. GraphQL queries only ever return the exact fields you request, there's no * selector like with SQL.
+This will query all the users, and return the fields _key, age, name, and points. GraphQL queries only return the exact fields you request. There is no * selector unlike SQL.
 
-We can further filter our results by adding a filter argument to the query.
+You can further filter our results by adding a filter argument to the query.
 
 ```gql
 query {
@@ -125,7 +126,7 @@ To see all the available query options, types, and functions please see the [Que
 
 Internally, DefraDB uses MerkleCRDTs to store data. MerkleCRDTs convert all mutations and updates a document has into a graph of changes; similar to Git. Moreover, the graph is a [MerkleDAG](https://docs.ipfs.io/concepts/merkle-dag/), which means all nodes are content identifiable with CIDs, and each node, references its parents CIDs.
 
-To get the most recent commit in the MerkleDAG for a with a docKey of `bae-91171025-ed21-50e3-b0dc-e31bccdfa1ab`, we can submit the following query:
+To get the most recent commit in the MerkleDAG for a with a docKey of `bae-91171025-ed21-50e3-b0dc-e31bccdfa1ab`, you can submit the following query:
 
 ```gql
 query {
@@ -172,7 +173,7 @@ This will return a structure similar to the following, which contains the update
 }
 ```
 
-Additionally, we can get *all* commits in a document MerkleDAG with `allCommits`, and lastly, we can get a specific commit, identified by a `cid` with the `commit` query, like so:
+Additionally, you can get *all* commits in a document MerkleDAG with `allCommits`, and lastly, you can get a specific commit, identified by a `cid` with the `commit` query, like so:
 
 ```gql
 query {
@@ -187,7 +188,7 @@ query {
   }
 }
 ```
-Here, you can see we use the CID from the previous query to further explore the related nodes in the MerkleDAG.
+Here, you can see you use the CID from the previous query to further explore the related nodes in the MerkleDAG.
 
 This only scratches the surface of the DefraDB Query Language, see below for the entire language specification.
 
