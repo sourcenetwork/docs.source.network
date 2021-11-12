@@ -12,7 +12,7 @@ DefraDB is a peer-to-peer(P2P) Edge Database with a NoSQL document store interfa
 See the [Technical Overview](https://docsend.com/view/mczj7ic4i3kqpq7s) here.
 
 ## Early Access
-DefraDB is currently an *Early Access Alpha* program (not ready for production deployments). For support with your use-case and deployment, please contact [Source](https://source.network/) by [email](mailto:hello@source.network).
+DefraDB is currently an *Early Access Alpha* program (not ready for production deployments). Contact [Source](https://source.network/) by [email](mailto:hello@source.network) for support with your use-case and deployment.
 
 ## Installation
 To install a DefraDB node, you can either:
@@ -28,7 +28,9 @@ To install a DefraDB node, you can either:
     cd defradb/cli/defradb
     go install
     ```
-## Before You Begin
+## Getting Stated
+
+### Before You Begin
 
 Before installing DefraDB, review the following pre-requisites.
 
@@ -41,7 +43,7 @@ Set up a DefraDB node with this command in the terminal:
 - `defradb start`
 
 This action prompts the following items:
-- Starts a node with default settings (running at http://localhost:9181)
+- Starts a node with default settings (running at [http://localhost:9181/](http://localhost:9181/))
 - Creates a configuration file at $HOME/.defra/config.yaml, which is the user home directory
 
 DefraDB supports two storage engines:
@@ -61,20 +63,14 @@ It means that the terminal client does not support Mmap'ed files. This is common
 
 :::
 
-:::note
-
-Once your local environment is successfully setup, you can test your connection with:
-- `defradb client ping` for a `Success!` response.
-
-:::
-
-Once you've confirmed your node is running correctly, if you're using the GraphiQL client to interact with the database, then make sure you set the GraphQL Endpoint to http://localhost:9181/graphql and the Method to GET.
+After the local environment is successfully setup, test your connection with:
+- `defradb client ping` for a `Success!` response. Once you've confirmed your node is running correctly, then make sure you set the GraphQL Endpoint to http://localhost:9181/graphql and the method to GET. This is assuming that you are using GraphiQL client to interact with the database.
 
 ### Adding a Schema Type
 
-To add a new schema type to the database, you can write the schema to a local file using the GraphQL SDL format, and submit that to the database like so:
+To add a new schema type to the database, you can write the schema to a local file using the GraphQL SDL format, and submit that to the database. See example below.
 
-- Add this to the users.gql file
+- **Step 1**: Add to users.gql file
 
 ```gql
 type user 
@@ -85,17 +81,13 @@ type user
 	points: Float
 }
 ```
-- Run the following command:
+- **Step 2**: Run the following command:
 
 ```gql
 defradb client schema add -f users.gql
 ```
 
-These steps register the type, build a dedicated collection and 
-
-This will register the type, build a dedicated collection, and generate the typed GraphQL endpoints for querying and mutation.
-
-You can find more examples of schema type definitions in the [cli/defradb/examples](https://github.com/sourcenetwork/defradb/blob/master/cli/defradb/examples) folder.
+This registers the type, builds a dedicated collection, and generates the typed GraphQL endpoints for querying and mutation. More examples of schema type definitions are available in the [cli/defradb/examples](https://github.com/sourcenetwork/defradb/blob/master/cli/defradb/examples) folder.
 
 ### Query Documentation
 
