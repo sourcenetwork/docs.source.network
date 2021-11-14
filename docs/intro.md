@@ -39,12 +39,12 @@ Before installing DefraDB, review the following pre-requisites.
 
 ### SetUp
 
-Set up a DefraDB node with this command in the terminal:
+Open the installed node on your code editor. Set up a DefraDB node with this command in the terminal:
 - `defradb start`
 
-This action prompts the following items:
+This command:
 - Starts a node with default settings (running at [http://localhost:9181/](http://localhost:9181/))
-- Creates a configuration file at $HOME/.defra/config.yaml, which is the user home directory
+- Creates a configuration file at $HOME/.defra/config.yaml (your home directory)
 
 DefraDB supports two storage engines:
 - BadgerDB (used by default, provides disk-backed persistent storage)
@@ -59,7 +59,7 @@ To choose a storage type you can
 If you are using BadgerDB, and you get an error message:
 - `Failed to initiate database:Map log file. Path=.defradb/data/000000.vlog. Error=exec format error`
 
-It means that the terminal client does not support Mmap'ed files. This is common with older version of Ubuntu on Windows, Windows SubSystem for Linux (WSL). Unfortunately, BadgerDB uses Mmap to interact with the filesystem, so you will need to use a terminal client which supports it.
+It implies that your terminal client does not support Mmap'ed files (common with older version of Ubuntu on Windows, Windows SubSystem for Linux (WSL)). Unfortunately, BadgerDB uses Mmap to interact with the filesystem, so you need a terminal client which supports it.
 
 :::
 
@@ -87,11 +87,11 @@ type user
 defradb client schema add -f users.gql
 ```
 
-This registers the type, builds a dedicated collection, and generates the typed GraphQL endpoints for querying and mutation. More examples of schema type definitions are available in the [cli/defradb/examples](https://github.com/sourcenetwork/defradb/blob/master/cli/defradb/examples) folder.
+This registers the type, builds a dedicated collection, and generates the typed GraphQL endpoints for querying and mutation. More examples of schema type definitions are available [here](https://github.com/sourcenetwork/defradb/blob/master/cli/defradb/examples).
 
 ### Query Documents
 
-Once your local node is populated with data, you can query it.
+You can query the local node once it is populated with data.
 
 ```gql
 query {
