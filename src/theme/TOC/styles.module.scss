@@ -10,6 +10,14 @@
   /* overflow-y: auto; */
   /* position: sticky; */
   /* top: calc(var(--ifm-navbar-height) + 1rem); */
+  // background-color: red;
+  margin: 20px 0;
+  ul {
+    padding: 0;
+    ul {
+      padding: 0 0 0 20px;
+    }
+  }
 }
 
 @media (max-width: 996px) {

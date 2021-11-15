@@ -113,28 +113,30 @@ export default function DocItem(props) {
               <DocPaginator metadata={metadata} />
             </div>
           </div>
-          {renderTocDesktop && (
-            <div className="col col--3">
-              <div className={styles.sidebarColumn}>
-                {title}
-                <TOC
-                  toc={DocContent.toc}
-                  minHeadingLevel={tocMinHeadingLevel}
-                  maxHeadingLevel={tocMaxHeadingLevel}
-                  className={ThemeClassNames.docs.docTocDesktop}
-                />
 
-                <ul className={styles.sidebarLinks}>
-                  <li>
-                    {/* <pre>{JSON.stringify(metadata, null , 2)}</pre> */}
-                    {metadata?.editUrl && (
-                      <EditThisPage editUrl={metadata?.editUrl} />
-                    )}
-                  </li>
-                </ul>
-              </div>
+          <div className="col col--3">
+            <div className={styles.sidebarColumn}>
+              {renderTocDesktop && (
+                <>
+                  <h4>{title}</h4>
+                  <TOC
+                    toc={DocContent.toc}
+                    minHeadingLevel={tocMinHeadingLevel}
+                    maxHeadingLevel={tocMaxHeadingLevel}
+                    className={ThemeClassNames.docs.docTocDesktop}
+                  />
+                </>
+              )}
+              <ul className={styles.sidebarLinks}>
+                <li>
+                  {/* <pre>{JSON.stringify(metadata, null , 2)}</pre> */}
+                  {metadata?.editUrl && (
+                    <EditThisPage editUrl={metadata?.editUrl} />
+                  )}
+                </li>
+              </ul>
             </div>
-          )}
+          </div>
         </div>
       </div>
     </>

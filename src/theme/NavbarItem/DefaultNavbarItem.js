@@ -73,7 +73,7 @@ export function NavLink({
       ) : (
         label
       )}
-      {Icon && <Icon />}
+      {Icon && <Icon className="navbar__list-item-icon" />}
     </Link>
   );
 }

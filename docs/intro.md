@@ -1,9 +1,9 @@
 ---
 sidebar_position: 1
+title: Getting Started
 slug: /
 ---
 
-# Getting Started
 
 ## Overview
 DefraDB is a peer-to-peer(P2P) Edge Database with a NoSQL document store interface. DefraDB's data model is the core data storage system for [Source](https://source.network/) Ecosystem. It is:

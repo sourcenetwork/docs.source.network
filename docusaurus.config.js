@@ -1,7 +1,7 @@
 // @ts-check
 // Note: type annotations allow type checking and IDEs autocompletion
 
-const lightCodeTheme = require("./src/config/code-theme-light");
+const lightCodeTheme = require("./src/code-theme/code-theme-light");
 const darkCodeTheme = require("prism-react-renderer/themes/oceanicNext");
 
 /** @type {import('@docusaurus/types').Config} */
@@ -63,35 +63,41 @@ const config = {
           srcDark: "img/source-dark.svg",
         },
         items: [
-          // {
-          //   type: "doc",
-          //   docId: "intro",
-          //   position: "left",
-          //   label: "Getting Started",
-          // },
-          // {
-          //   type: "doc",
-          //   docId: "concepts/intro",
-          //   position: "left",
-          //   label: "Concepts",
-          //   activeBasePath: "/concepts",
-          // },
-          // {
-          //   type: "doc",
-          //   docId: "release-notes/intro",
-          //   position: "left",
-          //   label: "Release Notes",
-          //   activeBasePath: "/release-notes",
-          // },
-          // {
-          //   href: "https://github.com/sourcenetwork/docs.source.network",
-          //   label: " ",
-          //   position: "right",
-          //   iconName: "GoMarkGithub",
-          // },
+          {
+            type: "doc",
+            docId: "intro",
+            position: "left",
+            label: "Getting Started",
+          },
+          {
+            type: "doc",
+            docId: "concepts/intro",
+            position: "left",
+            label: "Concepts",
+            activeBasePath: "/concepts",
+          },
+          {
+            type: "doc",
+            docId: "release-notes/intro",
+            position: "left",
+            label: "Release Notes",
+            activeBasePath: "/release-notes",
+          },
+          {
+            href: "https://github.com/sourcenetwork/docs.source.network",
+            label: " ",
+            position: "right",
+            iconName: "GoMarkGithub",
+          },
         ],
       },
       footer: {
+        logo: {
+          alt: "Facebook Open Source Logo",
+          src: "img/source-full-light.svg",
+          srcDark: "img/source-full-dark.svg",
+          href: "https://source.network",
+        },
         links: [
           {
             title: "Docs",
