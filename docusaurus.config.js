@@ -1,40 +1,33 @@
 // @ts-check
 // Note: type annotations allow type checking and IDEs autocompletion
 
-const lightCodeTheme = require('prism-react-renderer/themes/github');
-const darkCodeTheme = require('prism-react-renderer/themes/dracula');
+const lightCodeTheme = require("./src/config/code-theme-light");
+const darkCodeTheme = require("prism-react-renderer/themes/oceanicNext");
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
-  title: 'Source Developer Portal',
-  tagline: 'The Home of Source Developers',
-  url: 'https://docs.source.network',
-  baseUrl: '/',
-  onBrokenLinks: 'warn',
-  onBrokenMarkdownLinks: 'warn',
-  favicon: 'img/favicon.ico',
-  organizationName: 'source-developer', // Usually your GitHub org/user name.
-  projectName: 'source-developer', // Usually your repo name.
-
+  title: "Source Developer Portal",
+  tagline: "The Home of Source Developers",
+  url: "https://docs.source.network",
+  baseUrl: "/",
+  onBrokenLinks: "warn",
+  onBrokenMarkdownLinks: "warn",
+  favicon: "img/favicon.ico",
+  organizationName: "source-developer", // Usually your GitHub org/user name.
+  projectName: "source-developer", // Usually your repo name.
   presets: [
     [
-      '@docusaurus/preset-classic',
+      "@docusaurus/preset-classic",
       /** @type {import('@docusaurus/preset-classic').Options} */
       ({
         docs: {
-          routeBasePath: '/',
-          sidebarPath: require.resolve('./sidebars.js'),
+          routeBasePath: "/",
+          sidebarPath: require.resolve("./sidebars.js"),
           // Please change this to your repo.
-          editUrl: 'https://github.com/sourcenetwork/docs.source.network/',
-        },
-        blog: {
-          showReadingTime: true,
-          // Please change this to your repo.
-          editUrl:
-            'https://github.com/sourcenetwork/docs.source.network/',
+          editUrl: "https://github.com/sourcenetwork/docs.source.network/",
         },
         theme: {
-          customCss: require.resolve('./src/css/custom.css'),
+          customCss: require.resolve("./src/css/custom.scss"),
         },
       }),
     ],
@@ -42,84 +35,100 @@ const config = {
 
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
-    ({ 
+    ({
+      colorMode: {
+        // Should we use the prefers-color-scheme media-query,
+        // using user system preferences, instead of the hardcoded defaultMode
+        respectPrefersColorScheme: false,
+
+        // Dark/light switch icon options
+        switchConfig: {
+          // Icon for the switch while in dark mode
+          darkIcon: "  ",
+          darkIconStyle: {
+            marginTop: "1px",
+          },
+          lightIcon: "  ",
+          lightIconStyle: {
+            marginTop: "1px",
+          },
+        },
+      },
       navbar: {
         title: null,
+        hideOnScroll: false,
         logo: {
-          alt: 'Source Developer Hub',
-          src: 'img/source-logo_icon.png',
+          alt: "Source Developer Hub",
+          src: "img/source-light.svg",
+          srcDark: "img/source-dark.svg",
         },
         items: [
-          {
-            type: 'doc',
-            docId: 'intro',
-            position: 'left',
-            label: 'Getting Started',
-          },
-          {
-            type: 'doc',
-            docId: 'concepts/ipfs',
-            position: 'left',
-            label: 'Concepts',
-          },
-          {
-            type: 'doc',
-            docId: 'query-specification/query-language-overview',
-            position: 'left',
-            label: 'Query Specification',
-          },
-          {
-            type: 'doc',
-            docId: 'release-notes/intro',
-            position: 'left',
-            label: 'Release Notes',
-          },
-          {
-            href: 'https://github.com/sourcenetwork/docs.source.network',
-            label: 'GitHub',
-            position: 'right',
-          },
+          // {
+          //   type: "doc",
+          //   docId: "intro",
+          //   position: "left",
+          //   label: "Getting Started",
+          // },
+          // {
+          //   type: "doc",
+          //   docId: "concepts/intro",
+          //   position: "left",
+          //   label: "Concepts",
+          //   activeBasePath: "/concepts",
+          // },
+          // {
+          //   type: "doc",
+          //   docId: "release-notes/intro",
+          //   position: "left",
+          //   label: "Release Notes",
+          //   activeBasePath: "/release-notes",
+          // },
+          // {
+          //   href: "https://github.com/sourcenetwork/docs.source.network",
+          //   label: " ",
+          //   position: "right",
+          //   iconName: "GoMarkGithub",
+          // },
         ],
       },
       footer: {
-        style: 'dark',
         links: [
           {
-            title: 'Docs',
+            title: "Docs",
             items: [
               {
-                label: 'Tutorial',
-                to: '/intro',
+                label: "Tutorial",
+                to: "/intro",
               },
             ],
           },
           {
-            title: 'Community',
+            title: "Community",
             items: [
               {
-                label: 'Stack Overflow',
-                href: 'https://stackoverflow.com/questions/tagged/docusaurus',
+                label: "Stack Overflow",
+                href: "https://stackoverflow.com/questions/tagged/docusaurus",
               },
               {
-                label: 'Discord',
-                href: 'https://discord.source.network',
+                label: "Discord",
+                href: "https://discord.source.network",
               },
               {
-                label: 'Twitter',
-                href: 'https://twitter.com/helloSource',
+                label: "Twitter",
+                href: "https://twitter.com/helloSource",
               },
             ],
           },
           {
-            title: 'More',
+            title: "More",
             items: [
               {
-                label: 'Blog',
-                to: '/blog',
+                label: "Blog",
+                to: "/blog",
               },
               {
-                label: 'GitHub',
-                href: 'https://github.com/sourcenetwork',
+                label: "GitHub",
+                href: "https://github.com/sourcenetwork",
               },
             ],
           },
@@ -131,6 +140,7 @@ const config = {
         darkTheme: darkCodeTheme,
       },
     }),
+  plugins: ["docusaurus-plugin-sass"],
 };
 
 module.exports = config;

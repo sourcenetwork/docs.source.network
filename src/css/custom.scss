@@ -1,0 +1,158 @@
+/**
+ * Any CSS included here will be global. The classic template
+ * bundles Infima by default. Infima is a CSS framework designed to
+ * work well for content-centric websites.
+ */
+@import "./infima-variables";
+@import "./fonts";
+
+html,
+body {
+  font-smoothing: antialiased;
+  scroll-behavior: smooth;
+  text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* You can override the default Infima variables here. */
+:root {
+  --menu-indicator-color: --ifm-color-primary;
+}
+
+html[data-theme="dark"] {
+  // Dark overrides
+}
+
+//  Layout
+.footer > .container,
+.navbar__inner,
+.main-wrapper {
+  width: 100%;
+  max-width: 1200px;
+  margin: auto;
+}
+
+// navbar
+
+.docusaurus-highlight-code-line {
+  background-color: rgba(0, 0, 0, 0.1);
+  display: block;
+  margin: 0 calc(-1 * var(--ifm-pre-padding));
+  padding: 0 var(--ifm-pre-padding);
+}
+
+html[data-theme="dark"] .docusaurus-highlight-code-line {
+  background-color: rgba(0, 0, 0, 0.3);
+}
+
+// Navbar
+
+.navbar {
+  box-shadow: none;
+
+  .navbar__logo {
+    margin-left: 30px;
+    @media (max-width: 996px) {
+      margin-left: 20px;
+    }
+  }
+
+  .navbar__link {
+    &--active {
+      color: var(--ifm-navbar-link-color);
+    }
+  }
+}
+
+// Sidebar menu
+.main-wrapper {
+  .menu {
+    padding: calc(var(--ifm-navbar-padding-vertical) * 4)
+      var(--ifm-navbar-padding-horizontal);
+
+    .menu__link {
+      font-size: 14px;
+    }
+
+    .menu__link--sublist {
+      position: relative;
+      &.menu__link--active {
+        color: var(--ifm-menu-color);
+        font-weight: bold;
+        &:after {
+          background: var(--menu-indicator-color);
+        }
+      }
+      &:after {
+        border-radius: 50%;
+        border: 1px solid var(--menu-indicator-color);
+        transition: all 0.3s ease;
+        content: " ";
+        display: block;
+        width: 8px;
+        height: 8px;
+        position: absolute;
+        top: 50%;
+        right: 5px;
+        margin-top: -4px;
+        background: none;
+        transform: none;
+        min-width: 0;
+      }
+    }
+
+    ul {
+      font-weight: 400;
+      > li {
+        > ul {
+          margin-left: 25px;
+          margin-top: 10px;
+          margin-bottom: 10px;
+          > li {
+            padding: 2px 0;
+            margin: 0;
+            position: relative;
+            .menu__link {
+              &:after {
+                transition: all 0.3s ease;
+                content: " ";
+                display: block;
+                width: 2px;
+                height: 100%;
+                position: absolute;
+                top: 0;
+                left: 0;
+                background: rgb(230, 230, 230);
+              }
+              &--active {
+                font-weight: bold;
+                &:after {
+                  background: var(--ifm-color-primary);
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+// Theme
+
+.theme-edit-this-page {
+  svg {
+    display: inline-block;
+    margin-right: 0.5rem;
+  }
+}
+
+// Footer
+
+.footer__copyright {
+  font-size: 12px;
+  margin: 30px 0;
+}
