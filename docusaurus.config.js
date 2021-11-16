@@ -64,7 +64,7 @@ const config = {
           },
           {
             type: 'doc',
-            docId: 'query-specification',
+            docId: 'query-specification/introduction',
             position: 'left',
             label: 'Query Specification',
           },
