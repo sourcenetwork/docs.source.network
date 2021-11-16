@@ -29,7 +29,7 @@
 
 .toggleTrack {
   width: 44px;
-  height: 18px;
+  height: 16px;
   border-radius: 30px;
   background-color: #d6d6d6;
   transition: all 0.2s ease;
@@ -47,13 +47,13 @@
   transition: opacity 0.25s ease;
 }
 
-[data-theme='dark'] {
-  .toggleTrack { 
+[data-theme="dark"] {
+  .toggleTrack {
     background-color: #3a3a3a;
   }
 }
 
-[data-theme='dark'] .toggle .toggleTrackCheck,
+[data-theme="dark"] .toggle .toggleTrackCheck,
 .toggleChecked .toggleTrackCheck {
   opacity: 1;
   transition: opacity 0.25s ease;
@@ -71,24 +71,43 @@
   transition: opacity 0.25s ease;
 }
 
-[data-theme='dark'] .toggle .toggleTrackX,
+[data-theme="dark"] .toggle .toggleTrackX,
 .toggleChecked .toggleTrackX {
   opacity: 0;
 }
 
 .toggleTrackThumb {
   position: absolute;
-  top: 1px;
+  top: -5px;
   left: 1px;
-  width: 16px;
-  height: 16px;
+  width: 25px;
+  height: 25px;
   border: 1px solid #979797;
   border-radius: 50%;
-  background-color: #fafafa;
+
   transition: all 0.25s ease;
+  background-color: rgb(56, 56, 56);
+  color: rgb(223, 223, 223);
+
+  svg {
+    position: absolute;
+    top: 0;
+    height: 15px;
+    width: 15px;
+    left: 4px;
+    top: 4px;
+    fill: currentColor;
+  }
 }
 
-[data-theme='dark'] .toggle .toggleTrackThumb,
+[data-theme="dark"] {
+  .toggleTrackThumb {
+    color: #000;
+    background-color: #fafafa;
+  }
+}
+
+[data-theme="dark"] .toggle .toggleTrackThumb,
 .toggleChecked .toggleTrackThumb {
   left: 27px;
 }
@@ -111,4 +130,17 @@
 }
 .toggle::before {
   position: absolute;
+}
+
+.dark {
+  display: none;
+}
+
+[data-theme="dark"] {
+  .dark {
+    display: inline-block;
+  }
+  .light {
+    display: none;
+  }
 }

@@ -9,6 +9,8 @@ import { useThemeConfig } from "@docusaurus/theme-common";
 import useIsBrowser from "@docusaurus/useIsBrowser";
 import clsx from "clsx";
 import styles from "./styles.module.scss";
+import MoonIcon from "./MoonIcon";
+import SunIcon from "./SunIcon";
 
 const Dark = ({ icon, style }) => (
   <span className={clsx(styles.toggleIcon, styles.dark)} style={style}>
@@ -44,7 +46,10 @@ const Toggle: FC<any> = memo(
         >
           <div className={styles.toggleTrackCheck}>{icons.checked}</div>
           <div className={styles.toggleTrackX}>{icons.unchecked}</div>
-          <div className={styles.toggleTrackThumb} />
+          <div className={styles.toggleTrackThumb}>
+            <MoonIcon className={styles.light} />
+            <SunIcon className={styles.dark} />
+          </div>
         </div>
 
         <input
