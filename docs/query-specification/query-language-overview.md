@@ -1,4 +1,8 @@
-## Query Language Overview
+---
+sidebar_position: 10
+---
+
+## Overview
 
 The following is a succinct description of the query language, its goals, and design choices to place this document in the correct context.
 
