@@ -162,16 +162,16 @@ const config = {
       },
     ],
   ],
-  // customFields: {
-  //   docsData: {
-  //     defra: {
-  //       title: "Defra DB",
-  //     },
-  //     sourceHub: {
-  //       title: "Source Hub",
-  //     },
-  //   },
-  // },
+  customFields: {
+    docsData: {
+      defra: {
+        title: "Defra DB",
+      },
+      sourceHub: {
+        title: "Source Hub",
+      },
+    },
+  },
 };
 
 module.exports = config;
