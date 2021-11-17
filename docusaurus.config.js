@@ -62,20 +62,20 @@ const config = {
           srcDark: "img/source-dark.svg",
         },
         items: [
-          // {
-          //   type: "doc",
-          //   position: "left",
-          //   docId: "intro",
-          //   label: "Defra DB",
-          //   docsPluginId: "defra",
-          // },
-          // {
-          //   type: "doc",
-          //   position: "left",
-          //   docId: "intro",
-          //   label: "SourceHub",
-          //   docsPluginId: "sourceHub",
-          // },
+          {
+            type: "doc",
+            position: "left",
+            docId: "intro",
+            label: "Defra DB",
+            docsPluginId: "defra",
+          },
+          {
+            type: "doc",
+            position: "left",
+            docId: "intro",
+            label: "SourceHub",
+            docsPluginId: "sourceHub",
+          },
           {
             href: "https://github.com/sourcenetwork/docs.source.network",
             label: " ",
@@ -141,26 +141,26 @@ const config = {
     }),
   plugins: [
     "docusaurus-plugin-sass",
-    // [
-    //   "@docusaurus/plugin-content-docs",
-    //   {
-    //     id: "defra",
-    //     path: "docs_defra",
-    //     routeBasePath: "defra-db",
-    //     sidebarPath: require.resolve("./sidebarsDefra.js"),
-    //     editUrl: "https://github.com/sourcenetwork/docs.source.network/",
-    //   },
-    // ],
-    // [
-    //   "@docusaurus/plugin-content-docs",
-    //   {
-    //     id: "sourceHub",
-    //     path: "docs_hub",
-    //     routeBasePath: "source-hub",
-    //     sidebarPath: require.resolve("./sidebarsHub.js"),
-    //     editUrl: "https://github.com/sourcenetwork/docs.source.network/",
-    //   },
-    // ],
+    [
+      "@docusaurus/plugin-content-docs",
+      {
+        id: "defra",
+        path: "docs_defra",
+        routeBasePath: "defra-db",
+        sidebarPath: require.resolve("./sidebarsDefra.js"),
+        editUrl: "https://github.com/sourcenetwork/docs.source.network/",
+      },
+    ],
+    [
+      "@docusaurus/plugin-content-docs",
+      {
+        id: "sourceHub",
+        path: "docs_hub",
+        routeBasePath: "source-hub",
+        sidebarPath: require.resolve("./sidebarsHub.js"),
+        editUrl: "https://github.com/sourcenetwork/docs.source.network/",
+      },
+    ],
   ],
   // customFields: {
   //   docsData: {
