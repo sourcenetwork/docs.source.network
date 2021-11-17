@@ -58,7 +58,7 @@ const config = {
           },
           {
             type: 'doc',
-            docId: 'concepts/intro',
+            docId: 'concepts/ipfs',
             position: 'left',
             label: 'Concepts',
           },
