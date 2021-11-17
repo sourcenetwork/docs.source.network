@@ -113,10 +113,9 @@ export default function DocItem(props) {
               <DocPaginator metadata={metadata} />
             </div>
           </div>
-
-          <div className="col col--3">
-            <div className={styles.sidebarColumn}>
-              {renderTocDesktop && (
+          {renderTocDesktop && (
+            <div className="col col--3">
+              <div className={styles.sidebarColumn}>
                 <>
                   <h4>{title}</h4>
                   <TOC
@@ -126,17 +125,18 @@ export default function DocItem(props) {
                     className={ThemeClassNames.docs.docTocDesktop}
                   />
                 </>
-              )}
-              <ul className={styles.sidebarLinks}>
-                <li>
-                  {/* <pre>{JSON.stringify(metadata, null , 2)}</pre> */}
-                  {metadata?.editUrl && (
-                    <EditThisPage editUrl={metadata?.editUrl} />
-                  )}
-                </li>
-              </ul>
+
+                <ul className={styles.sidebarLinks}>
+                  <li>
+                    {/* <pre>{JSON.stringify(metadata, null , 2)}</pre> */}
+                    {metadata?.editUrl && (
+                      <EditThisPage editUrl={metadata?.editUrl} />
+                    )}
+                  </li>
+                </ul>
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </div>
     </>

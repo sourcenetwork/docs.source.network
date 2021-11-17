@@ -137,32 +137,14 @@ html[data-theme="dark"] .docusaurus-highlight-code-line {
     ul {
       font-weight: 400;
       > li {
-        > ul {
+        ul {
           margin-left: rem(25px);
           margin-top: rem(10px);
           margin-bottom: rem(10px);
-          > li {
+          li {
             padding: rem(2px) 0;
             margin: 0;
             position: relative;
-            .menu__link {
-              &:after {
-                transition: all 0.3s ease;
-                content: " ";
-                display: block;
-                width: rem(2px);
-                height: 100%;
-                position: absolute;
-                top: 0;
-                left: 0;
-                background: rgb(230, 230, 230);
-              }
-              &--active {
-                &:after {
-                  background: var(--ifm-color-primary);
-                }
-              }
-            }
           }
         }
       }
@@ -264,7 +246,7 @@ html[data-theme="dark"] .docusaurus-highlight-code-line {
   }
 }
 
-// Admonition 
+// Admonition
 
 .admonition {
   .admonition-icon {

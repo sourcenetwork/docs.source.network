@@ -17,8 +17,45 @@ import { matchPath } from "@docusaurus/router";
 import { translate } from "@docusaurus/Translate";
 import clsx from "clsx";
 import styles from "./styles.module.scss";
-import { isSamePath, ThemeClassNames, docVersionSearchTag } from "@docusaurus/theme-common";
+import {
+  isSamePath,
+  ThemeClassNames,
+  docVersionSearchTag,
+} from "@docusaurus/theme-common";
 import Head from "@docusaurus/Head";
+import Breadcrumbs from "../Breadcrumbs";
+import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
+
+function getPageCrumbs(currentRoute: any, links: any[] = [], path: any[] = []) {
+  for (let i = 0; i < links.length; i++) {
+    const link = links[i];
+    if (link.type === "link" && link?.href === currentRoute.path) {
+      path.push({ label: link.label, type: link.type, href: link.href });
+      break;
+    }
+    if (link.type === "category" && link?.items?.length) {
+      path.push({ label: link.label, type: link.type });
+      return getPageCrumbs(currentRoute, link.items, path);
+    }
+  }
+  return path;
+}
+
+function getCurrentDocsData(context: any, versionMetadata: any) {
+  const docs = context?.globalData["docusaurus-plugin-content-docs"];
+  const { docsData = {} } = context?.siteConfig?.customFields;
+  const currentDoc = docs[versionMetadata?.pluginId].versions.find(
+    (version: any) => version.name === versionMetadata?.version
+  );
+  const currentDocData = docsData[versionMetadata?.pluginId];
+
+  if (!currentDocData) return;
+
+  return {
+    path: currentDoc.path,
+    title: currentDocData?.title,
+  };
+}
 
 function DocPageContent({ currentDocRoute, versionMetadata, children }) {
   const { pluginId, version } = versionMetadata;
@@ -27,22 +64,19 @@ function DocPageContent({ currentDocRoute, versionMetadata, children }) {
     ? versionMetadata.docsSidebars[sidebarName]
     : undefined;
 
-  // const crumbs = [];
-
-  // sidebar?.some((acc, curr, index, arr) => {
-
-  //   return acc;
-  // }, null);
-
   const [hiddenSidebarContainer, setHiddenSidebarContainer] = useState(false);
   const [hiddenSidebar, setHiddenSidebar] = useState(false);
   const toggleSidebar = useCallback(() => {
     if (hiddenSidebar) {
       setHiddenSidebar(false);
     }
-
     setHiddenSidebarContainer((value) => !value);
   }, [hiddenSidebar]);
+
+  const context: any = useDocusaurusContext();
+  const docData = getCurrentDocsData(context, versionMetadata);
+  const crumbs = getPageCrumbs(currentDocRoute, sidebar, []);
+
   return (
     <Layout
       wrapperClassName={ThemeClassNames.wrapper.docsPages}
@@ -52,12 +86,6 @@ function DocPageContent({ currentDocRoute, versionMetadata, children }) {
         tag: docVersionSearchTag(pluginId, version),
       }}
     >
-      {/* <div>
-        <pre>
-          {JSON.stringify(currentDocRoute, null, 2)}
-          {JSON.stringify(sidebar, null, 2)}
-        </pre>
-      </div> */}
       <div className={styles.docPage}>
         <BackToTopButton />
 
@@ -130,6 +158,9 @@ function DocPageContent({ currentDocRoute, versionMetadata, children }) {
               }
             )}
           >
+            {/* <pre>{JSON.stringify(currentDoc, null, 2)}</pre>
+            <pre>{JSON.stringify(customFields?.docsData, null, 2)}</pre> */}
+            <Breadcrumbs links={crumbs} docData={docData} />
             <MDXProvider components={MDXComponents}>{children}</MDXProvider>
           </div>
         </main>
@@ -158,11 +189,7 @@ function DocPage(props) {
         {/* TODO we should add a core addRoute({htmlClassName}) generic plugin option */}
         <html className={versionMetadata.className} />
       </Head>
-
-      {/* <pre>
-          {JSON.stringify(currentDocRoute, null, 2)}
-          {JSON.stringify(sidebar, null, 2)}
-        </pre> */}
+      {/* <pre>{JSON.stringify(props, null, 2)}</pre> */}
       <DocPageContent
         currentDocRoute={currentDocRoute}
         versionMetadata={versionMetadata}
