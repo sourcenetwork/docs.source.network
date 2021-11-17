@@ -23,7 +23,6 @@ const config = {
         docs: {
           routeBasePath: "/",
           sidebarPath: require.resolve("./sidebars.js"),
-          // Please change this to your repo.
           editUrl: "https://github.com/sourcenetwork/docs.source.network/",
         },
         theme: {
@@ -63,26 +62,20 @@ const config = {
           srcDark: "img/source-dark.svg",
         },
         items: [
-          {
-            type: "doc",
-            docId: "intro",
-            position: "left",
-            label: "Getting Started",
-          },
-          {
-            type: "doc",
-            docId: "concepts/intro",
-            position: "left",
-            label: "Concepts",
-            activeBasePath: "/concepts",
-          },
-          {
-            type: "doc",
-            docId: "release-notes/intro",
-            position: "left",
-            label: "Release Notes",
-            activeBasePath: "/release-notes",
-          },
+          // {
+          //   type: "doc",
+          //   position: "left",
+          //   docId: "intro",
+          //   label: "Defra DB",
+          //   docsPluginId: "defra",
+          // },
+          // {
+          //   type: "doc",
+          //   position: "left",
+          //   docId: "intro",
+          //   label: "SourceHub",
+          //   docsPluginId: "sourceHub",
+          // },
           {
             href: "https://github.com/sourcenetwork/docs.source.network",
             label: " ",
@@ -146,7 +139,39 @@ const config = {
         darkTheme: darkCodeTheme,
       },
     }),
-  plugins: ["docusaurus-plugin-sass"],
+  plugins: [
+    "docusaurus-plugin-sass",
+    // [
+    //   "@docusaurus/plugin-content-docs",
+    //   {
+    //     id: "defra",
+    //     path: "docs_defra",
+    //     routeBasePath: "defra-db",
+    //     sidebarPath: require.resolve("./sidebarsDefra.js"),
+    //     editUrl: "https://github.com/sourcenetwork/docs.source.network/",
+    //   },
+    // ],
+    // [
+    //   "@docusaurus/plugin-content-docs",
+    //   {
+    //     id: "sourceHub",
+    //     path: "docs_hub",
+    //     routeBasePath: "source-hub",
+    //     sidebarPath: require.resolve("./sidebarsHub.js"),
+    //     editUrl: "https://github.com/sourcenetwork/docs.source.network/",
+    //   },
+    // ],
+  ],
+  // customFields: {
+  //   docsData: {
+  //     defra: {
+  //       title: "Defra DB",
+  //     },
+  //     sourceHub: {
+  //       title: "Source Hub",
+  //     },
+  //   },
+  // },
 };
 
 module.exports = config;
