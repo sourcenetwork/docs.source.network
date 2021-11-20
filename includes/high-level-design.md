@@ -1,3 +1,9 @@
+---
+sidebar_label: High Level Design
+sidebar_position: 20
+---
+# High Level Design
+
 DefraDBs GraphQL Query Language, or DQL for shit, is used to read, write, modify, and delete data residing within a DefraDB instance. The entire language is compliant with the GraphQL specification, and will attempt to use GraphQL best practices. However, since GraphQL was not originally intended as a Database query language, small divergences are necessary from traditional API implementations.
 
 Currently, all query language functionality requires a predefined data schema, using the GraphQL Schema grammar. This will allow us to auto-generate all the necessary types, filters, inputs, payloads, etc to operate the query language with complete type safety guarantees. There may be instances where “Loose Typing” is used in place of Strong Typing, due to the dynamic nature of query languages, and the powerful and expressive features it enables.
