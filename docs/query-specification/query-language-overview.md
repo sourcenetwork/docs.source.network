@@ -12,7 +12,7 @@ Databases such as [DGraph](https://dgraph.io/) and [Fauna](https://fauna.com) us
 - DGraph is a distributed, high throughput graph database. 
 - Fauna is a transactional database delivered as a secure, web-native API GraphQL.
 
-DefraDB (while using GraphQL) is designed as a document storage database, unlike DGraph and Fauna respectively. DQL exposes every functionality of the database directly, without the need for any additional APIs. The functionalities include:
+DefraDB (while using GraphQL) is designed as a document storage database, unlike DGraph and Fauna. DQL exposes every functionality of the database directly, without the need for any additional APIs. The functionalities include:
 - reading, writing, and modifying data.
 - describing data structures, schemas, and architecting data models (via index's) and other schema.
   
