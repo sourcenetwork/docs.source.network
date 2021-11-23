@@ -1,0 +1,75 @@
+/**
+ * Copyright (c) Facebook, Inc. and its affiliates.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
+.docContainer {
+  max-width: none;
+
+  @media (min-width: 997px) {
+    padding: 30px calc(var(--ifm-spacing-horizontal) * 2) 0;
+  }
+}
+
+.docTitle {
+  margin: 0px 0 40px;
+  // border-bottom: 1px solid var(--docs-title-border);
+
+  h1 {
+    font-size: 2.75rem;
+  }
+
+  h3 {
+    font-weight: 400;
+  }
+
+  @media (min-width: 997px) {
+    margin: 0px 0 40px;
+  }
+}
+
+.sidebarColumn {
+  max-height: calc(100vh - (var(--ifm-navbar-height) + 2rem));
+  overflow-y: auto;
+  position: sticky;
+  top: calc(var(--ifm-navbar-height) + 1rem);
+}
+
+.sidebarLinks {
+  font-size: 12px;
+  margin: 30px 0;
+  list-style: none;
+  padding: 20px 0;
+  border-top: 1px solid var(--docs-title-border);
+  a {
+    font-weight: bold;
+    color: var(--ifm-menu-color);
+
+    svg {
+      vertical-align: middle;
+      width: 20px;
+      height: 20px;
+      margin-right: 10px;
+    }
+  }
+}
+
+/* Original */
+
+.docItemContainer article > *:first-child,
+.docItemContainer header + * {
+  margin-top: 0;
+}
+
+@media (min-width: 997px) {
+  .docItemCol {
+    max-width: 75% !important;
+  }
+
+  /* Prevent hydration FOUC, as the mobile TOC needs to be server-rendered */
+  .tocMobile {
+    display: none;
+  }
+}

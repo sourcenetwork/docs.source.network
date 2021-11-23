@@ -1,0 +1,62 @@
+:root {
+  // Colors
+  --ifm-color-primary: #1f60e9;
+  --ifm-color-primary-dark: #1554d8;
+  --ifm-color-primary-darker: #144fcc;
+  --ifm-color-primary-darkest: #1141a8;
+  --ifm-color-primary-light: #3771eb;
+  --ifm-color-primary-lighter: #437aed;
+  --ifm-color-primary-lightest: #6793f0;
+  --ifm-color-secondary-contrast-background: rgb(236, 236, 236);
+
+  // Fonts
+  --ifm-font-family-base: "Inter", system-ui, -apple-system, Segoe UI, Roboto,
+    Ubuntu, Cantarell, Noto Sans, sans-serif, BlinkMacSystemFont, "Segoe UI",
+    Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
+    "Segoe UI Symbol";
+  --ifm-font-size-base: 1rem;
+  --ifm-font-weight-bold: 800;
+
+  // Base
+  --ifm-global-radius: 0rem;
+
+  // Code
+
+  --ifm-code-background: rgb(226, 226, 226);
+  --ifm-code-font-size: 80%;
+  --ifm-pre-padding: 1rem;
+
+  --ifm-leading-desktop: 1.75;
+  --ifm-leading: calc(var(--ifm-leading-desktop) * 1rem);
+
+  --ifm-toc-border-color: transparent;
+  --ifm-toc-padding-horizontal: 0rem;
+
+  --ifm-menu-color-background-active: transparent;
+  --ifm-menu-link-padding-horizontal: 1rem;
+  --ifm-menu-link-padding-vertical: 0.5rem;
+
+  --ifm-navbar-height: 80px;
+  --ifm-navbar-padding-horizontal: calc(var(--ifm-spacing-horizontal) * 1);
+  --ifm-navbar-padding-vertical: calc(var(--ifm-spacing-vertical) * 0.5);
+
+  // Footer
+  --ifm-footer-background-color: var(--ifm-background-color);
+  --docs-title-border: #e0e0e0;
+
+  --ifm-alert-border-left-width: 2px;
+}
+
+html[data-theme="dark"] {
+  --ifm-color-primary: #5087fd;
+  --ifm-background-color: #1d1d1d;
+  --ifm-background-surface-color: var(--ifm-background-color);
+
+  --docs-title-border: #343434;
+}
+
+.markdown {
+  h1:first-child {
+    --ifm-h1-font-size: 2.5rem;
+  }
+}

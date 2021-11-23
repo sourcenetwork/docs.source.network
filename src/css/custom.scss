@@ -1,0 +1,255 @@
+/**
+ * Any CSS included here will be global. The classic template
+ * bundles Infima by default. Infima is a CSS framework designed to
+ * work well for content-centric websites.
+ */
+@import "./utils";
+@import "./infima-variables";
+@import "./fonts";
+@import "./typography";
+
+html,
+body {
+  scroll-behavior: smooth;
+  text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* You can override the default Infima variables here. */
+:root {
+  --root-wrapper-width: 75rem;
+  --menu-indicator-color: #ccc;
+}
+
+// html[data-theme="dark"] {
+// Dark overrides
+// }
+
+//  Layout
+.footer > .container,
+.navbar__inner,
+.main-wrapper {
+  width: 100%;
+  max-width: var(--root-wrapper-width);
+  margin: auto;
+}
+
+// navbar
+
+.docusaurus-highlight-code-line {
+  background-color: rgba(0, 0, 0, 0.1);
+  display: block;
+  margin: 0 calc(-1 * var(--ifm-pre-padding));
+  padding: 0 var(--ifm-pre-padding);
+}
+
+html[data-theme="dark"] .docusaurus-highlight-code-line {
+  background-color: rgba(0, 0, 0, 0.3);
+}
+
+// Navbar
+
+.navbar {
+  box-shadow: none;
+  border-bottom: rem(1px) solid var(--docs-title-border);
+
+  &__brand {
+    margin-right: rem(40px);
+  }
+
+  &__logo {
+    margin-left: rem(30px);
+    @media (max-width: 996px) {
+      margin-left: rem(20px);
+    }
+  }
+
+  &__link {
+    font-size: rem(14px);
+    &--active {
+      color: var(--ifm-navbar-link-color);
+    }
+  }
+
+  &__list-item-icon {
+    display: inline-block;
+    width: rem(25px);
+    height: rem(25px);
+    vertical-align: middle;
+  }
+}
+
+// Sidebar menu
+.main-wrapper {
+  .menu {
+    $self: &;
+
+    padding: calc(var(--ifm-navbar-padding-vertical) * 4)
+      var(--ifm-navbar-padding-horizontal);
+
+    &__link {
+      font-size: rem(14px);
+      &--active {
+        font-weight: bold;
+      }
+
+      &--sublist {
+        position: relative;
+        &.menu__link--active {
+          color: var(--ifm-menu-color);
+          font-weight: bold;
+        }
+
+        &:after {
+          content: " ";
+          transition: all 0.3s ease;
+          display: inline-block;
+          width: 0px;
+          height: 0px;
+          position: absolute;
+          top: 50%;
+          right: rem(5px);
+          margin-top: rem(-4px);
+          background: none;
+          min-width: 0;
+          border: solid var(--menu-indicator-color);
+          border-width: 0 rem(2px) rem(2px) 0;
+          padding: 3px;
+          transform: rotate(-135deg);
+        }
+      }
+    }
+
+    &__list-item {
+      &--collapsed {
+        .menu__link--sublist {
+          &:after {
+            transform: rotate(45deg);
+            // background: var(--menu-indicator-color);
+          }
+        }
+      }
+    }
+
+    ul {
+      font-weight: 400;
+      > li {
+        ul {
+          margin-left: rem(25px);
+          margin-top: rem(10px);
+          margin-bottom: rem(10px);
+          li {
+            padding: rem(2px) 0;
+            margin: 0;
+            position: relative;
+          }
+        }
+      }
+    }
+  }
+}
+
+// Theme
+
+.theme-edit-this-page {
+  svg {
+    display: inline-block;
+    margin-right: 0.5rem;
+  }
+}
+
+.theme-doc-footer-edit-meta-row {
+  @media (min-width: 997px) {
+    display: none;
+  }
+}
+
+// Footer
+
+.footer {
+  margin-top: rem(40px);
+
+  &__links {
+    @media (min-width: 997px) {
+      margin-bottom: rem(100px);
+    }
+  }
+  &__logo {
+    padding-left: var(--ifm-spacing-horizontal);
+    margin: 0;
+  }
+}
+
+.footer__copyright {
+  font-size: rem(12px);
+  margin: 30px 0;
+}
+
+// Markdown
+
+.markdown {
+  > :first-child {
+    margin-top: 0;
+  }
+  > :last-child {
+    margin-bottom: 0;
+  }
+}
+
+// Pagination
+.pagination-nav {
+  &__link {
+    border: none;
+    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+    border: 1px solid rgb(228, 228, 228);
+
+    &:hover {
+      border-color: rgb(228, 228, 228);
+      box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    html[data-theme="dark"] & {
+      background-color: #202020;
+      border-color: rgb(56, 56, 56);
+    }
+  }
+
+  &__label {
+    line-height: 1;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    span {
+      line-height: 1;
+      vertical-align: middle;
+      margin: 0 10px;
+    }
+  }
+
+  &__item {
+    &--next .pagination-nav__label {
+      padding-right: 10px;
+    }
+    &--previous .pagination-nav__label {
+      padding-left: 10px;
+    }
+
+    &--previous:hover .pagination-nav__label {
+      transform: translateX(-5px);
+    }
+    &--next:hover .pagination-nav__label {
+      transform: translateX(5px);
+    }
+  }
+}
+
+// Admonition
+
+.admonition {
+  .admonition-icon {
+    display: none;
+  }
+}
