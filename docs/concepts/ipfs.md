@@ -1,4 +1,6 @@
-# IPFS
+---
+title: IPFS
+---
 
 ## Overview
 
