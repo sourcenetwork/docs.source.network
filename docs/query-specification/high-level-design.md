@@ -4,23 +4,23 @@ sidebar_position: 20
 ---
 # High Level Design
 
-DefraDBs Query Language (DQL) is used to read, write, modify, and delete data residing within a DefraDB instance. DQL is compliant with the GraphQL specification and uses GraphQL best practices. However, a few divergences from traditional API implementations are necessary since GraphQL was not originally intended to be used as a database query language.
+DefraDBs Query Language (DQL) is used to read, write, modify, and delete data in a DefraDB instance. DQL is compliant with the GraphQL specification and uses GraphQL best practices. However, a few divergences from traditional API implementations are necessary since GraphQL was not originally intended to be used as a database query language.
+
+Query language functionalities requires a predefined data schema, using the GraphQL Schema grammar. This allows auto-generation of the necessary types, filters, inputs, payloads, etc. to operate the query language with complete type-safety guarantees. Instances of loose-typing (instead of strong typing) is possible due to the dynamic nature of the query languages. 
+
+DefraDBs query language covers around 99.99% of developer use cases (w.r.t. interacting with their data layer), a distinction between DefraDB and traditional application GraphQL API endpoints. With DefraDB, the binding between GraphQL input/output objects and the underlying data layer is very tight, unlike traditional API endpoints. 
+
+For example, application GraphQL APIs often enable filtering and aggregation only w.r.t. their specific application domain. They proxy all necessary functionality through custom query resolvers (use-case dependent) instead of directly exposing a fully encompassing filter and aggregate layer. DefraDB has no such option, it provides full functionality directly to the developer. There is no concept of the domain-specific context the application resides in.
+
+DQL needs to be as developer-friendly as possible by enabling multiple query language features (commonly expected from a data layer).
+
+GraphQL and other query languages  due to 
+
+The read-only operations and write operations are represented as queries and mutations respectively in GraphQL and other query languages. This is the major distinction between GraphQL and others. Use of subqueries within mutations (data is inserted based on subquery results) in SQL databases is a feature not available in DQL.
 
 
 
 
-
-
-
-Currently, all query language functionality requires a predefined data schema, using the GraphQL Schema grammar. This will allow us to auto-generate all the necessary types, filters, inputs, payloads, etc to operate the query language with complete type safety guarantees. There may be instances where “Loose Typing” is used in place of Strong Typing, due to the dynamic nature of query languages, and the powerful and expressive features it enables.
-
-Additionally, DefraDBs query language will need to cover 99.99% of developer use cases with respect to interacting with their data layer. This is a notable distinction between this query language, and traditional application GraphQL API endpoints. Traditional API endpoints assume that the developers have the freedom to control their data as they see fit, before returning it through a GraphQL response object. With DefraDB, the binding between GraphQL input/output objects, and the underlying data layer is very tight.
-
-As an example, application GraphQL APIs often enable filtering and aggregation only with respect to their specific application domain. Instead of directly exposing a fully encompassing filter and aggregate layer, they proxy all necessary functionality through custom Query resolvers, that are use case dependent. DefraDB has no such option, since it must provide full functionality and expressiveness directly to the developer. It, has no concept of the domain-specific context the application resides in.
-
-However, DQL still needs to be as developer-friendly as possible, enabling many query language features commonly expected from a data layer.
-
-The major distinction between GraphQL and other database query languages, is the explicit distinction from read-only operations, and write operations, represented as Queries and Mutations respectively. The only hindrance this exposes is the use of subqueries within mutations, commonly found in SQL databases, where one might insert data based on a subquery results. This ideally will be resolved in future versions of DQL.
 
 DQL will make notable use of custom reserved keywords within the GraphQL that will exist only to enable database query language features further. For the most part, reserved keywords will be prefixed by an “_” (underscore) to indicate some kind of special functionality. For example, when filtering or sorting data, the “_lt” (less than) or “_asc” (ascending) keywords will be used to indicate some desired functionality or behavior.
 
