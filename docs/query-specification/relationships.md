@@ -40,7 +40,7 @@ On the other hand, if you simply embed the Address within the Author type withou
 <!-- *todo*: Should we imply `@relation` directive whenever a type is within another, as in the example above Or, should we be explicit and require the `@relation` directive if we want a relation, and use a `@embed` directive behavior by default instead. [color=orange]
 -->
 
-<!--- Here we need to specify a relationship between these types using the `@relation` directive. This tells DefraDB to track the ID of the object, in place of the entire object. If didn't specify `@relation` then in the one-to-one model, the object and all of its fields/data would be directly embedded inside the parent object. --->
+<!-- Here we need to specify a relationship between these types using the `@relation` directive. This tells DefraDB to track the ID of the object, in place of the entire object. If didn't specify `@relation` then in the one-to-one model, the object and all of its fields/data would be directly embedded inside the parent object. -->
 
 #### One-to-Many
 A "one-to-many" relationship allows us to relate several objects of one type, to a single instance of another. 
@@ -63,9 +63,9 @@ type Book {
 
 In this case the books object is defined within the Author object to be an array of books, indicating that *one* Author type has a relationship to *many* Book types. Internally, much like the one-to-one model, only the DocKeys are stored. However, the DocKey is only stored on one side of the relationship (the child type). In this example only the Book type keeps a reference to its associated Author DocKey.
 
-<!---
+<!--
 > We are investigating methods for storing a non-normative array on the parent object that is efficient to maintain (inserts, deletes) and, as well as providing a secondary index for one-to-many relationships. The non-normative array method should only be used for small cardinality lists. E.g., Lists with a low and bounded number of elements.[color=green]
----> 
+--> 
 
 #### Many-to-Many
 ![](https://img.shields.io/badge/Status-TODO-yellow)
