@@ -68,7 +68,8 @@ In this case the books object is defined within the Author object to be an array
 --> 
 
 #### Many-to-Many
-![](https://img.shields.io/badge/Status-TODO-yellow)
+
+*to be updated*
 
 #### Multiple Relationships
 
