@@ -4,9 +4,9 @@ sidebar_position: 60
 ---
 # Sorting and Ordering
 
-Sorting is an integral part of any Database and Query Language. The sorting syntax is similar to the filter syntax, in that we use objects, and sub-objects to indicate sorting behavior, instead of filter behavior.
+Sorting is an integral part of any Database and Query Language. The sorting syntax is similar to filter syntax, in that we use objects, and sub-objects to indicate sorting behavior, instead of filter behavior.
 
-Let's find all books ordered by their latest published date
+The query to find all books ordered by their latest published date:
 ```javascript
 {
     books(sort: { published_at: “desc”}) {
@@ -16,14 +16,13 @@ Let's find all books ordered by their latest published date
     }
 }
 ```
+The syntax indicates:
+- the field we wanted to sort on `published_at`
+- direction we wanted to order by `descending`.
 
-Here we indicated which field we wanted to sort on (published_at) and which direction we wanted to order by (descending).
+Sorting can be applied to multiple fields in the same query. The sort order is same as the field order in the sorted object.
 
-Fields may be sorted either Ascending or Descending.
-
-Sorting can be applied to multiple fields in the same query. The order of which sort is applied first, is the same as the field order in the sort object. 
-
-Let's find all books ordered by earliest published date and then by title descending
+The query below finds all books ordered by earliest published date and then by title descending.
 ```javascript
 {
     books(sort: { published_at: ASC, title: DESC }) {
@@ -34,9 +33,9 @@ Let's find all books ordered by earliest published date and then by title descen
 }
 ```
 
-Additionally we can sort on sub-object fields along with root object fields.
+You can also sort sub-object fields along with root object fields.
 
-Let’s find all books ordered by earliest published date and then by the latest authors' birthday
+The query below finds all books ordered by earliest published date and then by the latest authors' birthday.
 ```javascript
 {
     books(sort: { published_at: ASC, author: { birthday: DESC }}) {
@@ -51,13 +50,18 @@ Let’s find all books ordered by earliest published date and then by the latest
 }
 ```
 
-Sorting on multiple fields at once behavior is primarily driven by the first indicated sort field, called the primary field. In the above example, this would be the “published_at” date. The following sort field, called the secondary field, is used in the case that more than one record has the same value for the primary sort field. Suppose than two sort fields are indicated. In that case, the same behavior applies, except the primary, secondary pair shifts by one element, so the 2nd field is the primary, and the 3rd is the secondary, until we reach the end of the sort fields.
+Sorting multiple fields simultaneously is primarily driven by the first indicated sort field (primary field). 
+In the query above, it is the “published_at” date. 
 
-If only a single sort field is given, and objects have the same value, then by default the documents identifier (DocKey) is used as the secondary sort field. This generally applies regardless of how many sort fields are given. So long as the DocKey is not already included sort fields, it is always the final tie-breaking secondary field.
+The following sort field (secondary field), is used in the case that more than one records have the same value for the primary sort field. 
 
-A direct result of the DocKey sort behavior algorithm is that if the DocKey is included in the queries sort fields, any field included afterward will never be evaluated, since all DocKeys are unique. Given fields (published_at, id, birthday), the birthday sort field will never be evaluated, and should be removed from the list.
+Assuming there are more than two sort fields, in that case, the same behavior applies, except the primary, secondary pair shifts by one element, so the 2nd field is the primary, and the 3rd is the secondary, until we reach the end of the sort fields.
 
-> Sorting on sub-objects from the root object is only allowed if the subobject is not an array. If it is an array, the sort must be applied to the object field directly instead of through the root object. [color=orange]
+In case of a single sort field and objects with same value, the documents identifier (DocKey) is used as the secondary sort field by default. This is applicable regardless of the number of sort fields. As long as the DocKey is not already included in sort fields, it acts as the final tie-breaking secondary field.
+
+If the DocKey is included in the sort fields, any field included afterwards will never be evaluated, since all DocKeys are unique. If the sort fields are `published_at`, `id`, and `birthday`, the `birthday` sort field will never be evaluated, and should be removed from the list.
+
+> Sorting on sub-objects from the root object is only allowed if the sub-object is not an array. If it is an array, the sort must be applied to the object field directly instead of through the root object.[color=orange]
 
 *So, instead of*
 ```javascript
@@ -88,14 +92,14 @@ A direct result of the DocKey sort behavior algorithm is that if the DocKey is i
 ```javascript
  [
      author {
-         name: "John Grissam"
+         name: "John Grisham"
          books: [
             { title: "A Painted House" },
             { title: "The Guardians" }
          ]
      }
      author {
-         name: "John Grissam"
+         name: "John Grisham"
          books: [
             { title: "Camino Winds" },
          ]
