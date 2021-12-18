@@ -86,9 +86,11 @@ If the DocKey is included in the sort fields, any field included afterwards will
 }
 ```
 
-> This is because root level filters and order apply to the root object only. If we did allow this version, it would be ambigiuous from the developers' point of view if the ordering applied to the order of the root object compared to its sibling objects or if the ordering applied solely to the sub-object. Suppose we allowed it, and enforced the semantics of root level sorting on array sub objects to act as a sorting mechanism for the root object. In that case, there is no obvious way to determine which value in the array is used for the root order. [color=orange]
->
-> This means that if we had the following objects in the database:
+>Root level filters and order apply to root object only. If you allow the initial version of the query, it would be confusing if the ordering applied to the order of the root object compared to its sibling objects or if the ordering applied solely to the sub-object. 
+
+>If you allow it, it enforces the semantics of root level sorting on array sub objects to act as a sorting mechanism for the root object. As a result, there is no obvious way to determine which value in the array is used for the root order.[color=orange]
+
+If you have the following objects in the database:
 ```javascript
  [
      author {
@@ -132,6 +134,6 @@ books(filter: {_id: [1]}) {
 }
 ```
 
-> Since we have two authors with the same name (John Grisham), the sort object `(sort: { name: "desc", books: { title: "asc" }}` would suggest we sort duplicate authors using `books: { title: "asc" }` as the secondary sort field. However, because the books field is an array of objects, there is no single value for the title to compare easily. [color=orange]
+> Given there are two authors with the same name (John Grisham), the sort object `(sort: { name: "desc", books: { title: "asc" }}` would suggest we sort duplicate authors using `books: { title: "asc" }` as the secondary sort field. However, because the books field is an array of objects, there is no single value for the title to compare easily. [color=orange]
 >
 > Therefore, sorting on array sub objects from the root field is ***strictly*** not allowed.
