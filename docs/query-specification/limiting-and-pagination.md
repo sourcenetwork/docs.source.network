@@ -17,9 +17,8 @@ Let us get the top 10 rated books
 }
 ```
 
-Here we introduce the `limit` function, which accepts the max number of items to return from the resulting set.
-
-Next, we can skip elements in the set, to get the following N objects from the return set. This can be used to create a pagination system, where we have a limit of items per page, and skip through pages.
+The `limit` function accepts the maximum number of items to return from the resulting set. Next, we can `skip` elements in the set, to get the following N objects from the return set. 
+Both these functions can be used to create a pagination system, where we have a limit on number of items per page, and can skip through pages as well.
 
 Let's get the *next* top 10 rated books after the previous query
 ```javascript
@@ -32,4 +31,4 @@ Let's get the *next* top 10 rated books after the previous query
 }
 ```
 
-Limits, and offsets can be combined to create several different pagination methods.
+Limits and offsets can be combined to create several different pagination methods.
