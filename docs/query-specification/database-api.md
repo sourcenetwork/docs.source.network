@@ -4,21 +4,23 @@ sidebar_position: 160
 ---
 # Database API
 
-So far, all the queries and mutations have been specific to the stored and managed developer or user-created objects. However, that is only one aspect of DefraDBs GraphQL API. The other part is the auxiliary APIs, which include MerkleCRDT Traversal, Schema Management, and more.
+DefraDB GraphQL auxiliary APIs include MerkleCRDT Traversal, Schema Management, etc.
 
-#### MerkleCRDTs
-Internally, all objects in DefraDB are stored in some kind of MerkleCRDT (See DefraDB Tech Specs for more details). These MerkleCRDTs are represented as a series of small updates or `Deltas`, connected in a MerkleDAG. The MerkleDAG is a Merklized version of a DAG (Directed Acyclical Graph), which means each node in the DAG, references a parent node through some kind of Content Identifier (CID). 
+## MerkleCRDTs
+
+All objects in DefraDB are stored in MerkleCRDTs (see [DefraDB Tech Specs](../tech-spec/defradb-tech-spec.md)). These MerkleCRDTs are represented as a series of small updates connected in a MerkleDAG. The MerkleDAG is a Merklized version of a DAG (Directed Acyclical Graph), which means each node in the DAG, references a parent node through some kind of Content Identifier (CID).
+
+Image below shows an example structure of a MerkleDAG.
 
 ![](https://mvpworkshop.co/wp-content/uploads/2021/01/ipfs-inarticle7.jpeg)
-*Here is an example structure of a MerkleDAG.*
 
 The `Head` CID represents the "current" or "latest" state of a MerkleDAG.
 
-DefraDB allows users and developers to query, traverse, and validate the DAG structure, allowing for self-verifying data structures.
+DefraDB allows you to query, traverse, and validate the DAG structure, allowing for self-verifying data structures. 
 
-In the DefraDB Database API, the DAG nodes are represented as `Commit`, `CommitLink`, and `Delta` types. They are defined as follows:
+In DefraDB Database API, DAG nodes are represented as `Commit`, `CommitLink`, and `Delta` types. They are defined as shown below:
 
-```javascript 
+```javascript
 // Commit is an individual node in a CRDTs MerkleDAG
 type Commit {
     cid: String            // cid is the Content Identifier of this commit
@@ -40,7 +42,7 @@ type Delta {
 }
 ```
 
-We can query for the latest commit of an object (with id: '123') like so:
+To query the latest commit of an object (with id: '123'):
 ```gql
 query {
     latestCommit(docid: "123") {
@@ -53,7 +55,7 @@ query {
 }
 ```
 
-We can query for the all the commits of an object (with id: '123') like so:
+To query all the commits of an object (with id: '123'):
 ```gql
 query {
     allCommits(docid: "123") {
@@ -66,7 +68,7 @@ query {
 }
 ```
 
-We can query for a specific commit
+To query a specific commit:
 ```gql 
 query {
     commit(cid: 'Qm123') {
@@ -79,7 +81,7 @@ query {
 }
 ```
 
-In addition to using the `Commit` specific queries, we can also include some commit version sub-fields in our object queries.
+In addition to using `Commit` specific queries, include commit version sub-fields in object queries.
 
 ```gql 
 query {
@@ -96,6 +98,6 @@ query {
 }
 ```
 
-This example shows how we can query for the additional `_version` field that's generated automatically for each added schema type. The `_version` is the same execution as `latestCommit`.
+This example shows how to query for the additional `_version` field that's generated automatically for each added schema type. The `_version` is the same execution as `latestCommit`.
 
-Both `_version` and `latestCommit` return an array of `Commit` types. This is because the `HEAD` of the MerkleDAG can actually point to more than one DAG node. This is caused by two concurrent updates to the DAG at the same height. More often the DAG will only have a single head, but it's imporant to understand that it *can* have multiple.
+Both `_version` and `latestCommit` return an array of `Commit` types because the `HEAD` of the MerkleDAG can point to more than one DAG node. This is caused by two concurrent updates to the DAG at the same height. DAG has a single head mostly, but it can have multiple.
