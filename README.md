@@ -27,3 +27,7 @@ This command generates static content into the `build` directory and can be serv
 ### Deployment
 
 ```TODO (netlify)```
+
+### Technical Writing (Internal)
+
+See [Technical Writing](https://hackmd.io/Ls4jV6ONQvefDYjAMz2FLQ?view) for best practices and guidelines.
