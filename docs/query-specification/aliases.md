@@ -4,7 +4,7 @@ sidebar_position: 90
 ---
 # Aliases
 
-Often the returned structure of a query isn't in the ideal context for a given application. In this instance we can rename fields and entire query results to better fit our use case. This is particularly useful, and sometimes necessary when using multiple queries within a single request
+If the structure of a returned query is not ideal for a given application, you can rename fields and entire query results to better fit your use case. This is particularly useful, and sometimes necessary when using multiple queries within a single request.
 
 ```javascript
 {
@@ -16,7 +16,7 @@ Often the returned structure of a query isn't in the ideal context for a given a
 }
 ```
 
-Here we have renamed the books result to `topTenBooks`, which can be useful for semantic reasoning about the request, and for organizational purposes. It is suggested in production deployments to name your queries properly.
+Here the books result is renamed to `topTenBooks`, which can be useful for semantic reasoning about the request, and for organizational purposes. It is suggested in production deployments to name your queries properly.
 
 ```javascript
 {
@@ -34,7 +34,7 @@ Here we have renamed the books result to `topTenBooks`, which can be useful for 
 }
 ```
 
-In this query we have two returned results named `topTenBooks` and `bottomTenBooks` respectively. When dealing with multiple queries of the same type (e.g. `books`) it is required to alias one from another.
+In this query the two returned results are named `topTenBooks` and `bottomTenBooks` respectively. When dealing with multiple queries of the same type (e.g. `books`) it is required to alias one from another.
 
 Additionally, we can alias individual fields within our returned types. Aliasing a field works the same as aliasing a query.
 
