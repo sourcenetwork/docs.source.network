@@ -6,7 +6,8 @@ sidebar_position: 100
 
 Variables are used in DefraDB to store both input placeholder values, and interim query results. DefraDB makes use of interim queries to allow for query composition, that is, using query results as inputs to other queries. This is similar to nested SQL `SELECT` statements. Variables can be used in place of string interpolation to create more efficient queries.
 
-#### Input Variables
+## Input Variables
+
 Input variables can be used in place of complex string interpolation to allow for operational simplicity for developers. DefraDB will natively handle the string interpolation internally, creating an easy workflow. Variables are strongly typed at the time of definition, and queries that are given incorrect variable types will return an error. Variables are defined in the `query` keyword, along with their types, and are indicated by a `$` prefix.
 
 ```graphql
@@ -25,7 +26,8 @@ query($myVar: Int) {
 
 Here we define the variable `$myVar` which is of type `Int`, used by the books filter on the rating field. We supply the variables as a `JSON` object at the end of the query. With, its keys matching the defined variables, any additional keys provided that don't match the defined variables will result in an error.
 
-#### Sub Queries
+## Sub Queries
+
 Subqueries are used to store interim query results to be used later on in the currently executing query. They can be used to logically break up a query into components or create a new set of data to filter, which would otherwise be cumbersome.
 
 Subqueries are defined as any other additional query, except using a special alias name indicated by a reserved variable prefix `$_[sub query name]`. All subqueries are not returned in the result, but their contents can be utilized in other parts of the query.
