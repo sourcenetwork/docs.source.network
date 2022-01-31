@@ -4,7 +4,7 @@ sidebar_position: 150
 ---
 # Mutation Block
 
-Mutations are the `write` side of the DefraDB Query Language. Mutations rely on the query system to properly function, as updates, upserts, and deletes all require filtering and finding data before taking action. 
+Mutations are the `write` side of the DefraDB Query Language. They rely on the query system to function properly. Updates, upserts, and deletes, all require filtering and finding data before taking action.
 
 The data and payload format that mutations use is fundemental to maintaining the designed structure of the database.
 
@@ -14,7 +14,8 @@ Mutations are similar to SQL `INSERT INTO ...` or `UPDATE` statements.
 
 Much like the Query system, all mutations exist inside a `mutation { ... }` block. Several mutations can be run at the same time, independently of one another.
 
-#### Insert
+## Insert
+
 Insert is used to create new documents from scratch, which involves many necessary steps to ensure all the data is structured properly and verifiable. From a developer's perspective, it's the easiest of all the mutations as it doesn't require any queries or document lookups before execution.
 
 ```javascript=
@@ -26,7 +27,8 @@ mutation {
 
 This is the general structure of an insert mutation. You call the `createTYPE` mutation, with the given data payload.
 
-##### Payload Format
+### Payload Format
+
 All mutations use a payload to update the data. Unlike the rest of the Query system, mutation payloads aren't typed. Instead, they use a standard JSON Serialization format.
 
 Removing the type system from payloads allows flexibility in the system.
@@ -56,11 +58,12 @@ mutation {
 
 Here we can see how a simple example of creating a Book using an insert mutation. Additionally, we can see, much like the Query functions, we can select the fields we want to be returned.
 
-The generated insert mutation returns the same type it creates, in this case, a Book type. So we can easily include all the fields as a selection set so that we can return them. 
+The generated insert mutation returns the same type it creates, in this case, a Book type. So we can easily include all the fields as a selection set so that we can return them.
 
 More specifically, the return type is of type `[Book]`. So we can create and return multiple books at once.
 
-#### Update
+## Update
+
 Updates are distinct from Inserts in several ways. Firstly, it relies on a query to select the correct document or documents to update. Secondly it uses a different payload system.
 
 Update filters use the same format and types from the Query system, so it easily transferable.
@@ -119,11 +122,13 @@ Here, we select all documents with a rating less than or equal to 1.0, update th
 
 For additional filter details, see the above `Query Block` section.
 
-#### Upsert
-![](https://img.shields.io/badge/Status-TODO-yellow)
+## Upsert
 
-#### Delete
-Delete mutations allow developers and users to remove objects from collections. You can delete using specific Document Keys, a list of doc keys, or a filter statement.
+[TBD]
+
+## Delete
+
+Deleting mutations allow developers and users to remove objects from collections. You can delete using specific Document Keys, a list of doc keys, or a filter statement.
 
 The document selection interface is identical to the `Update` system. Much like the update system, we can return the fields of the deleted documents.
 
