@@ -4,50 +4,11 @@ sidebar_position: 90
 ---
 # Aliases
 
-Variables are used in DefraDB to store both input placeholder values, and interim query results. DefraDB makes use of interim queries to allow for query composition, that is, using query results as inputs to other queries. This is similar to nested SQL `SELECT` statements. Variables can be used in place of string interpolation to create more efficient queries.
-
-## Input Variables
-
-Input variables can be used in place of complex string interpolation to allow for operational simplicity for developers. DefraDB will natively handle the string interpolation internally, creating an easy workflow. Variables are strongly typed at the time of definition, and queries that are given incorrect variable types will return an error. Variables are defined in the `query` keyword, along with their types, and are indicated by a `$` prefix.
-
-```graphql
-query($myVar: Int) {
-    books(filter{ rating: $myVar}) {
-        title
-        genre
-        description
-    }
-}
-
-{
-    "myVar": 4
-}
-```
-
-Here we define the variable `$myVar` which is of type `Int`, used by the books filter on the rating field. We supply the variables as a `JSON` object at the end of the query. With, its keys matching the defined variables, any additional keys provided that don't match the defined variables will result in an error.
-
-## Sub Queries
-
-Subqueries are used to store interim query results to be used later on in the currently executing query. They can be used to logically break up a query into components or create a new set of data to filter, which would otherwise be cumbersome.
-
-Subqueries are defined as any other additional query, except using a special alias name indicated by a reserved variable prefix `$_[sub query name]`. All subqueries are not returned in the result, but their contents can be utilized in other parts of the query.
-
-The values of the subquery are stored in the special subquery variable defined using the `$_` prefix. They are managed as a map of type `Map<ID, Object>` a map with `IDs` as the key, and `Objects` as the value, where the `Object` is the return type of the subquery. Subqueries have no concept of an ordering since any desired ordering can be applied on the final query, so any `sort` input given to a subquery will return an error.
-
-A subquery must always return *at least* the `_id` field of the returned type, any other field is optional. Unless other fields are necessary, it is best to solely use the `_id` field, due to the optimizations it affords the engine.
-
-Subquery results, represented by the prefixed variable, can be used as many other arguments within the `filter` object. It can act like both an array of `IDs`, allowing operators like `_in` and `_nin`, as well as being able to access the fields of the object through a map operator
-
-> ** More on-map operations for subqueries to be added! [color=red]**
+If the structure of a returned query is not ideal for a given application, you can rename fields and entire query results to better fit your use case. This is particularly useful, and sometimes necessary when using multiple queries within a single request.
 
 ```javascript
-// Select all books published by X reviewed by authors belonging to a publisher Y
 {
-    _authorsOfPubY: authors(filter: { written: { publishedBy: {name: "Y"}}}) {
-        _id
-    }
-    
-    books(filter: {publishedBy: { name: "X" }, reviewedBy: {_in: $_authorsOfPubY}}) {
+    topTenBooks: books(sort: {rating: DESC}, limit: 10) {
         title
         genre
         description
@@ -55,4 +16,36 @@ Subquery results, represented by the prefixed variable, can be used as many othe
 }
 ```
 
-This query utilizes a subquery, defined as `$_authorsOfPubY` which is all the authors who have books published by the publisher with the name "Y". The results of the subquery are then later used in the main query as a list of `IDs` to compare against the `reviewedBy` field using the array `_in` operator, which returns true if the value at `reviewedBy` is anywhere within the subquery `$_authorsOfPubY`. This query will only return the `books` result, as subqueries are not included in the results output.
+Here the books result is renamed to `topTenBooks`, which can be useful for semantic reasoning about the request, and for organizational purposes. It is suggested in production deployments to name your queries properly.
+
+```javascript
+{
+    topTenBooks: books(sort: {rating: DESC}, limit: 10) {
+        title
+        genre
+        description
+    }
+    
+    bottomTenBooks: books(sort: {rating: ASC}, limit: 10) {
+        title
+        genre
+        description
+    }
+}
+```
+
+In this query the two returned results are named `topTenBooks` and `bottomTenBooks` respectively. When dealing with multiple queries of the same type (e.g. `books`) it is required to alias one from another.
+
+Additionally, we can alias individual fields within our returned types. Aliasing a field works the same as aliasing a query.
+
+```javascript
+{
+    books {
+        name: title
+        genre
+        description
+    }
+}
+```
+
+Here we have renamed the `title` field to `name`. Unlike query aliases, there is no requirement in any context since name collisions are impossible within a defined query return type.
