@@ -4,11 +4,11 @@ sidebar_position: 50
 ---
 # Filtering
 
-Provided a collection of documents, we can `filter` on a number of fields and predicates, including compound predicates via conditional keywords like (`_and`, `_or`, `_not`). 
+Filtering is used to screen data entries containing the specified fields and predicates (including compound predicates) out of a collection of documents using conditional keywords like `_and`, `_or`, `_not`.
 
-Basic filtering is exposed through the `filter` keyword, and can be supplied as arguments to a root level field, or subfields that contain some kind of embedding or relation.
+To accomplish this, the `filter` keyword can be applied as an argument to root level fields and subfields.
 
-The following shows the use of the `filter` keyword on the root level books field. An empty `filter` object is equivalent to no filters at all, so it will match all objects it is applied to. In this case, it will return all books.
+An empty `filter` object is equivalent to no filters being applied. Hence, the output will return all books. The following example displays an empty filter being applied on the root level field.
 
 ```javascript
 {
@@ -20,12 +20,12 @@ The following shows the use of the `filter` keyword on the root level books fiel
 }
 ```
 
-Some of the available filtering options depend on the available indexes on a field, but, we will omit this for now.
+Some filtering options depend on the available indexes on a field. However, we will not discuss them in this section.
 
 To apply a filter to a specific field, we can specify it within the filter object.
 
+The following only returns books with the title “A Painted House”.
 
-The following only returns books with the title “A Painted House”
 ```javascript
 {
 	books(filter: { title: "A Painted House" }) {
@@ -36,7 +36,10 @@ The following only returns books with the title “A Painted House”
 }
 ```
 
-We can apply filters to as many fields as are available. Note, each additional listed field in the filter object implies an AND conditional relation.
+We can apply filters to multiple / all fields available.
+
+NOTE: Each additional field listed in the filter object implies a conditional AND relation.
+
 ```javascript
 {
 	books(filter: { title: "A Painted House", genre: "Thriller" }) {
@@ -47,15 +50,15 @@ We can apply filters to as many fields as are available. Note, each additional l
 }
 ```
 
-The above query is equivalent to the statement: Return all the books with the title “A Painted House” AND whose genre is “Thriller”.
+The above query only returns books with the title “A Painted House” AND genre “Thriller”.
 
-Filtering is also possible on subfields that have relational objects within them.
+Filters can also be applied on subfields that have relational objects within them.
 
-Given a Book object, with an Author field which is a many-to-one relationship to the Author object, we can query and filter based on Author field value.
+For example: A Book object, with an Author field, has a many-to-one relationship to the Author object. Then we can query and filter based on the value of the Author field.
 
 ```javascript
 {
-	books(filter: { genre: "Thriller", author: {name: "John Grissam"}}) {
+	books(filter: { genre: "Thriller", author: {name: "John Grisham"}}) {
 		title
 		genre
 		description
@@ -66,9 +69,9 @@ Given a Book object, with an Author field which is a many-to-one relationship to
 }
 ```
 
-This query returns all books authored by “John Grissam” with the genre “Thriller”.
+This query returns all books authored by “John Grisham” with the genre “Thriller”.
 
-Filtering from the root object, compared to sub objects results in different semantics. Root filters that apply to sub objects, like the `author` section of the above query, only return the root object type if there is a match to the sub object filter. E.g. We will only return books, if the author filter condition accepts.
+Filtering from the root object, compared to sub objects results in different semantics. Root filters that apply to sub objects, like the `author` section of the above query, only returns the root object type if there is a match to the sub object filter. E.g. the code snippet only returns books, if the author filter condition accepts.
 
 This applies to both single sub-objects, and array sub-objects. Meaning, if we apply a filter on a sub-object, and that sub-object is an array, we will **only** return the root object, if at least one sub-object matches the given filter instead of requiring **every** sub-object to match the query. 
 
