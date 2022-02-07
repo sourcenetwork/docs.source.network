@@ -38,7 +38,7 @@ The following only returns books with the title “A Painted House”.
 
 We can apply filters to multiple / all fields available.
 
-NOTE: Each additional field listed in the filter object implies a conditional AND relation.
+**NOTE**: Each additional field listed in the filter object implies to a conditional AND relation.
 
 ```javascript
 {
@@ -71,11 +71,12 @@ For example: A Book object, with an Author field, has a many-to-one relationship
 
 This query returns all books authored by “John Grisham” with the genre “Thriller”.
 
-Filtering from the root object, compared to sub objects results in different semantics. Root filters that apply to sub objects, like the `author` section of the above query, only returns the root object type if there is a match to the sub object filter. E.g. the code snippet only returns books, if the author filter condition accepts.
+Filtering from the root object level, compared to the sub-object level results in different semantics. Root filters that apply to sub-objects (aka `author` section of the above query), only returns the root object type if both the root object and sub-object conditions are fulfilled. E.g., the code snippet only returns books, if the author filter condition is satisfied.
 
-This applies to both single sub-objects, and array sub-objects. Meaning, if we apply a filter on a sub-object, and that sub-object is an array, we will **only** return the root object, if at least one sub-object matches the given filter instead of requiring **every** sub-object to match the query. 
+This applies to both single sub-objects and array sub-objects. I.e., if we apply a filter on a sub-object array, the output **only** returns the root object, if at least one sub-object matches the given filter instead of requiring **every** sub-object to match the query. 
 
-The following query will only return authors, if they have **at least** one book whose genre is a thriller
+The following query will only return authors, if they have **at least** one thriller genre based book.
+
 ```javascript
 {
     authors(filter: {book: {genre: {_eq: "Thriller"}}}) {
@@ -85,9 +86,9 @@ The following query will only return authors, if they have **at least** one book
 }
 ```
 
-Moreover, if we include the sub-object we filter on, which is an array, in the selection set, the filter is then implicitly applied unless specified otherwise.
+Additionally, if we include the sub-object array we are filtering on, in the selection set, the filter is then implicitly applied unless otherwise specified.
 
-From the above query, let's add `books` to the selection set.
+In the quercode snippet above, let's add `books` to the selection set using the query below .
 ```
 {
     authors(filter: {book: {genre: {_eq: "Thriller"}}}) {
@@ -101,7 +102,7 @@ From the above query, let's add `books` to the selection set.
 }
 ```
 
-Here, the `books` section will only contain books that match the root object filter, E.g.: `{genre: {_eq: "Thriller"}}`. If we wish to return the same authors from the above query and include *all* their books, we can directly add an explicit filter to the sub-object instead of just the sub-filters.
+Here, the `books` section will only contain books that match the root object filter, namely, `{genre: {_eq: "Thriller"}}`. If we wish to return the same authors from the above query and include *all* their books, we can add an explicit filter directly to the sub-object instead of the sub-filters.
 
 ```
 {
@@ -116,9 +117,9 @@ Here, the `books` section will only contain books that match the root object fil
 }
 ```
 
-Here, we only return authors who have at least one book with the genre set to "Thriller". However, we then return **all** that specific authors' books, instead of just their thrillers.
+In the code snippet above, the output returns authors who have at least one book with the genre "Thriller". The output also returns **all** the books written by these selected authors (not just the thrillers).
 
-Applying filters solely to sub-objects, which is only applicable for Array types, is computed independently from the root object filters.
+Filters applied solely to sub-objects, which are only applicable for array types, are computed independently from the root object filters.
 
 ```javascript
 {
@@ -133,13 +134,14 @@ Applying filters solely to sub-objects, which is only applicable for Array types
 }
 ```
 
-The above query returns all authors with the name “John Grisham”, then filters and returns all the returned authors' books whose genre is “Thriller”. This is similar to the previous query, but an important distinction is that it will return all the matching Author objects regardless of the book's sub-object filter. 
+The above query returns all authors with the name “John Grisham”, then filters and returns all the returned authors' books with the genre “Thriller”. This is similar to the previous query, but an important distinction is that it will return all the matching author objects regardless of the book's sub-object filter. 
 
-The first query, will only return if there are Thriller books AND its author is “John Grisham”. The second query always returns all authors named “John Grishams”, and if they have some books with the genre “Thriller”, return those as well.
+The first query, will only return an output if there are any Thriller books written by the author “John Grisham” (using AND condition i.e., both conditions have to be fulfilled). The second query always returns all authors named “John Grisham”, and their Thriller genre books.
 
-So far, we have only looked at EXACT string matches, but we can filter on any scalar type or object fields, like booleans, integers, floating points, and more. To use other comparison operators, we can specify Greater Than, Less Than, Equal or Greater than, Less Than or Equal to, and of course, EQUAL. 
+So far, we have only seen examples of EXACT string matches, but we can also filter using scalar value type or object fields. For e.g., booleans, integers, floating points, etc. Also, comparison operators like: Greater Than, Less Than, Equal To or Greater than, Less Than or Equal To, EQUAL can be used. 
 
 Let's query for all books with a rating greater than or equal to 4.
+
 ```javascript
 {
 	books(filter: { rating: { _gte: 4 } }) {
@@ -149,9 +151,9 @@ Let's query for all books with a rating greater than or equal to 4.
 }
 ```
 
-Note, our filter expression contains a new object `{ _gte: 4 }`, instead of before, where we had a simple string value. If a field is a scalar type, and its filter is given an object value, that object's first and only key must be a comparator operator like `_gte`. If the filter is given a simple scalar value, like “John Grisham”, “Thriller”, or FALSE, the default operator is `_eq` (EQUAL).
+**NOTE**: In the above example, the expression contains a new scalar type object `{ _gte: 4 }`.  While previously, where we had a simple string value. If a scalar type field has a filter with an object value, then that object's first and only key must be a comparison operator like `_gte`. If the filter is given a simple scalar value like “John Grisham”, “Thriller”, or FALSE, then the default operator that should be used is `_eq` (EQUAL).
 
-See the following table for a reference of available operators
+The following table displays a list of available operators:
 
 
 | Operator | Description |
@@ -167,7 +169,7 @@ See the following table for a reference of available operators
 | `_like`  | Sub-String Like        |
 ###### Table 1. Supported operators.
 
-See the following table for a reference of which operators can be used on which types
+The table below displays the operators that can be used for every value type:
 
 
 | Scalar Type | Operators |
@@ -180,9 +182,10 @@ See the following table for a reference of which operators can be used on which 
 | DateTime     | `_eq, _neq, _gt, _gte, _lt, _lte, _in, _nin`     |
 ###### Table 2. Operators supported by Scalar types.
 
-To use multiple filters, as we saw above, the AND predicate is implied given a list of fields to filter on, however, we can explicitly indicate what conditional we want to use. This includes `_and`, `_or`, and `_not`. The _and and _or conditionals accept a list of predicate filters to apply to, whereas the _not conditional accepts an object.
+There are 3 types of conditional keywords, i.e, `_and`, `_or`, and `_not`. Conditional keywords like `_and` and `_or` are used when we need to apply filters on multiple fields simultaneously.  The `_not` conditional keyword accepts only an object.
 
-Lets' query all books that are a part of the Thriller genre, or have a rating between 4 to 5.
+The code snippet below queries all books that are a part of the Thriller genre, or have a rating between 4 to 5.
+
 ```javascript
 {
     books(
@@ -202,7 +205,7 @@ Lets' query all books that are a part of the Thriller genre, or have a rating be
 }
 ```
 
-An important thing to note about the above query is the _and conditional. Even though AND is assumed, if we have two filters on the same field, we MUST specify the _and operator, since JSON objects cannot contain duplicate fields.
+An important thing to note about the above query is the `_and` conditional. Even though AND is assumed, if we have two filters on the same field, we MUST specify the `_and` operator, since JSON objects cannot contain duplicate fields.
 >**Invalid**:
 `filter: { rating: { _gte: 4 }, rating { _lte: 5 } }`
 >**Valid**:
