@@ -1,6 +1,0 @@
-{
-    "cSpell.words": [
-        "libp"
-    ],
-    "window.title": "${dirty}${activeEditorShort}${separator}${rootName}${separator}${appName} ${separator} [Branch: filtering-documentation]"
-}
