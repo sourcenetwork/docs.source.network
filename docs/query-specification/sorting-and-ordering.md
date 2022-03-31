@@ -60,7 +60,7 @@ If the DocKey is included in the sort fields, any field included afterwards will
 
 > Sorting on sub-objects from the root object is only allowed if the sub-object is not an array. If it is an array, the sort must be applied to the object field directly instead of through the root object.
 
-*So, instead of*
+*So, instead of:*
 ```javascript
 {
     authors(sort: { name: DESC, books: { title: ASC }}) {
@@ -71,7 +71,7 @@ If the DocKey is included in the sort fields, any field included afterwards will
     }
 }
 ```
-*We need*
+*We need:*
 ```javascript
 {
     authors(sort: { name: DESC }) {
