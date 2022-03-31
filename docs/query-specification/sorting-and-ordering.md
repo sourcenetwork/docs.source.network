@@ -58,7 +58,7 @@ In case of a single sort field and objects with same value, the documents identi
 
 If the DocKey is included in the sort fields, any field included afterwards will never be evaluated. This is because all DocKeys are unique. If the sort fields are `published_at`, `id`, and `birthday`, the `birthday` sort field will never be evaluated and should be removed from the list.
 
-> Sorting on sub-objects from the root object is only allowed if the sub-object is not an array. If it is an array, the sort must be applied to the object field directly instead of through the root object.[color=orange]
+> Sorting on sub-objects from the root object is only allowed if the sub-object is not an array. If it is an array, the sort must be applied to the object field directly instead of through the root object.
 
 *So, instead of*
 ```javascript
