@@ -4,13 +4,13 @@ sidebar_position: 160
 ---
 # Database API
 
-DefraDB GraphQL auxiliary APIs include MerkleCRDT Traversal, Schema Management, etc.
+So far, all the queries and mutations that have been discussed were specific to the stored and managed developer or user-created objects. However, that is only one aspect of DefraDB's GraphQL API. The other part of DefraDB GraphQL API is the auxiliary APIs, which include MerkleCRDT Traversal, Schema Management, and more.
 
 ## MerkleCRDTs
 
-All objects in DefraDB are stored in MerkleCRDTs (see [DefraDB Tech Specs](../tech-spec/defradb-tech-spec.md)). These MerkleCRDTs are represented as a series of small updates connected in a MerkleDAG. The MerkleDAG is a Merklized version of a DAG (Directed Acyclical Graph), which means each node in the DAG, references a parent node through some kind of Content Identifier (CID).
+All objects in DefraDB are stored in MerkleCRDTs (see [DefraDB Tech Specs](../tech-spec/defradb-tech-spec.md)). These MerkleCRDTs are represented as a series of small updates connected in a MerkleDAG. The MerkleDAG is a Merklized version of a DAG (Directed Acyclical Graph), which means that each node in the DAG references a parent node through some kind of Content Identifier (CID).
 
-Image below shows an example structure of a MerkleDAG.
+The image below shows an example structure of a MerkleDAG.
 
 ![](https://mvpworkshop.co/wp-content/uploads/2021/01/ipfs-inarticle7.jpeg)
 
@@ -98,6 +98,6 @@ query {
 }
 ```
 
-This example shows how to query for the additional `_version` field that's generated automatically for each added schema type. The `_version` is the same execution as `latestCommit`.
+The above example shows how to query for the additional `_version` field that is generated automatically for each added schema type. The `_version` has the same execution as `latestCommit`.
 
-Both `_version` and `latestCommit` return an array of `Commit` types because the `HEAD` of the MerkleDAG can point to more than one DAG node. This is caused by two concurrent updates to the DAG at the same height. DAG has a single head mostly, but it can have multiple.
+Both `_version` and `latestCommit` return an array of `Commit` types because the `HEAD` of the MerkleDAG can point to more than one DAG node. This is caused by two concurrent updates to the DAG at the same height. The DAG usually has a single head. However, it can also have multiple heads.
