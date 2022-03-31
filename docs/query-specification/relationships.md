@@ -9,9 +9,7 @@ DefraDB supports a number of common relational models that an application may ne
 Relationships are defined through the Document Schemas, using a series of GraphQL directives, and inferencing. They are always defined on both sides of the relation, meaning both objects involved in the relationship.
 
 #### One-to-One
-The simplest relationship is a "one-to-one" which directly maps one document to another.
-
-The code below defines a one-to-one relationship between the `Author` and their `Address`.
+The simplest relationship is a "one-to-one" which directly maps one document to another. The code below defines a one-to-one relationship between the `Author` and their `Address`:
 
 ```graphql
 type Author {
@@ -29,8 +27,8 @@ type Address {
 ```
 
 The types of both objects are included and DefraDB infers the relationship. As a result:
-- both objects which can be queried separately.
-- each object provides field level access to its related object. 
+- Both objects which can be queried separately.
+- Each object provides field level access to its related object. 
 
 The notable distinction of "one-to-one" relationships is that only the DocKey of the corresponding object is stored.
 
@@ -39,7 +37,7 @@ On the other hand, if you simply embed the Address within the Author type withou
 #### One-to-Many
 A "one-to-many" relationship allows us to relate several objects of one type, to a single instance of another. 
 
-Let us define a one-to-many relationship between an author and their books. This example differs from the above relationship example because we relate the author to an array of books, instead of a single address.
+Let us define a one-to-many relationship between an author and their books below. This example differs from the above relationship example because we relate the author to an array of books, instead of a single address.
 
 ```graphql
 type Author {
@@ -55,7 +53,7 @@ type Book {
 }
 ```
 
-In this case the books object is defined within the Author object to be an array of books, indicating that *one* Author type has a relationship to *many* Book types. Internally, much like the one-to-one model, only the DocKeys are stored. However, the DocKey is only stored on one side of the relationship (the child type). In this example only the Book type keeps a reference to its associated Author DocKey.
+In this case, the books object is defined within the Author object to be an array of books, indicating that *one* Author type has a relationship to *many* Book types. Internally, much like the one-to-one model, only the DocKeys are stored. However, the DocKey is only stored on one side of the relationship (the child type). In this example, only the Book type keeps a reference to its associated Author DocKey.
 
 #### Many-to-Many
 
@@ -63,9 +61,7 @@ In this case the books object is defined within the Author object to be an array
 
 #### Multiple Relationships
 
-It is possible to define a collection of different relationship models. Additionally, we can define multiple relationships within a single type.
-
-Relationships containing unique types, can simply be added to the types without issue. Like the following.
+It is possible to define a collection of different relationship models. Additionally, we can define multiple relationships within a single type. Relationships containing unique types, can simply be added to the types without issue. Like the following:
 ```graphql
 type Author {
     name: String
@@ -90,4 +86,4 @@ type Book {
 }
 ```
 
-Here we have two relations of the same type. By default, their association would conflict because internally type names are used to specify relations. We use the `@relation` to add a custom name to the relation. `@relation` can be added to any relationship, even if it's a duplicate type relationship. It exists to be explicit, and to change the default parameters of the relation.
+Here we have two relations of the same type. By default, their association would conflict because internally, type names are used to specify relations. We use the `@relation` to add a custom name to the relation. `@relation` can be added to any relationship, even if it's a duplicate type relationship. It exists to be explicit, and to change the default parameters of the relation.
