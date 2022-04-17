@@ -207,4 +207,4 @@ The `_not` conditional accepts an object instead of an array.
 > Filter all objects that *do not* have the genre "Thriller"
 > `filter: { _not: { genre: { _eq: "Thriller" } } }`
 
-*Using the `_not` operator should be used only when the available filter operators like `_neq` do not fit the use case.*
+*The`_not` operator should only be used when the available filter operators like `_neq` do not fit the use case.*

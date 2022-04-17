@@ -4,7 +4,7 @@ sidebar_position: 90
 ---
 # Aliases
 
-If the structure of a returned query is not ideal for a given application, you can rename fields and entire query results to better fit your use case. This is particularly useful, and sometimes necessary when using multiple queries within a single request.
+If the structure of a returned query is not ideal for a given application, you can rename fields and entire query results to suit your use case. This is particularly useful, and sometimes necessary when using multiple queries within a single request.
 
 ```javascript
 {
@@ -16,7 +16,7 @@ If the structure of a returned query is not ideal for a given application, you c
 }
 ```
 
-Here the books result is renamed to `topTenBooks`, which can be useful for semantic reasoning about the request, and for organizational purposes. It is suggested in production deployments to name your queries properly.
+In the above example, the books result is renamed to `topTenBooks`, which can be useful for semantic reasoning about the request, and for organizational purposes. It is suggested in production deployments to name your queries properly.
 
 ```javascript
 {
@@ -34,9 +34,9 @@ Here the books result is renamed to `topTenBooks`, which can be useful for seman
 }
 ```
 
-In this query the two returned results are named `topTenBooks` and `bottomTenBooks` respectively. When dealing with multiple queries of the same type (e.g. `books`) it is required to alias one from another.
+In this query the two returned results are named `topTenBooks` and `bottomTenBooks` respectively. When dealing with multiple queries of the same type (e.g., `books`), it is required to alias one from another.
 
-Additionally, we can alias individual fields within our returned types. Aliasing a field works the same as aliasing a query.
+Additionally, we can alias individual fields within our returned types. Aliasing a field works the same way as aliasing a query.
 
 ```javascript
 {
@@ -48,4 +48,4 @@ Additionally, we can alias individual fields within our returned types. Aliasing
 }
 ```
 
-Here we have renamed the `title` field to `name`. Unlike query aliases, there is no requirement in any context since name collisions are impossible within a defined query return type.
+In the above example, we have renamed the `title` field to `name`. Unlike query aliases, there is no requirement in any context because name collisions are impossible within a defined query return type.

@@ -24,7 +24,7 @@ query($myVar: Int) {
 }
 ```
 
-Here we define the variable `$myVar` which is of type `Int`, used by the books filter on the rating field. We supply the variables as a `JSON` object at the end of the query. With, its keys matching the defined variables, any additional keys provided that don't match the defined variables will result in an error.
+In the above example, we define the variable `$myVar` which is of type `Int`, used by the books filter on the rating field. We supply the variables as a `JSON` object at the end of the query. With its keys matching the defined variables, any additional keys provided that don't match the defined variables will result in an error.
 
 ## Sub Queries
 
@@ -34,11 +34,11 @@ Subqueries are defined as any other additional query, except using a special ali
 
 The values of the subquery are stored in the special subquery variable defined using the `$_` prefix. They are managed as a map of type `Map<ID, Object>` a map with `IDs` as the key, and `Objects` as the value, where the `Object` is the return type of the subquery. Subqueries have no concept of an ordering since any desired ordering can be applied on the final query, so any `sort` input given to a subquery will return an error.
 
-A subquery must always return *at least* the `_id` field of the returned type, any other field is optional. Unless other fields are necessary, it is best to solely use the `_id` field, due to the optimizations it affords the engine.
+A subquery must always return *at least* the `_id` field of the returned type. Any other field is optional. Unless other fields are necessary, it is best to solely use the `_id` field, due to the optimizations it affords the engine.
 
-Subquery results, represented by the prefixed variable, can be used as many other arguments within the `filter` object. It can act like both an array of `IDs`, allowing operators like `_in` and `_nin`, as well as being able to access the fields of the object through a map operator
+Subquery results, represented by the prefixed variable, can be used as many other arguments within the `filter` object. It can act like both an array of `IDs`, allowing operators like `_in` and `_nin`, as well as being able to access the fields of the object through a map operator.
 
-> ** More on-map operations for subqueries to be added! [color=red]**
+> ** More on-map operations for subqueries to be added!**
 
 ```javascript
 // Select all books published by X reviewed by authors belonging to a publisher Y
@@ -55,4 +55,4 @@ Subquery results, represented by the prefixed variable, can be used as many othe
 }
 ```
 
-This query utilizes a subquery, defined as `$_authorsOfPubY` which is all the authors who have books published by the publisher with the name "Y". The results of the subquery are then later used in the main query as a list of `IDs` to compare against the `reviewedBy` field using the array `_in` operator, which returns true if the value at `reviewedBy` is anywhere within the subquery `$_authorsOfPubY`. This query will only return the `books` result, as subqueries are not included in the results output.
+This query utilizes a subquery, defined as `$_authorsOfPubY` which includes all the authors who have books published by the publisher with the name "Y". The results of the subquery are then later used in the main query as a list of `IDs` to compare against the `reviewedBy` field using the array `_in` operator, which returns true if the value at `reviewedBy` is anywhere within the subquery `$_authorsOfPubY`. This query will only return the `books` result, as subqueries are not included in the results output.

@@ -4,19 +4,15 @@ sidebar_position: 150
 ---
 # Mutation Block
 
-Mutations are the `write` side of the DefraDB Query Language. They rely on the query system to function properly. Updates, upserts, and deletes, all require filtering and finding data before taking action.
+Mutations are the `write` side of the DefraDB Query Language. They rely on the query system to function properly. Updates, upserts and deletes, all require filtering and finding data before taking action. 
 
-The data and payload format that mutations use is fundemental to maintaining the designed structure of the database.
+The data and payload format that mutations use is fundamental to maintaining the designed structure of the database. All mutation definitions are generated for each defined type in the Database. This is similar to the read query system.
 
-All mutation definitions are generated for each defined type in the Database. This is similar to the read query system.
-
-Mutations are similar to SQL `INSERT INTO ...` or `UPDATE` statements.
-
-Much like the Query system, all mutations exist inside a `mutation { ... }` block. Several mutations can be run at the same time, independently of one another.
+Mutations are similar to SQL `INSERT INTO ...` or `UPDATE` statements. Much like the Query system, all mutations exist inside a `mutation { ... }` block. Several mutations can be run at the same time, independently of one another.
 
 ## Insert
 
-Insert is used to create new documents from scratch, which involves many necessary steps to ensure all the data is structured properly and verifiable. From a developer's perspective, it's the easiest of all the mutations as it doesn't require any queries or document lookups before execution.
+Insert is used to create new documents from scratch. This involves many necessary steps to ensure all the data is structured properly and verifiable. From a developer's perspective, it's the easiest of all the mutations as it doesn't require any queries or document lookups before execution.
 
 ```javascript=
 type Book { ... }
@@ -25,17 +21,13 @@ mutation {
 }
 ```
 
-This is the general structure of an insert mutation. You call the `createTYPE` mutation, with the given data payload.
+The above example displays the general structure of an insert mutation. You call the `createTYPE` mutation, with the given data payload.
 
 ### Payload Format
 
-All mutations use a payload to update the data. Unlike the rest of the Query system, mutation payloads aren't typed. Instead, they use a standard JSON Serialization format.
+All mutations use a payload to update the data. Unlike the rest of the Query system, mutation payloads aren't typed. Instead, they use a standard JSON Serialization format. Removing the type system from payloads allows flexibility in the system. 
 
-Removing the type system from payloads allows flexibility in the system.
-
-JSON Supports all the same types as DefraDB, and it's familiar for developers, so i's an obvious choice for us.
-
-Here's an example with a full type and payload
+JSON Supports all the same types as DefraDB, and it's familiar for developers. Hence, it is an obvious choice for us. The following is an example with a full type and payload:
 ```javascript 
 type Book {
     title: String
@@ -56,7 +48,7 @@ mutation {
 }
 ```
 
-Here we can see how a simple example of creating a Book using an insert mutation. Additionally, we can see, much like the Query functions, we can select the fields we want to be returned.
+The above is a simple example of creating a Book using an insert mutation. Additionally, we can see that much like the Query functions, we can select the fields we want to be returned here.
 
 The generated insert mutation returns the same type it creates, in this case, a Book type. So we can easily include all the fields as a selection set so that we can return them.
 
@@ -64,22 +56,22 @@ More specifically, the return type is of type `[Book]`. So we can create and ret
 
 ## Update
 
-Updates are distinct from Inserts in several ways. Firstly, it relies on a query to select the correct document or documents to update. Secondly it uses a different payload system.
+Updates are distinct from Inserts in several ways. Firstly, it relies on a query to select the correct document or documents to update. Secondly, it uses a different payload system.
 
-Update filters use the same format and types from the Query system, so it easily transferable.
+Update filters use the same format and types from the Query system. Hence, it easily transferable.
 
-Heres the structure of the generated update mutation for a `Book` type.
+The structure of the generated update mutation for a `Book` type is given below:
 ```javascript
 mutation {
     update_book(id: ID, filter: BookFilterArg, data: updateBookPayload) [Book]
 }
 ```
 
-See above for the structure and syntax of the filter query. You can also see an additional field `id`, that will supersede the `filter`; this makes it easy to update a single document by a given ID.
+See the structure and syntax of the filter query above. You can also see an additional field `id`, thawhich will supersede the `filter`; this makes it easy to update a single document by a given ID.
 
-More importantly than the Update filter, is the update payload. Currently all update payloads use the `JSON Merge Patch` system.
+More important than the Update filter, is the update payload. Currently all update payloads use the `JSON Merge Patch` system.
 
-`JSON Merge Patch` is very similar to a traditional JSON object, with a few semantic differences that are important for Updates. Most significantly is how to remove or delete a field value in a document. To remove a `JSON Merge Patch` field. we provide a `nil` value in the JSON object.
+`JSON Merge Patch` is very similar to a traditional JSON object, with a few semantic differences that are important for Updates. The most significant aspect is how to remove or delete a field value in a document. To remove a `JSON Merge Patch` field. we provide a `nil` value in the JSON object.
 
 Here's an example.
 ```json
@@ -91,9 +83,9 @@ Here's an example.
 
 This Merge Patch sets the `name` field to "John" and deletes the `rating` field value.
 
-Once we create our update , and select which document(s) to update, we can query the new state of all documents affected by the mutation. This is because our update mutation returns the type it mutates.
+Once we create our update, and select which document(s) to update, we can query the new state of all documents affected by the mutation. This is because our update mutation returns the type it mutates.
 
-Heres a basic example
+A basic example is provided below:
 ```javascript
 mutation {
     update_book(id: '123', data: "{'name': 'John'}") {
@@ -104,9 +96,9 @@ mutation {
 
 ```
 
-Here we can see after applying the mutation; we return the `_key` and `name` fields. We can return any field from the document, not just the ones updated. We can even return and filter on related types.
+Here, we can see that after applying the mutation, we return the `_key` and `name` fields. We can return any field from the document (not just the updated ones). We can even return and filter on related types.
 
-Beyond, updating by an ID or IDs, we can use a query filter to select which fields to apply our update to. This filter works the same as the queries.
+Beyond updating by an ID or IDs, we can use a query filter to select which fields to apply our update to. This filter works the same as the queries.
 
 ```javascript
 mutation {
@@ -132,14 +124,14 @@ Deleting mutations allow developers and users to remove objects from collections
 
 The document selection interface is identical to the `Update` system. Much like the update system, we can return the fields of the deleted documents.
 
-Heres the structure of the generated delete mutation for a `Book` type.
+The structure of the generated delete mutation for a `Book` type is given below:
 ```javascript
 mutation {
     delete_book(id: ID, ids: [ID], filter: BookFilterArg) [Book]
 }
 ```
 
-Here we can delete a document with ID '123':
+Here, we can delete a document with ID '123':
 ```javascript
 mutation {
     delete_user(id: '123') {
@@ -151,9 +143,9 @@ mutation {
 
 This will delete the specific document, and return the `_key` and `name` for the deleted document.
 
-DefraDB currently uses a Hard Delete system, which means that it is completely removed from the database when a document is deleted.
+DefraDB currently uses a Hard Delete system, which means that when a document is deleted, it is completely removed from the database.
 
-Similar to the Update system, you can use a filter to select which documents to delete.
+Similar to the Update system, you can use a filter to select which documents to delete, as shown below:
 ```javascript
 mutation {
     delete_user(filter: {rating: {_gt: 3}}) {
@@ -163,4 +155,4 @@ mutation {
 }
 ```
 
-Here we delete all the matching documents (documents with a rating greater than 3).
+Here, we are deleting all the matching documents (documents with a rating greater than 3).
