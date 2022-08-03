@@ -226,8 +226,6 @@ This is a minor release that resolves several bugs and implements some minor fea
 * Remove commented out code ([#238](https://github.com/sourcenetwork/defradb/issues/238))
 * Remove dead code from multi node ([#186](https://github.com/sourcenetwork/defradb/issues/186))
 
-
-
 ## v0.2.0
 DefraDB v0.2 is a major pre-production release. Until the stable version 1.0 is reached, the SemVer minor patch number will denote notable releases, which will give the project freedom to experiment and explore potentially breaking changes.
 
