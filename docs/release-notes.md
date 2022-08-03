@@ -262,6 +262,7 @@ This release does include a Breaking Change to existing v0.1 databases regarding
 * Check for nil iterator before closing document fetcher ([#108](https://github.com/sourcenetwork/defradb/pull/108))
 
 ### Tooling
+
 * Added benchmark suite ([#160](https://github.com/sourcenetwork/defradb/issues/160))
 
 ### Documentation
@@ -286,6 +287,7 @@ This release does include a Breaking Change to existing v0.1 databases regarding
 * Remove schemaless code branches ([#23](https://github.com/sourcenetwork/defradb/pull/23))
 
 ### Performance
+
 * Add badger multi scan support ([#85](https://github.com/sourcenetwork/defradb/pull/85))
 * Add support for range spans ([#86](https://github.com/sourcenetwork/defradb/pull/86))
 
