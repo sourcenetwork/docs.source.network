@@ -1,3 +1,7 @@
+---
+sidebar_position: 5
+---
+
 # Release Notes
 
 ## v0.3.0
