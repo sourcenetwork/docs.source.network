@@ -31,7 +31,6 @@ const config = {
       }),
     ],
   ],
-
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
@@ -51,9 +50,9 @@ const config = {
         items: [
           {
             href: "https://github.com/sourcenetwork/docs.source.network",
-            label: " ",
+            "aria-label": "GitHub repository",
+            className: "header-github-link",
             position: "right",
-            iconName: "GoMarkGithub",
           },
         ],
       },

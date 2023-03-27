@@ -1,0 +1,26 @@
+.footerMenu {
+  @media (min-width: 997px) {
+    display: flex;
+  }
+
+  .footerMenuLogo {
+    margin-bottom: 40px;
+    @media (min-width: 997px) {
+      width: var(--doc-sidebar-width);
+    }
+
+    a {
+      opacity: 1;
+      transition: opacity var(--ifm-transition-fast)
+        var(--ifm-transition-timing-default);
+      &:hover {
+        opacity: 0.5;
+      }
+    }
+  }
+
+  .footerMenuLinks {
+    width: 100%;
+    flex: 1;
+  }
+}

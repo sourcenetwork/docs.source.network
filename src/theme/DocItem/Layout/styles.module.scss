@@ -1,0 +1,25 @@
+.docItemContainer header + *,
+.docItemContainer article > *:first-child {
+  margin-top: 0;
+}
+
+.docBody {
+  min-width: 0;
+}
+
+.sidebar {
+  position: relative;
+}
+
+.sidebarItems {
+  position: sticky;
+  top: calc(var(--ifm-navbar-height) + 1rem);
+  overflow-y: auto;
+  max-height: calc(100vh - (var(--ifm-navbar-height) + 2rem));
+}
+
+.edit {
+  border-top: 1px solid var(--docs-title-border);
+  padding: 20px 0;
+  margin: 20px 0;
+}
