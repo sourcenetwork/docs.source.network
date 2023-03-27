@@ -17,13 +17,14 @@ const config = {
   projectName: "source-developer", // Usually your repo name.
   presets: [
     [
-      "@docusaurus/preset-classic",
+      "classic",
       /** @type {import('@docusaurus/preset-classic').Options} */
       ({
         docs: {
           routeBasePath: "/",
           sidebarPath: require.resolve("./sidebars.js"),
-          editUrl: "https://github.com/sourcenetwork/docs.source.network/",
+          editUrl:
+            "https://github.com/sourcenetwork/docs.source.network/edit/master/",
         },
         theme: {
           customCss: require.resolve("./src/css/custom.scss"),
@@ -31,27 +32,18 @@ const config = {
       }),
     ],
   ],
-
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
+      docs: {
+        sidebar: {
+          autoCollapseCategories: true,
+        },
+      },
       colorMode: {
         // Should we use the prefers-color-scheme media-query,
         // using user system preferences, instead of the hardcoded defaultMode
         respectPrefersColorScheme: false,
-
-        // Dark/light switch icon options
-        switchConfig: {
-          // Icon for the switch while in dark mode
-          darkIcon: "  ",
-          darkIconStyle: {
-            marginTop: "1px",
-          },
-          lightIcon: "  ",
-          lightIconStyle: {
-            marginTop: "1px",
-          },
-        },
       },
       navbar: {
         title: null,
@@ -63,10 +55,17 @@ const config = {
         },
         items: [
           {
+            type: "docSidebar",
+            position: "left",
+            sidebarId: "mainSidebar",
+            label: "Docs",
+            className: "header-docs-link",
+          },
+          {
             href: "https://github.com/sourcenetwork/docs.source.network",
-            label: " ",
+            "aria-label": "GitHub repository",
+            className: "header-github-link",
             position: "right",
-            iconName: "GoMarkGithub",
           },
         ],
       },
