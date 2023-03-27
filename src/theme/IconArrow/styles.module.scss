@@ -1,0 +1,9 @@
+.arrow {
+  display: inline-block;
+  fill: currentColor;
+  vertical-align: middle;
+
+  &.left {
+    transform: rotate(180deg);
+  }
+}

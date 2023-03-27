@@ -280,6 +280,7 @@ body {
   }
 
   &__label {
+    display: flex;
     line-height: 1;
     font-size: rem(14px);
     transition: all 0.3s ease;
@@ -287,6 +288,18 @@ body {
       line-height: 1;
       vertical-align: middle;
       margin: 0 rem(10px);
+      order: 1;
+      width: 100%;
+    }
+    &:before,
+    &:after {
+      display: none;
+    }
+  }
+
+  &__arrow {
+    &--next {
+      order: 2;
     }
   }
 
@@ -298,15 +311,15 @@ body {
     &--next .pagination-nav__label {
       padding-right: rem(10px);
     }
+    &--next:hover .pagination-nav__label {
+      transform: translateX(5px);
+    }
+
     &--previous .pagination-nav__label {
       padding-left: rem(10px);
     }
-
     &--previous:hover .pagination-nav__label {
       transform: translateX(-5px);
-    }
-    &--next:hover .pagination-nav__label {
-      transform: translateX(5px);
     }
   }
 }
