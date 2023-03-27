@@ -100,6 +100,12 @@ body {
       }
     }
   }
+
+  .header-docs-link {
+    @media (min-width: 996px) {
+      display: none;
+    }
+  }
 }
 
 // Sidebar menu

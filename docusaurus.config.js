@@ -34,6 +34,11 @@ const config = {
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
+      docs: {
+        sidebar: {
+          autoCollapseCategories: true,
+        },
+      },
       colorMode: {
         // Should we use the prefers-color-scheme media-query,
         // using user system preferences, instead of the hardcoded defaultMode
@@ -48,6 +53,13 @@ const config = {
           srcDark: "img/source-dark.svg",
         },
         items: [
+          {
+            type: "docSidebar",
+            position: "left",
+            sidebarId: "mainSidebar",
+            label: "Docs",
+            className: "header-docs-link",
+          },
           {
             href: "https://github.com/sourcenetwork/docs.source.network",
             "aria-label": "GitHub repository",
