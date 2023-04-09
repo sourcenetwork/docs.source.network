@@ -2,13 +2,14 @@
 sidebar_label: Variables
 sidebar_position: 100
 ---
+
 # Variables
 
-Variables are used in DefraDB to store input placeholder values and interim query results. DefraDB uses interim queries (query results as inputs to other queries) to allow for query composition. This is similar to nested SQL `SELECT` statements. Variables can be used in place of string interpolation to create more efficient queries.
+Variables in DefraDB are used to store placeholder values for inputs and interim query results. They enable query composition through the use of interim queries, which are similar to nested SQL `SELECT` statements. Variables can replace string interpolation, leading to more efficient queries.
 
 ## Input Variables
 
-Input variables can be used in place of complex string interpolation to allow for operational simplicity for developers. DefraDB natively handles the string interpolation internally, creating an easy workflow. Variables are strongly typed at the time of definition. Queries that are given incorrect variable types will return an error. Variables are defined in the `query` keyword, along with their types, and are indicated by a `$` prefix.
+Input variables provide a simpler alternative to complex string interpolation, making it easier for developers to work with DefraDB. DefraDB handles string interpolation internally, resulting in a streamlined workflow. Variables are strongly typed when defined, and queries with incorrect variable types will produce an error. Variables can be declared within the `query` keyword along with their types, and are prefixed with a `$` symbol.
 
 ```graphql
 query($myVar: Int) {
@@ -24,24 +25,24 @@ query($myVar: Int) {
 }
 ```
 
-In the above example, we define the variable `$myVar` which is of type `Int`, used by the books filter on the rating field. We supply the variables as a `JSON` object at the end of the query. With its keys matching the defined variables, any additional keys provided that don't match the defined variables will result in an error.
+In the example above, the variable `$myVar` of type `Int` is defined to be used by the books filter on the rating field. The variables are supplied as a JSON object at the end of the query, where keys correspond to the defined variables. Providing additional keys that do not match the defined variables will result in an error.
 
 ## Sub Queries
 
-Subqueries are used to store interim query results to be used later on in the currently executing query. They can be used to logically break up a query into components or create a new set of data to filter, which would otherwise be cumbersome.
+Subqueries are used to store temporary query results for further use within the current query. This allows for the logical separation of a query into components or the creation of new data sets to filter, which would otherwise be difficult.
 
-Subqueries are defined as any other additional query, except using a special alias name indicated by a reserved variable prefix `$_[sub query name]`. All subqueries are not returned in the result, but their contents can be utilized in other parts of the query.
+Subqueries are defined like any other query, but with a unique alias name indicated by a reserved variable prefix `$_[sub query name]`. Subqueries are not included in the final result, although their contents can be used in other parts of the query.
 
-The values of the subquery are stored in the special subquery variable defined using the `$_` prefix. They are managed as a map of type `Map<ID, Object>` a map with `IDs` as the key, and `Objects` as the value, where the `Object` is the return type of the subquery. Subqueries have no concept of an ordering since any desired ordering can be applied on the final query, so any `sort` input given to a subquery will return an error.
+The values of the subquery are stored in the special subquery variable defined with the `$_` prefix. They are managed as a map of type `Map<ID, Object>`, where the `ID` is the key and the `Object` is the return type of the subquery. Subqueries do not have an ordering concept, as any desired ordering can be applied to the final query. Providing a `sort` input to a subquery will result in an error.
 
-A subquery must always return *at least* the `_id` field of the returned type. Any other field is optional. Unless other fields are necessary, it is best to solely use the `_id` field, due to the optimizations it affords the engine.
+A subquery must always return *at least* the `_id` field of the returned type. Any other field is optional. However, it is recommended to use only the `_id` field when possible due to the optimizations it provides the engine.
 
-Subquery results, represented by the prefixed variable, can be used as many other arguments within the `filter` object. It can act like both an array of `IDs`, allowing operators like `_in` and `_nin`, as well as being able to access the fields of the object through a map operator.
+Subquery results, represented by the prefixed variable, can be used as arguments within the `filter` object. They can function as both an array of `IDs`, supporting operators like `_in` and `_nin`, as well as accessing the fields of the object through a map operator.
 
-> ** More on-map operations for subqueries to be added!**
+> **More map operations for subqueries will be added soon!**
 
-```javascript
-// Select all books published by X reviewed by authors belonging to a publisher Y
+```gql
+// Select all books published by X and reviewed by authors belonging to a publisher Y
 {
     _authorsOfPubY: authors(filter: { written: { publishedBy: {name: "Y"}}}) {
         _id
@@ -55,4 +56,4 @@ Subquery results, represented by the prefixed variable, can be used as many othe
 }
 ```
 
-This query utilizes a subquery, defined as `$_authorsOfPubY` which includes all the authors who have books published by the publisher with the name "Y". The results of the subquery are then later used in the main query as a list of `IDs` to compare against the `reviewedBy` field using the array `_in` operator, which returns true if the value at `reviewedBy` is anywhere within the subquery `$_authorsOfPubY`. This query will only return the `books` result, as subqueries are not included in the results output.
+In this example, a subquery is defined as `$_authorsOfPubY`, which includes all authors who have books published by the publisher with the name "Y". The subquery results are then used in the main query as a list of `IDs` to be compared against the `reviewedBy` field using the array `_in` operator. This operator returns true if the value at `reviewedBy` is found within the subquery `$_authorsOfPubY`. The final output will only include the `books` result since subqueries are not part of the result set.

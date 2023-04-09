@@ -2,18 +2,19 @@
 sidebar_label: Query Language Overview
 sidebar_position: 10
 ---
-# Query Language Overview
 
-The DefraDB query language (DQL) is a GraphQL defined API which is used to access and query data residing inside a DefraDB node.
+# DefraDB Query Language Overview
 
-[GraphQL](https://graphql.org) is an open-source query language for APIs, built for making APIs fast, flexible, and developer friendly. Databases such as [DGraph](https://dgraph.io/) and [Fauna](https://fauna.com) use GraphQL API as a query language to read and write data to/from the database. 
-- DGraph is a distributed, high throughput graph database. 
-- Fauna is a transactional database delivered as a secure, web-native API GraphQL.
+The DefraDB query language (DQL) is a GraphQL-based API designed for accessing and querying data stored within a DefraDB node.
 
-DefraDB (while using GraphQL) is designed as a document storage database, unlike DGraph and Fauna. DQL exposes every functionality of the database directly, without the need for any additional APIs. The functionalities include:
+[GraphQL](https://graphql.org) is an open-source query language for APIs, developed to make APIs fast, flexible, and developer-friendly. Databases such as [DGraph](https://dgraph.io/) and [Fauna](https://fauna.com) use GraphQL API as a query language for reading and writing data to and from the database. 
+- DGraph is a distributed, high-throughput graph database. 
+- Fauna is a transactional database delivered as a secure, web-native API with GraphQL support.
+
+DefraDB is designed as a document storage database, unlike DGraph and Fauna. DQL exposes all database functionalities directly, eliminating the need for additional APIs. These functionalities include:
 - Reading, writing, and modifying data.
-- Describing data structures, schemas, and architecting data models (via index's and other schema independent, application-specific requirements).
-  
-**Exception**: DefraDBs PeerAPI is used to interact with other databases and with the underlying CRDTs (for collaborative text editing).
+- Defining data structures, schemas, and designing data models (through indexes and other schema-independent, application-specific requirements).
 
-Our initial design relies only on the currently available GraphQL specification (version tagged June 2018 edition). Initially, the GraphQL Query Language will utilize standard GraphQL Schemas, with any additional directives exposed by DefraDB. DefraDBs CRDT types will initially be automatically mapped to GraphQL types.
+**Exception**: DefraDB's peer-to-peer API is used for interacting with other databases and the underlying CRDTs (for collaborative text editing).
+
+The design of DefraDB is built upon the currently available GraphQL specification. The query Language uses standard GraphQL Schemas with additional directives exposed by DefraDB.

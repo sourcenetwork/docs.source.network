@@ -2,12 +2,13 @@
 sidebar_label: Limiting and Pagination
 sidebar_position: 70
 ---
-# Limiting and Pagination
 
-After filtering and sorting a query, we can then limit and skip elements from the returned set of objects.
+# Limiting and Pagination in Queries
 
-Let us get the top 10 rated books:
-```javascript
+After applying filtering and sorting to a query, you can further refine the results by limiting and skipping elements from the returned set of objects.
+
+For example, let's retrieve the top 10 highest-rated books:
+```gql
 {
     books(sort: {rating: DESC}, limit: 10) {
         title
@@ -17,12 +18,12 @@ Let us get the top 10 rated books:
 }
 ```
 
-The `limit` function accepts the maximum number of items to return from the resulting set. Next, we can `skip` elements in the set, to get the following N objects from the return set. Both these functions can be used to create a pagination system, where we have a limit on number of items per page, and can skip through pages as well.
+The `limit` argument specifies the maximum number of items to return from the resulting set. Additionally, you can use the `offset` argument to skip a certain number of elements in the set. This is helpful for creating a pagination system, where you can limit the number of items displayed per page and navigate through pages as needed.
 
-Let's get the *next* top 10 rated books after the previous query:
-```javascript
+Let's retrieve the *next* top 10 highest-rated books after the previous query:
+```gql
 {
-    books(sort: {rating: DESC}, limit:10, offset: 10) {
+    books(sort: {rating: DESC}, limit: 10, offset: 10) {
         title
         genre
         description
@@ -30,4 +31,4 @@ Let's get the *next* top 10 rated books after the previous query:
 }
 ```
 
-Limits and offsets can be combined to create several different pagination methods.
+By combining `limit` and `offset` arguments, you can create various pagination methods to effectively manage and display the data in your queries.

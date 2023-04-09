@@ -1,33 +1,25 @@
 # Source Docs
 
-This website is built using [Docusaurus 2](https://docusaurus.io/), a modern static website generator.
+Welcome to the Source Docs, a website built using the modern static website generator, [Docusaurus 2](https://docusaurus.io/).
 
-### Installation
+## Getting Started
 
-```
-$ npm i
-```
+Follow these steps to install dependencies and start a local development server:
 
-### Local Development
+1. Install the required dependencies:
 
 ```
-$ npm run start
+npm install
 ```
 
-This command starts a local development server and opens up a browser window. Most changes are reflected live without having to restart the server.
-
-### Build
+2. Run the local development server:
 
 ```
-$ npm run build
+npm run start
 ```
 
-This command generates static content into the `build` directory and can be served using any static contents hosting service.
+Now, you can access the website on the localhost and view any changes you make in real-time.
 
-### Deployment
+## Deployment
 
-`TODO (netlify)`
-
-### Technical Writing (Internal)
-
-See [Technical Writing](https://hackmd.io/Ls4jV6ONQvefDYjAMz2FLQ?view) for best practices and guidelines.
+Every commit on the `master` branch is automatically published via Cloudflare.

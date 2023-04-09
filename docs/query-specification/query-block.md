@@ -2,8 +2,9 @@
 sidebar_label: Query Block
 sidebar_position: 30
 ---
+
 # Query Block
 
-Query blocks are read-only GraphQL operations designed only to request information from the database, without the ability to mutate the database state. They contain multiple subqueries which are executed concurrently, unless there is some variable (see [Variable Blocks](variables.md)) dependency between them.
+Query blocks are read-only GraphQL operations designed solely for requesting information from the database without the ability to mutate the database state. They contain multiple subqueries that are executed concurrently, unless there is a variable dependency between them (see [Variable Blocks](variables.md)).
 
-Queries support database query operations such as filtering, sorting, grouping, skipping/limiting, aggregation, etc. These query operations can be used on different GraphQL object levels, mostly on fields that have some relation or embedding to other objects.
+Queries support various database query operations, such as filtering, sorting, grouping, skipping/limiting, and aggregation. These operations can be applied on different GraphQL object levels, primarily on fields that have a relationship or are embedded within other objects.

@@ -4,28 +4,28 @@ title: IPFS
 
 ## Overview
 
-IPFS is a decentralized system to access websites, applications, files, and data using content addressing. IPFS stands for **InterPlanetary File System**. The fundamental idea underlying in this technology is to change the way a network of people and computers can exchange information amongst themselves.
+IPFS, or **InterPlanetary File System**, is a decentralized system designed for accessing websites, applications, files, and data using content addressing. This technology aims to revolutionize the way networks of people and computers exchange information with each other.
 
 ## Key Features
 
-- Distributed/decentralized system
-- Uses content addressing
-- Participation
+- Decentralized system
+- Content addressing
+- Active participation
 
-A decentralized system lets you access information or a file from multiple locations, which aren't managed by a single organization. The pro's of decentralization are - access to multiple locations to access data, easy to dodge content censorship, and faster file transfer.
+Decentralization allows users to access information or files from multiple locations, which are not controlled by a single entity. The benefits of decentralization include multiple data access points, resistance to content censorship, and faster file transfers.
 
-IPFS addresses a file by its content instead of its location. A content identifier is the cyrptographic hash of the content at that address. It is unique to the content it came in from and permits you to verify if you got what you had requested for.
+IPFS identifies files by their content instead of their location. A content identifier is the cryptographic hash of the content at that address, unique to the content it represents, and enables users to verify they have received the requested information.
 
-For IPFS to work well, active participation of people is necessary. If you are sharing files using IPFS, you need to have copies of the shared files available on multiple computers, which are powered on and running IPFS. In a nutshell, many people provide access to each others files and participate in making them available when requested. Note that if you have downloaded a file using IPFS, by default your computer will share it further with others participants to share further.
+For IPFS to function effectively, active participation of users is essential. Sharing files via IPFS requires having copies of the shared files available on multiple computers, which must be powered on and running IPFS. In essence, participants provide access to each other's files and contribute to their availability when requested. By default, when you download a file using IPFS, your computer will share it with other participants.
 
 ## How Does it Work?
 
-As discussed earlier, IPFS is a p2p (peer-to-peer) storage network. The IPFS ecosystem works with the following fundamental principles.
+IPFS operates as a peer-to-peer (P2P) storage network, utilizing the following core principles:
 
-1. Unique identification via content addressing
-2. Content linking via directed acrylic graphs (DAGs)
+1. Unique identification through content addressing
+2. Content linking using directed acyclic graphs (DAGs)
 3. Content discovery via distributed hash tables (DHTs)
 
 ## Suggested Reading
 
-For more in-depth knowledge of the IPFS system refer to the [IPFS Conceptual documentation](https://docs.ipfs.io/concepts/).
+For a more comprehensive understanding of the IPFS system, refer to the [IPFS Conceptual documentation](https://docs.ipfs.io/concepts/).

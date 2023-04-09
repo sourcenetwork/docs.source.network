@@ -2,11 +2,12 @@
 sidebar_label: Aliases
 sidebar_position: 90
 ---
+
 # Aliases
 
-If the structure of a returned query is not ideal for a given application, you can rename fields and entire query results to suit your use case. This is particularly useful, and sometimes necessary when using multiple queries within a single request.
+Aliases allow you to rename fields and entire query results in GraphQL to better suit your application's needs. They are especially useful when working with multiple queries within a single request, ensuring better organization and semantic clarity.
 
-```javascript
+```gql
 {
     topTenBooks: books(sort: {rating: DESC}, limit: 10) {
         title
@@ -16,9 +17,9 @@ If the structure of a returned query is not ideal for a given application, you c
 }
 ```
 
-In the above example, the books result is renamed to `topTenBooks`, which can be useful for semantic reasoning about the request, and for organizational purposes. It is suggested in production deployments to name your queries properly.
+In the example above, the `books` result is aliased as `topTenBooks`. This makes it easier to understand the purpose of the request and improves organization. It's recommended to use meaningful names for your queries in production deployments.
 
-```javascript
+```gql
 {
     topTenBooks: books(sort: {rating: DESC}, limit: 10) {
         title
@@ -34,11 +35,11 @@ In the above example, the books result is renamed to `topTenBooks`, which can be
 }
 ```
 
-In this query the two returned results are named `topTenBooks` and `bottomTenBooks` respectively. When dealing with multiple queries of the same type (e.g., `books`), it is required to alias one from another.
+In this query, the two results are aliased as `topTenBooks` and `bottomTenBooks` respectively. When working with multiple queries of the same type (e.g., `books`), using aliases to differentiate them is required.
 
-Additionally, we can alias individual fields within our returned types. Aliasing a field works the same way as aliasing a query.
+You can also alias individual fields within the returned types. The process for aliasing a field is the same as aliasing a query.
 
-```javascript
+```gql
 {
     books {
         name: title
@@ -48,4 +49,4 @@ Additionally, we can alias individual fields within our returned types. Aliasing
 }
 ```
 
-In the above example, we have renamed the `title` field to `name`. Unlike query aliases, there is no requirement in any context because name collisions are impossible within a defined query return type.
+In the example above, the `title` field is aliased as `name`. Unlike query aliases, field aliases do not have any specific requirements, as name collisions are not possible within a defined query return type.

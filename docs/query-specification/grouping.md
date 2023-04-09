@@ -2,14 +2,16 @@
 sidebar_label: Grouping
 sidebar_position: 110
 ---
+
 # Grouping
 
-Grouping allows a collection of results from a query to be "grouped" into sections based on some field. These sections are called sub-groups, and are based on the equality of fields within objects, resulting in clusters of groups. Any object field may be used to group objects together. Additionally, multiple fields may be used in the group by clause to further segment the groups over multiple dimensions.
+Grouping enables organizing the results of a query into sections or sub-groups based on a specific field. These sub-groups are formed by clustering objects with equal field values. Any object field may be used for grouping, and multiple fields can be specified in the `groupBy` clause for more granular segmentation.
 
-Once one or more group by fields have been selected using the `groupBy` argument, which accepts an array of length one or more, you may only access certain fields in the return object. Only the indicated `groupBy` fields and aggregate function results may be included in the result object. If you wish to access the sub-groups of individual objects, a special return field called `_group` is available. This field matches the root query type, and can access any field in the object type.
+When using the `groupBy` argument, which accepts an array of one or more fields, only the specified `groupBy` fields and aggregate function results can be included in the result object. To access the sub-groups of individual objects, a special return field called `_group` is available. This field corresponds to the root query type and can access any field in the object type.
 
-In the example below, we are querying for all the books whose author's name begins with 'John'. The results will then be grouped by genre, and will return the genre name and the sub-groups `title` and `rating`.
-```javascript
+In the example below, we query all books whose authors' names start with 'John'. The results are grouped by genre, returning the genre name along with the sub-groups `title` and `rating`.
+
+```gql
 {
     books(filter: {author: {name: {_like: "John%"}}}, groupBy: [genre]) {
         genre
@@ -21,13 +23,15 @@ In the example below, we are querying for all the books whose author's name begi
 }
 ```
 
-In the above example, we can see how the `groupBy` argument is provided and that it accepts an array of field names. We can also see how the special `_group` field can be used to access the sub-group elements.
+The example demonstrates how the `groupBy` argument is used, accepting an array of field names, and how the special `_group` field is used to access sub-group elements.
 
-It's important to note that in the above example, the only available field from the root `Book` type is the `groupBy` field `genre`, along with the special group and aggregate proxy fields.
+Note that in the example, the only available field from the root `Book` type is the `groupBy` field `genre`, along with the special group and aggregate proxy fields.
 
-#### Grouping on Multiple Fields
-As mentioned, we can include any number of fields in the `groupBy` argument to segment the data further. Which can then also be accessed in the return object, as demonstrated in the example below:
-```javascript
+## Grouping on Multiple Fields
+
+As mentioned, any number of fields can be included in the `groupBy` argument for further data segmentation. These fields can also be accessed in the return object, as shown in the example below:
+
+```gql
 {
     books(filter: {author: {name: {_like: "John%"}}}, groupBy: [genre, rating]) {
         genre
@@ -40,14 +44,14 @@ As mentioned, we can include any number of fields in the `groupBy` argument to s
 }
 ```
 
-#### Grouping on Related Objects
-Objects often have related objects within their type definition indicated by the `@relation` directive on the respective object. We can use the grouping system to split results over the related object and the root type fields.
+## Grouping on Related Objects
 
-Like any other group query, we are limited in which fields we can access indicated by the `groupBy` argument's fields. If we include a subtype that has a `@relation` directive in the `groupBy` list, we can access the entire relations fields.
+Objects often have related objects within their type definition, indicated by the `@relation` directive on the respective object. The grouping system can be used to split results based on related objects and root type fields.
 
-Only "One-to-One" and "One-to-Many" relations can be used in a `groupBy` argument.
+When including a subtype with a `@relation` directive in the `groupBy` list, the entire related object's fields can be accessed. Only "One-to-One" and "One-to-Many" relations can be used in a `groupBy` argument.
 
 Given a type definition defined as:
+
 ```graphql
 type Book {
     title: String
@@ -57,13 +61,14 @@ type Book {
 }
 
 type Author {
-    name string
-    written [Book] @relation
+    name: String
+    written: [Book] @relation
 }
 ```
 
-We can create a group query over books and their authors, as demonstrated in the example below:
-```javascript
+A group query can be created for books and their authors, as shown in the example below:
+
+```gql
 {
     books(groupBy: [author]) {
         author {
@@ -78,6 +83,6 @@ We can create a group query over books and their authors, as demonstrated in the
 }
 ```
 
-As you can see, we can access the entire `Author` object in the main return object without having to use any special proxy fields.
+As shown, the entire `Author` object can be accessed in the main return object without using any special proxy fields.
 
-Group operations can include any combination, single or multiple, individual field or related object, that a developer needs.
+Group operations can be performed with any combination of single or multiple fields, individual fields, or related objects, depending on the developer's needs.

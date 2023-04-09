@@ -2,13 +2,14 @@
 sidebar_label: Database API
 sidebar_position: 160
 ---
+
 # Database API
 
 So far, all the queries and mutations that have been discussed were specific to the stored and managed developer or user-created objects. However, that is only one aspect of DefraDB's GraphQL API. The other part of DefraDB GraphQL API is the auxiliary APIs, which include MerkleCRDT Traversal, Schema Management, and more.
 
 ## MerkleCRDTs
 
-All objects in DefraDB are stored in MerkleCRDTs (see [DefraDB Tech Specs](../tech-spec/defradb-tech-spec.md)). These MerkleCRDTs are represented as a series of small updates connected in a MerkleDAG. The MerkleDAG is a Merklized version of a DAG (Directed Acyclical Graph), which means that each node in the DAG references a parent node through some kind of Content Identifier (CID).
+All objects in DefraDB are stored in MerkleCRDTs. These MerkleCRDTs are represented as a series of small updates connected in a MerkleDAG. The MerkleDAG is a Merklized version of a DAG (Directed Acyclical Graph), which means that each node in the DAG references a parent node through some kind of Content Identifier (CID).
 
 The image below shows an example structure of a MerkleDAG.
 
@@ -20,7 +21,7 @@ DefraDB allows you to query, traverse, and validate the DAG structure, allowing 
 
 In DefraDB Database API, DAG nodes are represented as `Commit`, `CommitLink`, and `Delta` types. They are defined as shown below:
 
-```javascript
+```gql
 // Commit is an individual node in a CRDTs MerkleDAG
 type Commit {
     cid: String            // cid is the Content Identifier of this commit
