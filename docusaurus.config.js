@@ -13,8 +13,8 @@ const config = {
   onBrokenLinks: "warn",
   onBrokenMarkdownLinks: "warn",
   favicon: "img/favicon.ico",
-  organizationName: "source-developer", // Usually your GitHub org/user name.
-  projectName: "source-developer", // Usually your repo name.
+  organizationName: "source-developer",
+  projectName: "source-developer",
   presets: [
     [
       "classic",
@@ -91,7 +91,7 @@ const config = {
             items: [
               {
                 label: "Stack Overflow",
-                href: "https://stackoverflow.com/questions/tagged/docusaurus",
+                href: "https://stackoverflow.com/questions/tagged/sourcenetwork",
               },
               {
                 label: "Discord",
@@ -99,7 +99,7 @@ const config = {
               },
               {
                 label: "Twitter",
-                href: "https://twitter.com/helloSource",
+                href: "https://twitter.com/sourcenetwrk",
               },
             ],
           },
