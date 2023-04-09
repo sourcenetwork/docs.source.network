@@ -46,7 +46,7 @@ const config = {
         respectPrefersColorScheme: false,
       },
       navbar: {
-        title: null,
+        title: "Source Network Documentation",
         hideOnScroll: false,
         logo: {
           alt: "Source Developer Hub",
