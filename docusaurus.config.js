@@ -49,9 +49,9 @@ const config = {
         title: null,
         hideOnScroll: false,
         logo: {
-          alt: "Source Developer Hub",
-          src: "img/source-light.svg",
-          srcDark: "img/source-dark.svg",
+          alt: "Source Network Documentation",
+          src: "img/source-docs-full-light.svg",
+          srcDark: "img/source-docs-full-dark.svg",
         },
         items: [
           {

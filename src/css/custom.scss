@@ -61,6 +61,8 @@ body {
   }
 
   &__logo {
+    max-width: rem(230px);
+    width: 100%;
     margin-left: rem(30px);
     @media (max-width: 996px) {
       margin-left: rem(20px);
