@@ -78,11 +78,15 @@ const config = {
         },
         links: [
           {
-            title: "Docs",
+            title: "Developers",
             items: [
               {
-                label: "Tutorial",
-                to: "/intro",
+                label: "Getting Started",
+                to: "/",
+              },
+              {
+                label: "GitHub",
+                href: "https://github.com/sourcenetwork",
               },
             ],
           },
@@ -90,25 +94,29 @@ const config = {
             title: "Community",
             items: [
               {
-                label: "Stack Overflow",
-                href: "https://stackoverflow.com/questions/tagged/docusaurus",
-              },
-              {
                 label: "Discord",
                 href: "https://discord.source.network",
               },
               {
                 label: "Twitter",
-                href: "https://twitter.com/helloSource",
+                href: "https://twitter.com/sourcenetwrk",
+              },
+              {
+                label: "Telegram",
+                href: "https://t.me/source_network",
               },
             ],
           },
           {
-            title: "More",
+            title: "About",
             items: [
               {
-                label: "GitHub",
-                href: "https://github.com/sourcenetwork",
+                label: "About Us",
+                href: "https://source.network/about",
+              },
+              {
+                label: "Privacy Policy",
+                href: "https://source.network/privacy",
               },
             ],
           },
