@@ -1,7 +1,6 @@
 ---
 sidebar_position: 5
 title: Release Notes
-
 ---
 
 # Release Notes
