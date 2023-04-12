@@ -1,3 +1,9 @@
+---
+sidebar_position: 5
+title: Release Notes
+slug: /
+---
+
 # Release Notes
 
 ## v0.3.1
