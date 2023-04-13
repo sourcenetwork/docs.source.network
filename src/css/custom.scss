@@ -198,6 +198,11 @@ body {
       display: none;
     }
 
+    &:last-child {
+      color: var(--ifm-color-primary);
+      opacity: 0.8;
+    }
+
     &:not(:last-child):after {
       content: " /";
       display: inline-block;
