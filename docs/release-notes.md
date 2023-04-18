@@ -4,99 +4,323 @@ title: Release Notes
 ---
 
 # Release Notes
+## [v0.5.0](https://github.com/sourcenetwork/defradb/compare/v0.4.0...v0.5.0)
 
-## v0.3.1
+> 2023-04-12
+
+DefraDB v0.5 is a major pre-production release. Until the stable version 1.0 is reached, the SemVer minor patch number will denote notable releases, which will give the project freedom to experiment and explore potentially breaking changes.
+
+There many new features in this release, but most importantly, this is the first open source release for DefraDB. As such, this release focused on various quality of life changes and refactors, bug fixes, and overall cleanliness of the repo so it can effectively be used and tested in the public domain.
+
+To get a full outline of the changes, we invite you to review the official changelog below. Some highlights are the first iteration of our schema update system, allowing developers to add new fields to schemas using our JSON Patch based DDL, a new DAG based delete system which will persist "soft-delete" ops into the CRDT Merkle DAG, and a early prototype for our collection level peer-to-peer synchronization.
+
+This release does include a Breaking Change to existing v0.4.x databases. If you need help migrating an existing deployment, reach out at [hello@source.network](mailto:hello@source.network) or join our Discord at https://discord.source.network/.
+
+### Features
+
+* Add document delete mechanics ([#1263](https://github.com/sourcenetwork/defradb/issues/1263))
+* Ability to explain an executed request ([#1188](https://github.com/sourcenetwork/defradb/issues/1188))
+* Add SchemaPatch CLI command ([#1250](https://github.com/sourcenetwork/defradb/issues/1250))
+* Add support for one-one mutation from sec. side ([#1247](https://github.com/sourcenetwork/defradb/issues/1247))
+* Store only key in DAG instead of dockey path ([#1245](https://github.com/sourcenetwork/defradb/issues/1245))
+* Add collectionId field to commit field ([#1235](https://github.com/sourcenetwork/defradb/issues/1235))
+* Add field kind substitution for PatchSchema ([#1223](https://github.com/sourcenetwork/defradb/issues/1223))
+* Add dockey field for commit field ([#1216](https://github.com/sourcenetwork/defradb/issues/1216))
+* Allow new fields to be added locally to schema ([#1139](https://github.com/sourcenetwork/defradb/issues/1139))
+* Add `like` sub-string filter ([#1091](https://github.com/sourcenetwork/defradb/issues/1091))
+* Add ability for P2P to wait for pushlog by peer ([#1098](https://github.com/sourcenetwork/defradb/issues/1098))
+* Add P2P collection topic subscription ([#1086](https://github.com/sourcenetwork/defradb/issues/1086))
+* Add support for schema version id in queries ([#1067](https://github.com/sourcenetwork/defradb/issues/1067))
+* Add schema version id to commit queries ([#1061](https://github.com/sourcenetwork/defradb/issues/1061))
+* Persist schema version at time of commit ([#1055](https://github.com/sourcenetwork/defradb/issues/1055))
+* Add ability to input simple explain type arg ([#1039](https://github.com/sourcenetwork/defradb/issues/1039))
+
+### Fixes
+
+* API address parameter validation ([#1311](https://github.com/sourcenetwork/defradb/issues/1311))
+* Improve error message for NonNull GQL types ([#1333](https://github.com/sourcenetwork/defradb/issues/1333))
+* Handle panics in the rpc server ([#1330](https://github.com/sourcenetwork/defradb/issues/1330))
+* Handle returned error in select.go ([#1329](https://github.com/sourcenetwork/defradb/issues/1329))
+* Resolve handful of CLI issues ([#1318](https://github.com/sourcenetwork/defradb/issues/1318))
+* Only check for events queue on subscription request ([#1326](https://github.com/sourcenetwork/defradb/issues/1326))
+* Remove client Create/UpdateCollection ([#1309](https://github.com/sourcenetwork/defradb/issues/1309))
+* CLI to display specific command usage help ([#1314](https://github.com/sourcenetwork/defradb/issues/1314))
+* Fix P2P collection CLI commands ([#1295](https://github.com/sourcenetwork/defradb/issues/1295))
+* Dont double up badger file path ([#1299](https://github.com/sourcenetwork/defradb/issues/1299))
+* Update immutable package ([#1290](https://github.com/sourcenetwork/defradb/issues/1290))
+* Fix panic on success of Add/RemoveP2PCollections ([#1297](https://github.com/sourcenetwork/defradb/issues/1297))
+* Fix deadlock on memory-datastore Close ([#1273](https://github.com/sourcenetwork/defradb/issues/1273))
+* Determine if query is introspection query ([#1255](https://github.com/sourcenetwork/defradb/issues/1255))
+* Allow newly added fields to sync via p2p ([#1226](https://github.com/sourcenetwork/defradb/issues/1226))
+* Expose `ExplainEnum` in the GQL schema ([#1204](https://github.com/sourcenetwork/defradb/issues/1204))
+* Resolve aggregates' mapping with deep nested subtypes ([#1175](https://github.com/sourcenetwork/defradb/issues/1175))
+* Make sort stable and handle nil comparison ([#1094](https://github.com/sourcenetwork/defradb/issues/1094))
+* Change successful schema add status to 200 ([#1106](https://github.com/sourcenetwork/defradb/issues/1106))
+* Add delay in P2P test util execution ([#1093](https://github.com/sourcenetwork/defradb/issues/1093))
+* Ensure errors test don't hard expect folder name ([#1072](https://github.com/sourcenetwork/defradb/issues/1072))
+* Remove potential P2P deadlock ([#1056](https://github.com/sourcenetwork/defradb/issues/1056))
+* Rework the P2P integration tests ([#989](https://github.com/sourcenetwork/defradb/issues/989))
+* Improve DAG sync with highly concurrent updates ([#1031](https://github.com/sourcenetwork/defradb/issues/1031))
+
+### Documentation
+
+* Update docs for the v0.5 release ([#1320](https://github.com/sourcenetwork/defradb/issues/1320))
+* Document client interfaces in client/db.go ([#1305](https://github.com/sourcenetwork/defradb/issues/1305))
+* Document client Description types ([#1307](https://github.com/sourcenetwork/defradb/issues/1307))
+* Improve security policy ([#1240](https://github.com/sourcenetwork/defradb/issues/1240))
+* Add security disclosure policy ([#1194](https://github.com/sourcenetwork/defradb/issues/1194))
+* Correct commits query example in readme ([#1172](https://github.com/sourcenetwork/defradb/issues/1172))
+
+### Refactoring
+
+* Improve p2p collection operations on peer ([#1286](https://github.com/sourcenetwork/defradb/issues/1286))
+* Migrate gql introspection tests to new framework ([#1211](https://github.com/sourcenetwork/defradb/issues/1211))
+* Reorganise client transaction related interfaces ([#1180](https://github.com/sourcenetwork/defradb/issues/1180))
+* Config-local viper, rootdir, and logger parsing ([#1132](https://github.com/sourcenetwork/defradb/issues/1132))
+* Migrate mutation-relation tests to new framework ([#1109](https://github.com/sourcenetwork/defradb/issues/1109))
+* Rework integration test framework ([#1089](https://github.com/sourcenetwork/defradb/issues/1089))
+* Generate gql types using col. desc ([#1080](https://github.com/sourcenetwork/defradb/issues/1080))
+* Extract config errors to dedicated file ([#1107](https://github.com/sourcenetwork/defradb/issues/1107))
+* Change terminology from query to request ([#1054](https://github.com/sourcenetwork/defradb/issues/1054))
+* Allow db keys to handle multiple schema versions ([#1026](https://github.com/sourcenetwork/defradb/issues/1026))
+* Extract query schema errors to dedicated file ([#1037](https://github.com/sourcenetwork/defradb/issues/1037))
+* Extract planner errors to dedicated file ([#1034](https://github.com/sourcenetwork/defradb/issues/1034))
+* Extract query parser errors to dedicated file ([#1035](https://github.com/sourcenetwork/defradb/issues/1035))
+
+### Testing
+
+* Remove test reference to DEFRA_ROOTDIR env var ([#1328](https://github.com/sourcenetwork/defradb/issues/1328))
+* Expand tests for Peer subscribe actions ([#1287](https://github.com/sourcenetwork/defradb/issues/1287))
+* Fix flaky TestCloseThroughContext test ([#1265](https://github.com/sourcenetwork/defradb/issues/1265))
+* Add gql introspection tests for patch schema ([#1219](https://github.com/sourcenetwork/defradb/issues/1219))
+* Explicitly state change detector split for test ([#1228](https://github.com/sourcenetwork/defradb/issues/1228))
+* Add test for successful one-one create mutation ([#1215](https://github.com/sourcenetwork/defradb/issues/1215))
+* Ensure that all databases are always closed on exit ([#1187](https://github.com/sourcenetwork/defradb/issues/1187))
+* Add P2P tests for Schema Update adding field ([#1182](https://github.com/sourcenetwork/defradb/issues/1182))
+* Migrate P2P/state tests to new framework ([#1160](https://github.com/sourcenetwork/defradb/issues/1160))
+* Remove sleep from subscription tests ([#1156](https://github.com/sourcenetwork/defradb/issues/1156))
+* Fetch documents on test execution start ([#1163](https://github.com/sourcenetwork/defradb/issues/1163))
+* Introduce basic testing for the `version` module ([#1111](https://github.com/sourcenetwork/defradb/issues/1111))
+* Boost test coverage for collection_update ([#1050](https://github.com/sourcenetwork/defradb/issues/1050))
+* Wait between P2P update retry attempts ([#1052](https://github.com/sourcenetwork/defradb/issues/1052))
+* Exclude auto-generated protobuf files from codecov ([#1048](https://github.com/sourcenetwork/defradb/issues/1048))
+* Add P2P tests for relational docs ([#1042](https://github.com/sourcenetwork/defradb/issues/1042))
+
+### Continuous integration
+
+* Add workflow that builds DefraDB AMI upon tag push ([#1304](https://github.com/sourcenetwork/defradb/issues/1304))
+* Allow PR title to end with a capital letter ([#1291](https://github.com/sourcenetwork/defradb/issues/1291))
+* Changes for `dependabot` to be well-behaved ([#1165](https://github.com/sourcenetwork/defradb/issues/1165))
+* Skip benchmarks for dependabot ([#1144](https://github.com/sourcenetwork/defradb/issues/1144))
+* Add workflow to ensure deps build properly ([#1078](https://github.com/sourcenetwork/defradb/issues/1078))
+* Runner and Builder Containerfiles ([#951](https://github.com/sourcenetwork/defradb/issues/951))
+* Fix go-header linter rule to be any year ([#1021](https://github.com/sourcenetwork/defradb/issues/1021))
+
+### Chore
+
+* Add Islam as contributor ([#1302](https://github.com/sourcenetwork/defradb/issues/1302))
+* Update go-libp2p to 0.26.4 ([#1257](https://github.com/sourcenetwork/defradb/issues/1257))
+* Improve the test coverage of datastore ([#1203](https://github.com/sourcenetwork/defradb/issues/1203))
+* Add issue and discussion templates ([#1193](https://github.com/sourcenetwork/defradb/issues/1193))
+* Bump libp2p/go-libp2p-kad-dht from 0.21.0 to 0.21.1 ([#1146](https://github.com/sourcenetwork/defradb/issues/1146))
+* Enable dependabot ([#1120](https://github.com/sourcenetwork/defradb/issues/1120))
+* Update `opentelemetry` dependencies ([#1114](https://github.com/sourcenetwork/defradb/issues/1114))
+* Update dependencies including go-ipfs ([#1112](https://github.com/sourcenetwork/defradb/issues/1112))
+* Bump to GoLang v1.19 ([#818](https://github.com/sourcenetwork/defradb/issues/818))
+* Remove versionedScan node ([#1049](https://github.com/sourcenetwork/defradb/issues/1049))
+
+### Bot
+
+* Bump github.com/multiformats/go-multiaddr from 0.8.0 to 0.9.0 ([#1277](https://github.com/sourcenetwork/defradb/issues/1277))
+* Bump google.golang.org/grpc from 1.53.0 to 1.54.0 ([#1233](https://github.com/sourcenetwork/defradb/issues/1233))
+* Bump github.com/multiformats/go-multibase from 0.1.1 to 0.2.0 ([#1230](https://github.com/sourcenetwork/defradb/issues/1230))
+* Bump github.com/ipfs/go-libipfs from 0.6.2 to 0.7.0 ([#1231](https://github.com/sourcenetwork/defradb/issues/1231))
+* Bump github.com/ipfs/go-cid from 0.3.2 to 0.4.0 ([#1200](https://github.com/sourcenetwork/defradb/issues/1200))
+* Bump github.com/ipfs/go-ipfs-blockstore from 1.2.0 to 1.3.0 ([#1199](https://github.com/sourcenetwork/defradb/issues/1199))
+* Bump github.com/stretchr/testify from 1.8.1 to 1.8.2 ([#1198](https://github.com/sourcenetwork/defradb/issues/1198))
+* Bump github.com/ipfs/go-libipfs from 0.6.1 to 0.6.2 ([#1201](https://github.com/sourcenetwork/defradb/issues/1201))
+* Bump golang.org/x/crypto from 0.6.0 to 0.7.0 ([#1197](https://github.com/sourcenetwork/defradb/issues/1197))
+* Bump libp2p/go-libp2p-gostream from 0.5.0 to 0.6.0 ([#1152](https://github.com/sourcenetwork/defradb/issues/1152))
+* Bump github.com/ipfs/go-libipfs from 0.5.0 to 0.6.1 ([#1166](https://github.com/sourcenetwork/defradb/issues/1166))
+* Bump github.com/ugorji/go/codec from 1.2.9 to 1.2.11 ([#1173](https://github.com/sourcenetwork/defradb/issues/1173))
+* Bump github.com/libp2p/go-libp2p-pubsub from 0.9.0 to 0.9.3 ([#1183](https://github.com/sourcenetwork/defradb/issues/1183))
+
+
+## [v0.4.0](https://github.com/sourcenetwork/defradb/compare/v0.3.1...v0.4.0)
+
+> 2023-12-23
+
+DefraDB v0.4 is a major pre-production release. Until the stable version 1.0 is reached, the SemVer minor patch number will denote notable releases, which will give the project freedom to experiment and explore potentially breaking changes.
+
+There are various new features in this release - some of which are breaking - and we invite you to review the official changelog below. Some highlights are persistence of replicators, DateTime scalars, TLS support, and GQL subscriptions.
+
+This release does include a Breaking Change to existing v0.3.x databases. If you need help migrating an existing deployment, reach out at [hello@source.network](mailto:hello@source.network) or join our Discord at https://discord.source.network/.
+
+### Features
+
+* Add basic metric functionality ([#971](https://github.com/sourcenetwork/defradb/issues/971))
+* Add thread safe transactional in-memory datastore ([#947](https://github.com/sourcenetwork/defradb/issues/947))
+* Persist p2p replicators ([#960](https://github.com/sourcenetwork/defradb/issues/960))
+* Add DateTime custom scalars ([#931](https://github.com/sourcenetwork/defradb/issues/931))
+* Add GraphQL subscriptions ([#934](https://github.com/sourcenetwork/defradb/issues/934))
+* Add support for tls ([#885](https://github.com/sourcenetwork/defradb/issues/885))
+* Add group by support for commits ([#887](https://github.com/sourcenetwork/defradb/issues/887))
+* Add depth support for commits ([#889](https://github.com/sourcenetwork/defradb/issues/889))
+* Make dockey optional for allCommits queries ([#847](https://github.com/sourcenetwork/defradb/issues/847))
+* Add WithStack to the errors package ([#870](https://github.com/sourcenetwork/defradb/issues/870))
+* Add event system ([#834](https://github.com/sourcenetwork/defradb/issues/834))
+
+### Fixes
+
+* Correct errors.WithStack behaviour ([#984](https://github.com/sourcenetwork/defradb/issues/984))
+* Correctly handle nested one to one joins ([#964](https://github.com/sourcenetwork/defradb/issues/964))
+* Do not assume parent record exists when joining ([#963](https://github.com/sourcenetwork/defradb/issues/963))
+* Change time format for HTTP API log ([#910](https://github.com/sourcenetwork/defradb/issues/910))
+* Error if group select contains non-group-by fields ([#898](https://github.com/sourcenetwork/defradb/issues/898))
+* Add inspection of values for ENV flags ([#900](https://github.com/sourcenetwork/defradb/issues/900))
+* Remove panics from document ([#881](https://github.com/sourcenetwork/defradb/issues/881))
+* Add __typename support ([#871](https://github.com/sourcenetwork/defradb/issues/871))
+* Handle subscriber close ([#877](https://github.com/sourcenetwork/defradb/issues/877))
+* Publish update events post commit ([#866](https://github.com/sourcenetwork/defradb/issues/866))
+
+### Refactoring
+
+* Make rootstore require Batching and TxnDatastore ([#940](https://github.com/sourcenetwork/defradb/issues/940))
+* Conceptually clarify schema vs query-language ([#924](https://github.com/sourcenetwork/defradb/issues/924))
+* Decouple db.db from gql ([#912](https://github.com/sourcenetwork/defradb/issues/912))
+* Merkle clock heads cleanup ([#918](https://github.com/sourcenetwork/defradb/issues/918))
+* Simplify dag fetcher ([#913](https://github.com/sourcenetwork/defradb/issues/913))
+* Cleanup parsing logic ([#909](https://github.com/sourcenetwork/defradb/issues/909))
+* Move planner outside the gql directory ([#907](https://github.com/sourcenetwork/defradb/issues/907))
+* Refactor commit nodes ([#892](https://github.com/sourcenetwork/defradb/issues/892))
+* Make latest commits syntax sugar ([#890](https://github.com/sourcenetwork/defradb/issues/890))
+* Remove commit query ([#841](https://github.com/sourcenetwork/defradb/issues/841))
+
+### Testing
+
+* Add event tests ([#965](https://github.com/sourcenetwork/defradb/issues/965))
+* Add new setup for testing explain functionality ([#949](https://github.com/sourcenetwork/defradb/issues/949))
+* Add txn relation-type delete and create tests ([#875](https://github.com/sourcenetwork/defradb/issues/875))
+* Skip change detection for tests that assert panic ([#883](https://github.com/sourcenetwork/defradb/issues/883))
+
+### Continuous integration
+
+* Bump all gh-action versions to support node16 ([#990](https://github.com/sourcenetwork/defradb/issues/990))
+* Bump ssh-agent action to v0.7.0 ([#978](https://github.com/sourcenetwork/defradb/issues/978))
+* Add error message format check ([#901](https://github.com/sourcenetwork/defradb/issues/901))
+
+### Chore
+
+* Extract (events, merkle) errors to errors.go ([#973](https://github.com/sourcenetwork/defradb/issues/973))
+* Extract (datastore, db) errors to errors.go ([#969](https://github.com/sourcenetwork/defradb/issues/969))
+* Extract (connor, crdt, core) errors to errors.go ([#968](https://github.com/sourcenetwork/defradb/issues/968))
+* Extract inline (http and client) errors to errors.go ([#967](https://github.com/sourcenetwork/defradb/issues/967))
+* Update badger version ([#966](https://github.com/sourcenetwork/defradb/issues/966))
+* Move Option and Enumerable to immutables ([#939](https://github.com/sourcenetwork/defradb/issues/939))
+* Add configuration of external loggers ([#942](https://github.com/sourcenetwork/defradb/issues/942))
+* Strip DSKey prefixes and simplify NewDataStoreKey ([#944](https://github.com/sourcenetwork/defradb/issues/944))
+* Include version metadata in cross-building ([#930](https://github.com/sourcenetwork/defradb/issues/930))
+* Update to v0.23.2 the libP2P package ([#908](https://github.com/sourcenetwork/defradb/issues/908))
+* Remove `ipfslite` dependency ([#739](https://github.com/sourcenetwork/defradb/issues/739))
+
+
+
+## [v0.3.1](https://github.com/sourcenetwork/defradb/compare/v0.3.0...v0.3.1)
+
+> 2022-09-23
 
 DefraDB v0.3.1 is a minor release, primarily focusing on additional/extended features and fixes of items added in the `v0.3.0` release.
 
 ### Features
 
-- Add cid support for allCommits ([#857](https://github.com/sourcenetwork/defradb/issues/857))
-- Add offset support to allCommits ([#859](https://github.com/sourcenetwork/defradb/issues/859))
-- Add limit support to allCommits query ([#856](https://github.com/sourcenetwork/defradb/issues/856))
-- Add order support to allCommits ([#845](https://github.com/sourcenetwork/defradb/issues/845))
-- Display CLI usage on user error ([#819](https://github.com/sourcenetwork/defradb/issues/819))
-- Add support for dockey filters in child joins ([#806](https://github.com/sourcenetwork/defradb/issues/806))
-- Add sort support for numeric aggregates ([#786](https://github.com/sourcenetwork/defradb/issues/786))
-- Allow filtering by nil ([#789](https://github.com/sourcenetwork/defradb/issues/789))
-- Add aggregate offset support ([#778](https://github.com/sourcenetwork/defradb/issues/778))
-- Remove filter depth limit ([#777](https://github.com/sourcenetwork/defradb/issues/777))
-- Add support for and-or inline array aggregate filters ([#779](https://github.com/sourcenetwork/defradb/issues/779))
-- Add limit support for aggregates ([#771](https://github.com/sourcenetwork/defradb/issues/771))
-- Add support for inline arrays of nillable types ([#759](https://github.com/sourcenetwork/defradb/issues/759))
-- Create errors package ([#548](https://github.com/sourcenetwork/defradb/issues/548))
-- Add ability to display peer id ([#719](https://github.com/sourcenetwork/defradb/issues/719))
-- Add a config option to set the vlog max file size ([#743](https://github.com/sourcenetwork/defradb/issues/743))
-- Explain `topLevelNode` like a `MultiNode` plan ([#749](https://github.com/sourcenetwork/defradb/issues/749))
-- Make `topLevelNode` explainable ([#737](https://github.com/sourcenetwork/defradb/issues/737))
+* Add cid support for allCommits ([#857](https://github.com/sourcenetwork/defradb/issues/857))
+* Add offset support to allCommits ([#859](https://github.com/sourcenetwork/defradb/issues/859))
+* Add limit support to allCommits query ([#856](https://github.com/sourcenetwork/defradb/issues/856))
+* Add order support to allCommits ([#845](https://github.com/sourcenetwork/defradb/issues/845))
+* Display CLI usage on user error ([#819](https://github.com/sourcenetwork/defradb/issues/819))
+* Add support for dockey filters in child joins ([#806](https://github.com/sourcenetwork/defradb/issues/806))
+* Add sort support for numeric aggregates ([#786](https://github.com/sourcenetwork/defradb/issues/786))
+* Allow filtering by nil ([#789](https://github.com/sourcenetwork/defradb/issues/789))
+* Add aggregate offset support ([#778](https://github.com/sourcenetwork/defradb/issues/778))
+* Remove filter depth limit ([#777](https://github.com/sourcenetwork/defradb/issues/777))
+* Add support for and-or inline array aggregate filters ([#779](https://github.com/sourcenetwork/defradb/issues/779))
+* Add limit support for aggregates ([#771](https://github.com/sourcenetwork/defradb/issues/771))
+* Add support for inline arrays of nillable types ([#759](https://github.com/sourcenetwork/defradb/issues/759))
+* Create errors package ([#548](https://github.com/sourcenetwork/defradb/issues/548))
+* Add ability to display peer id ([#719](https://github.com/sourcenetwork/defradb/issues/719))
+* Add a config option to set the vlog max file size ([#743](https://github.com/sourcenetwork/defradb/issues/743))
+* Explain `topLevelNode` like a `MultiNode` plan ([#749](https://github.com/sourcenetwork/defradb/issues/749))
+* Make `topLevelNode` explainable ([#737](https://github.com/sourcenetwork/defradb/issues/737))
 
 ### Fixes
 
-- Order subtype without selecting the join child ([#810](https://github.com/sourcenetwork/defradb/issues/810))
-- Correctly handles nil one-one joins ([#837](https://github.com/sourcenetwork/defradb/issues/837))
-- Reset scan node for each join ([#828](https://github.com/sourcenetwork/defradb/issues/828))
-- Handle filter input field argument being nil ([#787](https://github.com/sourcenetwork/defradb/issues/787))
-- Ensure CLI outputs JSON to stdout when directed to pipe ([#804](https://github.com/sourcenetwork/defradb/issues/804))
-- Error if given the wrong side of a one-one relationship ([#795](https://github.com/sourcenetwork/defradb/issues/795))
-- Add object marker to enable return of empty docs ([#800](https://github.com/sourcenetwork/defradb/issues/800))
-- Resolve the extra `typeIndexJoin`s for `_avg` aggregate ([#774](https://github.com/sourcenetwork/defradb/issues/774))
-- Remove \_like filter operator ([#797](https://github.com/sourcenetwork/defradb/issues/797))
-- Remove having gql types ([#785](https://github.com/sourcenetwork/defradb/issues/785))
-- Error if child \_group selected without parent groupBy ([#781](https://github.com/sourcenetwork/defradb/issues/781))
-- Error nicely on missing field specifier ([#782](https://github.com/sourcenetwork/defradb/issues/782))
-- Handle order input field argument being nil ([#701](https://github.com/sourcenetwork/defradb/issues/701))
-- Change output to outputpath in config file template for logger ([#716](https://github.com/sourcenetwork/defradb/issues/716))
-- Delete mutations not correct persisting all keys ([#731](https://github.com/sourcenetwork/defradb/issues/731))
+* Order subtype without selecting the join child ([#810](https://github.com/sourcenetwork/defradb/issues/810))
+* Correctly handles nil one-one joins ([#837](https://github.com/sourcenetwork/defradb/issues/837))
+* Reset scan node for each join ([#828](https://github.com/sourcenetwork/defradb/issues/828))
+* Handle filter input field argument being nil ([#787](https://github.com/sourcenetwork/defradb/issues/787))
+* Ensure CLI outputs JSON to stdout when directed to pipe ([#804](https://github.com/sourcenetwork/defradb/issues/804))
+* Error if given the wrong side of a one-one relationship ([#795](https://github.com/sourcenetwork/defradb/issues/795))
+* Add object marker to enable return of empty docs ([#800](https://github.com/sourcenetwork/defradb/issues/800))
+* Resolve the extra `typeIndexJoin`s for `_avg` aggregate ([#774](https://github.com/sourcenetwork/defradb/issues/774))
+* Remove _like filter operator ([#797](https://github.com/sourcenetwork/defradb/issues/797))
+* Remove having gql types ([#785](https://github.com/sourcenetwork/defradb/issues/785))
+* Error if child _group selected without parent groupBy ([#781](https://github.com/sourcenetwork/defradb/issues/781))
+* Error nicely on missing field specifier ([#782](https://github.com/sourcenetwork/defradb/issues/782))
+* Handle order input field argument being nil ([#701](https://github.com/sourcenetwork/defradb/issues/701))
+* Change output to outputpath in config file template for logger ([#716](https://github.com/sourcenetwork/defradb/issues/716))
+* Delete mutations not correct persisting all keys ([#731](https://github.com/sourcenetwork/defradb/issues/731))
 
 ### Tooling
 
-- Ban the usage of `ioutil` package ([#747](https://github.com/sourcenetwork/defradb/issues/747))
-- Migrate from CircleCi to GitHub Actions ([#679](https://github.com/sourcenetwork/defradb/issues/679))
+* Ban the usage of `ioutil` package ([#747](https://github.com/sourcenetwork/defradb/issues/747))
+* Migrate from CircleCi to GitHub Actions ([#679](https://github.com/sourcenetwork/defradb/issues/679))
 
 ### Documentation
 
-- Clarify meaning of url param, update in-repo CLI docs ([#814](https://github.com/sourcenetwork/defradb/issues/814))
-- Disclaimer of exposed to network and not encrypted ([#793](https://github.com/sourcenetwork/defradb/issues/793))
-- Update logo to respect theme ([#728](https://github.com/sourcenetwork/defradb/issues/728))
+* Clarify meaning of url param, update in-repo CLI docs ([#814](https://github.com/sourcenetwork/defradb/issues/814))
+* Disclaimer of exposed to network and not encrypted ([#793](https://github.com/sourcenetwork/defradb/issues/793))
+* Update logo to respect theme ([#728](https://github.com/sourcenetwork/defradb/issues/728))
 
 ### Refactoring
 
-- Replace all `interface{}` with `any` alias ([#805](https://github.com/sourcenetwork/defradb/issues/805))
-- Use fastjson to parse mutation data string ([#772](https://github.com/sourcenetwork/defradb/issues/772))
-- Rework limit node flow ([#767](https://github.com/sourcenetwork/defradb/issues/767))
-- Make Option immutable ([#769](https://github.com/sourcenetwork/defradb/issues/769))
-- Rework sum and count nodes to make use of generics ([#757](https://github.com/sourcenetwork/defradb/issues/757))
-- Remove some possible panics from codebase ([#732](https://github.com/sourcenetwork/defradb/issues/732))
-- Change logging calls to use feedback in CLI package ([#714](https://github.com/sourcenetwork/defradb/issues/714))
+* Replace all `interface{}` with `any` alias ([#805](https://github.com/sourcenetwork/defradb/issues/805))
+* Use fastjson to parse mutation data string ([#772](https://github.com/sourcenetwork/defradb/issues/772))
+* Rework limit node flow ([#767](https://github.com/sourcenetwork/defradb/issues/767))
+* Make Option immutable ([#769](https://github.com/sourcenetwork/defradb/issues/769))
+* Rework sum and count nodes to make use of generics ([#757](https://github.com/sourcenetwork/defradb/issues/757))
+* Remove some possible panics from codebase ([#732](https://github.com/sourcenetwork/defradb/issues/732))
+* Change logging calls to use feedback in CLI package ([#714](https://github.com/sourcenetwork/defradb/issues/714))
 
 ### Testing
 
-- Add tests for aggs with nil filters ([#813](https://github.com/sourcenetwork/defradb/issues/813))
-- Add not equals filter tests ([#798](https://github.com/sourcenetwork/defradb/issues/798))
-- Fix `cli/peerid_test` to not clash addresses ([#766](https://github.com/sourcenetwork/defradb/issues/766))
-- Add change detector summary to test readme ([#754](https://github.com/sourcenetwork/defradb/issues/754))
-- Add tests for inline array grouping ([#752](https://github.com/sourcenetwork/defradb/issues/752))
+* Add tests for aggs with nil filters ([#813](https://github.com/sourcenetwork/defradb/issues/813))
+* Add not equals filter tests ([#798](https://github.com/sourcenetwork/defradb/issues/798))
+* Fix `cli/peerid_test` to not clash addresses ([#766](https://github.com/sourcenetwork/defradb/issues/766))
+* Add change detector summary to test readme ([#754](https://github.com/sourcenetwork/defradb/issues/754))
+* Add tests for inline array grouping ([#752](https://github.com/sourcenetwork/defradb/issues/752))
 
 ### Continuous integration
 
-- Reduce test resource usage and test with file db ([#791](https://github.com/sourcenetwork/defradb/issues/791))
-- Add makefile target to verify the local module cache ([#775](https://github.com/sourcenetwork/defradb/issues/775))
-- Allow PR titles to end with a number ([#745](https://github.com/sourcenetwork/defradb/issues/745))
-- Add a workflow to validate pull request titles ([#734](https://github.com/sourcenetwork/defradb/issues/734))
-- Fix the linter version to `v1.47` ([#726](https://github.com/sourcenetwork/defradb/issues/726))
+* Reduce test resource usage and test with file db ([#791](https://github.com/sourcenetwork/defradb/issues/791))
+* Add makefile target to verify the local module cache ([#775](https://github.com/sourcenetwork/defradb/issues/775))
+* Allow PR titles to end with a number ([#745](https://github.com/sourcenetwork/defradb/issues/745))
+* Add a workflow to validate pull request titles ([#734](https://github.com/sourcenetwork/defradb/issues/734))
+* Fix the linter version to `v1.47` ([#726](https://github.com/sourcenetwork/defradb/issues/726))
 
 ### Chore
 
-- Remove file system paths from resulting executable ([#831](https://github.com/sourcenetwork/defradb/issues/831))
-- Add goimports linter for consistent imports ordering ([#816](https://github.com/sourcenetwork/defradb/issues/816))
-- Improve UX by providing more information ([#802](https://github.com/sourcenetwork/defradb/issues/802))
-- Change to defra errors and handle errors stacktrace ([#794](https://github.com/sourcenetwork/defradb/issues/794))
-- Clean up `go.mod` with pruned module graphs ([#756](https://github.com/sourcenetwork/defradb/issues/756))
-- Update to v0.20.3 of libp2p ([#740](https://github.com/sourcenetwork/defradb/issues/740))
-- Bump to GoLang `v1.18` ([#721](https://github.com/sourcenetwork/defradb/issues/721))
+* Remove file system paths from resulting executable ([#831](https://github.com/sourcenetwork/defradb/issues/831))
+* Add goimports linter for consistent imports ordering ([#816](https://github.com/sourcenetwork/defradb/issues/816))
+* Improve UX by providing more information ([#802](https://github.com/sourcenetwork/defradb/issues/802))
+* Change to defra errors and handle errors stacktrace ([#794](https://github.com/sourcenetwork/defradb/issues/794))
+* Clean up `go.mod` with pruned module graphs ([#756](https://github.com/sourcenetwork/defradb/issues/756))
+* Update to v0.20.3 of libp2p ([#740](https://github.com/sourcenetwork/defradb/issues/740))
+* Bump to GoLang `v1.18` ([#721](https://github.com/sourcenetwork/defradb/issues/721))
 
 
-## v0.3.0
+## [v0.3.0](https://github.com/sourcenetwork/defradb/compare/v0.2.1...v0.3.0)
+
+> 2022-08-02
 
 DefraDB v0.3 is a major pre-production release. Until the stable version 1.0 is reached, the SemVer minor patch number will denote notable releases, which will give the project freedom to experiment and explore potentially breaking changes.
 
@@ -269,8 +493,10 @@ This release does include a Breaking Change to existing v0.2.x databases. If you
 * Updated README.md contributors section ([#292](https://github.com/sourcenetwork/defradb/issues/292))
 * Update changelog v0.2.1 ([#252](https://github.com/sourcenetwork/defradb/issues/252))
 
-## v0.2.1
-This is a minor release that resolves several bugs and implements some minor features that are only extensions of features released in v0.2.
+
+## [v0.2.1](https://github.com/sourcenetwork/defradb/compare/v0.2.0...v0.2.1)
+
+> 2022-03-04
 
 ### Features
 
@@ -322,7 +548,11 @@ This is a minor release that resolves several bugs and implements some minor fea
 * Remove commented out code ([#238](https://github.com/sourcenetwork/defradb/issues/238))
 * Remove dead code from multi node ([#186](https://github.com/sourcenetwork/defradb/issues/186))
 
-## v0.2.0
+
+## [v0.2.0](https://github.com/sourcenetwork/defradb/compare/v0.1.0...v0.2.0)
+
+> 2022-02-07
+
 DefraDB v0.2 is a major pre-production release. Until the stable version 1.0 is reached, the SemVer minor patch number will denote notable releases, which will give the project freedom to experiment and explore potentially breaking changes.
 
 This release is jam-packed with new features and a small number of breaking changes. Read the full changelog for a detailed description. Most notable features include a new Peer-to-Peer (P2P) data synchronization system, an expanded query system to support GroupBy & Aggregate operations, and lastly TimeTraveling queries allowing to query previous states of a document.
@@ -358,7 +588,6 @@ This release does include a Breaking Change to existing v0.1 databases regarding
 * Check for nil iterator before closing document fetcher ([#108](https://github.com/sourcenetwork/defradb/pull/108))
 
 ### Tooling
-
 * Added benchmark suite ([#160](https://github.com/sourcenetwork/defradb/issues/160))
 
 ### Documentation
@@ -383,7 +612,6 @@ This release does include a Breaking Change to existing v0.1 databases regarding
 * Remove schemaless code branches ([#23](https://github.com/sourcenetwork/defradb/pull/23))
 
 ### Performance
-
 * Add badger multi scan support ([#85](https://github.com/sourcenetwork/defradb/pull/85))
 * Add support for range spans ([#86](https://github.com/sourcenetwork/defradb/pull/86))
 
