@@ -9,7 +9,8 @@ sidebar_position: 20
 The DefraDB Explain System is a powerful tool designed to introspect requests, examine plan graphs, and deliver insights into the execution of queries and mutations in DefraDB. These requests can range from basic information queries to highly intricate multi-step operations, all enabled with a single directive added to the request.
 
 ### Regular Request
-```javascript
+
+```graphql
 query {
     author {
       _key
@@ -20,7 +21,8 @@ query {
 ```
 
 ### Explain Request
-```javascript
+
+```graphql
 query @explain {
     author {
       _key
@@ -78,16 +80,15 @@ This mode of explanation returns only the syntactic and structural information o
 
 The following example shows a Simple Explain request applies to an `author` query request.
 
-```javascript
-// Request 
-
-query @explain { 
-
-author {nameage}
-
+```graphql
+query @explain {
+    author {nameage}
 }
+```
 
-// Response{
+```json
+// Response
+{
     "explain": {
         "select TopNode": {
             "selectNode": {
@@ -119,15 +120,16 @@ You can create an Execute Explain by specifying the explain type using the direc
 
 The following example shows a Execute Explain request applies to an author query request.
 
-```javascript
-// Request
+```graphql
 query @explain(type: execute) {
 	author {
 		name
 		age
 	}
 }
+```
 
+```json
 // Response
 [
 	{
@@ -150,6 +152,7 @@ query @explain(type: execute) {
 	}
 ]
 ```
+
 Because Execute Explain actually executes the plan, it will of course take more time to complete and return results than the Simple Explain. It will actually take slightly longer to execute than the non-explain counterpart, as it has the overhead of measuring and collecting information.
 
 ## Limitations

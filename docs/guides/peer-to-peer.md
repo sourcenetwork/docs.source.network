@@ -56,7 +56,7 @@ In passive replication, updates are broadcasted on a per-document level over the
 
 One major difference between active and passive networks is that an active network can focus on both collections and individual documents, while a passive network is only focused on individual documents. Active networks operate over a direct, point-to-point connection and allow you to select an entire collection to replicate to another node. For example, if you have a collection of books and specify a target node for active replication, the entire collection will be replicated to that node, including any updates to individual books. However, it is also possible to replicate granularly by selecting specific books within the collection for replication. Passive networks, on the other hand, are only concerned with replicating individual documents.
 
-```javascript
+```bash
 $ defradb client rpc addreplicator "Books" /ip4/0.0.0.0/tcp/9172/p2p/<peerID_of_node_to_replicate_to>
 ```
 
@@ -66,7 +66,7 @@ $ defradb client rpc addreplicator "Books" /ip4/0.0.0.0/tcp/9172/p2p/<peerID_of_
 
 The Defra Command Line Interface (CLI) allows you to modify the behavior of the peer-to-peer data network. When a DefraDB node starts up, it is assigned a libp2p host by default.
 
-```javascript
+```bash
 $ defradb start
 ...
 2023-03-20T07:18:17.276-0400, INFO, defra.cli, Starting P2P node, {"P2P address": "/ip4/0.0.0.0/tcp/9171"}
@@ -75,27 +75,27 @@ $ defradb start
 
 This host has a Peer ID, which is a function of a secret private key generated when the node is started for the first time. The Peer ID is important to know as it may be relevant for different parts of the peer-to-peer networking system. The libp2p networking stack can be enabled or disabled.
 
-```javascript
+```bash
 $ defradb start --no-p2p
 ```
 
 The passive networking system can also be enabled or disabled. By default, if the P2P network is online, the passive networking system is turned on.
 
-```javascript
+```bash
 $ defradb start --peers /ip4/0.0.0.0/tcp/9171/p2p/<peerID_of_node_to_replicate_to>
 ```
 
 A node automatically listens on multiple addresses or ports when the P2P module is instantiated. These are referred to as the peer-to-peer address, which is expressed as a multi-address. A multi-address is a string that represents a network address and includes information about the transport protocol and addresses for multiple layers of the network stack.
 
 
-```javascript
+```bash
 /ip4/0.0.0.0/tcp/9171/p2p/<peerID_of_node_to_replicate_to>
 
 scheme/ip_address/protocol/port/protocol/peer_id
 ```
 The peer listens in on the p2p port 9171​ by default, which can be customized through the CLI or the configuration file.
 
-```javascript
+```bash
 $ defradb start --p2paddr /ip4/0.0.0.0/tcp/9172
 ```
 
@@ -109,7 +109,7 @@ When a node is started, it specifies a list of peers that it wants to stay conne
 
 To use the active replication feature in DefraDB, you can submit an add replicator Remote Procedure Call (RPC) command through the client API. You will need to specify the multi-address and Peer ID of the peer that you want to include in the replicator set, as well as the name of the collection that you want to replicate to that peer. These steps handle the process of defining which peers you want to connect to, enabling or disabling the underlying subsystems, and sending additional RPC commands to add any necessary replicators.
 
-```javascript
+```bash
 $ defradb client rpc addreplicator "Books" /ip4/0.0.0.0/tcp/9172/p2p/<peerID_of_node_to_replicate_to>
 ```
 

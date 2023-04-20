@@ -40,8 +40,8 @@ Subquery results, represented by the prefixed variable, can be used as many othe
 
 > ** More on-map operations for subqueries to be added!**
 
-```javascript
-// Select all books published by X reviewed by authors belonging to a publisher Y
+```graphql
+# Select all books published by X reviewed by authors belonging to a publisher Y
 {
     _authorsOfPubY: authors(filter: { written: { publishedBy: {name: "Y"}}}) {
         _id

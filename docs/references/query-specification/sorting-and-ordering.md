@@ -7,7 +7,7 @@ sidebar_position: 60
 Sorting is an integral part of any Database and Query Language. The sorting syntax is similar to filter syntax, in that we use objects, and sub-objects to indicate sorting behavior, instead of filter behavior.
 
 The query to find all books ordered by their latest published date:
-```javascript
+```graphql
 {
     books(sort: { published_at: “desc”}) {
         title
@@ -23,7 +23,7 @@ The syntax indicates:
 Sorting can be applied to multiple fields in the same query. The sort order is same as the field order in the sorted object.
 
 The query below finds all books ordered by earliest published date and then by descending order of titles.
-```javascript
+```graphql
 {
     books(sort: { published_at: ASC, title: DESC }) {
         title
@@ -36,7 +36,7 @@ The query below finds all books ordered by earliest published date and then by d
 Additionally, you can sort sub-object fields along with root object fields.
 
 The query below finds all books ordered by earliest published date and then by the latest authors' birthday.
-```javascript
+```graphql
 {
     books(sort: { published_at: ASC, author: { birthday: DESC }}) {
         title
@@ -61,7 +61,7 @@ If the DocKey is included in the sort fields, any field included afterwards will
 > Sorting on sub-objects from the root object is only allowed if the sub-object is not an array. If it is an array, the sort must be applied to the object field directly instead of through the root object.
 
 *So, instead of:*
-```javascript
+```graphql
 {
     authors(sort: { name: DESC, books: { title: ASC }}) {
         name
@@ -72,7 +72,7 @@ If the DocKey is included in the sort fields, any field included afterwards will
 }
 ```
 *We need:*
-```javascript
+```graphql
 {
     authors(sort: { name: DESC }) {
         name
@@ -88,31 +88,31 @@ If the DocKey is included in the sort fields, any field included afterwards will
 >If you allow it, it enforces the semantics of root level sorting on array sub-objects to act as a sorting mechanism for the root object. As a result, there is no obvious way to determine which value in the array is used for the root order.[color=orange]
 
 If you have the following objects in the database:
-```javascript
+```json
  [
-     author {
-         name: "John Grisham"
-         books: [
-            { title: "A Painted House" },
-            { title: "The Guardians" }
+     "author" {
+         "name": "John Grisham",
+         "books": [
+            { "title": "A Painted House" },
+            { "title": "The Guardians" }
          ]
-     }
-     author {
-         name: "John Grisham"
-         books: [
-            { title: "Camino Winds" },
+     },
+     "author" {
+         "name": "John Grisham",
+         "books": [
+            { "title": "Camino Winds" },
          ]
-     }
-     author {
-         name: "John LeCare"
-         books: [
-             { title: "Tinker, Tailor, Soldier, Spy"}
+     },
+     "author" {
+         "name": "John LeCare",
+         "books": [
+             { "title": "Tinker, Tailor, Soldier, Spy"}
          ]
      }
  ]
 ```
 > and the following query [color=orange]
-```javascript
+```graphql
 {
     authors(sort: { name: DESC, books: { title: ASC }}) {
         name
@@ -123,7 +123,7 @@ If you have the following objects in the database:
 }
 ```
 
-```javascript
+```graphql
 books(filter: {_id: [1]}) {
     title 
     genre
