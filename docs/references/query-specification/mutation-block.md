@@ -14,7 +14,7 @@ Mutations are similar to SQL `INSERT INTO ...` or `UPDATE` statements. Much like
 
 Insert is used to create new documents from scratch. This involves many necessary steps to ensure all the data is structured properly and verifiable. From a developer's perspective, it's the easiest of all the mutations as it doesn't require any queries or document lookups before execution.
 
-```javascript=
+```graphql
 type Book { ... }
 mutation {
     createBook(data: createBookPayload) [Book]
@@ -28,7 +28,7 @@ The above example displays the general structure of an insert mutation. You call
 All mutations use a payload to update the data. Unlike the rest of the Query system, mutation payloads aren't typed. Instead, they use a standard JSON Serialization format. Removing the type system from payloads allows flexibility in the system. 
 
 JSON Supports all the same types as DefraDB, and it's familiar for developers. Hence, it is an obvious choice for us. The following is an example with a full type and payload:
-```javascript 
+```graphql 
 type Book {
     title: String
     description: String
@@ -61,7 +61,7 @@ Updates are distinct from Inserts in several ways. Firstly, it relies on a query
 Update filters use the same format and types from the Query system. Hence, it easily transferable.
 
 The structure of the generated update mutation for a `Book` type is given below:
-```javascript
+```graphql
 mutation {
     update_book(id: ID, filter: BookFilterArg, data: updateBookPayload) [Book]
 }
@@ -86,7 +86,7 @@ This Merge Patch sets the `name` field to "John" and deletes the `rating` field 
 Once we create our update, and select which document(s) to update, we can query the new state of all documents affected by the mutation. This is because our update mutation returns the type it mutates.
 
 A basic example is provided below:
-```javascript
+```graphql
 mutation {
     update_book(id: '123', data: "{'name': 'John'}") {
         _key
@@ -100,7 +100,7 @@ Here, we can see that after applying the mutation, we return the `_key` and `nam
 
 Beyond updating by an ID or IDs, we can use a query filter to select which fields to apply our update to. This filter works the same as the queries.
 
-```javascript
+```graphql
 mutation {
     update_book(filter: {rating: {_le: 1.0}}, data: "{'rating': '1.5'}") {
         _key
@@ -125,14 +125,14 @@ Deleting mutations allow developers and users to remove objects from collections
 The document selection interface is identical to the `Update` system. Much like the update system, we can return the fields of the deleted documents.
 
 The structure of the generated delete mutation for a `Book` type is given below:
-```javascript
+```graphql
 mutation {
     delete_book(id: ID, ids: [ID], filter: BookFilterArg) [Book]
 }
 ```
 
 Here, we can delete a document with ID '123':
-```javascript
+```graphql
 mutation {
     delete_user(id: '123') {
         _key
@@ -146,7 +146,7 @@ This will delete the specific document, and return the `_key` and `name` for the
 DefraDB currently uses a Hard Delete system, which means that when a document is deleted, it is completely removed from the database.
 
 Similar to the Update system, you can use a filter to select which documents to delete, as shown below:
-```javascript
+```graphql
 mutation {
     delete_user(filter: {rating: {_gt: 3}}) {
         _key

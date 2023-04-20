@@ -51,7 +51,7 @@ The following pointers provide a concrete guide on how to implement various defi
 
     Once these schemas are loaded into the database, it will automatically create the necessary foreign keys in the respective types.
 
-```javascript
+```graphql
 type user {
   name: String
   username: String
@@ -71,7 +71,7 @@ type address {
 
     In the above example, the developer will first create the "user". This is the first mutation.
 
-```javascript
+```graphql
 mutation {
   create_address(data: "{\"streetNumber\": \"123\", \"streetName\": \"Test road\", \"country\": \"Canada\"}") {
   	_key
@@ -79,7 +79,7 @@ mutation {
 }
 ```
 
-```javascript
+```graphql
 mutation {
   create_user(data: "{\"name\": \"Alice\", \"username\": \"awesomealice\", \"age\": 35, \"address_id\": \"bae-fd541c25-229e-5280-b44b-e5c2af3e374d\"}") {
   	_key
@@ -91,7 +91,7 @@ Note: Currently, the developer must create the secondary side of the relation (a
 
 3. Querying Types - After creating the required documents, the developer has to send a query request from the primary side. Therefore, in the above example, it will ask for the three respective fields of the "user", and it will also have the embedded address type in the selection set. As the developer will query from the "user" into the "address", and as defined above, the "user" is the primary type, this lookup of "user" into "address" will be an efficient lookup that will only require a single point. A single point lookup means that it won't incur a table scan. This is explained in the query below:
 
-```javascript
+```graphql
 query {
     user {
         name
@@ -107,7 +107,7 @@ query {
 
 ```
 
-```javascript
+```graphql
 query {
     address {
         streetNumber
@@ -123,7 +123,7 @@ query {
 
 ```
 
-```javascript
+```graphql
 query {
     user (filter: {address: {country: "Canada"}}) {
         name
@@ -148,7 +148,7 @@ Note: Defra supports queries from both sides, regardless of which side is the pr
 1. Define the Schema and Add Types - For the one-to-many relationship, two types are defined, for example, "author" and "book".  The author type has a name, a birth date, and authored books. This is going to be a one-to-many relationship into the book type. The book type has a name, a description, a single genre string, and the author to which it is related.  So "author" is the one, and the "book" is the many. 
 
 
-```javascript
+```graphql
 # schema.graphql
 
 type author {
@@ -167,7 +167,7 @@ type book {
 ```
 
 
-```javascript
+```bash
 defradb client schema add -f schema.graphql
 ```
 
@@ -175,7 +175,7 @@ defradb client schema add -f schema.graphql
 
     Note: Currently Defra only supports creating one type at a time, but the developer can repeat this as many times as required.
 
-```javascript
+```graphql
 mutation {
     create_author(data: "{\"name\": \"Saadi\",\"dateOfBirth\": \"1210-07-23T03:46:56.647Z\"}") {
     	_key
@@ -184,7 +184,7 @@ mutation {
 ```
 
 
-```javascript
+```graphql
 mutation {
   	create_book(data: "{\"name\": \"Gulistan\",\"genre\": \"Poetry\", \"author_id\": \"bae-0e7c3bb5-4917-5d98-9fcf-b9db369ea6e4\"}") {
       	_key
@@ -193,7 +193,7 @@ mutation {
 ```
 
 
-```javascript
+```graphql
 mutation {
   	update_author(id: "bae-0e7c3bb5-4917-5d98-9fcf-b9db369ea6e4", data: "{\"name\": \"Saadi Shirazi\"}") {
       	_key
@@ -202,7 +202,7 @@ mutation {
 ```
 
 
-```javascript
+```graphql
 mutation {
   	update_book(filter: {name: {_eq: "Gulistan"}}, data: "{\"description\": \"Persian poetry of ideas\"}") {
       	_key
@@ -217,7 +217,7 @@ Note: The developer can create as many books they require by using this pattern.
 
     As a result, on querying a related type for a one-to-many, the developer can also sub-filter the related type. In other words, if an author has a certain number of books, we can filter the author by their name but return the books that are part of a particular genre. So, in the author-to-book direction, the developer can filter on two different levels - filter on the top level of the actual author type of the collection or filter on the book level - both having two different implications. This is further explained in the Query Specifications document. 
 
-```javascript
+```graphql
 query {
     author {
         name
@@ -232,7 +232,7 @@ query {
 ```
 
 
-```javascript
+```json
 // Results:
 [
   {
@@ -253,7 +253,7 @@ query {
 ]
 ```
 
-```javascript
+```graphql
 query {
     book {
         name
@@ -266,7 +266,7 @@ query {
 }
 ```
 
-```javascript
+```json
 // Results:
 [
   {
@@ -288,7 +288,7 @@ query {
 ]
 ```
 
-```javascript
+```graphql
 query {
     author {
         name
@@ -301,7 +301,7 @@ query {
 }
 ```
 
-```javascript
+```json
 // Results:
 [
   {
@@ -317,7 +317,7 @@ query {
 ]
 ```
 
-```javascript
+```graphql
 query {
 	# Filters on the parent object can reference child fields
 	# even if they are not requested.
@@ -328,7 +328,7 @@ query {
 }
 ```
 
-```javascript
+```json
 // Results:
 [
   {

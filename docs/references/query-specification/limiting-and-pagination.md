@@ -7,7 +7,7 @@ sidebar_position: 70
 After filtering and sorting a query, we can then limit and skip elements from the returned set of objects.
 
 Let us get the top 10 rated books:
-```javascript
+```graphql
 {
     books(sort: {rating: DESC}, limit: 10) {
         title
@@ -20,7 +20,7 @@ Let us get the top 10 rated books:
 The `limit` function accepts the maximum number of items to return from the resulting set. Next, we can `skip` elements in the set, to get the following N objects from the return set. Both these functions can be used to create a pagination system, where we have a limit on number of items per page, and can skip through pages as well.
 
 Let's get the *next* top 10 rated books after the previous query:
-```javascript
+```graphql
 {
     books(sort: {rating: DESC}, limit:10, offset: 10) {
         title

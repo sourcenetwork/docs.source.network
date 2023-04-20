@@ -6,7 +6,7 @@ sidebar_position: 90
 
 If the structure of a returned query is not ideal for a given application, you can rename fields and entire query results to suit your use case. This is particularly useful, and sometimes necessary when using multiple queries within a single request.
 
-```javascript
+```graphql
 {
     topTenBooks: books(sort: {rating: DESC}, limit: 10) {
         title
@@ -18,7 +18,7 @@ If the structure of a returned query is not ideal for a given application, you c
 
 In the above example, the books result is renamed to `topTenBooks`, which can be useful for semantic reasoning about the request, and for organizational purposes. It is suggested in production deployments to name your queries properly.
 
-```javascript
+```graphql
 {
     topTenBooks: books(sort: {rating: DESC}, limit: 10) {
         title
@@ -38,7 +38,7 @@ In this query the two returned results are named `topTenBooks` and `bottomTenBoo
 
 Additionally, we can alias individual fields within our returned types. Aliasing a field works the same way as aliasing a query.
 
-```javascript
+```graphql
 {
     books {
         name: title

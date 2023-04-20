@@ -8,7 +8,7 @@ Filtering is used to screen data entries containing the specified fields and pre
 
 An empty `filter` object is equivalent to no filters being applied. Hence, the output will return all books. The following example displays an empty filter being applied on the root level field.
 
-```javascript
+```graphql
 {
 	books(filter: {}) {
 		title
@@ -22,7 +22,7 @@ Some filtering options depend on the available indexes on a field. However, we w
 
 To apply a filter to a specific field, we can specify it within the filter object. The example below only returns books with the title “A Painted House”.
 
-```javascript
+```graphql
 {
 	books(filter: { title: { _eq: "A Painted House" }}) {
 		title
@@ -36,7 +36,7 @@ We can apply filters to all or multiple fields available.
 
 **NOTE:** Each additional field listed in the filter object implies to a conditional AND relation.
 
-```javascript
+```graphql
 {
 	books(filter: { title: {_eq: "A Painted House"}, genre: {_eq: "Thriller" }}) {
 		title
@@ -50,7 +50,7 @@ The above query only returns books with the title “A Painted House” AND genr
 
 Filters can also be applied on subfields that have relational objects within them. For example: an object Book, with an Author field, has a many-to-one relationship to the Author object. Then we can query and filter based on the value of the Author field.
 
-```javascript
+```graphql
 {
 	books(filter: { genre: {_eq: "Thriller"}, author: {name: {_eq: "John Grisham"}}}) {
 		title
@@ -60,6 +60,7 @@ Filters can also be applied on subfields that have relational objects within the
 			name
 			bio
 		}
+	}
 }
 ```
 
@@ -69,7 +70,7 @@ Filtering from the root object level, compared to the sub-object level results i
 
 This applies to both single sub-objects and array sub-objects, i.e., if we apply a filter on a sub-object array, the output **only** returns the root object, if at least one sub-object matches the given filter instead of requiring **every** sub-object to match the query. For example, the following query will only return authors, if they have **at least** one thriller genre based book.
 
-```javascript
+```graphql
 {
     authors(filter: {book: {genre: {_eq: "Thriller"}}}) {
         name
@@ -81,7 +82,7 @@ This applies to both single sub-objects and array sub-objects, i.e., if we apply
 Additionally, in the selection set, if we include the sub-object array we are filtering on, the filter is then implicitly applied unless otherwise specified.
 
 In the quercode snippet above, let's add `books` to the selection set using the query below .
-```
+```graphql
 {
     authors(filter: {book: {genre: {_eq: "Thriller"}}}) {
         name
@@ -96,7 +97,7 @@ In the quercode snippet above, let's add `books` to the selection set using the 
 
 Here, the `books` section will only contain books that match the root object filter, namely, `{genre: {_eq: "Thriller"}}`. If we wish to return the same authors from the above query and include *all* their books, we can add an explicit filter directly to the sub-object instead of the sub-filters.
 
-```
+```graphql
 {
     authors(filter: {book: {genre: {_eq: "Thriller"}}}) {
         name
@@ -113,7 +114,7 @@ In the code snippet above, the output returns authors who have at least one book
 
 Filters applied solely to sub-objects, which are only applicable for array types, are computed independently from the root object filters.
 
-```javascript
+```graphql
 {
 	authors(filter: {name: {_eq: "John Grisham"}}) {
 		name
@@ -123,6 +124,7 @@ Filters applied solely to sub-objects, which are only applicable for array types
 			genre
 			description
 		}
+	}
 }
 ```
 
@@ -134,12 +136,13 @@ So far, we have only seen examples of EXACT string matches, but we can also filt
 
 Let's query for all books with a rating greater than or equal to 4.
 
-```javascript
+```graphql
 {
 	books(filter: { rating: { _gte: 4 } }) {
 		title
 		genre
 		description
+	}
 }
 ```
 
@@ -176,7 +179,7 @@ There are 3 types of conditional keywords, i.e, `_and`, `_or`, and `_not`. Condi
 
 The code snippet below queries all books that are a part of the Thriller genre, or have a rating between 4 to 5.
 
-```javascript
+```graphql
 {
     books(
         filter: { 

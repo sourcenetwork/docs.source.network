@@ -18,12 +18,12 @@ DefraDB is currently an *Early Access Alpha* program (not ready for production d
 ## Installation
 To install a DefraDB node, you can either:
 - download the pre-compiled binaries available from the releases page, or
-    ```gql
+    ```bash
     go install github.com/sourcenetwork/defradb/cli/defradb
     ```
 - compile it yourself if you have a local [Go Toolchain](https://golang.org/) installed
 
-    ```gql
+    ```bash
     git clone git@github.com:sourcenetwork/defradb-early-access.git
     mv defradb-early-access defradb # Rename the folder
     cd defradb/cli/defradb
@@ -77,7 +77,7 @@ To add a new schema type to the database, you can write the schema to a local fi
 
 - Add this to the users.gql file
 
-```gql
+```graphql
 type user 
 {
 	name: String 
@@ -88,7 +88,7 @@ type user
 ```
 - Run the following command:
 
-```gql
+```bash
 defradb client schema add -f users.gql
 ```
 
@@ -101,7 +101,7 @@ You can find more examples of schema type definitions in the [cli/defradb/exampl
 ### Query Documentation
 
 Once your local node is populated with data, we can query that data.
-```gql
+```graphql
 query {
   user {
     _key
@@ -115,7 +115,7 @@ This will query all the users, and return the fields _key, age, name, points. Gr
 
 We can further filter our results by adding a filter argument to the query.
 
-```gql
+```graphql
 query {
   user(filter: {points: {_ge: 50}}) {
     _key
@@ -136,7 +136,7 @@ Internally, DefraDB uses MerkleCRDTs to store data. MerkleCRDTs convert all muta
 
 To get the most recent commit in the MerkleDAG for a with a docKey of `bae-91171025-ed21-50e3-b0dc-e31bccdfa1ab`, we can submit the following query:
 
-```gql
+```graphql
 query {
   latestCommits(dockey: "bae-91171025-ed21-50e3-b0dc-e31bccdfa1ab") {
     cid
@@ -183,7 +183,7 @@ This will return a structure similar to the following, which contains the update
 
 Additionally, we can get *all* commits in a document MerkleDAG with `allCommits`, and lastly, we can get a specific commit, identified by a `cid` with the `commit` query, like so:
 
-```gql
+```graphql
 query {
   commit(cid: "QmPqCtcCPNHoWkHLFvG4aKqDkLLzhVDAVEDSzEs38GHxoo") {
     cid

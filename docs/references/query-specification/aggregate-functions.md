@@ -10,7 +10,7 @@ The most common use case of grouping queries is to compute some aggregate functi
 The special aggregate function fields' format is the function name and the field name as its sub-elements. Specifically: `_$function { $field }`, where `$function` is the list of functions from `Table 3`, and `$field` is the field name to which the function will be applied to. E.g., applying the `max` function to the `rating` field becomes `_max { rating }`.
 
 Let us augment the previous grouped books by genre example and include an aggregate function on the sub-groups ratings.
-```javascript
+```graphql
 {
     books(filter: {author: {name: {_like: "John%"}}}, groupBy: [genre]) {
         genre
@@ -31,7 +31,7 @@ Here we return the average of all the ratings of the books whose authors name be
 We can also use simpler queries, without any `groupBy` clause, and still use aggregate functions. The difference is, instead of applying the aggregate function to only the sub-group, it applies it to the entire result set.
 
 Let's simply count all the objects returned by a given filter.
-```javascript
+```graphql
 {
     books(filter: {rating: {_gt: 3.5}}) {
         title
@@ -54,7 +54,7 @@ When using group queries, it is often necessary to further filter the returned s
 In addition to filtering using the `having` argument, we can still use `limit` and `order` in the same way, since those operations are applied *after* the grouping and aggregation. Further explanation of the query execution pipeline is provided below.
 
 Let us get all the books from the author John LeCare, group them by genre, calculate the average rating of these books, select the groups with at least an average rating of 3.5, and order them from highest to lowest.
-```javascript
+```graphql
 {
     books(filter{ author: {name: "John LeCare"} }, groupBy: [genre], having: { _avg: {rating: {_gt: 3.5}}}, order: { _avg: {rating: DESC}}) {
         genre

@@ -20,8 +20,8 @@ DefraDB allows you to query, traverse, and validate the DAG structure, allowing 
 
 In DefraDB Database API, DAG nodes are represented as `Commit`, `CommitLink`, and `Delta` types. They are defined as shown below:
 
-```javascript
-// Commit is an individual node in a CRDTs MerkleDAG
+```graphql
+# Commit is an individual node in a CRDTs MerkleDAG
 type Commit {
     cid: String            // cid is the Content Identifier of this commit
     height: Int            // height is the incremental version of the current commit
@@ -30,20 +30,20 @@ type Commit {
     links: [CommitLink]    // links are any additional commits this commit may reference.
 }
 
-// CommitLink is a named link to a commit
+# CommitLink is a named link to a commit
 type CommitLink {
     name: String           // name is the name of the CommitLink
     commit: Commit         // commit is the linked commit
 }
 
-// Delta is the differential state change from one node to another
+# Delta is the differential state change from one node to another
 type Delta {
     payload: String        // payload is a base64 encoded byte-array.
 }
 ```
 
 To query the latest commit of an object (with id: '123'):
-```gql
+```graphql
 query {
     latestCommit(docid: "123") {
         cid
@@ -56,7 +56,7 @@ query {
 ```
 
 To query all the commits of an object (with id: '123'):
-```gql
+```graphql
 query {
     allCommits(docid: "123") {
         cid
@@ -69,7 +69,7 @@ query {
 ```
 
 To query a specific commit:
-```gql 
+```graphql 
 query {
     commit(cid: 'Qm123') {
         cid
@@ -83,7 +83,7 @@ query {
 
 In addition to using `Commit` specific queries, include commit version sub-fields in object queries.
 
-```gql 
+```graphql 
 query {
     user {
         _key
