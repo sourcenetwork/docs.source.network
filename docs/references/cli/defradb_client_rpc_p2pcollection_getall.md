@@ -1,8 +1,8 @@
-## defradb client rpc p2pcollection getall
+# client rpc p2pcollection getall
 
 Get all P2P collections
 
-### Synopsis
+## Synopsis
 
 Use this command if you wish to get all P2P collections in the pubsub topics
 
@@ -10,13 +10,13 @@ Use this command if you wish to get all P2P collections in the pubsub topics
 defradb client rpc p2pcollection getall [flags]
 ```
 
-### Options
+## Options
 
 ```
   -h, --help   help for getall
 ```
 
-### Options inherited from parent commands
+## Options inherited from parent commands
 
 ```
       --addr string          gRPC endpoint address (default "0.0.0.0:9161")
@@ -30,7 +30,7 @@ defradb client rpc p2pcollection getall [flags]
       --url string           URL of HTTP endpoint to listen on or connect to (default "localhost:9181")
 ```
 
-### SEE ALSO
+## SEE ALSO
 
 * [defradb client rpc p2pcollection](defradb_client_rpc_p2pcollection.md)	 - Interact with the P2P collection system
 

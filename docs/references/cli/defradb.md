@@ -1,8 +1,8 @@
-## defradb
+# defradb
 
 DefraDB Edge Database
 
-### Synopsis
+## Synopsis
 
 DefraDB is the edge database to power the user-centric future.
 
@@ -12,7 +12,7 @@ DefraDB is released under the BSL license, (c) 2022 Democratized Data Foundation
 See https://docs.source.network/BSL.txt for more information.
 
 
-### Options
+## Options
 
 ```
   -h, --help                 help for defradb
@@ -26,7 +26,7 @@ See https://docs.source.network/BSL.txt for more information.
       --url string           URL of HTTP endpoint to listen on or connect to (default "localhost:9181")
 ```
 
-### SEE ALSO
+## SEE ALSO
 
 * [defradb client](defradb_client.md)	 - Interact with a running DefraDB node as a client
 * [defradb init](defradb_init.md)	 - Initialize DefraDB's root directory and configuration file

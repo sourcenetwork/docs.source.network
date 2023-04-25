@@ -1,8 +1,8 @@
-## defradb client schema add
+# client schema add
 
 Add a new schema type to DefraDB
 
-### Synopsis
+## Synopsis
 
 Add a new schema type to DefraDB.
 
@@ -21,14 +21,14 @@ To learn more about the DefraDB GraphQL Schema Language, refer to https://docs.s
 defradb client schema add [schema] [flags]
 ```
 
-### Options
+## Options
 
 ```
   -f, --file string   File to load a schema from
   -h, --help          help for add
 ```
 
-### Options inherited from parent commands
+## Options inherited from parent commands
 
 ```
       --logformat string     Log format to use. Options are csv, json (default "csv")
@@ -41,7 +41,7 @@ defradb client schema add [schema] [flags]
       --url string           URL of HTTP endpoint to listen on or connect to (default "localhost:9181")
 ```
 
-### SEE ALSO
+## SEE ALSO
 
 * [defradb client schema](defradb_client_schema.md)	 - Interact with the schema system of a running DefraDB instance
 

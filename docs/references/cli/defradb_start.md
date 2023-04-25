@@ -1,8 +1,8 @@
-## defradb start
+# start
 
 Start a DefraDB node
 
-### Synopsis
+## Synopsis
 
 Start a new instance of DefraDB node.
 
@@ -10,7 +10,7 @@ Start a new instance of DefraDB node.
 defradb start [flags]
 ```
 
-### Options
+## Options
 
 ```
       --email string                Email address used by the CA for notifications (default "example@example.com")
@@ -27,7 +27,7 @@ defradb start [flags]
       --valuelogfilesize ByteSize   Specify the datastore value log file size (in bytes). In memory size will be 2*valuelogfilesize (default 1GiB)
 ```
 
-### Options inherited from parent commands
+## Options inherited from parent commands
 
 ```
       --logformat string     Log format to use. Options are csv, json (default "csv")
@@ -40,7 +40,7 @@ defradb start [flags]
       --url string           URL of HTTP endpoint to listen on or connect to (default "localhost:9181")
 ```
 
-### SEE ALSO
+## SEE ALSO
 
 * [defradb](defradb.md)	 - DefraDB Edge Database
 

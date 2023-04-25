@@ -1,19 +1,19 @@
-## defradb client
+# client
 
 Interact with a running DefraDB node as a client
 
-### Synopsis
+## Synopsis
 
 Interact with a running DefraDB node as a client.
 Execute queries, add schema types, and run debug routines.
 
-### Options
+## Options
 
 ```
   -h, --help   help for client
 ```
 
-### Options inherited from parent commands
+## Options inherited from parent commands
 
 ```
       --logformat string     Log format to use. Options are csv, json (default "csv")
@@ -26,7 +26,7 @@ Execute queries, add schema types, and run debug routines.
       --url string           URL of HTTP endpoint to listen on or connect to (default "localhost:9181")
 ```
 
-### SEE ALSO
+## SEE ALSO
 
 * [defradb](defradb.md)	 - DefraDB Edge Database
 * [defradb client blocks](defradb_client_blocks.md)	 - Interact with the database's blockstore

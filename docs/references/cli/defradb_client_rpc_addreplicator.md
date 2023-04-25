@@ -1,8 +1,8 @@
-## defradb client rpc addreplicator
+# client rpc addreplicator
 
 Add a new replicator
 
-### Synopsis
+## Synopsis
 
 Use this command if you wish to add a new target replicator
 for the p2p data sync system.
@@ -11,13 +11,13 @@ for the p2p data sync system.
 defradb client rpc addreplicator <collection> <peer> [flags]
 ```
 
-### Options
+## Options
 
 ```
   -h, --help   help for addreplicator
 ```
 
-### Options inherited from parent commands
+## Options inherited from parent commands
 
 ```
       --addr string          gRPC endpoint address (default "0.0.0.0:9161")
@@ -31,7 +31,7 @@ defradb client rpc addreplicator <collection> <peer> [flags]
       --url string           URL of HTTP endpoint to listen on or connect to (default "localhost:9181")
 ```
 
-### SEE ALSO
+## SEE ALSO
 
 * [defradb client rpc](defradb_client_rpc.md)	 - Interact with a DefraDB gRPC server
 

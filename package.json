@@ -42,6 +42,9 @@
   "devDependencies": {
     "@docusaurus/module-type-aliases": "^2.4.0",
     "@tsconfig/docusaurus": "^1.0.7",
+    "glob": "^10.2.2",
+    "simple-git": "^3.17.0",
+    "tmp": "^0.2.1",
     "typescript": "^5.0.2"
   }
 }

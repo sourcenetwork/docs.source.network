@@ -1,18 +1,18 @@
-## defradb client schema
+# client schema
 
 Interact with the schema system of a running DefraDB instance
 
-### Synopsis
+## Synopsis
 
 Make changes, updates, or look for existing schema types to a DefraDB node.
 
-### Options
+## Options
 
 ```
   -h, --help   help for schema
 ```
 
-### Options inherited from parent commands
+## Options inherited from parent commands
 
 ```
       --logformat string     Log format to use. Options are csv, json (default "csv")
@@ -25,7 +25,7 @@ Make changes, updates, or look for existing schema types to a DefraDB node.
       --url string           URL of HTTP endpoint to listen on or connect to (default "localhost:9181")
 ```
 
-### SEE ALSO
+## SEE ALSO
 
 * [defradb client](defradb_client.md)	 - Interact with a running DefraDB node as a client
 * [defradb client schema add](defradb_client_schema_add.md)	 - Add a new schema type to DefraDB

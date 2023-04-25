@@ -1,18 +1,18 @@
-## defradb client rpc p2pcollection
+# client rpc p2pcollection
 
 Interact with the P2P collection system
 
-### Synopsis
+## Synopsis
 
 Add, delete, or get the list of P2P collections
 
-### Options
+## Options
 
 ```
   -h, --help   help for p2pcollection
 ```
 
-### Options inherited from parent commands
+## Options inherited from parent commands
 
 ```
       --addr string          gRPC endpoint address (default "0.0.0.0:9161")
@@ -26,7 +26,7 @@ Add, delete, or get the list of P2P collections
       --url string           URL of HTTP endpoint to listen on or connect to (default "localhost:9181")
 ```
 
-### SEE ALSO
+## SEE ALSO
 
 * [defradb client rpc](defradb_client_rpc.md)	 - Interact with a DefraDB gRPC server
 * [defradb client rpc p2pcollection add](defradb_client_rpc_p2pcollection_add.md)	 - Add P2P collections

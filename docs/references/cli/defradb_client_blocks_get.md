@@ -1,4 +1,4 @@
-## defradb client blocks get
+# client blocks get
 
 Get a block by its CID from the blockstore.
 
@@ -6,13 +6,13 @@ Get a block by its CID from the blockstore.
 defradb client blocks get [CID] [flags]
 ```
 
-### Options
+## Options
 
 ```
   -h, --help   help for get
 ```
 
-### Options inherited from parent commands
+## Options inherited from parent commands
 
 ```
       --logformat string     Log format to use. Options are csv, json (default "csv")
@@ -25,7 +25,7 @@ defradb client blocks get [CID] [flags]
       --url string           URL of HTTP endpoint to listen on or connect to (default "localhost:9181")
 ```
 
-### SEE ALSO
+## SEE ALSO
 
 * [defradb client blocks](defradb_client_blocks.md)	 - Interact with the database's blockstore
 

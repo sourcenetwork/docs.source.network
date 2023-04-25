@@ -1,8 +1,8 @@
-## defradb init
+# init
 
 Initialize DefraDB's root directory and configuration file
 
-### Synopsis
+## Synopsis
 
 Initialize a directory for configuration and data at the given path.
 
@@ -10,7 +10,7 @@ Initialize a directory for configuration and data at the given path.
 defradb init [flags]
 ```
 
-### Options
+## Options
 
 ```
   -h, --help             help for init
@@ -18,7 +18,7 @@ defradb init [flags]
       --rootdir string   Directory for data and configuration to use (default "$HOME/.defradb")
 ```
 
-### Options inherited from parent commands
+## Options inherited from parent commands
 
 ```
       --logformat string     Log format to use. Options are csv, json (default "csv")
@@ -30,7 +30,7 @@ defradb init [flags]
       --url string           URL of HTTP endpoint to listen on or connect to (default "localhost:9181")
 ```
 
-### SEE ALSO
+## SEE ALSO
 
 * [defradb](defradb.md)	 - DefraDB Edge Database
 

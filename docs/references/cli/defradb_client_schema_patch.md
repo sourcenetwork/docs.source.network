@@ -1,8 +1,8 @@
-## defradb client schema patch
+# client schema patch
 
 Patch an existing schema type
 
-### Synopsis
+## Synopsis
 
 Patch an existing schema.
 
@@ -23,14 +23,14 @@ To learn more about the DefraDB GraphQL Schema Language, refer to https://docs.s
 defradb client schema patch [schema] [flags]
 ```
 
-### Options
+## Options
 
 ```
   -f, --file string   File to load a patch from
   -h, --help          help for patch
 ```
 
-### Options inherited from parent commands
+## Options inherited from parent commands
 
 ```
       --logformat string     Log format to use. Options are csv, json (default "csv")
@@ -43,7 +43,7 @@ defradb client schema patch [schema] [flags]
       --url string           URL of HTTP endpoint to listen on or connect to (default "localhost:9181")
 ```
 
-### SEE ALSO
+## SEE ALSO
 
 * [defradb client schema](defradb_client_schema.md)	 - Interact with the schema system of a running DefraDB instance
 

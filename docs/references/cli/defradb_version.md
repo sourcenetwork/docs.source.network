@@ -1,4 +1,4 @@
-## defradb version
+# version
 
 Display the version information of DefraDB and its components
 
@@ -6,7 +6,7 @@ Display the version information of DefraDB and its components
 defradb version [flags]
 ```
 
-### Options
+## Options
 
 ```
   -f, --format string   Version output format. Options are text, json
@@ -14,7 +14,7 @@ defradb version [flags]
   -h, --help            help for version
 ```
 
-### Options inherited from parent commands
+## Options inherited from parent commands
 
 ```
       --logformat string     Log format to use. Options are csv, json (default "csv")
@@ -27,7 +27,7 @@ defradb version [flags]
       --url string           URL of HTTP endpoint to listen on or connect to (default "localhost:9181")
 ```
 
-### SEE ALSO
+## SEE ALSO
 
 * [defradb](defradb.md)	 - DefraDB Edge Database
 

@@ -1,4 +1,4 @@
-## defradb server-dump
+# server-dump
 
 Dumps the state of the entire database
 
@@ -6,14 +6,14 @@ Dumps the state of the entire database
 defradb server-dump [flags]
 ```
 
-### Options
+## Options
 
 ```
   -h, --help           help for server-dump
       --store string   Datastore to use. Options are badger, memory (default "badger")
 ```
 
-### Options inherited from parent commands
+## Options inherited from parent commands
 
 ```
       --logformat string     Log format to use. Options are csv, json (default "csv")
@@ -26,7 +26,7 @@ defradb server-dump [flags]
       --url string           URL of HTTP endpoint to listen on or connect to (default "localhost:9181")
 ```
 
-### SEE ALSO
+## SEE ALSO
 
 * [defradb](defradb.md)	 - DefraDB Edge Database
 

@@ -1,12 +1,12 @@
-## defradb client rpc replicator
+# client rpc replicator
 
 Interact with the replicator system
 
-### Synopsis
+## Synopsis
 
 Add, delete, or get the list of persisted replicators
 
-### Options
+## Options
 
 ```
   -c, --collection stringArray   Define the collection for the replicator
@@ -14,7 +14,7 @@ Add, delete, or get the list of persisted replicators
   -h, --help                     help for replicator
 ```
 
-### Options inherited from parent commands
+## Options inherited from parent commands
 
 ```
       --addr string          gRPC endpoint address (default "0.0.0.0:9161")
@@ -28,7 +28,7 @@ Add, delete, or get the list of persisted replicators
       --url string           URL of HTTP endpoint to listen on or connect to (default "localhost:9181")
 ```
 
-### SEE ALSO
+## SEE ALSO
 
 * [defradb client rpc](defradb_client_rpc.md)	 - Interact with a DefraDB gRPC server
 * [defradb client rpc replicator delete](defradb_client_rpc_replicator_delete.md)	 - Delete a replicator
