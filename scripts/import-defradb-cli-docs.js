@@ -5,7 +5,7 @@ const tmp = require('tmp');
 const path = require('path');
 
 const repoUrl = 'https://github.com/sourcenetwork/defradb.git';
-const commitHash = process.argv[2];
+const commitHash = process.argv[2] || 'develop';
 const subdirectory = 'docs/cli/';
 const outputDir = 'docs/references/cli/';
 
