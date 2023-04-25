@@ -4,175 +4,175 @@ title: Getting Started
 slug: /
 ---
 
+DefraDB is a user-centric database that prioritizes data ownership, personal privacy, and information security. Its data model, powered by the convergence of [MerkleCRDTs](https://arxiv.org/pdf/2004.00107.pdf) and the content-addressability of [IPLD](https://docs.ipld.io/), enables a multi-write-master architecture. It features [DQL](https://docs.source.network/query-specification/query-language-overview), a query language compatible with GraphQL but providing extra convenience. By leveraging peer-to-peer networking it can be deployed nimbly in novel topologies. Access control is determined by a relationship-based DSL, supporting document or field-level policies, secured by the SourceHub network. DefraDB is a core part of the [Source technologies](https://source.network/) that enable new paradigms of decentralized data and access-control management, user-centric apps, data trustworthiness, and much more.
 
-## Overview
-DefraDB is a peer-to-peer(P2P) Edge Database with a NoSQL document store interface. DefraDB's data model is the core data storage system for [Source](https://source.network/) Ecosystem. It is:
-- backed by [MerkleCRDTs](https://arxiv.org/pdf/2004.00107.pdf) for multi write-master architecture
-- built using [IPFS](https://ipfs.io/) technologies ([IPLD](https://docs.ipld.io/), [LibP2P](https://libp2p.io/)) and features Semantic web3 properties.
+DISCLAIMER: At this early stage, DefraDB does not offer access control or data encryption, and the default configuration exposes the database to the network. The software is provided "as is" and is not guaranteed to be stable, secure, or error-free. We encourage you to experiment with DefraDB and provide feedback, but please do not use it for production purposes until it has been thoroughly tested and developed.
 
-See the [Technical Overview](https://docsend.com/view/mczj7ic4i3kqpq7s) here.
+## Install
 
-## Early Access
-DefraDB is currently an *Early Access Alpha* program (not ready for production deployments). For support with your use-case and deployment, please contact [Source](https://source.network/) by [email](mailto:hello@source.network).
+Install `defradb` by [downloading an executable](https://github.com/sourcenetwork/defradb/releases) or building it locally using the [Go toolchain](https://golang.org/):
 
-## Installation
-To install a DefraDB node, you can either:
-- download the pre-compiled binaries available from the releases page, or
-    ```bash
-    go install github.com/sourcenetwork/defradb/cli/defradb
-    ```
-- compile it yourself if you have a local [Go Toolchain](https://golang.org/) installed
-
-    ```bash
-    git clone git@github.com:sourcenetwork/defradb-early-access.git
-    mv defradb-early-access defradb # Rename the folder
-    cd defradb/cli/defradb
-    go install
-    ```
-## Before You Begin
-
-Before installing DefraDB, review the following pre-requisites.
-
-- Install DefraDB Command Line Interface (`defradb cli`) locally or in an accessible remote node.
-- Install GraphQL client (e.g. GraphiQL). See download [link](https://www.electronjs.org/apps/graphiql).
-
-### SetUp
-
-Set up a DefraDB node with this command in the terminal:
-- `defradb start`
-
-This action prompts the following items:
-- Starts a node with default settings (running at http://localhost:9181)
-- Creates a configuration file at $HOME/.defra/config.yaml, which is the user home directory
-
-DefraDB supports two storage engines:
-- BadgerDB (used by default, provides disk-backed persistent storage)
-- In-memory store
-
-To choose a storage type you can
-- use `--store` option with the start command, or
-- edit the local config file
-
-:::note
-
-If you are using BadgerDB, and you get an error message:
-- `Failed to initiate database:Map log file. Path=.defradb/data/000000.vlog. Error=exec format error`
-
-It means that the terminal client does not support Mmap'ed files. This is common with older version of Ubuntu on Windows, Windows SubSystem for Linux (WSL). Unfortunately, BadgerDB uses Mmap to interact with the filesystem, so you will need to use a terminal client which supports it.
-
-:::
-
-:::note
-
-Once your local environment is successfully setup, you can test your connection with:
-- `defradb client ping` for a `Success!` response.
-
-:::
-
-Once you've confirmed your node is running correctly, if you're using the GraphiQL client to interact with the database, then make sure you set the GraphQL Endpoint to http://localhost:9181/graphql and the Method to GET.
-
-### Adding a Schema Type
-
-To add a new schema type to the database, you can write the schema to a local file using the GraphQL SDL format, and submit that to the database like so:
-
-- Add this to the users.gql file
-
-```graphql
-type user 
-{
-	name: String 
-	age: Int 
-	verified: Boolean 
-	points: Float
-}
-```
-- Run the following command:
-
-```bash
-defradb client schema add -f users.gql
+```sh
+git clone git@github.com:sourcenetwork/defradb.git
+cd defradb
+make install
 ```
 
-These steps register the type, build a dedicated collection and 
+In the following sections, we assume that `defradb` is included in your `PATH`. If you installed it with the Go toolchain, use:
 
-This will register the type, build a dedicated collection, and generate the typed GraphQL endpoints for querying and mutation.
+```sh
+export PATH=$PATH:$(go env GOPATH)/bin
+```
 
-You can find more examples of schema type definitions in the [cli/defradb/examples](https://github.com/sourcenetwork/defradb/blob/master/cli/defradb/examples) folder.
+We recommend experimenting with queries using a native GraphQL client. GraphiQL is a popular option - [download and install it](https://altairgraphql.dev/#download).
 
-### Query Documentation
+## Start
 
-Once your local node is populated with data, we can query that data.
-```graphql
-query {
-  user {
-    _key
-    age
-    name
-    points
+Start a node by executing `defradb start`. Keep the node running while going through the following examples.
+
+Verify the local connection to the node works by executing `defradb client ping` in another terminal.
+
+## Configuration
+
+In this document, we use the default configuration, which has the following behavior:
+
+- `~/.defradb/` is DefraDB's configuration and data directory
+- `client` command interacts with the locally running node
+- The GraphQL endpoint is provided at http://localhost:9181/api/v0/graphql
+
+The GraphQL endpoint can be used with a GraphQL client (e.g., Altair) to conveniently perform requests (`query`, `mutation`) and obtain schema introspection.
+
+## Add a schema type
+
+Schemas are used to structure documents using a type system.
+
+In the following examples, we'll be using a simple `User` schema type.
+
+Add it to the database with the following command. By doing so, DefraDB generates the typed GraphQL endpoints for querying, mutation, and introspection.
+
+```shell
+defradb client schema add '
+  type User {
+    name: String 
+    age: Int 
+    verified: Boolean 
+    points: Float
   }
-}
+'
 ```
-This will query all the users, and return the fields _key, age, name, points. GraphQL queries only ever return the exact fields you request, there's no * selector like with SQL.
 
-We can further filter our results by adding a filter argument to the query.
+Find more examples of schema type definitions in the [examples/schema/](examples/schema/) folder.
 
-```graphql
-query {
-  user(filter: {points: {_ge: 50}}) {
-    _key
-    age
-    name
-    points
+## Create a document
+
+Submit a `mutation` request to create an docuement of the `User` type:
+
+```shell
+defradb client query '
+  mutation {
+      create_User(data: "{\"age\": 31, \"verified\": true, \"points\": 90, \"name\": \"Bob\"}") {
+          _key
+      }
   }
-}
+'
 ```
 
-This will only return user documents which have a value for the points field Greater Than or Equal to ( _ge ) 50.
-
-To see all the available query options, types, and functions please see the [Query Documentation](https://github.com/sourcenetwork/defradb#query-documenation).
-
-### Interact with Document Commits
-
-Internally, DefraDB uses MerkleCRDTs to store data. MerkleCRDTs convert all mutations and updates a document has into a graph of changes; similar to Git. Moreover, the graph is a [MerkleDAG](https://docs.ipfs.io/concepts/merkle-dag/), which means all nodes are content identifiable with CIDs, and each node, references its parents CIDs.
-
-To get the most recent commit in the MerkleDAG for a with a docKey of `bae-91171025-ed21-50e3-b0dc-e31bccdfa1ab`, we can submit the following query:
-
-```graphql
-query {
-  latestCommits(dockey: "bae-91171025-ed21-50e3-b0dc-e31bccdfa1ab") {
-    cid
-    delta
-    height
-    links {
-      cid
-      name
-    }
-  }
-}
-```
-This will return a structure similar to the following, which contains the update payload that caused this new commit (delta), and any sub graph commits this references.
+Expected response:
 
 ```json
 {
   "data": [
     {
-      "cid": "QmPqCtcCPNHoWkHLFvG4aKqDkLLzhVDAVEDSzEs38GHxoo",
+      "_key": "bae-91171025-ed21-50e3-b0dc-e31bccdfa1ab",
+    }
+  ]
+}
+```
+
+`_key` is the document's key, a unique identifier of the document, determined by its schema and initial data.
+
+## Query documents
+
+Once you have populated your node with data, you can query it:
+
+```shell
+defradb client query '
+  query {
+    User {
+      _key
+      age
+      name
+      points
+    }
+  }
+'
+```
+
+This query obtains *all* users and returns their fields `_key, age, name, points`. GraphQL queries only return the exact fields requested.
+
+You can further filter results with the `filter` argument.
+
+```shell
+defradb client query '
+  query {
+    User(filter: {points: {_ge: 50}}) {
+      _key
+      age
+      name
+      points
+    }
+  }
+'
+```
+
+This returns only user documents which have a value for the `points` field *Greater Than or Equal to* (`_ge`) 50.
+
+## Obtain document commits
+
+DefraDB's data model is based on [MerkleCRDTs](https://arxiv.org/pdf/2004.00107.pdf). Each document has a graph of all of its updates, similar to Git. The updates are called `commit`s and are identified by `cid`, a content identifier. Each references its parents by their `cid`s.
+
+To get the most recent commit in the MerkleDAG for the document identified as `bae-91171025-ed21-50e3-b0dc-e31bccdfa1ab`:
+
+```shell
+defradb client query '
+  query {
+    latestCommits(dockey: "bae-91171025-ed21-50e3-b0dc-e31bccdfa1ab") {
+      cid
+      delta
+      height
+      links {
+        cid
+        name
+      }
+    }
+  }
+'
+```
+
+It returns a structure similar to the following, which contains the update payload that caused this new commit (`delta`) and any subgraph commits it references.
+
+```json
+{
+  "data": [
+    {
+      "cid": "bafybeifhtfs6vgu7cwbhkojneh7gghwwinh5xzmf7nqkqqdebw5rqino7u",
       "delta": "pGNhZ2UYH2RuYW1lY0JvYmZwb2ludHMYWmh2ZXJpZmllZPU=",
       "height": 1,
       "links": [
         {
-          "cid": "QmSom35RYVzYTE7nGsudvomv1pi9ffjEfSFsPZgQRM92v1",
+          "cid": "bafybeiet6foxcipesjurdqi4zpsgsiok5znqgw4oa5poef6qtiby5hlpzy",
           "name": "age"
         },
         {
-          "cid": "QmYJrCcfMmfFp4JcbChLfMLCv8TSHjGwRVHUBgPazWxPga",
+          "cid": "bafybeielahxy3r3ulykwoi5qalvkluojta4jlg6eyxvt7lbon3yd6ignby",
           "name": "name"
         },
         {
-          "cid": "QmXLuVB5CCGqWcdQitingkfRxoVRLKh2jNcnX4UbYnW6Mk",
+          "cid": "bafybeia3tkpz52s3nx4uqadbm7t5tir6gagkvjkgipmxs2xcyzlkf4y4dm",
           "name": "points"
         },
         {
-          "cid": "QmNRQwWjTBTDfAFUHkG8yuKmtbprYQtGs4jYxGJ5fCfXtn",
+          "cid": "bafybeia4off4javopmxcdyvr6fgb5clo7m5bblxic5sqr2vd52s6khyksm",
           "name": "verified"
         }
       ]
@@ -181,51 +181,173 @@ This will return a structure similar to the following, which contains the update
 }
 ```
 
-Additionally, we can get *all* commits in a document MerkleDAG with `allCommits`, and lastly, we can get a specific commit, identified by a `cid` with the `commit` query, like so:
+Obtain a specific commit by its content identifier (`cid`):
 
-```graphql
-query {
-  commit(cid: "QmPqCtcCPNHoWkHLFvG4aKqDkLLzhVDAVEDSzEs38GHxoo") {
-    cid
-    delta
-    height
-    links {
+```gql
+defradb client query '
+  query {
+    commits(cid: "bafybeifhtfs6vgu7cwbhkojneh7gghwwinh5xzmf7nqkqqdebw5rqino7u") {
       cid
-      name
+      delta
+      height
+      links {
+        cid
+        name
+      }
     }
   }
-}
+'
 ```
-Here, you can see we use the CID from the previous query to further explore the related nodes in the MerkleDAG.
 
-This only scratches the surface of the DefraDB Query Language, see below for the entire language specification.
+## DefraDB Query Language (DQL)
 
-## Query Documentation
+DQL is compatible with GraphQL but features various extensions.
 
-Access the official DefraDB Query Language Docs [add new link] 
+Read its documentation at [docs.source.network](https://docs.source.network/query-specification/query-language-overview) to discover its filtering, ordering, limiting, relationships, variables, aggregate functions, and other useful features.
 
-## CLI Documentation
-You can find generated documentation for the shipped CLI interface [here](https://github.com/sourcenetwork/defradb/blob/master/docs/cmd/defradb.md)
 
-## Next Steps
+## Peer-to-peer data synchronization
 
-The current early access release has much of the digial signatute, and identity work removed, until the cryptographic elements can be finalized.
+DefraDB leverages peer-to-peer networking for data exchange, synchronization, and replication of documents and commits.
 
-The following will ship with the next release:
+When starting a node for the first time, a key pair is generated and stored in its "root directory" (`~/.defradb/` by default).
 
-- schema type mutation/migration
-- data syncronization between nodes
-- grouping and aggregation on the query language
-- additional CRDT type(s)
+Each node has a unique `Peer ID` generated from its public key. This ID allows other nodes to connect to it.
 
-We will release a project board outlining the planned, and completed features of our roadmap.
+There are two types of peer-to-peer relationships supported: **pubsub** peering and **replicator** peering.
 
-## Licensing
+Pubsub peering *passively* synchronizes data between nodes by broadcasting *Document Commit* updates to the topic of the commit's document key. Nodes need to be listening on the pubsub channel to receive updates. This is for when two nodes *already* have share a document and want to keep them in sync.
 
-Current DefraDB code is released under a combination of two licenses, the [Business Source License (BSL)](https://github.com/sourcenetwork/defradb/blob/master/licenses/BSL.txt) and the [DefraDB Community License (DCL)](https://github.com/sourcenetwork/defradb/blob/master/licenses/DCL.txt).
+Replicator peering *actively* pushes changes from a specific collection *to* a target peer.
 
-When contributing to a DefraDB feature, you can find the relevant license in the comments at the top of each file.
+### Pubsub example
 
-## Further Reading
+Pubsub peers can be specified on the command line using the `--peers` flag, which accepts a comma-separated list of peer [multiaddresses](https://docs.libp2p.io/concepts/addressing/). For example, a node at IP `192.168.1.12` listening on 9000 with Peer ID `12D3KooWNXm3dmrwCYSxGoRUyZstaKYiHPdt8uZH5vgVaEJyzU8B` would be referred to using the multiaddress `/ip4/192.168.1.12/tcp/9000/p2p/12D3KooWNXm3dmrwCYSxGoRUyZstaKYiHPdt8uZH5vgVaEJyzU8B`.
 
-to be updated
+Let's go through an example of two nodes (*nodeA* and *nodeB*) connecting with each other over pubsub, on the same machine.
+
+Start *nodeA* with a default configuration:
+
+```
+defradb start
+```
+
+Obtain the Peer ID from its console output. In this example, we use `12D3KooWNXm3dmrwCYSxGoRUyZstaKYiHPdt8uZH5vgVaEJyzU8B`, but locally it will be different.
+
+For *nodeB*, we provide the following configuration:
+
+```
+defradb start --rootdir ~/.defradb-nodeB --url localhost:9182 --p2paddr /ip4/0.0.0.0/tcp/9172 --tcpaddr /ip4/0.0.0.0/tcp/9162 --peers /ip4/0.0.0.0/tcp/9171/p2p/12D3KooWNXm3dmrwCYSxGoRUyZstaKYiHPdt8uZH5vgVaEJyzU8B
+```
+
+About the flags:
+
+- `--rootdir` specifies the root dir (config and data) to use
+- `--url` is the address to listen on for the client HTTP and GraphQL API
+- `--p2paddr` is the multiaddress for the p2p networking to listen on
+- `--tcpaddr` is the multiaddress for the gRPC server to listen on
+- `--peers` is a comma-separated list of peer multiaddresses
+
+This starts two nodes and connects them via pubsub networking.
+
+### Collection subscription example
+
+It is possible to subscribe to updates on a given collection by using its ID as the pubsub topic. The ID of a collection is found as the field `schemaVersionID` in one of its documents. Here we use the collection ID of the `User` type we created above. After setting up 2 nodes as shown in the [Pubsub example](#pubsub-example) section, we can subscribe to collections updates on *nodeA* from *nodeB* by using the `rpc p2pcollection` command:
+
+```shell
+defradb client rpc p2pcollection add --url localhost:9182 bafkreibpnvkvjqvg4skzlijka5xe63zeu74ivcjwd76q7yi65jdhwqhske
+```
+
+Multiple collection IDs can be added at once.
+
+```shell
+defradb client rpc p2pcollection add --url localhost:9182 <collection1ID> <collection2ID> <collection3ID>
+```
+
+### Replicator example
+
+Replicator peering is targeted: it allows a node to actively send updates to another node. Let's go through an example of *nodeA* actively replicating to *nodeB*:
+
+Start *nodeA*:
+
+```shell
+defradb start
+```
+
+In another terminal, add this example schema to it:
+
+```shell
+defradb client schema add '
+  type Article {
+    content: String
+    published: Boolean
+  }
+'
+```
+
+Start (or continue running from above) *nodeB*, that will be receiving updates:
+
+```shell
+defradb start --rootdir ~/.defradb-nodeB --url localhost:9182 --p2paddr /ip4/0.0.0.0/tcp/9172 --tcpaddr /ip4/0.0.0.0/tcp/9162
+```
+
+Here we *do not* specify `--peers` as we will manually define a replicator after startup via the `rpc` client command.
+
+In another terminal, add the same schema to *nodeB*:
+
+```shell
+defradb client schema add --url localhost:9182 '
+  type Article {
+    content: String
+    published: Boolean
+  }
+'
+```
+
+Set *nodeA* to actively replicate the "Article" collection to *nodeB*:
+
+```shell
+defradb client rpc addreplicator "Article" /ip4/0.0.0.0/tcp/9172/p2p/
+defradb client rpc replicator set -c "Article" /ip4/0.0.0.0/tcp/9172/p2p/<peerID_of_nodeB>
+
+```
+
+As we add or update documents in the "Article" collection on *nodeA*, they will be actively pushed to *nodeB*. Note that changes to *nodeB* will still be passively published back to *nodeA*, via pubsub.
+
+
+## Securing the HTTP API with TLS
+
+By default, DefraDB will expose its HTTP API at `http://localhost:9181/api/v0`. It's also possible to configure the API to use TLS with self-signed certificates or Let's Encrypt.
+
+To start defradb with self-signed certificates placed under `~/.defradb/certs/` with `server.key`
+being the public key and `server.crt` being the private key, just do:
+```shell
+defradb start --tls
+```
+
+The keys can be generated with your generator of choice or with `make tls-certs`.
+
+Since the keys should be stored within the DefraDB data and configuration directory, the recommended key generation command is `make tls-certs path="~/.defradb/certs"`.
+
+If not saved under `~/.defradb/certs` then the public (`pubkeypath`) and private (`privkeypaths`) key paths need to be explicitly defined in addition to the `--tls` flag or `tls` set to `true` in the config.
+
+Then to start the server with TLS, using your generated keys in custom path:
+```shell
+defradb start --tls --pubkeypath ~/path-to-pubkey.key --privkeypath ~/path-to-privkey.crt
+
+```
+
+DefraDB also comes with automatic HTTPS for deployments on the public web. To enable HTTPS,
+ deploy DefraDB to a server with both port 80 and port 443 open. With your domain's DNS A record
+ pointed to the IP of your server, you can run the database using the following command:
+```shell
+sudo defradb start --tls --url=your-domain.net --email=email@example.com
+```
+Note: `sudo` is needed above for the redirection server (to bind port 80).
+
+A valid email address is necessary for the creation of the certificate, and is important to get notifications from the Certificate Authority - in case the certificate is about to expire, etc.
+
+
+## Conclusion
+
+This gets you started to use DefraDB! Read on the documentation website for guides and further information.
