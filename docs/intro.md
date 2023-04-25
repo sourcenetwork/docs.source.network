@@ -12,7 +12,7 @@ DISCLAIMER: At this early stage, DefraDB does not offer access control or data e
 
 Install `defradb` by [downloading an executable](https://github.com/sourcenetwork/defradb/releases) or building it locally using the [Go toolchain](https://golang.org/):
 
-```sh
+```shell
 git clone git@github.com:sourcenetwork/defradb.git
 cd defradb
 make install
@@ -20,11 +20,11 @@ make install
 
 In the following sections, we assume that `defradb` is included in your `PATH`. If you installed it with the Go toolchain, use:
 
-```sh
+```shell
 export PATH=$PATH:$(go env GOPATH)/bin
 ```
 
-We recommend experimenting with queries using a native GraphQL client. GraphiQL is a popular option - [download and install it](https://altairgraphql.dev/#download).
+We recommend experimenting with queries using a native GraphQL client. Altair is a popular option - [download and install it](https://altairgraphql.dev/#download).
 
 ## Start
 
@@ -61,7 +61,7 @@ defradb client schema add '
 '
 ```
 
-Find more examples of schema type definitions in the [examples/schema/](examples/schema/) folder.
+Find more examples of schema type definitions in the [examples/schema/](https://github.com/sourcenetwork/defradb/examples/schema/) folder.
 
 ## Create a document
 
@@ -129,7 +129,7 @@ This returns only user documents which have a value for the `points` field *Grea
 
 ## Obtain document commits
 
-DefraDB's data model is based on [MerkleCRDTs](https://arxiv.org/pdf/2004.00107.pdf). Each document has a graph of all of its updates, similar to Git. The updates are called `commit`s and are identified by `cid`, a content identifier. Each references its parents by their `cid`s.
+DefraDB's data model is based on [MerkleCRDTs](https://docs.source.network/guides/merkle-crdt). Each document has a graph of all of its updates, similar to Git. The updates are called `commit`s and are identified by `cid`, a content identifier. Each references its parents by their `cid`s.
 
 To get the most recent commit in the MerkleDAG for the document identified as `bae-91171025-ed21-50e3-b0dc-e31bccdfa1ab`:
 
@@ -183,7 +183,7 @@ It returns a structure similar to the following, which contains the update paylo
 
 Obtain a specific commit by its content identifier (`cid`):
 
-```gql
+```shell
 defradb client query '
   query {
     commits(cid: "bafybeifhtfs6vgu7cwbhkojneh7gghwwinh5xzmf7nqkqqdebw5rqino7u") {
@@ -203,7 +203,7 @@ defradb client query '
 
 DQL is compatible with GraphQL but features various extensions.
 
-Read its documentation at [docs.source.network](https://docs.source.network/query-specification/query-language-overview) to discover its filtering, ordering, limiting, relationships, variables, aggregate functions, and other useful features.
+Read the [Query specification](https://docs.source.network/query-specification/query-language-overview) to discover filtering, ordering, limiting, relationships, variables, aggregate functions, and other useful features.
 
 
 ## Peer-to-peer data synchronization
@@ -228,7 +228,7 @@ Let's go through an example of two nodes (*nodeA* and *nodeB*) connecting with e
 
 Start *nodeA* with a default configuration:
 
-```
+```shell
 defradb start
 ```
 
@@ -236,7 +236,7 @@ Obtain the Peer ID from its console output. In this example, we use `12D3KooWNXm
 
 For *nodeB*, we provide the following configuration:
 
-```
+```shell
 defradb start --rootdir ~/.defradb-nodeB --url localhost:9182 --p2paddr /ip4/0.0.0.0/tcp/9172 --tcpaddr /ip4/0.0.0.0/tcp/9162 --peers /ip4/0.0.0.0/tcp/9171/p2p/12D3KooWNXm3dmrwCYSxGoRUyZstaKYiHPdt8uZH5vgVaEJyzU8B
 ```
 
