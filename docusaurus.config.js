@@ -41,9 +41,7 @@ const config = {
         },
       },
       colorMode: {
-        // Should we use the prefers-color-scheme media-query,
-        // using user system preferences, instead of the hardcoded defaultMode
-        respectPrefersColorScheme: false,
+        respectPrefersColorScheme: true,
       },
       navbar: {
         title: null,
