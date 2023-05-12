@@ -12,7 +12,7 @@ Input variables can be used in place of complex string interpolation to allow fo
 
 ```graphql
 query($myVar: Int) {
-    books(filter{ rating: $myVar}) {
+    Books(filter{ rating: $myVar}) {
         title
         genre
         description
@@ -43,11 +43,11 @@ Subquery results, represented by the prefixed variable, can be used as many othe
 ```graphql
 # Select all books published by X reviewed by authors belonging to a publisher Y
 {
-    _authorsOfPubY: authors(filter: { written: { publishedBy: {name: "Y"}}}) {
+    _authorsOfPubY: Authors(filter: { written: { publishedBy: {name: "Y"}}}) {
         _id
     }
     
-    books(filter: {publishedBy: { name: "X" }, reviewedBy: {_in: $_authorsOfPubY}}) {
+    Books(filter: {publishedBy: { name: "X" }, reviewedBy: {_in: $_authorsOfPubY}}) {
         title
         genre
         description

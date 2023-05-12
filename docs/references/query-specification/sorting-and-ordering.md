@@ -9,7 +9,7 @@ Sorting is an integral part of any Database and Query Language. The sorting synt
 The query to find all books ordered by their latest published date:
 ```graphql
 {
-    books(sort: { published_at: “desc”}) {
+    Books(sort: { published_at: “desc”}) {
         title
         description
         published_at
@@ -25,7 +25,7 @@ Sorting can be applied to multiple fields in the same query. The sort order is s
 The query below finds all books ordered by earliest published date and then by descending order of titles.
 ```graphql
 {
-    books(sort: { published_at: ASC, title: DESC }) {
+    Books(sort: { published_at: ASC, title: DESC }) {
         title
         genre
         description
@@ -38,11 +38,11 @@ Additionally, you can sort sub-object fields along with root object fields.
 The query below finds all books ordered by earliest published date and then by the latest authors' birthday.
 ```graphql
 {
-    books(sort: { published_at: ASC, author: { birthday: DESC }}) {
+    Books(sort: { published_at: ASC, Author: { birthday: DESC }}) {
         title
         description
         published_at
-        author {
+        Author {
             name
             birthday
         }
@@ -63,9 +63,9 @@ If the DocKey is included in the sort fields, any field included afterwards will
 *So, instead of:*
 ```graphql
 {
-    authors(sort: { name: DESC, books: { title: ASC }}) {
+    Authors(sort: { name: DESC, Books: { title: ASC }}) {
         name
-        books {
+        Books {
             title
         }
     }
@@ -74,9 +74,9 @@ If the DocKey is included in the sort fields, any field included afterwards will
 *We need:*
 ```graphql
 {
-    authors(sort: { name: DESC }) {
+    Authors(sort: { name: DESC }) {
         name
-        books(sort: { title: ASC }) {
+        Books(sort: { title: ASC }) {
             title
         }
     }
@@ -90,22 +90,22 @@ If the DocKey is included in the sort fields, any field included afterwards will
 If you have the following objects in the database:
 ```json
  [
-     "author" {
+     "Author" {
          "name": "John Grisham",
-         "books": [
+         "Books": [
             { "title": "A Painted House" },
             { "title": "The Guardians" }
          ]
      },
-     "author" {
+     "Author" {
          "name": "John Grisham",
-         "books": [
+         "Books": [
             { "title": "Camino Winds" },
          ]
      },
-     "author" {
+     "Author" {
          "name": "John LeCare",
-         "books": [
+         "Books": [
              { "title": "Tinker, Tailor, Soldier, Spy"}
          ]
      }
@@ -114,9 +114,9 @@ If you have the following objects in the database:
 > and the following query [color=orange]
 ```graphql
 {
-    authors(sort: { name: DESC, books: { title: ASC }}) {
+    Authors(sort: { name: DESC, books: { title: ASC }}) {
         name
-        books {
+        Books {
             title
         }
     }
@@ -124,13 +124,13 @@ If you have the following objects in the database:
 ```
 
 ```graphql
-books(filter: {_id: [1]}) {
+Books(filter: {_id: [1]}) {
     title 
     genre
     description
 }
 ```
 
-> Given there are two authors with the same name (John Grisham), the sort object `(sort: { name: "desc", books: { title: "asc" }}` would suggest we sort duplicate authors using `books: { title: "asc" }` as the secondary sort field. However, because the books field is an array of objects, there is no single value for the title to compare easily. [color=orange]
+> Given there are two authors with the same name (John Grisham), the sort object `(sort: { name: "desc", Books: { title: "asc" }}` would suggest we sort duplicate authors using `Books: { title: "asc" }` as the secondary sort field. However, because the books field is an array of objects, there is no single value for the title to compare easily. [color=orange]
 >
 > Therefore, sorting on array sub objects from the root field is ***strictly not allowed***.

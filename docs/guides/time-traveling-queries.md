@@ -19,12 +19,12 @@ A powerful feature of a time-traveling query is that very little work is require
 # Here we fetch a User of the given dockey, in the state that it was at
 # at the commit matching the given CID.
 query {
-  Users (
+  User (
     cid: "bafybeieqnthjlvr64aodivtvtwgqelpjjvkmceyz4aqerkk5h23kjoivmu",
     dockey: "bae-52b9170d-b77a-5887-b877-cbdbb99b009f"
   ) {
-    Name
-    Age
+    name
+    age
   }
 }
 ```

@@ -52,18 +52,18 @@ The following pointers provide a concrete guide on how to implement various defi
     Once these schemas are loaded into the database, it will automatically create the necessary foreign keys in the respective types.
 
 ```graphql
-type user {
+type User {
   name: String
   username: String
   age: Int
-  address: address @primary
+  address: Address @primary
 }
 
-type address {
+type Address {
   streetNumber: String
   streetName: String
   country: String
-  user: user
+  user: User
 }
 ```
 
@@ -73,7 +73,7 @@ type address {
 
 ```graphql
 mutation {
-  create_address(data: "{\"streetNumber\": \"123\", \"streetName\": \"Test road\", \"country\": \"Canada\"}") {
+  create_Address(data: "{\"streetNumber\": \"123\", \"streetName\": \"Test road\", \"country\": \"Canada\"}") {
   	_key
   }
 }
@@ -81,7 +81,7 @@ mutation {
 
 ```graphql
 mutation {
-  create_user(data: "{\"name\": \"Alice\", \"username\": \"awesomealice\", \"age\": 35, \"address_id\": \"bae-fd541c25-229e-5280-b44b-e5c2af3e374d\"}") {
+  create_User(data: "{\"name\": \"Alice\", \"username\": \"awesomealice\", \"age\": 35, \"address_id\": \"bae-fd541c25-229e-5280-b44b-e5c2af3e374d\"}") {
   	_key
   }
 }
@@ -93,11 +93,11 @@ Note: Currently, the developer must create the secondary side of the relation (a
 
 ```graphql
 query {
-    user {
+    User {
         name
         username
         age
-        address {
+        Address {
             streetNumber
             streetName
             country
@@ -109,11 +109,11 @@ query {
 
 ```graphql
 query {
-    address {
+    Address {
         streetNumber
         streetName
         country
-        user {
+        User {
             name
             username
             age
@@ -125,11 +125,11 @@ query {
 
 ```graphql
 query {
-    user (filter: {address: {country: "Canada"}}) {
+    User (filter: {Address: {country: "Canada"}}) {
         name
         username
         age
-        address {
+        Address {
             streetNumber
             streetName
             country
@@ -151,17 +151,17 @@ Note: Defra supports queries from both sides, regardless of which side is the pr
 ```graphql
 # schema.graphql
 
-type author {
+type Author {
     name: String
     dateOfBirth: DateTime
-    authoredBooks: [book]
+    authoredBooks: [Book]
 }
 
-type book {
+type Book {
     name: String
     description: String
     genre: String
-    author: author
+    author: Author
 }
 
 ```
@@ -177,7 +177,7 @@ defradb client schema add -f schema.graphql
 
 ```graphql
 mutation {
-    create_author(data: "{\"name\": \"Saadi\",\"dateOfBirth\": \"1210-07-23T03:46:56.647Z\"}") {
+    create_Author(data: "{\"name\": \"Saadi\",\"dateOfBirth\": \"1210-07-23T03:46:56.647Z\"}") {
     	_key
     }
 }
@@ -186,7 +186,7 @@ mutation {
 
 ```graphql
 mutation {
-  	create_book(data: "{\"name\": \"Gulistan\",\"genre\": \"Poetry\", \"author_id\": \"bae-0e7c3bb5-4917-5d98-9fcf-b9db369ea6e4\"}") {
+  	create_Book(data: "{\"name\": \"Gulistan\",\"genre\": \"Poetry\", \"Author_id\": \"bae-0e7c3bb5-4917-5d98-9fcf-b9db369ea6e4\"}") {
       	_key
     }
 }
@@ -195,7 +195,7 @@ mutation {
 
 ```graphql
 mutation {
-  	update_author(id: "bae-0e7c3bb5-4917-5d98-9fcf-b9db369ea6e4", data: "{\"name\": \"Saadi Shirazi\"}") {
+  	update_Author(id: "bae-0e7c3bb5-4917-5d98-9fcf-b9db369ea6e4", data: "{\"name\": \"Saadi Shirazi\"}") {
       	_key
     }
 }
@@ -204,7 +204,7 @@ mutation {
 
 ```graphql
 mutation {
-  	update_book(filter: {name: {_eq: "Gulistan"}}, data: "{\"description\": \"Persian poetry of ideas\"}") {
+  	update_Book(filter: {name: {_eq: "Gulistan"}}, data: "{\"description\": \"Persian poetry of ideas\"}") {
       	_key
     }
 }
@@ -219,13 +219,13 @@ Note: The developer can create as many books they require by using this pattern.
 
 ```graphql
 query {
-    author {
-        name
-        dateOfBirth
-        authoredBooks {
-            name
-            genre
-			description
+    Author {
+      name
+      dateOfBirth
+      authoredBooks {
+          name
+          genre
+          description
         }
     }
 }
@@ -255,10 +255,10 @@ query {
 
 ```graphql
 query {
-    book {
+    Book {
         name
         genre
-        author {
+        Author {
           name
           dateOfBirth
         }
@@ -272,7 +272,7 @@ query {
   {
     "name": "Gulistan",
     "genre": "Poetry",
-    "author": {
+    "Author": {
       "name": "Saadi Shirazi",
       "dateOfBirth":  "1210-07-23T03:46:56.647Z",
     }
@@ -280,7 +280,7 @@ query {
   {
     "name": "Bustan",
     "genre": "Poetry",
-    "author": {
+    "Author": {
       "name": "Saadi Shirazi",
       "dateOfBirth":  "1210-07-23T03:46:56.647Z",
     }
@@ -290,7 +290,7 @@ query {
 
 ```graphql
 query {
-    author {
+    Author {
         name
         dateOfBirth
         authoredBooks(filter: {name: {_eq: "Gulistan"}}) {
@@ -321,7 +321,7 @@ query {
 query {
 	# Filters on the parent object can reference child fields
 	# even if they are not requested.
-    author(filter: {authoredBooks: {name: {_eq: "Gulistan"}}}) {
+    Author(filter: {authoredBooks: {name: {_eq: "Gulistan"}}}) {
         name
         dateOfBirth
     }

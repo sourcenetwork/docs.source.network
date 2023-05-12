@@ -41,15 +41,15 @@ Let us define a one-to-many relationship between an author and their books below
 
 ```graphql
 type Author {
-    name string
-    books [Book]
+    name: string
+    books: [Book]
 }
 
 type Book {
-    title string
-    genre string
-    description string
-    author Author
+    title: string
+    genre: string
+    description: string
+    author: Author
 }
 ```
 
@@ -81,8 +81,8 @@ type Author {
 type Book {
     title: String
     genre: String
-    author Author @relation(name: "written_books")
-    reviewedBy Author @relation(name: "reviewed_books")
+    author: Author @relation(name: "written_books")
+    reviewedBy: Author @relation(name: "reviewed_books")
 }
 ```
 

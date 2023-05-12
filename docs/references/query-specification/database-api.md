@@ -71,7 +71,7 @@ query {
 To query a specific commit:
 ```graphql 
 query {
-    commit(cid: 'Qm123') {
+    Commit(cid: 'Qm123') {
         cid
         height
         delta {
@@ -85,7 +85,7 @@ In addition to using `Commit` specific queries, include commit version sub-field
 
 ```graphql 
 query {
-    user {
+    User {
         _key
         name
         age
