@@ -41,14 +41,14 @@ Let us define a one-to-many relationship between an author and their books below
 
 ```graphql
 type Author {
-    name: string
+    name: String
     books: [Book]
 }
 
 type Book {
-    title: string
-    genre: string
-    description: string
+    title: String
+    genre: String
+    description: String
     author: Author
 }
 ```

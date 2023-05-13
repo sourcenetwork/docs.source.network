@@ -92,20 +92,20 @@ If you have the following objects in the database:
  [
      "Author" {
          "name": "John Grisham",
-         "Books": [
+         "books": [
             { "title": "A Painted House" },
             { "title": "The Guardians" }
          ]
      },
      "Author" {
          "name": "John Grisham",
-         "Books": [
+         "books": [
             { "title": "Camino Winds" },
          ]
      },
      "Author" {
          "name": "John LeCare",
-         "Books": [
+         "books": [
              { "title": "Tinker, Tailor, Soldier, Spy"}
          ]
      }

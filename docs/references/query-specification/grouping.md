@@ -57,7 +57,7 @@ type Book {
 }
 
 type Author {
-    name: string
+    name: String
     written: [Book] @relation
 }
 ```
