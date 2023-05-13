@@ -81,7 +81,7 @@ This applies to both single sub-objects and array sub-objects, i.e., if we apply
 
 Additionally, in the selection set, if we include the sub-object array we are filtering on, the filter is then implicitly applied unless otherwise specified.
 
-In the quercode snippet above, let's add `books` to the selection set using the query below .
+In the query snippet above, let's add `books` to the selection set using the query below .
 ```graphql
 {
 	Authors(filter: {book: {genre: {_eq: "Thriller"}}}) {

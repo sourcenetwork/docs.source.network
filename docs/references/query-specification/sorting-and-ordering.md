@@ -85,7 +85,7 @@ If the DocKey is included in the sort fields, any field included afterwards will
 
 >Root level filters and order only apply to root object. If you allow the initial version of the query, it would be confusing if the ordering applied to the order of the root object compared to its sibling objects or if the ordering applied solely to the sub-object. 
 
->If you allow it, it enforces the semantics of root level sorting on array sub-objects to act as a sorting mechanism for the root object. As a result, there is no obvious way to determine which value in the array is used for the root order.[color=orange]
+>If you allow it, it enforces the semantics of root level sorting on array sub-objects to act as a sorting mechanism for the root object. As a result, there is no obvious way to determine which value in the array is used for the root order.
 
 If you have the following objects in the database:
 ```json
@@ -111,12 +111,12 @@ If you have the following objects in the database:
      }
  ]
 ```
-> and the following query [color=orange]
+> and the following query
 ```graphql
 {
     Authors(sort: { name: DESC, books: { title: ASC }}) {
         name
-        Books {
+        books {
             title
         }
     }
@@ -131,6 +131,6 @@ Books(filter: {_id: [1]}) {
 }
 ```
 
-> Given there are two authors with the same name (John Grisham), the sort object `(sort: { name: "desc", Books: { title: "asc" }}` would suggest we sort duplicate authors using `Books: { title: "asc" }` as the secondary sort field. However, because the books field is an array of objects, there is no single value for the title to compare easily. [color=orange]
+> Given there are two authors with the same name (John Grisham), the sort object `(sort: { name: "desc", Books: { title: "asc" }}` would suggest we sort duplicate authors using `Books: { title: "asc" }` as the secondary sort field. However, because the books field is an array of objects, there is no single value for the title to compare easily.
 >
 > Therefore, sorting on array sub objects from the root field is ***strictly not allowed***.

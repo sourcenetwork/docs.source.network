@@ -78,7 +78,7 @@ Simple Explain Requests is the default mode for explanation, only requiring the 
 
 This mode of explanation returns only the syntactic and structural information of the Plan Graph, its nodes, and their attributes.
 
-The following example shows a Simple Explain request applies to an `author` query request.
+The following example shows a Simple Explain request applies to an `Author` query request.
 
 ```graphql
 query @explain {
