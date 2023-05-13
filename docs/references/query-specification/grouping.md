@@ -11,7 +11,7 @@ Once one or more group by fields have been selected using the `groupBy` argument
 In the example below, we are querying for all the books whose author's name begins with 'John'. The results will then be grouped by genre, and will return the genre name and the sub-groups `title` and `rating`.
 ```graphql
 {
-    books(filter: {author: {name: {_like: "John%"}}}, groupBy: [genre]) {
+    Books(filter: {author: {name: {_like: "John%"}}}, groupBy: [genre]) {
         genre
         _group {
             title
@@ -29,7 +29,7 @@ It's important to note that in the above example, the only available field from 
 As mentioned, we can include any number of fields in the `groupBy` argument to segment the data further. Which can then also be accessed in the return object, as demonstrated in the example below:
 ```graphql
 {
-    books(filter: {author: {name: {_like: "John%"}}}, groupBy: [genre, rating]) {
+    Books(filter: {author: {name: {_like: "John%"}}}, groupBy: [genre, rating]) {
         genre
         rating
         _group {
@@ -57,16 +57,16 @@ type Book {
 }
 
 type Author {
-    name string
-    written [Book] @relation
+    name: String
+    written: [Book] @relation
 }
 ```
 
 We can create a group query over books and their authors, as demonstrated in the example below:
 ```graphql
 {
-    books(groupBy: [author]) {
-        author {
+    Books(groupBy: [author]) {
+        Author {
             name
         }
         _group {

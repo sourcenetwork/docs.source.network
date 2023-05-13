@@ -16,8 +16,9 @@ Insert is used to create new documents from scratch. This involves many necessar
 
 ```graphql
 type Book { ... }
+
 mutation {
-    createBook(data: createBookPayload) [Book]
+    create_Book(data: createBookPayload) [Book]
 }
 ```
 
@@ -28,6 +29,7 @@ The above example displays the general structure of an insert mutation. You call
 All mutations use a payload to update the data. Unlike the rest of the Query system, mutation payloads aren't typed. Instead, they use a standard JSON Serialization format. Removing the type system from payloads allows flexibility in the system. 
 
 JSON Supports all the same types as DefraDB, and it's familiar for developers. Hence, it is an obvious choice for us. The following is an example with a full type and payload:
+
 ```graphql 
 type Book {
     title: String
@@ -36,7 +38,7 @@ type Book {
 }
 
 mutation {
-    createBook(data: "{
+    create_Book(data: "{
         'title': 'Painted House',
         'description': 'The story begins as Luke Chandler ...',
         'rating': 4.9
@@ -63,7 +65,7 @@ Update filters use the same format and types from the Query system. Hence, it ea
 The structure of the generated update mutation for a `Book` type is given below:
 ```graphql
 mutation {
-    update_book(id: ID, filter: BookFilterArg, data: updateBookPayload) [Book]
+    update_Book(id: ID, filter: BookFilterArg, data: updateBookPayload) [Book]
 }
 ```
 
@@ -88,7 +90,7 @@ Once we create our update, and select which document(s) to update, we can query 
 A basic example is provided below:
 ```graphql
 mutation {
-    update_book(id: '123', data: "{'name': 'John'}") {
+    update_Book(id: '123', data: "{'name': 'John'}") {
         _key
         name
     }
@@ -102,7 +104,7 @@ Beyond updating by an ID or IDs, we can use a query filter to select which field
 
 ```graphql
 mutation {
-    update_book(filter: {rating: {_le: 1.0}}, data: "{'rating': '1.5'}") {
+    update_Book(filter: {rating: {_le: 1.0}}, data: "{'rating': '1.5'}") {
         _key
         rating
         name
@@ -127,14 +129,14 @@ The document selection interface is identical to the `Update` system. Much like 
 The structure of the generated delete mutation for a `Book` type is given below:
 ```graphql
 mutation {
-    delete_book(id: ID, ids: [ID], filter: BookFilterArg) [Book]
+    delete_Book(id: ID, ids: [ID], filter: BookFilterArg) [Book]
 }
 ```
 
 Here, we can delete a document with ID '123':
 ```graphql
 mutation {
-    delete_user(id: '123') {
+    delete_User(id: '123') {
         _key
         name
     }
@@ -146,9 +148,10 @@ This will delete the specific document, and return the `_key` and `name` for the
 DefraDB currently uses a Hard Delete system, which means that when a document is deleted, it is completely removed from the database.
 
 Similar to the Update system, you can use a filter to select which documents to delete, as shown below:
+
 ```graphql
 mutation {
-    delete_user(filter: {rating: {_gt: 3}}) {
+    delete_User(filter: {rating: {_gt: 3}}) {
         _key
         name
     }

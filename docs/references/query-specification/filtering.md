@@ -10,7 +10,7 @@ An empty `filter` object is equivalent to no filters being applied. Hence, the o
 
 ```graphql
 {
-	books(filter: {}) {
+	Books(filter: {}) {
 		title
 		genre
 		description
@@ -24,7 +24,7 @@ To apply a filter to a specific field, we can specify it within the filter objec
 
 ```graphql
 {
-	books(filter: { title: { _eq: "A Painted House" }}) {
+	Books(filter: { title: { _eq: "A Painted House" }}) {
 		title
 		genre
 		description
@@ -38,7 +38,7 @@ We can apply filters to all or multiple fields available.
 
 ```graphql
 {
-	books(filter: { title: {_eq: "A Painted House"}, genre: {_eq: "Thriller" }}) {
+	Books(filter: { title: {_eq: "A Painted House"}, genre: {_eq: "Thriller" }}) {
 		title
 		genre
 		description
@@ -52,11 +52,11 @@ Filters can also be applied on subfields that have relational objects within the
 
 ```graphql
 {
-	books(filter: { genre: {_eq: "Thriller"}, author: {name: {_eq: "John Grisham"}}}) {
+	Books(filter: { genre: {_eq: "Thriller"}, author: {name: {_eq: "John Grisham"}}}) {
 		title
 		genre
 		description
-		author {
+		Author {
 			name
 			bio
 		}
@@ -72,7 +72,7 @@ This applies to both single sub-objects and array sub-objects, i.e., if we apply
 
 ```graphql
 {
-    authors(filter: {book: {genre: {_eq: "Thriller"}}}) {
+    Authors(filter: {book: {genre: {_eq: "Thriller"}}}) {
         name
         bio
     }
@@ -81,10 +81,10 @@ This applies to both single sub-objects and array sub-objects, i.e., if we apply
 
 Additionally, in the selection set, if we include the sub-object array we are filtering on, the filter is then implicitly applied unless otherwise specified.
 
-In the quercode snippet above, let's add `books` to the selection set using the query below .
+In the query snippet above, let's add `books` to the selection set using the query below .
 ```graphql
 {
-    authors(filter: {book: {genre: {_eq: "Thriller"}}}) {
+	Authors(filter: {book: {genre: {_eq: "Thriller"}}}) {
         name
         bio
         books {
@@ -99,7 +99,7 @@ Here, the `books` section will only contain books that match the root object fil
 
 ```graphql
 {
-    authors(filter: {book: {genre: {_eq: "Thriller"}}}) {
+    Authors(filter: {book: {genre: {_eq: "Thriller"}}}) {
         name
         bio
         books(filter: {}) {
@@ -116,7 +116,7 @@ Filters applied solely to sub-objects, which are only applicable for array types
 
 ```graphql
 {
-	authors(filter: {name: {_eq: "John Grisham"}}) {
+	Authors(filter: {name: {_eq: "John Grisham"}}) {
 		name
 		bio
 		books(filter: { genre: {_eq: "Thriller" }}) {
@@ -138,7 +138,7 @@ Let's query for all books with a rating greater than or equal to 4.
 
 ```graphql
 {
-	books(filter: { rating: { _gte: 4 } }) {
+	Books(filter: { rating: { _gte: 4 } }) {
 		title
 		genre
 		description
@@ -181,7 +181,7 @@ The code snippet below queries all books that are a part of the Thriller genre, 
 
 ```graphql
 {
-    books(
+    Books(
         filter: { 
             _or: [ 
                 {genre: {_eq: "Thriller"}}, 

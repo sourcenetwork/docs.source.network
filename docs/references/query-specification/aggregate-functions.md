@@ -12,7 +12,7 @@ The special aggregate function fields' format is the function name and the field
 Let us augment the previous grouped books by genre example and include an aggregate function on the sub-groups ratings.
 ```graphql
 {
-    books(filter: {author: {name: {_like: "John%"}}}, groupBy: [genre]) {
+    Books(filter: {author: {name: {_like: "John%"}}}, groupBy: [genre]) {
         genre
         _avg {
             rating
@@ -33,7 +33,7 @@ We can also use simpler queries, without any `groupBy` clause, and still use agg
 Let's simply count all the objects returned by a given filter.
 ```graphql
 {
-    books(filter: {rating: {_gt: 3.5}}) {
+    Books(filter: {rating: {_gt: 3.5}}) {
         title
         _count
     }
@@ -56,14 +56,14 @@ In addition to filtering using the `having` argument, we can still use `limit` a
 Let us get all the books from the author John LeCare, group them by genre, calculate the average rating of these books, select the groups with at least an average rating of 3.5, and order them from highest to lowest.
 ```graphql
 {
-    books(filter{ author: {name: "John LeCare"} }, groupBy: [genre], having: { _avg: {rating: {_gt: 3.5}}}, order: { _avg: {rating: DESC}}) {
+    Books(filter{ author: {name: "John LeCare"} }, groupBy: [genre], having: { _avg: {rating: {_gt: 3.5}}}, order: { _avg: {rating: DESC}}) {
         genre
         _avg {
             rating
         }
         _avg(field: rating)
         
-        books: _group{
+        Books: _group{
             title
             rating
             description

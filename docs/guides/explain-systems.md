@@ -12,7 +12,7 @@ The DefraDB Explain System is a powerful tool designed to introspect requests, e
 
 ```graphql
 query {
-    author {
+    Author {
       _key
       name
       age
@@ -24,7 +24,7 @@ query {
 
 ```graphql
 query @explain {
-    author {
+    Author {
       _key
       name
       age
@@ -78,11 +78,14 @@ Simple Explain Requests is the default mode for explanation, only requiring the 
 
 This mode of explanation returns only the syntactic and structural information of the Plan Graph, its nodes, and their attributes.
 
-The following example shows a Simple Explain request applies to an `author` query request.
+The following example shows a Simple Explain request applies to an `Author` query request.
 
 ```graphql
 query @explain {
-    author {nameage}
+    Author {
+        name
+        age
+    }
 }
 ```
 
@@ -96,7 +99,7 @@ query @explain {
                 "scanNode": {
                     "filter":null,
                     "collectionID": "3",
-                    "collectionName": "author",
+                    "collectionName": "Author",
                     "spans": [{
                         "start": "/3",
                         "end": "/4"
@@ -122,7 +125,7 @@ The following example shows a Execute Explain request applies to an author query
 
 ```graphql
 query @explain(type: execute) {
-	author {
+	Author {
 		name
 		age
 	}
