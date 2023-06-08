@@ -65,7 +65,7 @@ Update filters use the same format and types from the Query system. Hence, it ea
 The structure of the generated update mutation for a `Book` type is given below:
 ```graphql
 mutation {
-    update_Book(id: ID, filter: BookFilterArg, data: updateBookPayload) [Book]
+    update_Book(dockey: ID, filter: BookFilterArg, data: updateBookPayload) [Book]
 }
 ```
 
@@ -90,7 +90,7 @@ Once we create our update, and select which document(s) to update, we can query 
 A basic example is provided below:
 ```graphql
 mutation {
-    update_Book(id: '123', data: "{'name': 'John'}") {
+    update_Book(dockey: '123', data: "{'name': 'John'}") {
         _key
         name
     }
@@ -116,9 +116,6 @@ Here, we select all documents with a rating less than or equal to 1.0, update th
 
 For additional filter details, see the above `Query Block` section.
 
-## Upsert
-
-[TBD]
 
 ## Delete
 
@@ -129,14 +126,14 @@ The document selection interface is identical to the `Update` system. Much like 
 The structure of the generated delete mutation for a `Book` type is given below:
 ```graphql
 mutation {
-    delete_Book(id: ID, ids: [ID], filter: BookFilterArg) [Book]
+    delete_Book(dockey: ID, ids: [ID], filter: BookFilterArg) [Book]
 }
 ```
 
 Here, we can delete a document with ID '123':
 ```graphql
 mutation {
-    delete_User(id: '123') {
+    delete_User(dockey: '123') {
         _key
         name
     }
