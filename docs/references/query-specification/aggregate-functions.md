@@ -33,10 +33,7 @@ We can also use simpler queries, without any `groupBy` clause, and still use agg
 Let's simply count all the objects returned by a given filter.
 ```graphql
 {
-    Books(filter: {rating: {_gt: 3.5}}) {
-        title
-        _count
-    }
+    _count(Books: {filter: {rating: {_gt: 3.5}}})
 }
 ```
 This returns an array of objects that includes the respective books title, along with the repeated `_count` field, which is the total number of objects that match the filter.
