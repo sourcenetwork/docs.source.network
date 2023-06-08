@@ -33,19 +33,19 @@ type Commit {
 # CommitLink is a named link to a commit
 type CommitLink {
     name: String           // name is the name of the CommitLink
-    commit: Commit         // commit is the linked commit
+    commit: Commit        // commit is the linked commit
 }
 
 # Delta is the differential state change from one node to another
 type Delta {
-    payload: String        // payload is a base64 encoded byte-array.
+    payload: String      // payload is a base64 encoded byte-array.
 }
 ```
 
 To query the latest commit of an object (with id: '123'):
 ```graphql
 query {
-    latestCommit(docid: "123") {
+    latestCommits(docid: "123") {
         cid
         height
         delta {
@@ -71,7 +71,7 @@ query {
 To query a specific commit:
 ```graphql 
 query {
-    Commit(cid: 'Qm123') {
+    Commits(cid: 'Qm123') {
         cid
         height
         delta {
@@ -81,7 +81,7 @@ query {
 }
 ```
 
-In addition to using `Commit` specific queries, include commit version sub-fields in object queries.
+In addition to using `Commits` specific queries, include commit version sub-fields in object queries.
 
 ```graphql 
 query {
@@ -98,6 +98,16 @@ query {
 }
 ```
 
-The above example shows how to query for the additional `_version` field that is generated automatically for each added schema type. The `_version` has the same execution as `latestCommit`.
+The above example shows how to query for the additional `_version` field that is generated automatically for each added schema type. The `_version` has the same execution as `latestCommits`.
 
-Both `_version` and `latestCommit` return an array of `Commit` types because the `HEAD` of the MerkleDAG can point to more than one DAG node. This is caused by two concurrent updates to the DAG at the same height. The DAG usually has a single head. However, it can also have multiple heads.
+Both `_version` and `latestCommits` return an array of `Commits` types because the `HEAD` of the MerkleDAG can point to more than one DAG node. This is caused by two concurrent updates to the DAG at the same height. The DAG usually has a single head. However, it can also have multiple heads.
+
+Commits queries also work with aggregates, grouping, limit, offset, order, dockey, cid, and depth
+There is __typename introspection keyword that works on all queries that does not appear to be documented anywhere, for example:
+
+```graphql 
+commits(dockey: "bae-52b9170d-b77a-5887-b877-cbdbb99b009f") {
+    cid
+    __typename
+}
+```

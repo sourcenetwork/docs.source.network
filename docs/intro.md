@@ -129,9 +129,9 @@ This returns only user documents which have a value for the `points` field *Grea
 
 ## Obtain document commits
 
-DefraDB's data model is based on [MerkleCRDTs](https://docs.source.network/guides/merkle-crdt). Each document has a graph of all of its updates, similar to Git. The updates are called `commit`s and are identified by `cid`, a content identifier. Each references its parents by their `cid`s.
+DefraDB's data model is based on [MerkleCRDTs](https://docs.source.network/guides/merkle-crdt). Each document has a graph of all of its updates, similar to Git. The updates are called `commits` and are identified by `cid`, a content identifier. Each references its parents by their `cid`s.
 
-To get the most recent commit in the MerkleDAG for the document identified as `bae-91171025-ed21-50e3-b0dc-e31bccdfa1ab`:
+To get the most recent commits in the MerkleDAG for the document identified as `bae-91171025-ed21-50e3-b0dc-e31bccdfa1ab`:
 
 ```shell
 defradb client query '

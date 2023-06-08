@@ -1,5 +1,5 @@
 ---
-sidebar_label: Aggregates Functions
+sidebar_label: Aggregate Functions
 sidebar_position: 115
 ---
 
@@ -47,31 +47,4 @@ We can further simplify the above count query by including only the `_count` fie
 
 DefraDB also supports applying aggregate functions to relations just like we do fields. However, only the `count` function is available directly on the related object type.
 
-## Having - Filtering & Ordering on Groups
 
-When using group queries, it is often necessary to further filter the returned set based on aggregate function results' properties. The `Having` argument can be used to filter aggregate and group results further. A new system of filtering is required because the `filter` argument is applied before any grouping and aggregate. Hence, it cannot provide the necessary functionality.
-
-In addition to filtering using the `having` argument, we can still use `limit` and `order` in the same way, since those operations are applied *after* the grouping and aggregation. Further explanation of the query execution pipeline is provided below.
-
-Let us get all the books from the author John LeCare, group them by genre, calculate the average rating of these books, select the groups with at least an average rating of 3.5, and order them from highest to lowest.
-```graphql
-{
-    Books(filter{ author: {name: "John LeCare"} }, groupBy: [genre], having: { _avg: {rating: {_gt: 3.5}}}, order: { _avg: {rating: DESC}}) {
-        genre
-        _avg {
-            rating
-        }
-        _avg(field: rating)
-        
-        Books: _group{
-            title
-            rating
-            description
-        }
-    }
-}
-```
-
-In the above example, we have combined several different query functionalities, including filtering data, followed by grouping and aggregating over the filtered data, further filtering the results again, and finally ordering the return set.
-
-The `having` argument functions similar to the `filter` argument; it takes an object as its parameter. The difference lies in which fields can be included inside the `having` object parameter. Unlike the `filter` argument, **only** the fields from the `groupBy` argument, and any included aggregate field function can be used in `having`. Beyond this limitation, everything else functions the same, from operators' use and structure, to compound conditionals. This includes sub-objects that exist in the `groupBy` argument, which can have their respective fields included within a `having` argument.

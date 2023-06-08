@@ -159,7 +159,8 @@ Let's query for all books with a rating greater than or equal to 4.
 | `_lte`   | Less Than or Equal to        |
 | `_in`    | In the List        |
 | `_nin`   | Not in the List        |
-| `_like`  | Sub-String Like        |
+| `_like`  | Like Sub-String         |
+|`_nlike`  | Unlike Sub-String       |
 ###### Table 1. Supported operators.
 
 The table below displays the operators that can be used for every value type:
@@ -171,7 +172,6 @@ The table below displays the operators that can be used for every value type:
 | Integer     | `_eq, _neq, _gt, _gte, _lt, _lte, _in, _nin`     |
 | Floating Point     | `_eq, _neq, _gt, _gte, _lt, _lte, _in, _nin`     |
 | Boolean     | `_eq, _neq, _in, _nin`     |
-| Binary     | `_eq, _neq`     |
 | DateTime     | `_eq, _neq, _gt, _gte, _lt, _lte, _in, _nin`     |
 ###### Table 2. Operators supported by Scalar types.
 

@@ -9,7 +9,7 @@ Sorting is an integral part of any Database and Query Language. The sorting synt
 The query to find all books ordered by their latest published date:
 ```graphql
 {
-    Books(sort: { published_at: “desc”}) {
+    Books(order: { published_at: DESC}) {
         title
         description
         published_at
@@ -25,7 +25,7 @@ Sorting can be applied to multiple fields in the same query. The sort order is s
 The query below finds all books ordered by earliest published date and then by descending order of titles.
 ```graphql
 {
-    Books(sort: { published_at: ASC, title: DESC }) {
+    Books(order: { published_at: ASC, title: DESC }) {
         title
         genre
         description
@@ -38,7 +38,7 @@ Additionally, you can sort sub-object fields along with root object fields.
 The query below finds all books ordered by earliest published date and then by the latest authors' birthday.
 ```graphql
 {
-    Books(sort: { published_at: ASC, Author: { birthday: DESC }}) {
+    Books(order: { published_at: ASC, Author: { birthday: DESC }}) {
         title
         description
         published_at
@@ -63,7 +63,7 @@ If the DocKey is included in the sort fields, any field included afterwards will
 *So, instead of:*
 ```graphql
 {
-    Authors(sort: { name: DESC, Books: { title: ASC }}) {
+    Authors(order: { name: DESC, Books: { title: ASC }}) {
         name
         Books {
             title
@@ -74,9 +74,9 @@ If the DocKey is included in the sort fields, any field included afterwards will
 *We need:*
 ```graphql
 {
-    Authors(sort: { name: DESC }) {
+    Authors(order: { name: DESC }) {
         name
-        Books(sort: { title: ASC }) {
+        Books(order: { title: ASC }) {
             title
         }
     }
@@ -114,7 +114,7 @@ If you have the following objects in the database:
 > and the following query
 ```graphql
 {
-    Authors(sort: { name: DESC, books: { title: ASC }}) {
+    Authors(order: { name: DESC, books: { title: ASC }}) {
         name
         books {
             title
