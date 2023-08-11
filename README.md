@@ -1,33 +1,29 @@
-# Source Docs
+# Source Network Documentation
 
-This website is built using [Docusaurus 2](https://docusaurus.io/), a modern static website generator.
+[![CC BY-SA 4.0][cc-by-sa-image]][cc-by-sa]
 
-### Installation
+[cc-by-sa]: http://creativecommons.org/licenses/by-sa/4.0/
+[cc-by-sa-image]: https://licensebuttons.net/l/by-sa/4.0/88x31.png
+
+This is the center of Source Network's documentation.
+
+## Getting started
 
 ```
-$ npm i
-```
-
-### Local Development
-
-```
+$ npm install
 $ npm run start
 ```
 
-This command starts a local development server and opens up a browser window. Most changes are reflected live without having to restart the server.
+This installs necessary dependencies and starts a local development server.
+Most changes are reflected live without having to restart the server.
 
-### Build
+This website is built using [Docusaurus 2](https://docusaurus.io/).
 
-```
-$ npm run build
-```
+## Deployment
 
-This command generates static content into the `build` directory and can be served using any static contents hosting service.
+The website is automatically deployed using Cloudfare Pages.
 
-### Deployment
 
-`TODO (netlify)`
+## Contributing
 
-### Technical Writing (Internal)
-
-See [Technical Writing](https://hackmd.io/Ls4jV6ONQvefDYjAMz2FLQ?view) for best practices and guidelines.
+Feedback and pull requests appreciated!
