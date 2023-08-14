@@ -4,7 +4,7 @@ title: Getting Started
 slug: /
 ---
 
-DefraDB is a user-centric database that prioritizes data ownership, personal privacy, and information security. Its data model, powered by the convergence of [MerkleCRDTs](https://arxiv.org/pdf/2004.00107.pdf) and the content-addressability of [IPLD](https://docs.ipld.io/), enables a multi-write-master architecture. It features [DQL](https://docs.source.network/references/query-specification/query-language-overview), a query language compatible with GraphQL but providing extra convenience. By leveraging peer-to-peer networking it can be deployed nimbly in novel topologies. Access control is determined by a relationship-based DSL, supporting document or field-level policies, secured by the SourceHub network. DefraDB is a core part of the [Source technologies](https://source.network/) that enable new paradigms of decentralized data and access-control management, user-centric apps, data trustworthiness, and much more.
+DefraDB is a user-centric database that prioritizes data ownership, personal privacy, and information security. Its data model, powered by the convergence of [MerkleCRDTs](https://arxiv.org/pdf/2004.00107.pdf) and the content-addressability of [IPLD](https://docs.ipld.io/), enables a multi-write-master architecture. It features [DQL](./references/query-specification/query-language-overview.md), a query language compatible with GraphQL but providing extra convenience. By leveraging peer-to-peer networking it can be deployed nimbly in novel topologies. Access control is determined by a relationship-based DSL, supporting document or field-level policies, secured by the SourceHub network. DefraDB is a core part of the [Source technologies](https://source.network/) that enable new paradigms of decentralized data and access-control management, user-centric apps, data trustworthiness, and much more.
 
 DISCLAIMER: At this early stage, DefraDB does not offer access control or data encryption, and the default configuration exposes the database to the network. The software is provided "as is" and is not guaranteed to be stable, secure, or error-free. We encourage you to experiment with DefraDB and provide feedback, but please do not use it for production purposes until it has been thoroughly tested and developed.
 
@@ -129,7 +129,7 @@ This returns only user documents which have a value for the `points` field *Grea
 
 ## Obtain document commits
 
-DefraDB's data model is based on [MerkleCRDTs](https://docs.source.network/guides/merkle-crdt). Each document has a graph of all of its updates, similar to Git. The updates are called `commits` and are identified by `cid`, a content identifier. Each references its parents by their `cid`s.
+DefraDB's data model is based on [MerkleCRDTs](./guides/merkle-crdt.md). Each document has a graph of all of its updates, similar to Git. The updates are called `commits` and are identified by `cid`, a content identifier. Each references its parents by their `cid`s.
 
 To get the most recent commits in the MerkleDAG for the document identified as `bae-91171025-ed21-50e3-b0dc-e31bccdfa1ab`:
 
@@ -203,7 +203,7 @@ defradb client query '
 
 DQL is compatible with GraphQL but features various extensions.
 
-Read the [Query specification](https://docs.source.network/query-specification/query-language-overview) to discover filtering, ordering, limiting, relationships, variables, aggregate functions, and other useful features.
+Read the [Query specification](./references/query-specification/query-language-overview.md) to discover filtering, ordering, limiting, relationships, variables, aggregate functions, and other useful features.
 
 
 ## Peer-to-peer data synchronization
