@@ -14,7 +14,7 @@ IPFS is a decentralized system to access websites, applications, files, and data
 
 A decentralized system lets you access information or a file from multiple locations, which aren't managed by a single organization. The pro's of decentralization are - access to multiple locations to access data, easy to dodge content censorship, and faster file transfer.
 
-IPFS addresses a file by its content instead of its location. A content identifier is the cyrptographic hash of the content at that address. It is unique to the content it came in from and permits you to verify if you got what you had requested for.
+IPFS addresses a file by its content instead of its location. A content identifier is the cryptographic hash of the content at that address. It is unique to the content it came in from and permits you to verify if you got what you had requested for.
 
 For IPFS to work well, active participation of people is necessary. If you are sharing files using IPFS, you need to have copies of the shared files available on multiple computers, which are powered on and running IPFS. In a nutshell, many people provide access to each others files and participate in making them available when requested. Note that if you have downloaded a file using IPFS, by default your computer will share it further with others participants to share further.
 
