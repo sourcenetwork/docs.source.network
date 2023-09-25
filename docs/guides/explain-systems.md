@@ -117,7 +117,7 @@ Simple Explain requests are extremely fast, since it does not actually execute t
 
 ### Execute Explain
 
-Execute explanation differs from Simple mode because it actually executes the constructed plan graph from the request. However, it doesn't return the results, but instead collects various metrics and runtime information about how the the request was executed, and returns it using using the same rendered plan graph structure that the Simple Explain does. This is similar to EXPLAIN ANALYZE from PostgreSQL or MySQL
+Execute explanation differs from Simple mode because it actually executes the constructed plan graph from the request. However, it doesn't return the results, but instead collects various metrics and runtime information about how the request was executed, and returns it using using the same rendered plan graph structure that the Simple Explain does. This is similar to EXPLAIN ANALYZE from PostgreSQL or MySQL
 
 You can create an Execute Explain by specifying the explain type using the directive type​arguments @explain(type: execute).
 
