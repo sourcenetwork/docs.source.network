@@ -65,7 +65,7 @@ Find more examples of schema type definitions in the [examples/schema/](https://
 
 ## Create a document
 
-Submit a `mutation` request to create an docuement of the `User` type:
+Submit a `mutation` request to create a document of the `User` type:
 
 ```shell
 defradb client query '
