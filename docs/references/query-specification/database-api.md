@@ -8,7 +8,7 @@ So far, all the queries and mutations that have been discussed were specific to 
 
 ## MerkleCRDTs
 
-All objects in DefraDB are stored in MerkleCRDTs (see [DefraDB Tech Specs](../tech-spec/defradb-tech-spec.md)). These MerkleCRDTs are represented as a series of small updates connected in a MerkleDAG. The MerkleDAG is a Merklized version of a DAG (Directed Acyclical Graph), which means that each node in the DAG references a parent node through some kind of Content Identifier (CID).
+All objects in DefraDB are stored in MerkleCRDTs (see [Merkle CRDT Guide](../../guides/merkle-crdt.md)). These MerkleCRDTs are represented as a series of small updates connected in a MerkleDAG. The MerkleDAG is a Merklized version of a DAG (Directed Acyclical Graph), which means that each node in the DAG references a parent node through some kind of Content Identifier (CID).
 
 The image below shows an example structure of a MerkleDAG.
 
