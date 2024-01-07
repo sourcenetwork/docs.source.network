@@ -60,15 +60,14 @@ grpc:
 For testing purposes, developers require tokens in their local wallets, obtained through a faucet. These tokens, not actual coins, facilitate transactions within the testnet and cover gas fees. A user-friendly faucet serves as an API endpoint/tool for accessing dummy money.
 
 ## Running a Node
+
+### Hardware Requirements
 For effective participation in the Testnet, certain hardware specifications are essential for running a node as a validator. The key considerations encompass network capability, persistence, and connections. The specified hardware requirements include:
 
 * x86-64 (amd64) multi-core CPU (AMD / Intel)
 * 64GB RAM
 * 1TB NVMe SSD Storage
 * 100Mbps bi-directional Internet connection
-
-
-### Hardware Requirements
 
 ### Installation
 The installation is divided into two components:
