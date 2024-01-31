@@ -74,7 +74,7 @@ Having the plan arranged as parts in a graph is helpful because it's both fast t
 
 ### Simple Explain
 
-Simple Explain Requests is the default mode for explanation, only requiring the additional `@explain` directive. You can also be explicit and provide a type argument to the directive like this `@explain(type: simple)`. `
+Simple Explain Requests is the default mode for explanation, only requiring the additional `@explain` directive. You can also be explicit and provide a type argument to the directive like this `@explain(type: simple)`. 
 
 This mode of explanation returns only the syntactic and structural information of the Plan Graph, its nodes, and their attributes.
 
