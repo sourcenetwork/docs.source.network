@@ -111,17 +111,23 @@ sourcehubd keys add <key_name>
 Make sure to backup the newly created keypair. Then, go to the Source Network [Faucet](https://faucet.testnet1.source.network) and get some $OPEN tokens so you can pay for transaction gas.
 
 ```bash
-sourcehubd tx staking create-validator \
-  --amount=0uopen \
-  --pubkey=$(sourcehubd comet show-validator) \
-  --moniker="<choose a moniker>" \
-  --chain-id=sourcehub-testnet1 \
-  --commission-rate="0" \
-  --commission-max-rate="0" \
-  --commission-max-change-rate="0" \
-  --gas="auto" \
-  --gas-prices="1uopen" \
-  --from=<key_name>
+# Create Validator info json config
+cd $HOME
+echo "{
+        \"pubkey\": $(sourcehubd comet show-validator),
+        \"amount\": \"0stake\",
+        \"moniker\": \"<choose a moniker>\",
+        \"website\": \"validator's (optional) website\",
+        \"security\": \"validator's (optional) security contact email\",
+        \"details\": \"validator's (optional) details\",
+        \"commission-rate\": \"0\",
+        \"commission-max-rate\": \"0\",
+        \"commission-max-change-rate\": \"0\",
+        \"min-self-delegation\": \"0\"
+}" > validator.json
+
+# Create validator transaction
+sourcehubd tx staking create-validator validator.json --from=<key_name>
 ```
 
 Where the `<key_name>` is the same key you made from above.
