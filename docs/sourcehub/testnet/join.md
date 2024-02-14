@@ -100,7 +100,7 @@ WantedBy=multi-user.target
 
 You must specify/edit the `<user>` of your system in the SystemD service
 
-# Register your validator
+## Register your validator
 Once you have your node running and synchronized with the rest of the network you can register as a Validator. 
 
 First, we want to create a local keypair. This keypair is independant of your validator, and can exist on any node, but we need one to submit transactions to the network, like the `create-validator` transaction.
