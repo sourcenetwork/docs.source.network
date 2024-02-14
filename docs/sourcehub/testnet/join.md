@@ -1,0 +1,116 @@
+---
+title: Join
+sidebar_position: 2
+---
+
+# How to join Testnet 1
+The following will detail the necessary steps to join Testnet 1 as a validator. Only approved validators can join testnet 1 as we have not yet enabled permissionless public validator sets.
+
+## Hardware Requirements
+Firstly any validator joining the network must ensure they have sufficient server hardware to ensure the network meets its current performance targets. 
+
+* x86-64 (amd64) multi-core CPU (AMD / Intel)
+* 16GB RAM
+* 256GB SSD Storage
+* 100Mbps bi-directional Internet connection
+
+## SourceHub Binary
+
+### Precompiled
+You can get the `sourcehubd` binary from the releases page of the SourceHub repo: https://github.om/sourcenetwork/sourcehub/releases/tag/v0.2.0
+
+
+### From Source
+You can download the code and compile your own binaries if you prefer. However you will need a local installation of the `go` toolchain at a minimum version of 1.21
+```bash
+cd $HOME
+git clone https://github.com/sourcenetwork/sourcehub
+cd sourcehub
+git checkout v0.2.0
+make install
+export PATH=$PATH:$GOBIN
+```
+Now you will have the `sourcehubd` available in your local system.
+
+## Initialization
+To join the network you need to initiaze your node with a keypair, download the genesis file, and update your configurations.
+
+```bash
+# You must specify your own moniker, which is a label for your node
+sourcehubd init <moniker>
+
+# Download the Genesis
+cd $HOME
+wget https://raw.githubusercontent.com/sourcenetwork/networks/testnet/testnet1/genesis.json
+mv genesis.json $HOME/.sourcehub/config/genesis.json
+
+# Update your configuration
+cd $HOME/.sourcehub/config
+sed -i 's/minimum-gas-prices = ""/minimum-gas-prices = "0.001uopen"/' app.toml
+sed -i 's/persistent_peers = ""/persistent_peers = "2da42ce7b32cb76c3a86db2eadfab8508ee41815@54.158.208.103:26656"/' config.toml
+
+# Update timeouts
+sed -i 's/timeout_propose = "3s"/timeout_propose = "500ms"/' config.toml
+sed -i 's/timeout_commit = "5s"/timeout_commit = "1s"/' config.toml
+```
+
+### State Sync (Recommended)
+At this point you can start your node and it will begin syncing with the rest of the network starting from height 0. However, this process can take several hours to complete. Instead nodes can use the ***much*** faster State Sync system that automatically downloads a snapshot from other nodes at a specific trusted height, and will sync from this point onwards. This process only takes a couple of minutes.
+
+```bash
+cd $HOME/.sourcehubd/config
+sed -i 's/enable = false/enable = true/' config.toml
+sed -i 's/trust_height = 0/trust_height = <BLOCK_HEIGHT>/' config.toml
+sed -i 's/trust_hash = ""/trust_hash = "<BLOCK_HASH>"/' config.toml
+sed -i 's/rpc_servers = ""/rpc_servers = "http:\/\/rpc1.testnet1.source.network:26657,http:\/\/rpc2.testnet1.source.network:26657"/' config.toml
+```
+
+You can get the `<BLOCK_HEIGHT>` and `<BLOCK_HASH>` from the `#validator-info` channel in the Validator section of the [Source Network Discord](https://discord.source.network)
+
+### SystemD Service (Optional)
+```
+[Unit]
+Description=SourceHub service
+After=network-online.target
+
+[Service]
+User=<user>
+ExecStart=$GOBIN/sourcehubd start --x-crisis-skip-assert-invariants
+Restart=no
+LimitNOFILE=4096
+
+[Install]
+WantedBy=multi-user.target
+```
+
+You must specify/edit the `<user>` of your system in the SystemD service
+
+# Register your validator
+Once you have your node synchronized with the rest of the network you can register as a Validator. 
+
+First, we want to create a local keypair. This keypair is independant of your validator, and can exist on any node, but we need one to submit transactions to the network, like the `create-validator` transaction.
+```bash
+sourcehubd keys add <key_name>
+```
+
+Make sure to backup the newly created keypair. Then, go to the Source Network [Faucet](https://faucet.testnet1.source.network) and get some $OPEN tokens so you can pay for transaction gas.
+
+```bash
+sourcehubd tx staking create-validator \
+  --amount=0uopen \
+  --pubkey=$(sourcehubd comet show-validator) \
+  --moniker="<choose a moniker>" \
+  --chain-id=sourcehub-testnet1 \
+  --commission-rate="0" \
+  --commission-max-rate="0" \
+  --commission-max-change-rate="0" \
+  --gas="auto" \
+  --gas-prices="1uopen" \
+  --from=<key_name>
+```
+
+Where the `<key_name>` is the same key you made from above.
+
+If the transaction is successful, you now have an *in-active* validator on SourceHub Testnet 1.  To become active, you must post your validator address `$> sourcehubd comet show-address` in the `#validator-general` chat on the [Source Network Discord](https://discord.source.network), and we will delegate voting power to you, which will move you into the *active* validator set, and you'll node will start producing and verifying blocks.
+
+> The SourceHub Testnet 1 is a public but permissioned network, meaning only approved validators can join the network. This is guranteed by the fact that Source owns 100% of the staking power of the network.
