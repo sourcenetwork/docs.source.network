@@ -83,14 +83,14 @@ sourcehubd comet bootstrap-state
 You can get the `<BLOCK_HEIGHT>` and `<BLOCK_HASH>` from the `#validator-info` channel in the Validator section of the [Source Network Discord](https://discord.source.network)
 
 ### SystemD Service (Optional)
-```
+```bash
 [Unit]
 Description=SourceHub service
 After=network-online.target
 
 [Service]
 User=<user>
-ExecStart=$GOBIN/sourcehubd start --x-crisis-skip-assert-invariants
+ExecStart=/<path-to>/sourcehubd start --x-crisis-skip-assert-invariants
 Restart=no
 LimitNOFILE=4096
 
@@ -98,7 +98,7 @@ LimitNOFILE=4096
 WantedBy=multi-user.target
 ```
 
-You must specify/edit the `<user>` of your system in the SystemD service
+You must specify/edit the `<user>` and `<path-to>` of your system in the SystemD service
 
 ## Register your validator
 Once you have your node running and synchronized with the rest of the network you can register as a Validator. 
@@ -112,6 +112,7 @@ Make sure to backup the newly created keypair. Then, go to the Source Network [F
 
 ```bash
 # Create Validator info json config
+# Update the moniker, website, security, and details
 cd $HOME
 echo "{
         \"pubkey\": $(sourcehubd comet show-validator),
