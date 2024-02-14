@@ -17,7 +17,13 @@ Firstly any validator joining the network must ensure they have sufficient serve
 ## SourceHub Binary
 
 ### Precompiled
-You can get the `sourcehubd` binary from the releases page of the SourceHub repo: https://github.om/sourcenetwork/sourcehub/releases/tag/v0.2.0
+You can get the `sourcehubd` binary from the releases page of the SourceHub repo: https://github.com/sourcenetwork/sourcehub/releases/tag/v0.2.0
+```bash
+cd $HOME
+wget https://github.com/sourcenetwork/sourcehub/releases/download/v0.2.0/sourcehubd
+chmod +x sourcehubd
+sudo mv /usr/bin
+```
 
 
 ### From Source
@@ -37,7 +43,7 @@ To join the network you need to initiaze your node with a keypair, download the 
 
 ```bash
 # You must specify your own moniker, which is a label for your node
-sourcehubd init <moniker>
+sourcehubd init <moniker> --chain-id sourcehub-testnet1
 
 # Download the Genesis
 cd $HOME
@@ -59,10 +65,19 @@ At this point you can start your node and it will begin syncing with the rest of
 
 ```bash
 cd $HOME/.sourcehubd/config
+# Configure Trusted blocks
 sed -i 's/enable = false/enable = true/' config.toml
 sed -i 's/trust_height = 0/trust_height = <BLOCK_HEIGHT>/' config.toml
 sed -i 's/trust_hash = ""/trust_hash = "<BLOCK_HASH>"/' config.toml
 sed -i 's/rpc_servers = ""/rpc_servers = "http:\/\/rpc1.testnet1.source.network:26657,http:\/\/rpc2.testnet1.source.network:26657"/' config.toml
+
+# Download snapshot
+cd $HOME
+export BLOCK_HEIGHT=<BLOCK_HEIGHT>
+wget https://sourcehub-snapshot.s3.amazonaws.com/testnet-1/$BLOCK_HEIGHT-3.tar.gz
+sourcehubd snapshots load $BLOCK_HEIGHT-3.tar.gz
+sourcehubd snapshots restore $BLOCK_HEIGHT 3
+sourcehubd comet bootstrap-state
 ```
 
 You can get the `<BLOCK_HEIGHT>` and `<BLOCK_HASH>` from the `#validator-info` channel in the Validator section of the [Source Network Discord](https://discord.source.network)
@@ -86,7 +101,7 @@ WantedBy=multi-user.target
 You must specify/edit the `<user>` of your system in the SystemD service
 
 # Register your validator
-Once you have your node synchronized with the rest of the network you can register as a Validator. 
+Once you have your node running and synchronized with the rest of the network you can register as a Validator. 
 
 First, we want to create a local keypair. This keypair is independant of your validator, and can exist on any node, but we need one to submit transactions to the network, like the `create-validator` transaction.
 ```bash
