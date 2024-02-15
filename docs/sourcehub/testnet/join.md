@@ -83,6 +83,8 @@ sourcehubd comet bootstrap-state
 You can get the `<BLOCK_HEIGHT>` and `<BLOCK_HASH>` from the `#validator-info` channel in the Validator section of the [Source Network Discord](https://discord.source.network)
 
 ### SystemD Service (Optional)
+
+Create the following file: `/etc/systemd/system/sourcehubd.service`
 ```bash
 [Unit]
 Description=SourceHub service
@@ -98,7 +100,21 @@ LimitNOFILE=4096
 WantedBy=multi-user.target
 ```
 
-You must specify/edit the `<user>` and `<path-to>` of your system in the SystemD service
+You must specify/edit the `<user>` and `<path-to>` of your system in the SystemD service file.
+
+#### Start the service
+
+```bash
+# Restart SystemD
+systemctl daemon-reload
+systemctl restart systemd-journald
+
+# Start the SourceHub service
+systemctl enable sourcehubd.service
+systemctl start sourcehubd.service
+```
+
+To follow the service log, run `journalctl -fu sourcehubd`
 
 ## Register your validator
 Once you have your node running and synchronized with the rest of the network you can register as a Validator. 
@@ -108,7 +124,11 @@ First, we want to create a local keypair. This keypair is independant of your va
 sourcehubd keys add <key_name>
 ```
 
-Make sure to backup the newly created keypair. Then, go to the Source Network [Faucet](https://faucet.testnet1.source.network) and get some $OPEN tokens so you can pay for transaction gas.
+Make sure to backup the newly created keypair. Then, go to the Source Network [Faucet](https://faucet.source.network/) and get some `$OPEN` tokens so you can pay for transaction gas.
+
+You also need to post your key address to the `#validator-general` chat on the [Source Network Discord](https://discord.source.network) so you can recieve your minimum `stake` tokens. These stake tokens are used to determine voting power in the network, and are seperate from the `$OPEN` tokens used for gas.
+
+Once you have recieved your `stake` tokens from the Source Network team you can create you validator wit the following commands.
 
 ```bash
 # Create Validator info json config
@@ -116,7 +136,7 @@ Make sure to backup the newly created keypair. Then, go to the Source Network [F
 cd $HOME
 echo "{
         \"pubkey\": $(sourcehubd comet show-validator),
-        \"amount\": \"0stake\",
+        \"amount\": \"1stake\",
         \"moniker\": \"<choose a moniker>\",
         \"website\": \"validator's (optional) website\",
         \"security\": \"validator's (optional) security contact email\",
@@ -124,11 +144,11 @@ echo "{
         \"commission-rate\": \"0\",
         \"commission-max-rate\": \"0\",
         \"commission-max-change-rate\": \"0\",
-        \"min-self-delegation\": \"0\"
+        \"min-self-delegation\": \"1\"
 }" > validator.json
 
 # Create validator transaction
-sourcehubd tx staking create-validator validator.json --from=<key_name>
+sourcehubd tx staking create-validator validator.json --from=<key_name> --fees 1000uopen -y
 ```
 
 Where the `<key_name>` is the same key you made from above.
