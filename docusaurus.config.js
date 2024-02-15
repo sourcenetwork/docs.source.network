@@ -25,6 +25,12 @@ const config = {
           sidebarPath: require.resolve("./sidebars.js"),
           editUrl:
             "https://github.com/sourcenetwork/docs.source.network/edit/master/",
+
+          // Reorder changelog sidebar
+          async sidebarItemsGenerator({defaultSidebarItemsGenerator, ...args}) {
+            const sidebarItems = await defaultSidebarItemsGenerator(args);
+            return reverseSidebarChangelog(sidebarItems);
+            }
         },
         theme: {
           customCss: require.resolve("./src/css/custom.scss"),
@@ -55,9 +61,23 @@ const config = {
           {
             type: "docSidebar",
             position: "left",
-            sidebarId: "mainSidebar",
-            label: "Docs",
-            className: "header-docs-link",
+            sidebarId: "defraSidebar",
+            label: "DefraDB",
+            className: "header-docs-link-defra",
+          },
+          {
+            type: "docSidebar",
+            position: "left",
+            sidebarId: "sourcehubSidebar",
+            label: "SourceHub",
+            className: "header-docs-link-sourcehub",
+          },
+          {
+            type: "docSidebar",
+            position: "left",
+            sidebarId: "orbisSidebar",
+            label: "Orbis",
+            className: "header-docs-link-orbis",
           },
           {
             href: "https://github.com/sourcenetwork/docs.source.network",
@@ -126,10 +146,24 @@ const config = {
         darkTheme: darkCodeTheme,
       },
     }),
-  plugins: ["docusaurus-plugin-sass"],
+  plugins: [
+    "docusaurus-plugin-sass",
+  ],
   customFields: {
     docsData: {},
   },
 };
 
 module.exports = config;
+
+// Reverse the sidebar items ordering (including nested category items)
+function reverseSidebarChangelog(items) {
+  // Reverse items in categories
+  const result = items.map((item) => {
+    if (item.type === 'category' && item.label == "Release Notes") {
+      return {...item, items: item.items.reverse()};
+    }
+    return item;
+  });
+  return result;
+}

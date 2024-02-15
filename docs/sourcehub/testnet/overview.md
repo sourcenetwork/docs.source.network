@@ -1,8 +1,8 @@
 ---
-sidebar_position: 6
-title: Testnet1
+title: Overview
+sidebar_position: 1
 ---
-# Testnet1
+# Testnet Overview
 
 ## Introduction
 Testnets are essential for developing and testing blockchain networks before they go live on the mainnet. They consist of nodes running specific blockchain protocols and modules that enhance the functionality of the DefraDB.
@@ -65,8 +65,8 @@ For testing purposes, developers require tokens in their local wallets, obtained
 For effective participation in the Testnet, certain hardware specifications are essential for running a node as a validator. The key considerations encompass network capability, persistence, and connections. The specified hardware requirements include:
 
 * x86-64 (amd64) multi-core CPU (AMD / Intel)
-* 64GB RAM
-* 1TB NVMe SSD Storage
+* 16GB RAM
+* 256GB SSD Storage
 * 100Mbps bi-directional Internet connection
 
 ### Installation
@@ -74,7 +74,7 @@ The installation is divided into two components:
 
 1. SourceHub Daemon (SourceHub D): This is also referred to as node software, and is interchangeable with the SourceHub Daemon. The binaries for SourceHub D are named `sourcehubd`.
 
-2. Orbis Daemon (Orbis D): The binaries for Orbis D are named `orbisd`.
+2. Orbis Daemon (Orbis): The binaries for Orbis are named `orbisd`.
 
  
 
