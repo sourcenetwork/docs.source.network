@@ -79,14 +79,14 @@ defradb client schema add '
 '
 ```
 
-**Step Two**, patch the `Users` schema, adding the new field, here we pass in `--set-default=true` to automatically apply the schema change to the `Users` collection:
+**Step Two**, patch the `Users` schema, adding the new field, here we pass in `--set-active=true` to automatically apply the schema change to the `Users` collection:
 
 ```graphql
 defradb client schema patch '
     [
     	{ "op": "add", "path": "/Users/Fields/-", "value": {"Name": "email", "Kind": "String"} }
     ]
-' --set-default=true
+' --set-active=true
 ```
 
 **Step Three**, fetch the schema ids so that we can later tell Defra which schema versions we wish to migrate to/from:
@@ -212,10 +212,10 @@ Now the migration has been configured!  Any documents committed under the origin
 
 As we have defined an inverse migration, we can give this migration to other nodes in our peer network still on the original schema version, and they will be able to query our documents committed using the new schema version applying the inverse.
 
-We can also change our default schema version on this node back to the original to see the inverse in action:
+We can also change our active schema version on this node back to the original to see the inverse in action:
 
 ```graphql
-defradb client schema set-default <Original schema ID> 
+defradb client schema set-active <Original schema ID>
 ```
 
 Now when we query Defra, any documents committed after the schema update will be rendered as if they were committed on the original schema version, with `email` field values being copied to the `emailAddress` field at query time.
