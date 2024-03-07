@@ -17,9 +17,13 @@ const config = {
   projectName: "source-developer", // Usually your repo name.
   presets: [
     [
-      "classic",
-      /** @type {import('@docusaurus/preset-classic').Options} */
+      "docusaurus-preset-openapi",
+      /** @type {import('docusaurus-preset-openapi').Options} */
       ({
+        api: {
+          path: "openapi.yml",
+          routeBasePath: "/sourcehub/api",
+        },
         docs: {
           routeBasePath: "/",
           sidebarPath: require.resolve("./sidebars.js"),
