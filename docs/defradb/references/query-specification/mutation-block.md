@@ -18,17 +18,17 @@ Insert is used to create new documents from scratch. This involves many necessar
 type Book { ... }
 
 mutation {
-    create_Book(data: createBookPayload) [Book]
+    create_Book(input: createBookInput) [Book]
 }
 ```
 
-The above example displays the general structure of an insert mutation. You call the `createTYPE` mutation, with the given data payload.
+The above example displays the general structure of an insert mutation. You call the `createTYPE` mutation, with the given input.
 
-### Payload Format
+### Input Object Type
 
-All mutations use a payload to update the data. Unlike the rest of the Query system, mutation payloads aren't typed. Instead, they use a standard JSON Serialization format. Removing the type system from payloads allows flexibility in the system. 
+All mutations use a typed input object to update the data.
 
-JSON Supports all the same types as DefraDB, and it's familiar for developers. Hence, it is an obvious choice for us. The following is an example with a full type and payload:
+The following is an example with a full type and input object:
 
 ```graphql 
 type Book {
@@ -38,11 +38,11 @@ type Book {
 }
 
 mutation {
-    create_Book(data: "{
-        'title': 'Painted House',
-        'description': 'The story begins as Luke Chandler ...',
-        'rating': 4.9
-    }") {
+    create_Book(input: {
+        title: "Painted House",
+        description: "The story begins as Luke Chandler ...",
+        rating: 4.9
+    }) {
         title
         description
         rating
@@ -65,32 +65,30 @@ Update filters use the same format and types from the Query system. Hence, it ea
 The structure of the generated update mutation for a `Book` type is given below:
 ```graphql
 mutation {
-    update_Book(dockey: ID, filter: BookFilterArg, data: updateBookPayload) [Book]
+    update_Book(dockey: ID, filter: BookFilterArg, input: updateBookInput) [Book]
 }
 ```
 
 See the structure and syntax of the filter query above. You can also see an additional field `id`, thawhich will supersede the `filter`; this makes it easy to update a single document by a given ID.
 
-More important than the Update filter, is the update payload. Currently all update payloads use the `JSON Merge Patch` system.
-
-`JSON Merge Patch` is very similar to a traditional JSON object, with a few semantic differences that are important for Updates. The most significant aspect is how to remove or delete a field value in a document. To remove a `JSON Merge Patch` field. we provide a `nil` value in the JSON object.
+The input object type is the same for both `updateTYPE` and `createTYPE` mutations.
 
 Here's an example.
 ```json
 {
-    "name": "John",
-    "rating": nil
+    name: "John",
+    rating: nil
 }
 ```
 
-This Merge Patch sets the `name` field to "John" and deletes the `rating` field value.
+This update sets the `name` field to "John" and deletes the `rating` field value.
 
 Once we create our update, and select which document(s) to update, we can query the new state of all documents affected by the mutation. This is because our update mutation returns the type it mutates.
 
 A basic example is provided below:
 ```graphql
 mutation {
-    update_Book(dockey: '123', data: "{'name': 'John'}") {
+    update_Book(dockey: '123', input: {name: "John"}) {
         _key
         name
     }
@@ -104,7 +102,7 @@ Beyond updating by an ID or IDs, we can use a query filter to select which field
 
 ```graphql
 mutation {
-    update_Book(filter: {rating: {_le: 1.0}}, data: "{'rating': '1.5'}") {
+    update_Book(filter: {rating: {_le: 1.0}}, input: {rating: 1.5}) {
         _key
         rating
         name
