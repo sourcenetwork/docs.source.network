@@ -79,14 +79,14 @@ defradb client schema add '
 '
 ```
 
-**Step Two**, patch the `Users` schema, adding the new field, here we pass in `--set-default=true` to automatically apply the schema change to the `Users` collection:
+**Step Two**, patch the `Users` schema, adding the new field, here we pass in `--set-active=true` to automatically apply the schema change to the `Users` collection:
 
 ```graphql
 defradb client schema patch '
     [
     	{ "op": "add", "path": "/Users/Fields/-", "value": {"Name": "email", "Kind": "String"} }
     ]
-' --set-default=true
+' --set-active=true
 ```
 
 **Step Three**, fetch the schema ids so that we can later tell Defra which schema versions we wish to migrate to/from:
@@ -97,17 +97,25 @@ defradb client schema describe --name="Users"
 
 **Step Four**, in order to define our Lens module - we need to define 4 functions:
 
+- `next() unsignedInteger8`, this is a host function imported to the module - calling it will return a pointer to a byte array that will either contain
+ an error, an EndOfStream identifier (indicating that there are no more source values), or a pointer to the start of a json byte array containing the Defra document to migrate.  It is typically called from within the `transform` and `inverse` functions, and can be called multiple times within them if desired.
+
  - `alloc(size: unsignedInteger64) unsignedInteger8`​, this is required by all lens modules regardless of language or content - this function should allocate a block of memory of the given `size` , it is used by the Lens engine to pass stuff in to the wasm instance.  The memory needs to remain reserved until the next wasm call, e.g. until `transform` or `set_param` has been called. It's implementation will be different depending on which language you are working with, but it should not need to differ between modules of the same language.  The Rust SDK contains an alloc function that you can call.
 
 - `set_param(ptr: unsignedInteger8) unsignedInteger8`​, this function is only required by modules that accept a set of parameters.  As an input parameter it receives a single pointer that will point to the start of a json byte array containing the parameters defined in the configuration file.  It returns a pointer to either nil, or an error message. It will be called once, when the the migration is defined in Defra (and on restart of the database).  How it is implemented is up to you.
 
-- `transform(ptr: unsignedInteger8) unsignedInteger8`​, this function is required by all Lens modules - it is the migration, and within this function you should define what the migration should do, in this example it will copy the data from the `emailAddress` field into the `email` field. It receives a single input parameter, a pointer to the start of a json byte array containing the Defra document to migrate.  It returns a pointer to either the json byte array of the transformed document, or an error message.
+- `transform() unsignedInteger8`​, this function is required by all Lens modules - it is the migration, and within this function you should define what the migration should do, in this example it will copy the data from the `emailAddress` field into the `email` field. Lens Modules can call the `next` function zero to many times to draw documents from the Defra datastore, however modules used in schema migrations should currently limit this to a single call per `transform` call (Lens based views may call it more or less frequently in order to filter or create documents).
 
-- `inverse(ptr: unsignedInteger8) unsignedInteger8`​, this function is optional, you only need to define it if you wish to define the inverse migration.  It follows the same pattern as the `transform` function, only you should implement it to do the reverse.  In this example we want this to copy the value from the `email` field into the `emailAddress`​ field.
+- `inverse() unsignedInteger8`​, this function is optional, you only need to define it if you wish to define the inverse migration.  It follows the same pattern as the `transform` function, only you should implement it to do the reverse.  In this example we want this to copy the value from the `email` field into the `emailAddress`​ field.
 
 Here is what our migration would look like if we were to write it in Rust:
 
 ```graphql
+#[link(wasm_import_module = "lens")]
+extern "C" {
+    fn next() -> *mut u8;
+}
+
 #[derive(Deserialize, Clone)]
 pub struct Parameters {
     pub src: String,
@@ -129,53 +137,83 @@ pub extern fn set_param(ptr: *mut u8) -> *mut u8 {
     }
 }
 
+fn try_set_param(ptr: *mut u8) -> Result<(), Box<dyn Error>> {
+    let parameter = lens_sdk::try_from_mem::<Parameters>(ptr)?;
+
+    let mut dst = PARAMETERS.write()?;
+    *dst = Some(parameter);
+    Ok(())
+}
+
 #[no_mangle]
-pub extern fn transform(ptr: *mut u8) -> *mut u8 {
-    match try_transform(ptr) {
+pub extern fn transform() -> *mut u8 {
+    match try_transform() {
         Ok(o) => match o {
             Some(result_json) => lens_sdk::to_mem(lens_sdk::JSON_TYPE_ID, &result_json),
             None => lens_sdk::nil_ptr(),
+            EndOfStream => lens_sdk::to_mem(lens_sdk::EOS_TYPE_ID, &[]),
         },
         Err(e) => lens_sdk::to_mem(lens_sdk::ERROR_TYPE_ID, &e.to_string().as_bytes())
     }
 }
 
-fn try_transform(ptr: *mut u8) -> Result<Option<Vec<u8>>, Box<dyn Error>> {
-    let mut input = match lens_sdk::try_from_mem::<HashMap<String, serde_json::Value>>(ptr)?
+fn try_transform() -> Result<StreamOption<Vec<u8>>, Box<dyn Error>> {
+    let ptr = unsafe { next() };
+    let mut input = match lens_sdk::try_from_mem::<HashMap<String, serde_json::Value>>(ptr)? {
+        Some(v) => v,
+        // Implementations of `transform` are free to handle nil however they like. In this
+        // implementation we chose to return nil given a nil input.
+        None => return Ok(None),
+        EndOfStream => return Ok(EndOfStream)
+    };
 
-    let params = PARAMETERS.read()?
+    let params = PARAMETERS.read()?;
 
-    let value = input.get_mut(&params.src)?;
+    let value = input.get_mut(&params.src)
+        .ok_or(ModuleError::PropertyNotFoundError{requested: params.src.clone()})?
+        .clone();
 
-    input.insert(params.dst, value);
+    let mut result = input.clone();
+    result.insert(params.dst, value);
 
-    let result_json = serde_json::to_vec(&input.clone())?;
+    let result_json = serde_json::to_vec(&result)?;
+    lens_sdk::free_transport_buffer(ptr)?;
     Ok(Some(result_json))
 }
 
 #[no_mangle]
-pub extern fn inverse(ptr: *mut u8) -> *mut u8 {
-    match try_inverse(ptr) {
+pub extern fn inverse() -> *mut u8 {
+    match try_inverse() {
         Ok(o) => match o {
             Some(result_json) => lens_sdk::to_mem(lens_sdk::JSON_TYPE_ID, &result_json),
             None => lens_sdk::nil_ptr(),
+            EndOfStream => lens_sdk::to_mem(lens_sdk::EOS_TYPE_ID, &[]),
         },
         Err(e) => lens_sdk::to_mem(lens_sdk::ERROR_TYPE_ID, &e.to_string().as_bytes())
     }
 }
 
-fn try_inverse(ptr: *mut u8) -> Result<Option<Vec<u8>>, Box<dyn Error>> {
-    let mut input = match lens_sdk::try_from_mem::<HashMap<String, serde_json::Value>>(ptr)?
+fn try_inverse() -> Result<StreamOption<Vec<u8>>, Box<dyn Error>> {
+    let ptr = unsafe { next() };
+    let mut input = match lens_sdk::try_from_mem::<HashMap<String, serde_json::Value>>(ptr)? {
+        Some(v) => v,
+        // Implementations of `transform` are free to handle nil however they like. In this
+        // implementation we chose to return nil given a nil input.
+        None => return Ok(None),
+        EndOfStream => return Ok(EndOfStream)
+    };
 
-    let params = PARAMETERS.read()?
+    let params = PARAMETERS.read()?;
 
 	// Note: In this example `inverse` is exactly the same as `transform`, only the useage
     // of `params.dst` and `params.src` is reversed.
     let value = input.get_mut(&params.dst)?;
 
-    input.insert(params.src, value);
+    let mut result = input.clone();
+    result.insert(params.src, value);
 
-    let result_json = serde_json::to_vec(&input.clone())?;
+    let result_json = serde_json::to_vec(&result)?;
+    lens_sdk::free_transport_buffer(ptr)?;
     Ok(Some(result_json))
 }
 ```
@@ -212,10 +250,10 @@ Now the migration has been configured!  Any documents committed under the origin
 
 As we have defined an inverse migration, we can give this migration to other nodes in our peer network still on the original schema version, and they will be able to query our documents committed using the new schema version applying the inverse.
 
-We can also change our default schema version on this node back to the original to see the inverse in action:
+We can also change our active schema version on this node back to the original to see the inverse in action:
 
 ```graphql
-defradb client schema set-default <Original schema ID> 
+defradb client schema set-active <Original schema ID>
 ```
 
 Now when we query Defra, any documents committed after the schema update will be rendered as if they were committed on the original schema version, with `email` field values being copied to the `emailAddress` field at query time.
