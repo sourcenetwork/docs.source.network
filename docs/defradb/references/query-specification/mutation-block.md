@@ -22,7 +22,7 @@ mutation {
 }
 ```
 
-The above example displays the general structure of an insert mutation. You call the `createTYPE` mutation, with the given input.
+The above example displays the general structure of an insert mutation. You call the `create_TYPE` mutation, with the given input.
 
 ### Input Object Type
 
@@ -71,7 +71,7 @@ mutation {
 
 See the structure and syntax of the filter query above. You can also see an additional field `id`, thawhich will supersede the `filter`; this makes it easy to update a single document by a given ID.
 
-The input object type is the same for both `updateTYPE` and `createTYPE` mutations.
+The input object type is the same for both `update_TYPE` and `create_TYPE` mutations.
 
 Here's an example.
 ```json
