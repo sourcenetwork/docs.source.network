@@ -71,7 +71,7 @@ As for the sourcehub keypair, Orbis needs access to a sourcehubd keyring instanc
 
 The `keyname` you have already, or if you create a new one, must match what you specify in the `orbis.yml` config, defined below.
 
-By default `sourcehubd keys add <keyname>` will use the `os` keyring backend, you may use other key backends supported by the SourceHub keyring utility, but whatever backend you use *MUST* match what is in your `orbis.yml` config. To learn more about various backends you can see the documentation available from the `sourcehubd keys --help` command.
+By default `sourcehubd keys add <keyname>` will use the `os` keyring backend, you may use other key backends supported by the SourceHub keyring utility, but whatever backend you use *MUST* match what is in your `orbis.yml` config. To learn more about various backends you can see the documentation available from the `sourcehubd keys --help` command. 
 
 > [!WARNING]
 > If when you start your node and you get an error similar to `error: bech32 decode ...` then you likely have either used the wrong `keyname` or `keyringBackend`.
@@ -92,15 +92,15 @@ logger:
   level: "info"
 
 host:
-  # P2P Host Address (multiaddress)
+  # P2P Host Address (required - see below)
   listenAddresses:
     - /ip4/0.0.0.0/tcp/9000
-  # P2P Boostrap peers
+  # P2P Boostrap peers (required - see below)
   bootstrap_peers:
-    - /dns4/<SOURCEHUB_VALIDATOR_ADDRESS>/tcp/9001/p2p/<SOURCEHUB_VALIDATOR_PEERID>
+    - /dns4/<SOURCEHUB_BOOTSTRAP_ADDRESS>/tcp/9000/p2p/<SOURCEHUB_BOOTSTRAP_PEERID>
 
 transport:
-  # P2P Peer exchange topic
+  # P2P Peer exchange topic (required)
   rendezvous: "orbis-transport"
 
 db:
@@ -125,13 +125,22 @@ cosmos:
 When starting an Orbis daemon, you can specify the config file path with the `--config <path>` flag. 
 
 ## Configuration Requirements
-You *MUST* run orbis with a publicly available "Host Address". In the above example config this is the
+> [!IMPORTANT] `host.listenAddress`
+
+You *MUST* run orbis with a publicly available `host.listenAddress`. In the above example config this is the
 ```yaml
 listenAddresses:
   - /ip4/0.0.0.0/tcp/9000
 ```
-
 You can specify your own port to listen on, but the host port and bind address must result in a publicly available listener. This is the port that all the orbis nodes communicate their P2P network traffic.
+
+> [!IMPORTANT] `host.bootstrapPeers`
+
+You *MUST* use the `host.boostrapPeers`address provided in the [#validator-info](https://discord.com/channels/427944769851752448/1207162452337360936) channel in the Source Network discord.
+```yaml
+ bootstrap_peers:
+    - /dns4/<SOURCEHUB_BOOTSTRAP_ADDRESS>/tcp/9000/p2p/<SOURCEHUB_BOOTSTRAP_PEERID>
+```
 
 The GRPC and Rest address/port don't necessarily have to be public, this can match whatever deployment environment you are currently using, however if you want to access these APIs from other machines, you must make the appropriate port and network rules to do so.
 
@@ -219,7 +228,7 @@ Please post this *full* response in the [#validator-general](https://discord.com
 Once all the current validators have started their nodes, and posted their host info, we can craft the Root Ring manifest.
 
 ### Create Root Ring
-Once we have the Root Ring manifest, everyone can download it from the discord or Github testnet repo page (links to be provided here once we generate it), we can go ahread and create the root ring.
+Once we have the Root Ring manifest, everyone can download it from the discord or Github testnet repo page (links to be provided here once we generate it), we can go ahead and create the root ring.
 
 To do so, each node will need to run
 ```bash
