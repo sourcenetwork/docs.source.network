@@ -77,6 +77,10 @@ By default `sourcehubd keys add <keyname>` will use the `os` keyring backend, yo
 If you start your node and you get an error similar to `error: bech32 decode ...` then you likely have either used the wrong `keyname` or `keyringBackend`.
 :::
 
+### Faucet
+To be able to properly run the Orbis daemon and join the Root Ring, you need to ensure your account for the key you chose has sufficent number of $OPEN tokens, since initializating the DKG requires transactions on the network that need to be paid for.
+
+As usual, you can go the [SourceHub Testnet 1](https://faucet.source.network/) and use the address of the new key `sourcehubd keys show <keyname> --address`. 
 
 ## Configuration
 You may have to configure orbis to work in your specific environment or hardware, depending on your storage and networking resources, here is a pretty standard configuration file `orbis.yml`
