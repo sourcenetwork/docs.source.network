@@ -17,10 +17,10 @@ Minimum hardware requirements:
 * 100Mbps bi-directional internet connection.
 
 ## Orbis Binary
-You can get the `orbisd` binary from the releases page of the Orbis repo: [https://github.com/sourcenetwork/orbis-go/releases/tag/v0.2.1](https://github.com/sourcenetwork/orbis-go/releases/tag/v0.2.1).
+You can get the `orbisd` binary from the releases page of the Orbis repo: [https://github.com/sourcenetwork/orbis-go/releases/tag/v0.2.2](https://github.com/sourcenetwork/orbis-go/releases/tag/v0.2.2).
 ```bash
 cd $HOME
-wget https://github.com/sourcenetwork/orbis-go/releases/download/v0.2.1/orbisd
+wget https://github.com/sourcenetwork/orbis-go/releases/download/v0.2.2/orbisd
 chmod +x orbisd
 sudo mv /usr/bin
 ```
@@ -31,7 +31,7 @@ You can download the code and compile your own binaries if you prefer. However y
 cd $HOME
 git clone https://github.com/sourcenetwork/orbis-go
 cd orbis-go
-git checkout v0.2.1
+git checkout v0.2.2
 make build
 cp ./build/orbisd $GOBIN/orbisd
 export PATH=$PATH:$GOBIN
@@ -42,14 +42,14 @@ Now you will have the `orbisd` available in your local system.
 You can either use the pre-existing docker image hosted on our GitHub, or build your own
 
 ### Github Container Registry (coming soon)
-`docker pull ghcr.io/sourcenetwork/orbis:0.2.1`
+`docker pull ghcr.io/sourcenetwork/orbis:0.2.2`
 
 ### Build Docker Image from Source
 ```bash
 cd $HOME
 git clone https://github.com/sourcenetwork/orbis-go
 cd orbis-go
-git checkout v0.2.1
+git checkout v0.2.2
 docker build -t <name> .
 ```
 
@@ -227,7 +227,7 @@ This will respond back with something like:
 {
     "node":{
         "id":"16Uiu2HAm35sSr96x1TJHBTkWdcDH9P8twhTw92iDyq38XvyGzgZN",
-        "address":"/ip4/127.0.0.1/tcp/9001",
+        "address":"/ip4/<YOUR_PUBLIC_IP_ADDRESS>/tcp/9001",
         "publicKey":{
             "Type":"Secp256k1",
             "Data":"AnHK2Co3LgeLHo8tMsyfMlp0JXGL3y9yiPOAkQVknfrp"
@@ -235,6 +235,10 @@ This will respond back with something like:
     }
 }
 ```
+
+:::info
+Sometimes the `address` field returns `127.0.0.1` instead of a public address, if so, please replace it with your nodes publicly accessible IP address
+:::
 
 Please post this *full* response in the [#validator-general](https://discord.com/channels/427944769851752448/1200236096089509918) channel, this is all public information, so no security details are being leaked.
 
