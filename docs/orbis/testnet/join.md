@@ -20,7 +20,7 @@ Minimum hardware requirements:
 You can get the `orbisd` binary from the releases page of the Orbis repo: [https://github.com/sourcenetwork/orbis-go/releases/tag/v0.2.1](https://github.com/sourcenetwork/orbis-go/releases/tag/v0.2.1).
 ```bash
 cd $HOME
-wget https://github.com/sourcenetwork/orbis-go/releases/tag/v0.2.1
+wget https://github.com/sourcenetwork/orbis-go/releases/download/v0.2.1/orbisd
 chmod +x orbisd
 sudo mv /usr/bin
 ```
@@ -125,6 +125,8 @@ cosmos:
   addressPrefix: source
   # Transaction fees
   fees: 2000uopen
+  # SourceHub data folder where your keyring is defined
+  home: ~/.sourcehub
   rpcAddress: <RPC Address>
 ```
 
