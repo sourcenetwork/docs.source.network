@@ -1,8 +1,8 @@
 ---
-title: Join
+title: Join Root Ring
 ---
 
-# How to join Testnet 1
+# How to Join Testnet 1 Root Ring
 The following will detail the necessary steps to join Testnet 1 Orbis Root Ring as a validator. Only the existing and approved validators can operate a Orbis node in the Root Ring.
 
 ## Hardware Requirements
@@ -73,8 +73,10 @@ The `keyname` you have already, or if you create a new one, must match what you 
 
 By default `sourcehubd keys add <keyname>` will use the `os` keyring backend, you may use other key backends supported by the SourceHub keyring utility, but whatever backend you use *MUST* match what is in your `orbis.yml` config. To learn more about various backends you can see the documentation available from the `sourcehubd keys --help` command. 
 
-> [!WARNING]
-> If when you start your node and you get an error similar to `error: bech32 decode ...` then you likely have either used the wrong `keyname` or `keyringBackend`.
+:::caution
+If you start your node and you get an error similar to `error: bech32 decode ...` then you likely have either used the wrong `keyname` or `keyringBackend`.
+:::
+
 
 ## Configuration
 You may have to configure orbis to work in your specific environment or hardware, depending on your storage and networking resources, here is a pretty standard configuration file `orbis.yml`
@@ -125,7 +127,9 @@ cosmos:
 When starting an Orbis daemon, you can specify the config file path with the `--config <path>` flag. 
 
 ## Configuration Requirements
-> [!IMPORTANT] `host.listenAddress`
+:::info
+required `host.listenAddress`
+:::
 
 You *MUST* run orbis with a publicly available `host.listenAddress`. In the above example config this is the
 ```yaml
@@ -134,7 +138,9 @@ listenAddresses:
 ```
 You can specify your own port to listen on, but the host port and bind address must result in a publicly available listener. This is the port that all the orbis nodes communicate their P2P network traffic.
 
-> [!IMPORTANT] `host.bootstrapPeers`
+:::info
+required `host.bootstrapPeers`
+:::
 
 You *MUST* use the `host.boostrapPeers`address provided in the [#validator-info](https://discord.com/channels/427944769851752448/1207162452337360936) channel in the Source Network discord.
 ```yaml
@@ -149,8 +155,9 @@ Once you have configured your keyring and config file, you can start you node.
 ```bash
 orbisd start --config /path/to/orbis.yml
 ```
-> [!IMPORTANT]
-> When starting your orbis daemon, your configured `cosmos.rpcAddress` endpoint must be live, since it tries to connect to this endpoint immediatly upon startup. If you have any errors relating to `cosmos client` then you have either used the wrong `rpcAddress` or the RPC node isn't online.
+:::info
+When starting your orbis daemon, your configured `cosmos.rpcAddress` endpoint **must** be live, since it tries to connect to this node immediatly upon startup. If you have any errors relating to `cosmos client` then you have either used the wrong `rpcAddress` or the RPC node isn't online.
+:::
 
 ### SystemD Service (Optional)
 If you wish to use systemd to manage your daemon, you can use the following configuration.
