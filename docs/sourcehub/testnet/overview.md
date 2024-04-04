@@ -102,31 +102,29 @@ Specific values like address prefix and account name must be obtained from local
  
 
 **Note**:
-
 * Specific values for address prefix and account name need to be obtained from your local configuration.
 
-    ```
-    bulletin:
-     p2p:
-        rendezvous: "orbis-bulletin"
-     sourcehub:
-        accountName: "<name>"
-        addressPrefix: "<prefix>"
-        nodeAddress: "<nodeAddress>"
-        rpcAddress: "<rpcAddress>"
-    ```
-
- 
-
+```yaml
+cosmos:
+  # Cosmos chain ID
+  chainId: sourcehub-testnet1
+  # Cosmos keyring key name
+  accountName: <keyname>
+  # Cosmos keyring backend ('os' is the default when running sourcehubd)
+  keyringBackend: os
+  # Cosmos address prefix ('source' is for SourceHub)
+  addressPrefix: source
+  # Transaction fees
+  fees: 2000uopen
+  rpcAddress: <RPC Address>
+```
 
 * Remove the crypto section (specifically host_crypto_seed) from the config file.
-    ```
-    host:
-      crypto:
-        seed: 1
-      listenAddresses:
-        - /ip4/0.0.0.0/tcp/9001 
-    ```
+```
+  host:
+    listenAddresses:
+      - /ip4/0.0.0.0/tcp/9001 
+```
 
  
 
