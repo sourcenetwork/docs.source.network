@@ -245,10 +245,13 @@ Please post this *full* response in the [#validator-general](https://discord.com
 Once all the current validators have started their nodes, and posted their host info, we can craft the Root Ring manifest.
 
 ### Create Root Ring
-Once we have the Root Ring manifest, everyone can download it from the discord or Github testnet repo page (links to be provided here once we generate it), we can go ahead and create the root ring.
-
-To do so, each node will need to run
+:::info
+We now have the assembled `manifest.json` file needed to start the root ring. You can download the root ring manifest for Testnet1 [here](https://github.com/sourcenetwork/networks/blob/15ad45d92e6c012150e764db0c9e7f9e1e25c64f/testnet1/orbis-root-ring/manifest.json)
+:::
+To create the root ring, and start the Ditributed Key Generation (DKG) process to create the shared keypair, each node will need download the manifest file [here](https://github.com/sourcenetwork/networks/blob/15ad45d92e6c012150e764db0c9e7f9e1e25c64f/testnet1/orbis-root-ring/manifest.json) and then run the `create-ring` command, as shown here:
 ```bash
+wget https://github.com/sourcenetwork/networks/blob/15ad45d92e6c012150e764db0c9e7f9e1e25c64f/testnet1/orbis-root-ring/manifest.json
+
 orbisd -s <grpc-address:port> ring-service create-ring -f <path-to>/manifest.json
 ```
 
