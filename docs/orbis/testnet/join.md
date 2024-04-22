@@ -248,6 +248,7 @@ Once all the current validators have started their nodes, and posted their host 
 :::info
 We now have the assembled `manifest.json` file needed to start the root ring. You can download the root ring manifest for Testnet1 [here](https://github.com/sourcenetwork/networks/blob/15ad45d92e6c012150e764db0c9e7f9e1e25c64f/testnet1/orbis-root-ring/manifest.json)
 :::
+**ALL NODES MUST BE UPDATED TO v0.2.3 BEFORE CREATING THE RING**
 To create the root ring, and start the Ditributed Key Generation (DKG) process to create the shared keypair, each node will need download the manifest file [here](https://github.com/sourcenetwork/networks/blob/15ad45d92e6c012150e764db0c9e7f9e1e25c64f/testnet1/orbis-root-ring/manifest.json) and then run the `create-ring` command, as shown here:
 ```bash
 wget https://raw.githubusercontent.com/sourcenetwork/networks/15ad45d92e6c012150e764db0c9e7f9e1e25c64f/testnet1/orbis-root-ring/manifest.json
