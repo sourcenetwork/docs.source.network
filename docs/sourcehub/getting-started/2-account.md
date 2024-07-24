@@ -27,7 +27,7 @@ You MUST ensure that you sufficiently backup your mnemonic. Failure to do so may
 Now we can update the `CLI` client config to use the correct RPC node and ChainID. The RPC node is how we access the network API to send transactions and queries. RPC nodes are specific to certain networks, and must match the provided ChainID.
 ```bash
 sourcehubd config set client chain-id <chain-id>
-sourcehub config set client node <rpc-address>
+sourcehubd config set client node <rpc-address>
 ```
 
 ## Faucet
