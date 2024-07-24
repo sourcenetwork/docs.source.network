@@ -1,5 +1,6 @@
 ---
 title: Join Root Ring
+slug: /orbis
 ---
 
 # How to Join Testnet 1 Root Ring
