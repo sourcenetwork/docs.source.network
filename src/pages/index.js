@@ -11,8 +11,8 @@ function HomepageHeader() {
       <div className="container">
         <div className={styles.heroContent}>
           <div className={styles.heroText}>
-            <h1 className="hero__title">The Source Stack</h1>
-            <p className="hero__subtitle">Welcome to the Source Network developer documentation.</p>
+            <h1 className="hero__title">Source Network Stack</h1>
+            <p className="hero__subtitle">Welcome to the source of our developer documentation.</p>
           </div>
           <div className={styles.heroImageContainer}>
             <ThemedImage
