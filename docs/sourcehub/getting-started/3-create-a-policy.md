@@ -4,9 +4,9 @@ title: Create a Policy
 # Create an ACP Policy
 Now that we have a fully configured `CLI` client, we can start executing transactions and queries against the SourceHub network. Our first task will be to create a new ACP Policy.
 
-The SourceHub ACP Module is a [Zanzibar](concept) based global decentralized authorization system. Developers write policies using our Relation-Based Access Control (RelBAC) DSL, which allows you to define resources, relations, and permissions.
+The SourceHub ACP Module is a [Zanzibar](/sourcehub/concepts/zanzibar) based global decentralized authorization system. Developers write policies using our Relation-Based Access Control (RelBAC) DSL, which allows you to define resources, relations, and permissions.
 
-- **Resources**: Generic container for some kind of "thing" you wish to gate access to or provide authorization for. It can be anything from a document on [DefraDB](/), a Secret on [Orbis](/orbis), or any other digital resource.
+- **Resources**: Generic container for some kind of "thing" you wish to gate access to or provide authorization for. It can be anything from a document on [DefraDB](/defradb), a Secret on [Orbis](/orbis), or any other digital resource.
 
 - **Relation**: Named connections between resources. Similar to a database table that might have relations between its schema types, so does the SourceHub ACP module. This allows us to create expressive policies that go beyond traditional *Role-Based* or *Attribute-based* access control.
 

@@ -5,7 +5,7 @@ To get started with SourceHub, we need to download and initialize our local clie
 ## 1. Install SourceHub
 First, we will download the SourceHub binary which includes a client.
 ### Precompiled
-You can get precompiled binaries from our Github Release page [here](github) or using your console:
+You can get precompiled binaries from our Github Release page [here](https://github.com/sourcenetwork/sourcehub/releases) or using your console:
 ```bash
 cd $HOME
 wget https://github.com/sourcenetwork/sourcehub/releases/download/v0.2.0/sourcehubd
