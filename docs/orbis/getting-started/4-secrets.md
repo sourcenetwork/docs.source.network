@@ -1,11 +1,11 @@
-# Store and Recover Secrets
+# Store, Recover, and Share Secrets
 Now that we have initialized our orbis nodes, defined our manifest, created the secret ring, and uploaded our policy we are finally ready to store secrets into our Ring!
 
 ## Store Secrets
 
 To store a secret in a ring, theres a series of steps that clients must execute (thankfully our CLI Client does this all for you). The TLDR is that secrets must be 
 - Encrypted to the Secret Rings DKG Public Key
-- Proof-of-Encryption commitment that proves the first step is done correctly
+- Proof-of-Encryption commitment that cryptographically proves the first step is done correctly
 - Client sends the encrypted secret and commitment proof, along with the authorization policy details to any of the Orbis nodes within the Secret Ring as a `store-secret` request.
 - Finally the nodes broadcast the `store-secret` request amungst eachother.
 
