@@ -3,7 +3,7 @@ sidebar_position: 1
 title: Overview
 slug: /sourcehub
 ---
-# Overview
+# SourceHub Overview
 
 ![SourceHub Overview](/img/sourcehub-cover-copy.png)
 
