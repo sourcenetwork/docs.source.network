@@ -1,6 +1,5 @@
 ---
 title: Join Root Ring
-slug: /orbis
 ---
 
 # How to Join Testnet 1 Root Ring
@@ -55,7 +54,7 @@ docker build -t <name> .
 ```
 
 ## Docker Compose
-
+> TODO
 
 ## Initialization
 To deploy our orbis node and to join the Root Ring running on [SourceHub Testnet 1](/sourcehub/testnet/overview), generate or use an existing sourcehub keypair, and update your respective configuration. 
