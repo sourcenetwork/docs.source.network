@@ -3,10 +3,7 @@
     position: relative;
     display: flex;
     align-items: center;
-  }
-
-  .hero.heroBanner_src-pages-index-module {
-    background-color: black !important;
+    background-color: transparent !important;
   }
   
   .heroContent {
