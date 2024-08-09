@@ -1,3 +1,6 @@
+---
+sidebar_position: 1
+---
 # Multi-Party Computation
 
 Multi-Party Computation (MPC) is a cryptographic technique that allows multiple parties to jointly compute a function over their inputs while keeping those inputs private. In the context of Orbis, MPC plays a crucial role in ensuring the security and integrity of secret management without a single point of failure.
@@ -8,13 +11,13 @@ Multi-Party Computation (MPC) is a cryptographic technique that allows multiple 
    - **Definition**: A decentralized method for collaboratively generating a cryptographic keypair. All participating nodes know the public key, but no single node knows the private key. Instead, each node holds a "share" of the private key.
    - **Purpose in Orbis**: DKG is used to create a shared keypair for a Secret Ring, ensuring that the private key remains unknown to any single actor. This keypair is essential for securely encrypting secrets.
 
-2. [**Proactive Secret Sharing (PSS)**](/orbis/concepts/pss):
-   - **Definition**: An algorithm that periodically redistributes the shares of a private key among nodes without changing the long-term keypair. This process mitigates the risk of adversaries compromising the system over time.
-   - **Purpose in Orbis**: PSS ensures the long-term security of the secret management system by preventing adversaries from accumulating enough shares to reconstruct the private key. It does so by periodically refreshing the shares, making it impossible for an adversary to exploit nodes indefinitely.
-
-3. [**Proxy Re-Encryption (PRE)**](/orbis/concepts/pre):
+2. [**Proxy Re-Encryption (PRE)**](/orbis/concepts/pre):
    - **Definition**: A cryptographic mechanism that allows encrypted data (ciphertext) to be transformed from one public key to another without revealing the underlying plaintext.
    - **Purpose in Orbis**: PRE is employed to transfer encrypted secrets from the Secret Ring's public key to a requesting party's ephemeral public key. This transformation is done securely and privately, ensuring that neither the system nor the nodes involved in the process ever see the plaintext.
+
+3. [**Proactive Secret Sharing (PSS)**](/orbis/concepts/pss):
+   - **Definition**: An algorithm that periodically redistributes the shares of a private key among nodes without changing the long-term keypair. This process mitigates the risk of adversaries compromising the system over time.
+   - **Purpose in Orbis**: PSS ensures the long-term security of the secret management system by preventing adversaries from accumulating enough shares to reconstruct the private key. It does so by periodically refreshing the shares, making it impossible for an adversary to exploit nodes indefinitely.
 
 ## MPC in Orbis
 
