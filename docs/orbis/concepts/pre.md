@@ -1,3 +1,7 @@
+---
+sidebar_position: 3
+---
+
 # Proxy Re-Encryption
 
 ![Proxy ReEncryption](/img/orbis/pre.png)

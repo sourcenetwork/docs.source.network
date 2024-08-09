@@ -1,3 +1,7 @@
+---
+sidebar_position: 2
+---
+
 # Distributed Key Generation
 
 Distributed Key Generation (DKG) is a cryptographic protocol that enables a group of participants to collaboratively generate a public-private keypair in a decentralized manner. Unlike traditional key generation methods, where a single entity holds the private key, DKG ensures that the private key is never known in its entirety by any single participant. Instead, each participant holds a "share" of the private key, and a minimum threshold of participants must cooperate to perform cryptographic operations.
