@@ -112,6 +112,24 @@ body {
 
 // Sidebar menu
 
+html[data-theme="dark"] .main-wrapper {
+  background: url(/img/hero_grid_white_1.png);
+  background-repeat: no-repeat;
+  /* background-position: right; */
+  background-position-x: right;
+  background-position-y: bottom;
+  background-size: 25%;
+}
+
+.main-wrapper {
+  background: url(/img/hero_grid_black_1.png);
+  background-repeat: no-repeat;
+  /* background-position: right; */
+  background-position-x: right;
+  background-position-y: bottom;
+  background-size: 25%;
+}
+
 .main-wrapper {
   .menu {
     $self: &;

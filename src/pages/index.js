@@ -15,14 +15,6 @@ function HomepageHeader() {
             <p className="hero__subtitle">Welcome to the source of our developer documentation.</p>
           </div>
           <div className={styles.heroImageContainer}>
-            <ThemedImage
-              sources={{
-                light: '/img/hero_grid_black_1.png',
-                dark: '/img/hero_grid_white_1.png',
-              }}
-              alt="Hero"
-              className={styles.heroImage}
-            />
           </div>
         </div>
       </div>
