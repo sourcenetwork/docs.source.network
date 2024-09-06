@@ -15,7 +15,7 @@ The SourceHub ACP Module is a [Zanzibar](/sourcehub/concepts/zanzibar) based glo
 ## Example
 Lets create a very basic example policy which defines a single resource named `note` with both an `owner` and `collaborator` relation which are both of type `actor`.
 
-Create a file named `basic-policy.yaml` and past the following:
+Create a file named `basic-policy.yaml` and paste the following:
 ```yaml
 name: Basic Policy
 
