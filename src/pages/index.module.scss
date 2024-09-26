@@ -1,0 +1,152 @@
+@import "./utils";
+
+.homeWrapper {
+  margin: auto 0;
+
+  .container {
+    max-width: var(--root-wrapper-width);
+  }
+}
+
+.heroBanner {
+  padding-top: rem(100px);
+  position: relative;
+  display: flex;
+  align-items: center;
+
+  .heroContent {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    .heroText {
+      max-width: rem(900px);
+    }
+  }
+
+  .heroTitle {
+    font-size: rem(48px);
+    line-height: 1;
+  }
+
+  .heroSubTitle {
+    font-size: rem(20px);
+  }
+
+  @media screen and (max-width: 996px) {
+    padding-top: rem(50px);
+
+    .heroTitle {
+      font-size: rem(26px);
+    }
+
+    .heroSubTitle {
+      font-size: rem(16px);
+      br {
+        display: none;
+      }
+    }
+  }
+}
+
+.features {
+  padding: rem(32px) 0;
+
+  @media screen and (max-width: 996px) {
+    padding: 0 0 rem(32px);
+  }
+}
+
+.arrow {
+  margin-left: rem(5px);
+  transition: all 0.3s ease;
+}
+
+.card {
+  display: block;
+  background-color: var(--card-color);
+  border: rem(1px) solid var(--card-border-color);
+  border-radius: rem(8px);
+  padding: rem(32px);
+  text-align: center;
+  color: var(--ifm-font-color-base);
+  box-shadow: var(--card-box-shadow);
+  margin-bottom: rem(10px);
+  transition: all 0.3s ease;
+
+  h3,
+  p {
+    margin-bottom: 0;
+  }
+
+  p {
+    font-size: 14px;
+  }
+
+  img {
+    width: rem(40px);
+    margin-bottom: rem(10px);
+  }
+
+  &:hover {
+    transform: translateY(-2px) scale(1.02);
+    text-decoration: none;
+    color: var(--ifm-font-color-base);
+    border-color: var(--ifm-color-primary);
+    box-shadow: var(--card-box-shadow-highlight);
+
+    .arrow {
+      transform: translate(3px, 0);
+    }
+  }
+
+  @media screen and (max-width: 996px) {
+    display: flex;
+    text-align: left;
+
+    img {
+      width: rem(30px);
+      margin: auto 15px auto 0;
+    }
+    h3 {
+      font-size: 16px;
+    }
+  }
+}
+
+.linkList {
+  a {
+    display: block;
+    font-size: 14px;
+  }
+}
+
+.community {
+  border-bottom: 1px solid var(--docs-title-border);
+
+  h3 {
+    margin-bottom: 0;
+    color: var(--ifm-font-color-base);
+  }
+
+  .communityLinks {
+    margin-top: rem(40px);
+
+    .communityLink {
+      &:hover {
+        text-decoration: none;
+
+        p {
+          text-decoration: underline;
+        }
+
+        .arrow {
+          transform: rotate(-45deg) translate(3px, 0px);
+        }
+      }
+    }
+  }
+
+  .arrow {
+    transform: rotate(-45deg);
+  }
+}
