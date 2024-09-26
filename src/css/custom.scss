@@ -34,7 +34,7 @@ body {
   background-image: url(/img/hero_grid_black_1.png);
   background-repeat: no-repeat;
   background-position: 100% 10%;
-  background-size: 350px;
+  background-size: rem(350px);
 
   &[data-theme="dark"] {
     background-image: url(/img/hero_grid_white_1.png);
@@ -60,7 +60,7 @@ body {
 .block-section {
   padding-top: rem(50px);
   padding-bottom: rem(50px);
-  border-top: 1px solid var(--docs-title-border);
+  border-top: rem(1px) solid var(--docs-title-border);
 }
 
 // navbar
