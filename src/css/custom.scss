@@ -24,17 +24,43 @@ body {
   --menu-indicator-color: #ccc;
 }
 
-// html[data-theme="dark"] {
 // Dark overrides
-// }
+
+// html[data-theme="dark"] {}
+
+//  Pages
+
+.home-page {
+  background-image: url(/img/hero_grid_black_1.png);
+  background-repeat: no-repeat;
+  background-position: 100% 10%;
+  background-size: rem(350px);
+
+  &[data-theme="dark"] {
+    background-image: url(/img/hero_grid_white_1.png);
+  }
+}
 
 //  Layout
+
 .footer > .container,
 .navbar__inner,
 .main-wrapper {
   width: 100%;
   max-width: var(--root-wrapper-width);
   margin: auto;
+}
+
+// Utilities
+
+.spacing-horz {
+  padding: 0 var(--ifm-spacing-horizontal);
+}
+
+.block-section {
+  padding-top: rem(50px);
+  padding-bottom: rem(50px);
+  border-top: rem(1px) solid var(--docs-title-border);
 }
 
 // navbar
@@ -112,24 +138,6 @@ body {
 
 // Sidebar menu
 
-html[data-theme="dark"] .main-wrapper {
-  background: url(/img/hero_grid_white_1.png);
-  background-repeat: no-repeat;
-  /* background-position: right; */
-  background-position-x: right;
-  background-position-y: bottom;
-  background-size: 25%;
-}
-
-.main-wrapper {
-  background: url(/img/hero_grid_black_1.png);
-  background-repeat: no-repeat;
-  /* background-position: right; */
-  background-position-x: right;
-  background-position-y: bottom;
-  background-size: 25%;
-}
-
 .main-wrapper {
   .menu {
     $self: &;
@@ -201,6 +209,7 @@ html[data-theme="dark"] .main-wrapper {
 }
 
 // Breadcrumbs
+
 .breadcrumbs {
   margin: rem(30px) 0 rem(20px);
   font-size: rem(12px);

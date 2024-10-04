@@ -31,10 +31,13 @@ const config = {
             "https://github.com/sourcenetwork/docs.source.network/edit/master/",
 
           // Reorder changelog sidebar
-          async sidebarItemsGenerator({defaultSidebarItemsGenerator, ...args}) {
+          async sidebarItemsGenerator({
+            defaultSidebarItemsGenerator,
+            ...args
+          }) {
             const sidebarItems = await defaultSidebarItemsGenerator(args);
             return reverseSidebarChangelog(sidebarItems);
-            }
+          },
         },
         theme: {
           customCss: require.resolve("./src/css/custom.scss"),
@@ -151,7 +154,14 @@ const config = {
       },
     }),
   plugins: [
-    "docusaurus-plugin-sass",
+    [
+      "docusaurus-plugin-sass",
+      {
+        sassOptions: {
+          includePaths: ["./src/css"],
+        },
+      },
+    ],
   ],
   customFields: {
     docsData: {},
@@ -164,8 +174,8 @@ module.exports = config;
 function reverseSidebarChangelog(items) {
   // Reverse items in categories
   const result = items.map((item) => {
-    if (item.type === 'category' && item.label == "Release Notes") {
-      return {...item, items: item.items.reverse()};
+    if (item.type === "category" && item.label == "Release Notes") {
+      return { ...item, items: item.items.reverse() };
     }
     return item;
   });
