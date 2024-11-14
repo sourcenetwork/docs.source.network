@@ -13,7 +13,7 @@ const HomepageHeader: FC<{}> = () => {
         <div className={styles.heroContent}>
           <div className={styles.heroText}>
             <h1 className={styles.heroTitle}>Source Network Developer Hub</h1>
-            <p className={styles.heroSubTitle}>Your guide to building with the Source Network stack. <br />Get started, explore the docs, and discover the power of decentralized data.</p>
+            <p className={styles.heroSubTitle}>Your guide to building with the Source Network stack. <br />Get started, explore the docs, and discover the power of distributed data management.</p>
           </div>
           <div className={styles.heroImageContainer}>
           </div>
