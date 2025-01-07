@@ -45,7 +45,7 @@ type Delta {
 To query the latest commit of an object (with id: '123'):
 ```graphql
 query {
-    latestCommits(docid: "123") {
+    latestCommits(docID: "123") {
         cid
         height
         delta {
@@ -58,7 +58,7 @@ query {
 To query all the commits of an object (with id: '123'):
 ```graphql
 query {
-    allCommits(docid: "123") {
+    allCommits(docID: "123") {
         cid
         height
         delta {

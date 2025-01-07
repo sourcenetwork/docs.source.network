@@ -16,12 +16,12 @@ The Web2 stack has traditional databases, like Postgres or MySQL, that usually h
 A powerful feature of a time-traveling query is that very little work is required from the developer to turn a traditional non-time-traveling query into a time-traveling query. Each update a document goes through gets a version identifier known as a Content Identifier (CID). CIDs are a function of the data model and are used to build out the time travel queries. These CIDs can be used to refer to a version that contains some piece of data. Instead of using some sort of human-invented notion of semantic version labels like Version 1, or Version 3.1 alpha, it uses the hash of the data as the actual identifier. The user can take the entire state of a document and create a single constant-sized CID. Each update in the document produces a new version number for the document, including a new version number for its individual fields. The developer then only needs to submit a new time-traveling query using the doc key of the document that it wants to query backward through its state, just like in a regular query, only here the developer needs to add the 32-bit hexadecimal version identifier that is expressed as it’s CID in an additional argument and the query will fetch the specific update that was made in the document.
 
 ```graphql
-# Here we fetch a User of the given dockey, in the state that it was at
+# Here we fetch a User of the given docID, in the state that it was at
 # at the commit matching the given CID.
 query {
   User (
     cid: "bafybeieqnthjlvr64aodivtvtwgqelpjjvkmceyz4aqerkk5h23kjoivmu",
-    dockey: "bae-52b9170d-b77a-5887-b877-cbdbb99b009f"
+    docID: "bae-d4303725-7db9-53d2-b324-f3ee44020e52"
   ) {
     name
     age
@@ -33,7 +33,7 @@ query {
 
 The mechanism behind time-traveling queries is based on the Merkel CRDT system and the data model of the documents discussed in the above sections. Each time a document is updated, a log of updates known as the Update graph is recorded. This graph consists of every update that the user makes in the document from the beginning till the Nth update. In addition to the document update graph, we also have an independent and individual update graph for each field of the document. The document update graph would capture the overall updates made in the document whereas the independent and individual update graphs would capture the changes made to a specific field of the document. The data model as discussed in the Usage section works in a similar fashion, where it keeps appending the updates of the document to its present state. So even if a user deletes any information in the document, this will be recorded as an update within the update graph. Hence, no information gets deleted from the document, as all updates are stored in the update graph. 
 
-[Include link to CRDT doc here]
+[Merkle CRDT Guide](./merkle-crdt.md)
 
 Since we now have this update graph of changes, the query also takes its mechanism from the inherent properties of the Delta State Merkel CRDTs. Under this, the actual content of the update added by the user in the document is known as the Delta Payload. This delta payload is the amount of information that a user wants to go from a previous state to the very next state, where the value of the next state is set by some other user. For example, suppose a team of developers is working on a document and one of them wants to change the name of the document, then in this case, the delta payload of the new update would be the name of the document set by that user. Hence, the time-traveling queries work on two core concepts, the appending update graph and the delta payload which contains information that is required to go from the previous state to the next state. With both of these, whenever a user submits a regular query, the query caches the present state of the document within the database. And we internally issue a time-traveling query for the current state, with the only upside being that the user can submit a non-time-traveling query faster since a cached version of the same is already stored in the database. Thus, using this cached version of the present state of the document, the user can apply a time-traveling query using the CID of the specific version they want to query in the document. The database will then set the CID provided by the user as the Target State, a state at which the query will stop and go back to the beginning of the document, known as the Genesis State. The query will then apply all its operations until it reaches back to the Target State. 
 
