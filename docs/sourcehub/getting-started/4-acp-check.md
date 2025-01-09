@@ -5,7 +5,7 @@ title: Access Requests
 
 Now that we have an existing account and created policy, we're going to seed it with some resources and evaluate some `Check` requests.
 
-> A [`Check`](zanzibar-concept) request is how we determine if a given action on a reasource by an actor is allowed. 
+> A [`Check`](zanzibar-concept) request is how we determine if a given action on a resource by an actor is allowed. 
 
 We are using the policy we created for our basic note app from the last step, which has a policy id of `a3cc042579639c4b36357217a197e0bb17bdbb54ff322d4b52e4bba4d19548bf`. 
 
@@ -16,7 +16,7 @@ The full command is:
 sourcehubd tx acp direct-policy-cmd register-object a3cc042579639c4b36357217a197e0bb17bdbb54ff322d4b52e4bba4d19548bf note alice-grocery-list --from <wallet_name>
 ```
 
-We now have created the the `alice-grocery-list` and registered the `owner` as whatever wallet you used for `<wallet_name>`.
+We now have created the `alice-grocery-list` and registered the `owner` as whatever wallet you used for `<wallet_name>`.
 
 To verify this, we can run a request to inspect the resource owner.
 ```bash
@@ -33,7 +33,7 @@ After registering an object and verifying its owner, we can add a collaborator, 
 
 We are going to introduce a new actor `BOB` who has an identity `did:key:z6Mkmyi3eCUYJ6w2fbgpnf77STLcnMf6tuJ56RQmrFjce6XS`.
 
-To add `BOB` as a `collaborator` (which is a specific relation defined on the [policy](example-basic-policy)) we can issue a a `set-relationship <policy-id> <resource-name> <resource-id> <relation> <subject>` where `<relation>` is `collaborator` and `<subject>` is the BOB identity above (`did:key:z6Mkmyi3eCUYJ6w2fbgpnf77STLcnMf6tuJ56RQmrFjce6XS`).
+To add `BOB` as a `collaborator` (which is a specific relation defined on the [policy](example-basic-policy)) we can issue a `set-relationship <policy-id> <resource-name> <resource-id> <relation> <subject>` where `<relation>` is `collaborator` and `<subject>` is the BOB identity above (`did:key:z6Mkmyi3eCUYJ6w2fbgpnf77STLcnMf6tuJ56RQmrFjce6XS`).
 ```
 sourcehubd tx acp direct-policy-cmd set-relationship a3cc042579639c4b36357217a197e0bb17bdbb54ff322d4b52e4bba4d19548bf note alice-grocery-list collaborator did:key:z6Mkmyi3eCUYJ6w2fbgpnf77STLcnMf6tuJ56RQmrFjce6XS --from <wallet_name>
 ```
@@ -45,7 +45,7 @@ sourcehubd q acp verify-access-request a3cc042579639c4b36357217a197e0bb17bdbb54f
 
 Which will return `valid: true`.
 
-Lets check for a permission that Bob *shouldn't* have, like `edit` which is reserved for `OWNERs`.
+Let's check for a permission that Bob *shouldn't* have, like `edit` which is reserved for `OWNERs`.
 ```bash
 sourcehubd q acp verify-access-request a3cc042579639c4b36357217a197e0bb17bdbb54ff322d4b52e4bba4d19548bf did:key:z6Mkmyi3eCUYJ6w2fbgpnf77STLcnMf6tuJ56RQmrFjce6XS note:alice-grocery-list#edit
 ```

@@ -7,7 +7,7 @@ The following command will generate a new random private key with the name `<wal
 ```bash
 sourcehubd keys add <wallet_name>
 ```
-This will output the newly generated key public key, address, and mnemonic (make sure to backup the mnemonic)
+This will output the newly generated public key, address, and mnemonic (make sure to back up the mnemonic).
 
 ![Wallet output](/img/sourcehub/key-add-output.png)
 
@@ -20,7 +20,7 @@ sourcehubd keys add --recover <wallet_name>
 Then input your existing mnemonic when prompted.
 
 :::warning
-You MUST ensure that you sufficiently backup your mnemonic. Failure to do so may result in lost access to your wallet.
+You MUST ensure that you sufficiently back up your mnemonic. Failure to do so may result in lost access to your wallet.
 :::
 
 ## Configuring client
@@ -43,4 +43,4 @@ Finally, we can verify that our account exists and that it has been loaded with 
 sourcehubd query bank balances <wallet_name>
 ```
 
-That it, we now have a newly generated local wallet via the `CLI` client. Now we can interact with the network! First up, we will be creating an ACP policy, seeding it with some state, and executing authorization checks.
+That's it, we now have a newly generated local wallet via the `CLI` client. Now we can interact with the network! First up, we will be creating an ACP policy, seeding it with some state, and executing authorization checks.
