@@ -1,6 +1,6 @@
 # Getting Started
 
-To get started with SourceHub, we need to download and initialize our local client. This section will utilize the `CLI` but equivalent functionaly is available using the programatic embedded API.
+To get started with SourceHub, we need to download and initialize our local client. This section will utilize the `CLI` but equivalent functionality is available using the programmatic embedded API.
 
 ## 1. Install SourceHub
 First, we will download the SourceHub binary which includes a client.
@@ -10,11 +10,11 @@ You can get precompiled binaries from our Github Release page [here](https://git
 cd $HOME
 wget https://github.com/sourcenetwork/sourcehub/releases/download/v0.2.0/sourcehubd
 chmod +x sourcehubd
-sudo mv /usr/bin
+sudo mv sourcehubd /usr/bin
 ```
 
 ### From Source Code
-You can download the code and compile your own binaries if you prefer. However you will need a local installation of the go toolchain at a minimum version of 1.22
+You can download the code and compile your own binaries if you prefer. However you will need a local installation of the Go toolchain with a minimum version of 1.22.
 ```bash
 cd $HOME
 git clone https://github.com/sourcenetwork/sourcehub
