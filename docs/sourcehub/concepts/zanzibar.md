@@ -5,9 +5,7 @@ title: Zanzibar Access Control
 
 # Introduction
 
-Zanzibar was first introduced by Google in their [whitepaper](https://research.google/pubs/pub48190/).
-In essence, Zanzibar is an Authorization Service which powers Google's services.
-Its main purpose boils down to answering Access Requests, which in plain English can be translated to the question:
+Zanzibar was first introduced by Google in their [whitepaper](https://research.google/pubs/pub48190/). It is an authorization service which powers Google's services. Its main purpose boils down to answering Access Requests, which in plain English can be translated to the question
 
 > Can user U do operation O over object A?
 
@@ -29,7 +27,6 @@ The book's author should be able to read and edit their own book - meaning the o
 
 These relations exist in virtually every problem domain, so much so there are specialized languages dedicated to representing those relations, such as Description Logic.
 RelBAC exploits these relations in order to figure out permissions.
-
 
 ## Zanzibar's RelBAC
 
