@@ -3,6 +3,8 @@ sidebar_label: Secondary index guide
 sidebar_position: 80
 ---
 
+# Secondary Indexes
+
 ## Introduction
 
 DefraDB provides a powerful and flexible secondary indexing system that enables efficient document lookups and queries.
@@ -103,7 +105,7 @@ JSON fields differ from other field types (e.g., Int, String, Bool) because they
 
 #### JSON Interface
 
-DefraDB's JSON interface, defined in client/json.go, is essential for managing JSON fields. It allows the system to:
+DefraDB's JSON interface, defined in [`client/json.go`](https://github.com/sourcenetwork/defradb/blob/master/client/json.go), is essential for managing JSON fields. It allows the system to:
 
 Traverse all leaf nodes in a JSON document.
 Represent a JSON value as either a complete document or a single node within the structure.
@@ -157,7 +159,7 @@ When indexing a document with JSON fields, the system:
 ##### Query example
 Retrieve documents where the model is "iPhone":
 
-```
+```graphql
 query {
     Collection(filter: {
         jsonField: {
