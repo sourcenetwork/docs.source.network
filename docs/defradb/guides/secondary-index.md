@@ -1,5 +1,5 @@
 ---
-sidebar_label: Secondary index guide
+sidebar_label: Secondary Index Guide
 sidebar_position: 80
 ---
 
