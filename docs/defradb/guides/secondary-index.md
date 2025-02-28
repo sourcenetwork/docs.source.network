@@ -75,7 +75,7 @@ query {
 - Retrieve the corresponding User documents. This method is much faster because indexes enable direct lookups.
 
 #### Enforcing relationship cardinality
-Indexes can also enforce one-to-one relationships. For instance, to ensure each User has exactly one unique Address:
+Indexes can also enforce one-to-one relationships. For instance, to ensure each Address has exactly one unique User:
 
 ```graphql
 type User {
