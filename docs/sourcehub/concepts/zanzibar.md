@@ -3,36 +3,28 @@ date: 2023-09-08
 title: Zanzibar Access Control
 ---
 
-# Introduction
+## Introduction
 
-Zanzibar was first introduced by Google in their [whitepaper](https://research.google/pubs/pub48190/). It is an authorization service which powers Google's services. Its main purpose boils down to answering Access Requests, which in plain English can be translated to the question
+[Zanzibar](https://research.google/pubs/pub48190/) is an authorization service introduced by Google to manage access control across its services.
+Its primary function is to evaluate access requests by answering:
 
-> Can user U do operation O over object A?
+> Can user **U** perform operation **O** on object **A**?  
 
-The remainder of this article introduces Zanzibar's Access Control model, how it was designed to fulfill Access Requests and propose a model to aid understanding.
+This article explores Zanzibar's access control model, how it handles access requests, and a conceptual framework for understanding it.  
 
 ## Relation Based Access Control Model
 
-The field of Access Control is a branch which studies how to manage who or what can operate a certain resource within a system, which is to say, whether something has a permission to do something.
-Zanzibar is an implementation which closely resembles the model known as ["Relation Based Access Control"](https://ieeexplore.ieee.org/abstract/document/4725889/)(RelBAC).
+Access control determines who or what can operate on a given resource within a system. Zanzibar implements a model closely aligned with [Relation-Based Access Control (RelBAC)](https://ieeexplore.ieee.org/abstract/document/4725889). RelBAC defines permissions based on relationships between entities. Similar to relational databases and object-oriented modeling, it establishes access rules using entity relationships.
 
-The primary idea behind RelBAC is that objects within a system have relations amongst themselves, and through these relations the system can resolve Access Requests.
-This notion of relations should feel familiar to Relational Databases and Class Diagrams in Object Oriented Modeling.
+E.g. A book is written by an author. The book and author are connected by the authored relation. This relation implies permissions—an author should have read and edit access to their book.
 
-To illustrate RelBAC take the familiar example of: "a book is written by an author".
-From that sentence we can identify two entities, "book" and "author.
-Furthermore there exists a relation between these two entities, a book was *authored* by an author.
-The key to RelBAC is noticing that this relation can be used to derive permissions.
-The book's author should be able to read and edit their own book - meaning the operations "read" and "edit" should be allowed for an author.
-
-These relations exist in virtually every problem domain, so much so there are specialized languages dedicated to representing those relations, such as Description Logic.
-RelBAC exploits these relations in order to figure out permissions.
+Such relationships exist across various domains, often represented using specialized languages like description logic. RelBAC leverages these relationships to determine permissions dynamically.
 
 ## Zanzibar's RelBAC
 
-A very important concept drawn from Zanzibar is that of Relation Tuples, which are used to represent a Relation between system objects.
+A key concept in Zanzibar is the **Relation Tuple**, which represents relationships between system objects.  
 
-The Relation Tuple is defined as:
+### Relation Tuple
 
 ```
 tuple := (object, relation, user)
@@ -43,101 +35,109 @@ namespace := string
 id := string
 ```
 
-A Relation Tuple is a 3-tuple which contains a reference to an object, some named relation and an user.
-The 3-tuple `(article:zanzibar, publisher, corporation:google)` represents a relationship between the zanzibar article and the google corporation.
+A Relation Tuple is a **3-tuple** containing:  
 
-More interestingly however is the variant of `user` given by the pair `(object, relation)`, in Zanzibar's white paper this pair is called `userset`.
-The userset is a convenient way to express a group of users.
-The users given by the userset is the set of all users which are referenced in a relationship with the same object and relation as the userset.
+1. **Object** – The entity being referenced.  
+2. **Relation** – A named association between entities.  
+3. **User** – The entity granted access, which can be:  
+   - A direct reference to an object.  
+   - A **userset** (an indirect group reference).  
 
-Example:
-Take the userset `(group:engineering, member)` and the tuples:
+E.g. The tuple `(article:zanzibar, publisher, corporation:google)` defines a relationship where **Google (corporation:google) is the publisher of the Zanzibar article (article:zanzibar)**.  
 
-- `(group:engineering, member, user:bob)` 
+### Usersets  
+
+A **userset** is a special form of `user` defined as `(object, relation)`, grouping users who share the same relation to an object.  
+
+#### Example  
+
+Consider the userset  `(group:engineering, member)`  and the tuples:
+
+- `(group:engineering, member, user:bob)`
 - `(group:engineering, member, user:alice)`.
 
-The userset `(group:engineering, member)` expands to the users `bob` and `alice`.
+The userset `(group:engineering, member)` expands to include **Bob and Alice** as members.  
 
-Effectively usersets add a layer of indirection to the Relation Tuple.
-A Tuple can specify an Userset, and the Userset's Tuples can in turn specify an Userset.
-The Relation Tuple was designed to support recursive definitions.
+### Recursive Definitions  
 
-## The Relation Graph
+Usersets introduce a layer of indirection in Relation Tuples, allowing tuples to reference other usersets. This enables **recursive definitions**, where a tuple can specify a userset that, in turn, references another userset, supporting complex access hierarchies.
 
-A key insight to grok Zanzibar is to notice that a set of Tuples defines a Graph, let's call it the Relation Graph.
+## The Relation Graph  
 
-In order to vizualise this fact, notice that a Relation Tuple can be rewritten as a pair of pairs: ((object, relation), (object, relation)), let's call the object-relation pairs Relation Nodes.
-The first pair is given by the tuple's Object and Relation as per usual, the second pair is taken to be an userset.
-If we assume relations can be empty, this representation covers all cases mentioned in the original definition.
+A key insight into Zanzibar is recognizing that a set of Tuples forms a **Relation Graph**.  
 
-With this interpretation, we can start to see the relation graph taking shape.
-Each Relation Tuple actually defines an Edge in the Relation Graph.
-Each Node in the Relation Graph is given by an object-relation pair.
+### Structure of the Relation Graph  
 
-As an example, take the tuples:
-- ("file:readme", "owner", "bob")
+A Relation Tuple can be rewritten as a **pair of pairs**:  
+- ((object, relation), (object, relation))
+
+These **object-relation pairs** are called **Relation Nodes**. The first pair represents the Tuple’s **Object and Relation**, while the second represents a **userset**. If relations are allowed to be empty, this structure accommodates all cases from the original definition.  
+
+Each **Relation Tuple** defines an **Edge** in the Relation Graph, and each **Node** corresponds to an object-relation pair.  
+
+### Example
+
+Given the following tuples:  
+
 - ("file:readme", "owner", "bob")
 - ("file:readme", "reader", "group:engineering", "member")
 - ("group:engineering", "member", "alice")
 
-Would look like this as a graph:
+The corresponding Relation Graph looks like this:  
+
+![Relation Graph Example](/img/sourcehub/relgraph-simple.png)  
+
+### Using the Relation Graph  
+
+The Relation Graph provides a **system-wide view** of all objects and their relationships. It enables answering questions such as:  
+
+> Does user **U** have relation **R** with object **O**?  
+
+This question is resolved by starting at node `(O, R)`, traversing the graph, and checking for user **U**.  
+
+If **R** represents a permission (e.g., `"read"`, `"write"`, `"delete"`), the Relation Graph serves as a structured way to enforce and evaluate access control.  
+
+## Userset Rewrite Rules  
+
+Relation Tuples provide a **generic and powerful** model for representing **relations and permissions** in a system. However, they are minimalistic, often leading to redundant tuples.  
+
+Historically, **grouping relations** and **grouping objects** have been crucial in access control. Theoretically, these features are essential for Zanzibar to qualify as a **Relation-Based Access Control (RelBAC)** implementation.  
+
+To address this, Zanzibar introduces **Userset Rewrite Rules**.  
+
+### Overview of Userset Rewrite Rules  
+
+Userset Rewrite Rules are not immediately intuitive.  
+
+A **rule** functions as a **transformation** on a **Relation Node** `(object, relation)`, returning a set of **descendant Relation Nodes**.  
+
+#### Example
+
+Let **A** be a **Relation Node** and **R** be a **Rewrite Rule**. Then:  
+
+R(A) → {B, C, D}
+
+This means that applying **R** to **A** produces a **set of descendant Relation Nodes** `{B, C, D}`.  
+
+Rules are associated with specific **relations** and **execute at runtime**, dynamically resolving permissions as Zanzibar traverses the Relation Graph.
+
+### Permissions hierarchy and computed usersets
+
+A permission hierarchy simplifies access control by linking stronger and weaker permissions. If a user has permission to perform a higher-level action, they automatically gain permission for related lower-level actions. For example, the ability to write typically includes the ability to read. This hierarchy reduces administrative effort and simplifies rule management in an Access Control System.
+
+Refer to the following Relation Graph for a visual representation.
 
 ![Relation Graph Example](/img/sourcehub/relgraph-simple.png)
 
-The Relation Graph is a view over the set of all objects in a system and the relations between these objects.
-Through the relation graph it's possible to answer questions such as "does user U have relation R with object O"?
-We can answer that question by starting at the node given by (O, R) and walking through the graph looking for U.
-If we take relation R to represent a permission or an operation such as "read", "write", "delete" or whatever, we can use the Relation Graph to answer the originally posed as the object of study within the field of Access Control.
+In our system, Bob is both a *reader* and an *owner*. If ownership always implies read access, maintaining redundant permission tuples adds unnecessary overhead. Zanzibar addresses this with the **Computed Userset** rule, which dynamically links relations in the permission hierarchy. To enforce that *owner* always implies *reader*, we define a **Computed Userset("owner")** rule for the *reader* relation. This rule automatically extends permissions without requiring additional tuples.
 
-## Userset Rewrite Rules
+When checking if Bob has *reader* access to `file:readme`, Zanzibar follows these steps:
 
-The Relation Tuples model a generic and powerful system to represent Relations and consequently Permissions in a system.
-With that said, Tuples are very bare bones, which leads to a redundant tuples.
-Historically, grouping relations and grouping objects proved to be extremely useful in access control.
-From a theoretical perspective, these features are required for Zanzibar to be considered a "Relation Based Access Control" implementation.
+1. Start at the node `("file:readme", "reader")` and check for associated rules.
+1. Detect the **Computed Userset("owner")** rule, which creates a new relation node `("file:readme", "owner")` as a successor of `("file:readme", "reader")`.
+1. Continue searching through `("file:readme", "owner")`.
 
-Zanzibars "Userset Rewrite Rules" addresses these issues.
-
-### Rewrite Rule Briefing
-
-Userset Rewrite Rules aren't extremely intuitive.
-
-A Rule can be thought of as a function which takes an object-relation pair (ie Relation Node) and returns a set of Relation Nodes which are interpreted as descendents of the input node.
-Example: let A be a Relation Node and R be a Rewrite Rule: R(A) returns a set of Relation Nodes which are descedents of A.
-Rules are associated to Relations.
-
-A final remark: rules are evaluated during runtime, for every Relation Node Zanzibar encounters while searching through the Relation Graph.
-
-
-### Permissions Hierarchy & Computed Usersets
-
-Permission Hierarchy is a big word for a simple idea.
-It basically means that permission to do some operation implies permission to do some other "weaker" operation.
-
-ie. the permission to write (in most cases) implies the permission to read beforehand.
-
-From a practical perspective, this feature greatly reduces the administrative burden and complexity associated to managing rules in an Access Control System.
-
-Take for instance the previous Relation Graph, repeated here for convenience.
-
-![Relation Graph Example](/img/sourcehub/relgraph-simple.png)
-
-Note that Bob is both a "reader" and an "owner".
-Suppose that in our system "owner" should always imply "reader", there's an additional cost associate with maintaining these redundant Tuples.
-
-In Zanzibar there is a Rule for associating Relations, the "Computed Userset" rule.
-
-A Computed Userset is a rule defined for some Relation name which dynamically adds another Node to the Relation Graph.
-
-As a way of an example, let's add a Rule such that "owner" implies "reader".
-In Zanzibar that would be done by adding a `Computed Userset("owner")` Rule to the `reader` Relation.
-
-Now, let's walk through an example to see how Zanzibar handles that.
-Suppose we ask Zanzibar to check whether "bob" is a "reader" of "file:readme", zanzibar would:
-
-1. start at the node `("file:readme", "reader")` and look for any rules associated to the `reader` relation.
-2. With the `Computed Userset("owner")` rule, it would create a new Relation Node `("file:readme", "owner")` and set it as a successor of `("file:readme", "reader")`
-3. Continue the search through `("file:readme", "owner")`
+This approach ensures efficient permission management by dynamically resolving inherited access rights.
 
 ![Computed Userset Evaluation](/img/sourcehub/cu-annotated.png)
 
@@ -145,70 +145,87 @@ Using a Computed Userset we successfully added a rule to Zanzibar which automati
 This enable users to define a set of global rules for a relation as opposed to adding additional Relation Tuples for each object in the system.
 This powerful mechanism greatly decreases the maintainability cost associated to Relation Tuples.
 
-### Object Hierarchy & Tuple to Userset
+### Object Hierarchy and Tuple to Userset
 
-Before diving into the Tuple to Userset rule it's important to recall the main idea behind RelBAC: the relations among system objects can be used to derive permissiosn and fulfill Access Requests.
+Before exploring the **Tuple to Userset** rule, let's revisit the core idea of **RelBAC**: relationships between system objects define permissions and determine access control. We have already seen how **Relation Tuples** link objects to users and how **Usersets** establish hierarchies and group users. However, we have yet to define how Zanzibar can create **relationships between objects** and group them accordingly. This is where the **Tuple to Userset** rule comes into play.  
 
-We have seen how to relate objects to users using Relation Tuples.
-Usersets allows us to define hierarchy between users and group them.
-The missing link so far is how can we use Zanzibar to create Relations between Objects and consequently group them.
-That's where the Tuple to Userset comes in.
+To illustrate this concept, let's consider a familiar **filesystem permission model**.  
 
-To motivate this topic, we shall use the familiar example of a file system permission system.
-Filesystems are composed of directories, files and users.
-Users owns files and directories, directories contains files and for this example read permission over a directory implies read permission over all files in a directory.
+A filesystem consists of:  
 
-Let the Tuples in the system be illustrated by the following Relation Graph:
+- **Directories**, **files**, and **users**  
+- Users who **own** files and directories  
+- Directories that **contain** files  
+
+In this example, having **read** permission on a directory should automatically grant **read** permission for all files within that directory. The **Tuple to Userset** rule enables this by defining relationships between objects dynamically.  
+
+The following **Relation Graph** illustrates the existing **Tuples** in the system:  
 
 ![File system example](/img/sourcehub/ttu-relgraph.png)
 
-The problem at hand is: how to declare that Bob's readme file is under Alice's home directory.
-Furthermore, how can we declare that Alice should be able to read file readme, since it is contained in her directory.
+We need to express two key relationships:  
 
-One way to solve the problem regarding the permission is to create a Relation Tuple from the file to the directory.
-The tuple `(file:/home/readme, reader, (directory:/home, owner))` will do the trick, by adding the set of directory owners as readers.
+1. Bob’s `readme` file is inside Alice’s `/home` directory.  
+1. Since the file is in her directory, Alice should have **read** access to it.  
+
+One way to grant Alice read access is to create a **Relation Tuple** that links the file to the directory’s owners.  
+The tuple `(file:/home/readme, reader, (directory:/home, owner))` ensures that **directory owners automatically become file readers**.  
+
+The updated **Relation Graph** now looks like this:  
 
 ![File System Relation Graph with Relation from File to Directory owners](/img/sourcehub/ttu-relgraph-2.png)
 
-This solves the permission problem but a problem remains, this approach creates no relation between the file and the directory themselves.
-The Relation Tuple only states that directory owners are also file readers.
+While this grants the correct **permissions**, it does not establish an explicit **relationship** between the file and the directory itself. The **Relation Tuple** only states that **directory owners are also file readers**, but it does not indicate that `file:/home/readme` is actually **contained** within `directory:/home`.  
 
-What we really want is to declare a relation between a file and directory and from that relation get to the set of directory owners, as shown in the following image:
+To fully represent the **structure** of the filesystem, we need a way to explicitly define object relationships. This is where the **Tuple to Userset** rule becomes essential.
+
+What we truly need is a way to **declare a relationship between a file and a directory** and, from that relationship, derive the **set of directory owners**. The following image illustrates this concept:  
 
 ![File System Relation Graph parent relation](/img/sourcehub/ttu-relgraph-3.png)
 
-From the image we see that the file is related to its directory through the `parent` relation.
-This representation explicitly outlines how files and directories are associated in the system.
-All that is missing is tracing a path from the `/home/readme, reader` node to the `/home, owner` node, completing the chain.
+From this representation, we see that the file is linked to its directory through the **`parent`** relation. This explicitly defines the **structural** relationship between objects in the system. However, to complete the access control logic, we need a way to trace a path from the `("/home/readme", "reader")` node to the `("/home", "owner")` node.
 
-This *could* be done by using a Computed Userset rule pointing from reader to parent and an additional Relation Tuple between the `/home` node and `/home, owner` but that still blurs the line between what is an actual Relation between objects and Access Control rules.
-The Tuple to Userset rule solves this exact problem.
+One possible approach would be to use:  
 
-The Tuple to Userset rule is essentially a Tuple query chained with a Computed Userset rule.
-It takes two arguments: a "Tupleset Filter" and a "Computed Userset Relation".
-The rule first rewrites the current Relation Node using the Tupleset Filter, with the new node it then fetches all successors of that node.
-With the resulting successor set, it performs a Computed Userset Rewrite using the supplied "Computed Userset Relation".
+- A **Computed Userset** rule, linking `reader` to `parent`  
+- An additional **Relation Tuple** between `/home` and `/home, owner`  
 
-The Tuple to Userset rule is very powerful in that it allows the application to declare a Relation between two objects, thus allowing object hiearchies as we've just explored.
+However, this method **mixes object relationships with access control rules**, making it difficult to separate concerns. This is exactly the problem that the **Tuple to Userset** rule solves.  
 
-Note however that the main benefit of the `Tuple to Userset` is the fact that it allows an application to create only Tuples which expresses Relations, without requiring additional Tuples which would otherwise exist only for deriving Permission rules.
-This may seem trivial but it has profound implications, the fact that Zazibar supports Relations like these, means that the Application - which ultimately is responsible for creating the Tuples - need not be aware that a Relation Tuple from `/home/readme` to the parent directory needs to be created.
-The rules of access control are inconsequential at the application layer, being contained entirely within Zanzibar.
-The Tuple to Userset is fundamental to decouple Permission and Access Control logic from the application because it supports complex hiearchies between objects to be translated into Access Control rules.
+The **Tuple to Userset** rule is essentially a **Tuple query** combined with a **Computed Userset** rule. It takes two arguments:  
 
-Finally, let's see the TupleToUserset in action.
+- **Tupleset Filter** – Specifies the relation between objects  
+- **Computed Userset Relation** – Defines how permissions should propagate  
 
-Let the Rule `TupleToUserset(tupleset_filter: "parent", computed_userset: "reader")` be associated with the "reader" relation and assume the same Relation Tuples shown above.
+1. The rule first **rewrites the current Relation Node** using the **Tupleset Filter**.  
+2. Using this new node, it **fetches all successor nodes**.  
+3. The successor set is then processed through a **Computed Userset Rewrite**, applying the supplied **Computed Userset Relation**.
 
-Evaluating the TupleToUserset rule requires the following steps:
+The **Tuple to Userset** rule is powerful because it allows an application to **declare relationships between objects** without embedding access control logic in the application itself. This enables **object hierarchies** to be seamlessly translated into **access control rules**.  
 
-1. start at the Relation Node `(file:/home/readme, reader)`.
-2. Evaluate Rule `TupleToUserset(tupleset_filter: "parent", computed_userset: "reader")`
-3. Build a filter using "tupleset_relation" -> `(file:readme, parent)`
-4. Fetch all successors of the filter built in step 3 -> `[(directory:/home)]`
-5. Apply a Computed Userset rewrite rule using the provided "computed_userset" relation for each Relation Node fetched -> `[(directory:/home, reader)]`
+The key benefit of **Tuple to Userset** is that applications only need to create **Tuples expressing object relationships**—without extra tuples just for permission derivation.  
 
-Another explanation is given the following image:
+This has **profound implications**:  
+
+- Applications no longer need to **explicitly track access control logic**.  
+- The rules of access control remain **entirely within Zanzibar**.  
+- The **application layer is unaware of access rules**, focusing solely on object relationships.  
+
+By enabling complex object hierarchies to be **natively converted into access control rules**, the **Tuple to Userset** rule fundamentally decouples **permission management** from application logic.  
+
+Finally, let's see the TupleToUserset rule in action.  
+
+Let the rule `TupleToUserset(tupleset_filter: "parent", computed_userset: "reader")` be associated with the `"reader"` relation, and assume the same Relation Tuples as shown earlier.  
+
+Evaluating the TupleToUserset rule follows these steps:  
+
+1. Start at the Relation Node `(file:/home/readme, reader)`.  
+2. Evaluate the rule `TupleToUserset(tupleset_filter: "parent", computed_userset: "reader")`.  
+3. Build a filter using `"tupleset_filter"` -> `(file:/home/readme, parent)`.  
+4. Fetch all successors of the filter from step 3 -> `[(directory:/home)]`.  
+5. Apply a Computed Userset rewrite rule using the `"computed_userset"` relation for each fetched Relation Node -> `[(directory:/home, reader)]`.  
+
+This process ensures that the `"reader"` permission propagates correctly through the object hierarchy. The following image further illustrates the concept:  
 
 ![Tuple to Userset Evaluation](/img/sourcehub/ttu-eval.png)
 
@@ -217,32 +234,15 @@ The following image shows the edges the rule added:
 
 ![](/img/sourcehub/ttu-relgraph-annotated.png)
 
-### Rewrite Rule Expression
+### Rewrite Rule Expression  
 
-One final passing note about Rewrite Rules: in Zanzibar a relation can have multiple rewrite rules.
-These rewrite rules are combined to form Rewrite Rule expressions.
+In Zanzibar, a relation can have multiple rewrite rules. These rules are combined to form Rewrite Rule expressions. Each rewrite rule returns a set of Relation Nodes (or usersets), which are then combined using set operations defined in the Rewrite Rule Expression. The available set operations are union, difference, and intersection. When evaluating each Rewrite Rule, the resulting sets of Nodes are processed through these set operations. The final evaluated set of Nodes represents all the successors of a parent Relation Node.  
 
-Each Rewrite Rule effectively returns a set of Relation Nodes (or userset) which are combined using the operation defined in the Rewrite Rule Expression.
-Rules are joined using the familiar set operators: union, difference and intersection.
+### Conclusion  
 
-The set operations are applied to the resulting set of Nodes resulting from evaluating each Rewrite Rule.
-This evaluated final set of Nodes is effectively all the successors from a parent Relation Node.
-
-## Conclusion
-
-We've seen how the Relation Tuples actually define a Graph of object-relations, which in turn can be used to resolve Access Requests
-We've also seen how Usersets enables grouping users and applying a Relation to a set of users.
-Finally, we explored how the Userset Rewrite Rules can be used to define a Relation Hierarchy and how it supports Object hiearchies; both of these features are critical to ensure that Access Control Logic stays within Zanzibar.
-
-Although the initial mention of the Relation Graph was extremely helpful to illustrate how it works, the reality is that the actual Relation Graph is dynamically built by Zanzibar from the Relation Tuples and by evaluating the Relation Rewrite Rules.
-The synergy between these two concepts is what powers Zanzibar's Access Control Model.
-
-Under that point of view, we can think of Zanzibar's API as operating over the dynamic Relation Graph.
-The `Check` API call is equivalent to the graph reachability problem.
-`Expand` is used as a debug tool to dump the Goal Tree used while evaluating the recursive expansion of Rewrite Rules and sucessor fetching.
-
+The Relation Tuples define a graph of object relationships, which is used to resolve Access Requests. Usersets enable grouping users and applying relations to an entire set of users. The Userset Rewrite Rules allow the creation of Relation Hierarchies and support Object Hierarchies. These features are critical for keeping Access Control Logic within Zanzibar. While the Relation Graph was useful for illustration, in practice, Zanzibar dynamically constructs the graph from Relation Tuples and evaluates the Rewrite Rules. This synergy between Relation Tuples and Rewrite Rules powers Zanzibar’s Access Control Model. From this perspective, Zanzibar’s API operates on the dynamic Relation Graph. The `Check` API call corresponds to a graph reachability problem. The `Expand` API serves as a debugging tool, exposing the Goal Tree used during the recursive expansion of Rewrite Rules and successor retrieval.  
 
 # References
 
-- Zanzibar: https://research.google/pubs/pub48190/
-- RelBAC: https://ieeexplore.ieee.org/abstract/document/4725889/
+- Zanzibar: <https://research.google/pubs/pub48190/>
+- RelBAC: <https://ieeexplore.ieee.org/abstract/document/4725889/>
