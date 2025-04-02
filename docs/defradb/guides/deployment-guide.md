@@ -1,6 +1,6 @@
 ---
 sidebar_label: Deployment Guide
-sidebar_position: 70
+sidebar_position: 80
 ---
 # A Guide to DefraDB Deployment
 DefraDB aspires to be a versatile database, supporting both single-node and clustered deployments. In a clustered setup, multiple nodes collaborate seamlessly. This guide walks you through deploying DefraDB, from single-node configurations to cloud and server environments. Let’s begin.
