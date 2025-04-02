@@ -13,7 +13,7 @@ The SourceHub ACP Module is a [Zanzibar](/sourcehub/concepts/zanzibar) based glo
 - **Permissions**: Computed queries over resources, relations, and even other permissions (they're recursive!).
 
 ## Example
-Lets create a very basic example policy which defines a single resource named `note` with both an `owner` and `collaborator` relation which are both of type `actor`.
+Let's create a very basic example policy which defines a single resource named `note` with both an `owner` and `collaborator` relation which are both of type `actor`.
 
 Create a file named `basic-policy.yaml` and paste the following:
 ```yaml
@@ -40,9 +40,9 @@ resources:
 
 Here we are also defining 3 permissions. 
 
-The `read` permission is expressed as `owner + reader` which means *if* you have either an `owner` or `reader` relation *then* you have the `read`.
+The `read` permission is expressed as `owner + collaborator` which means *if* you have either an `owner` or `collaborator` relation *then* you have the `read` permission.
 
-Both the `edit` and `delete` permissions are reserved soley for those with the `owner` relation.
+Both the `edit` and `delete` permissions are reserved solely for those with the `owner` relation.
 
 :::info
 Traditionally we define relations as nouns and permissions as verbs. This is because we often understand authorization as some *thing* (noun) performing some *action* (verb) on some resource. 
@@ -51,13 +51,13 @@ Traditionally we define relations as nouns and permissions as verbs. This is bec
 ### Upload Policy
 Now that we have defined our policy, we can upload it to SourceHub.
 ```bash
-sourcehub tx acp create-policy basic-policy.yaml --from <wallet_name>
+sourcehubd tx acp create-policy basic-policy.yaml --from <wallet_name>
 ```
 
 Then, to get the policy we can list the existing policies.
 
 ```bash
-sourcehub q acp policy-ids
+sourcehubd q acp policy-ids
 ```
 
 ![Policy IDs](/img/sourcehub/policy-ids-1.png)
