@@ -1,7 +1,9 @@
 ---
-sidebar_label: Secondary index guide
+sidebar_label: Secondary Index Guide
 sidebar_position: 80
 ---
+
+# Secondary Indexes
 
 ## Introduction
 
@@ -73,7 +75,7 @@ query {
 - Retrieve the corresponding User documents. This method is much faster because indexes enable direct lookups.
 
 #### Enforcing relationship cardinality
-Indexes can also enforce one-to-one relationships. For instance, to ensure each User has exactly one unique Address:
+Indexes can also enforce one-to-one relationships. For instance, to ensure each Address has exactly one unique User:
 
 ```graphql
 type User {
@@ -103,7 +105,7 @@ JSON fields differ from other field types (e.g., Int, String, Bool) because they
 
 #### JSON Interface
 
-DefraDB's JSON interface, defined in client/json.go, is essential for managing JSON fields. It allows the system to:
+DefraDB's JSON interface, defined in [`client/json.go`](https://github.com/sourcenetwork/defradb/blob/master/client/json.go), is essential for managing JSON fields. It allows the system to:
 
 Traverse all leaf nodes in a JSON document.
 Represent a JSON value as either a complete document or a single node within the structure.
@@ -157,7 +159,7 @@ When indexing a document with JSON fields, the system:
 ##### Query example
 Retrieve documents where the model is "iPhone":
 
-```
+```graphql
 query {
     Collection(filter: {
         jsonField: {
