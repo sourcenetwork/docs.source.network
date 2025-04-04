@@ -195,5 +195,4 @@ They are ideal for **local-first applications**, **high-churn networks**, and **
 
 - [CRDTs: A Comprehensive Guide (University of Lisbon)](https://hal.inria.fr/file/index/docid/555588/filename/techreport.pdf)
 - [Merkle DAGs in IPFS](https://docs.ipfs.tech/concepts/merkle-dag/)
-- [DefraDB GitHub](https://github.com/defradb)
 - [CRDT Types and Implementations - Automerge, Yjs, RGA, etc.](https://crdt.tech)
