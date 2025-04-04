@@ -6,7 +6,7 @@ sidebar_position: 20
 
 ## Overview
 
-The DefraDB Explain System is a powerful tool designed to introspect requests, examine plan graphs, and deliver insights into the execution of queries and mutations in DefraDB. These requests can range from basic information queries to highly intricate multi-step operations, all enabled with a single directive added to the request.
+The DefraDB Explain System is a powerful tool designed to provide insight into query execution. It introspects requests, analyzes plan graphs, and offers developers a clear understanding of how queries and mutations are executed within DefraDB. Requests can vary from simple information queries to complex, multi-step operations, all enhanced with a single directive added to the request.
 
 ### Regular Request
 
@@ -32,53 +32,57 @@ query @explain {
 }
 ```
 
-As application demand grows and schemas expand, requests often become more complex. This could involve adding a type-join or sorting large data sets, which can significantly increase the workload for the database.  This often requires tweaking the query or the schema to ensure requests run as faster. However, without the capability to introspect and understand the request's execution flow, the database will be a black box to developers, limiting their capacity to optimize. This is why DefraDB allows developers to ask for an explanation of the request execution, plan graph, and runtime metrics.
+As application demands grow and schemas expand, requests often become more complex. This could involve adding a type-join or sorting large data sets, which can significantly increase the workload for the database. These complexities often require fine-tuning the query or schema to ensure faster execution. However, without tools to introspect and understand how the query will execute, the database remains a "black box" to developers, limiting their ability to optimize it effectively. This is why DefraDB offers the option to request an explanation of query execution, plan graphs, and runtime metrics.
 
-DefraDB provides the option to explain or analyze requests to gain insight into query resolution. Instead of directly requesting data, these queries ask the database to outline the steps it would take to resolve the request and execute all necessary operations before generating the result. This provides transparency into potential bottlenecks, such as inefficient scans or redundant sorting operations. Explain requests enable developers to better understand the database's inner workings and clarify the operations required for request resolution.
-
-Explain requests interact directly with the request planner, executor, and the resulting Plan Graph.
+By using the Explain System, developers can gain a clearer view of query resolution. Rather than simply requesting data, these queries ask the database to outline the steps it would take to resolve the request and execute all necessary operations before generating the result. This process provides transparency into potential bottlenecks, such as inefficient scans or redundant sorting operations. The Explain System enables developers to understand the intricate inner workings of the database and the operations required to resolve requests.
 
 ## Planner and Plan Graph
 
-The request planner plays a crucial role in DefraDB as it is responsible for executing and presenting request results. When a database receives a request, it converts it into a series of operations planned and implemented by the request planner. These operations are represented as a Plan Graph, which is a directed graph of operations the database must perform to deliver the requested information.
+The request planner is a central component of DefraDB, responsible for executing and presenting results. Upon receiving a request, the database transforms it into a series of operations planned and implemented by the request planner. These operations are represented as a Plan Graph, a directed graph that visualizes the operations the database must perform to deliver the requested information.
 
-The Plan Graph is beneficial because it offers a structured request representation, allowing concurrent traversal, branch exploration, and independent subgraph optimization. Each Plan Graph node represents a specific work unit and consists of smaller graphs. For instance, the Plan Graph may contain scan nodes, index nodes, sorting nodes, and filter nodes, among others. The Plan Graph's order and structure are hierarchical, with each node relying on the previous node's output. For example, the final output may depend on the state rendering, which in turn relies on the state limiting, state sorting, and state scanning.
+The Plan Graph plays an essential role in the system as it offers a structured representation of requests. This structure allows for parallel traversal, branch exploration, and independent subgraph optimization. Each node in the Plan Graph represents a specific operation, such as scans, index lookups, sorting, or filtering. The graph’s structure is hierarchical, where nodes depend on the output of preceding ones. For instance, the final output might rely on earlier operations like state rendering, which itself depends on state limiting, sorting, and scanning.
 
+The Plan Graph simplifies complex operations into smaller, manageable tasks, improving the database’s performance and scalability.
 
-
-The Plan Graph is a vital component of request processing as it enables the database to simplify complex operations into smaller, more manageable units. In this way, the Plan Graph contributes to the database's performance and scalability enhancement.
-
-The Explain System and Plan Graph collectively provide structured, accessible insights and transparency into the steps a database takes to execute a request.
+Together with the Explain System, the Plan Graph offers developers essential insights into how the database executes requests, providing transparency into every step of the process.
 
 ## Benefits
 
-At its core, the Explain System is a tool that assists developers in optimizing database queries and enhancing performance. Here is an example that emphasizes its advantages.
+The Explain System is a valuable tool for optimizing database queries and enhancing performance. Here are some of its key advantages:
 
-Quick scans - Most queries begin with a scan node, which is a brute-force method of searching the entire key-value collection. This can be slow for large data sets. However, by using a secondary index, a space-time tradeoff can be made to improve query performance and avoid full scans.
+### Efficient Query Execution
 
-Use of Secondary Indexes- Determining the performance benefits of adding a secondary index can be challenging. Fortunately, the Explain System offers valuable insights into DefraDB's internal processing and Plan Graph, helping to identify the impact. Most importantly, developers can run a simple Explain request and obtain these insights without actually executing the request or building the index, as it only operates on the plan graph.
+Queries typically begin with a scan node, a method that searches the entire key-value collection. This can be slow for large datasets. By using indexes, DefraDB allows for a space-time tradeoff that improves performance and avoids the need for full scans.
 
-Improved transparency- Submitting an explain request informs developers whether a full table scan or an index scan will be conducted, and which other elements will be involved in the process. This information enables developers to understand the steps required to execute their queries and create more efficient ones.
+### Insights into Index Performance
 
-Query Optimization- For example, it is more efficient to query from primary to secondary than from secondary to primary. The Explain System can also accurately demonstrate the inefficiency of certain queries, such as a simple point lookup compared to an efficient join index. Overall, the Explain System helps developers gain insight into the inner workings of the database and queries, allowing for greater introspection and understanding.
+Determining the impact of adding a secondary index can be difficult. The Explain System provides valuable insights into DefraDB’s internal operations, including how the plan graph and indexes affect query execution. Developers can request an explanation without executing the query or building the index, making it easy to analyze the potential impact.
+
+### Enhanced Transparency
+
+When an Explain request is issued, it reveals whether a full table scan or an index scan will be performed, and it shows which other operations are involved. This transparency helps developers understand the steps the database will take to resolve queries and create more efficient ones.
+
+### Query Optimization
+
+For example, querying from primary to secondary indexes is more efficient than the reverse. The Explain System helps identify inefficiencies, such as performing a simple point lookup rather than using an efficient join index. Overall, it provides developers with valuable insights into the database’s internal operations, enabling better optimization strategies.
 
 ## How it works
 
-When you send a request to the database, it can either execute the request or explain it. By default, the database will execute the request as expected. This will compile the request, construct a plan, and evaluate the nodes of the plan to render the results. 
+When a request is made to the database, it is either executed or explained. By default, the database will execute the request, compiling it, constructing a plan, and evaluating the plan's nodes to produce the result.
 
-Conversely, an Explain will compile the request, construct a plan, and finally walk the plan graph, collecting node attributes and execution metrics. The goal is to gather details about each part of the plan and show this information to the developer in a clear and organized way.
+Alternatively, an Explain request compiles the query, constructs a plan, and walks through the plan graph, collecting node attributes and execution metrics. This provides a detailed overview of each part of the plan, helping developers understand how the request is resolved.
 
-Having the plan arranged as parts in a graph is helpful because it's both fast to process and simple to understand. When a request is changed into an Explain request, it creates an organized view of the plan graph that developers can make sense of. Some smaller details might be left out, but the main points and important features give a clear link between the internal and external views of the graph. By gathering the structure and features of the plan graph, developers can learn the steps needed to run their requests and make them work better and faster.
+The plan is presented as a graph, which is both quick to process and easy to comprehend. Explain requests offer an organized view of the plan graph, where developers can understand the structure and key operations involved in query execution. Although minor details might be omitted, the core elements of the plan are displayed, giving developers a clear understanding of the necessary steps to execute the request efficiently.
 
 ## Types of Explain Requests
 
 ### Simple Explain
 
-Simple Explain Requests is the default mode for explanation, only requiring the additional `@explain` directive. You can also be explicit and provide a type argument to the directive like this `@explain(type: simple)`. 
+The default mode of the Explain System is the Simple Explain Request. This request requires only the `@explain` directive. Developers can also specify the `@explain(type: simple)` directive for clarity.
 
-This mode of explanation returns only the syntactic and structural information of the Plan Graph, its nodes, and their attributes.
+A Simple Explain request returns the syntactic and structural details of the Plan Graph, including the nodes and their attributes.
 
-The following example shows a Simple Explain request applies to an `Author` query request.
+Here’s an example of a Simple Explain request applied to an `Author` query:
 
 ```graphql
 query @explain {
@@ -111,61 +115,59 @@ query @explain {
 }
 ```
 
-With the corresponding Plan Graph:
-
-Simple Explain requests are extremely fast, since it does not actually execute the constructed Plan Graph. It is intended to give transparency back to the developer, and to understand the structure and operations of how the database would resolve their request.
+Simple Explain requests are very fast since they don’t actually execute the plan graph. They’re designed to give developers a transparent view of the operations that would occur during query execution.
 
 ### Execute Explain
 
-Execute explanation differs from Simple mode because it actually executes the constructed plan graph from the request. However, it doesn't return the results, but instead collects various metrics and runtime information about how the request was executed, and returns it using using the same rendered plan graph structure that the Simple Explain does. This is similar to EXPLAIN ANALYZE from PostgreSQL or MySQL
+The Execute Explain request goes beyond Simple Explain by actually executing the constructed plan graph. While it doesn’t return query results, it collects various metrics and runtime information about the execution process and returns these in the same plan graph format used by the Simple Explain request. This functionality is akin to the EXPLAIN ANALYZE feature in databases like PostgreSQL or MySQL.
 
-You can create an Execute Explain by specifying the explain type using the directive type​arguments @explain(type: execute).
+To initiate an Execute Explain request, simply specify `@explain(type: execute)` in the query directive.
 
-The following example shows a Execute Explain request applies to an author query request.
+Here’s an example of an Execute Explain request applied to an `Author` query:
 
 ```graphql
 query @explain(type: execute) {
-	Author {
-		name
-		age
-	}
+ Author {
+  name
+  age
+ }
 }
 ```
 
 ```json
 // Response
 [
-	{
-		"explain": {
-			"executionSuccess": true,
-			"sizeOfResult":     1,
-			"planExecutions":   2,
-			"selectTopNode": {
-				"selectNode": {
-					"iterations":    2,
-					"filterMatches": 1,
-					"scanNode": {
-						"iterations":    2,
-						"docFetches":    2,
-						"filterMatches": 1
-					}
-				}
-			}
-		}
-	}
+ {
+  "explain": {
+   "executionSuccess": true,
+   "sizeOfResult":     1,
+   "planExecutions":   2,
+   "selectTopNode": {
+    "selectNode": {
+     "iterations":    2,
+     "filterMatches": 1,
+     "scanNode": {
+      "iterations":    2,
+      "docFetches":    2,
+      "filterMatches": 1
+     }
+    }
+   }
+  }
+ }
 ]
 ```
 
-Because Execute Explain actually executes the plan, it will of course take more time to complete and return results than the Simple Explain. It will actually take slightly longer to execute than the non-explain counterpart, as it has the overhead of measuring and collecting information.
+Execute Explain requests take longer to process compared to Simple Explain, as they involve executing the plan and measuring additional runtime metrics.
 
 ## Limitations
 
-One disadvantage of the Explain System is that it violates the formal specification of the GraphQL API. This means that certain guarantees, such as the symmetry between the structure of the request and result, is not maintained. 
+While the Explain System offers great benefits, it does come with a limitation: it violates the formal specification of the GraphQL API. Normally, a request sent to a user collection returns an array of users. However, when an Explain directive is added, the response structure changes and represents the plan graph rather than the expected array.
 
-For example, if a request is sent to a user collection, the GraphQL Schema specifies that it will return an array of users. However, if the explain directive is added, the structure of the result will not match the schema specified and will instead be the plan graph representation. While this violation is considered acceptable in order to improve the developer experience, it is important to be aware of this limitation.
+Although this deviation from the schema is an acceptable tradeoff to improve the developer experience, it’s essential to keep this limitation in mind.
 
 ## Next Steps
 
-A future feature called Prediction Explain aims to provide a balance between speed and information. These requests do not execute the plan graph, but instead make educated guesses about the potential impact of the query based on attributes and metrics. Prediction Explain Requests take longer than the Simple Explain System, but not as long as Execution Explain Requests.
+A future feature called Prediction Explain will aim to provide a balance between speed and detail. Prediction Explain will not execute the plan graph but will offer predictions based on request attributes and metrics. This approach will be faster than the Execute Explain but more informative than the Simple Explain.
 
-The Explain System is being developed with additional tooling in mind. Currently, it returns a structured JSON object that represents the plan graph. In the future, the aim is for the tool to provide different representations of the Plan Graph, including a text output that is more easily readable by humans and a visual graph that displays the top-down structure of the graph. In addition to the Simple and Execution Explain Requests that the Explain System currently supports or will support in the future, the team is also working on serializing and representing the returned object in various ways. This will provide developers with more options for understanding and analyzing the database and queries.
+In the long term, the Explain System aims to offer multiple representations of the Plan Graph. These could include a human-readable text format and a visual graph that shows the top-down structure of the plan. Additionally, the system is being developed to allow developers to serialize and analyze the Plan Graph in various ways, making it even more powerful and flexible.
