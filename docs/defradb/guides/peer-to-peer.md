@@ -2,143 +2,275 @@
 sidebar_label: Peer-to-Peer Guide
 sidebar_position: 10
 ---
-# A Guide to Peer-to-Peer Networking in DefraDB
+# Peer-to-Peer Networking in DefraDB
 
 ## Overview
 
-P2P networking is a way for devices to communicate and share data directly with each other without the need for a central server. In a P2P network, all devices, also known as peers, are equal and can both send and receive data. DefraDB is a database that uses P2P networking instead of the traditional client-server model.
+Peer-to-peer (P2P) infrastructure allows entities to communicate and share data directly with each other, eliminating the need for a cloud-based server.
 
-One advantage of this is that it allows for the development of offline-first or local-first applications. These are apps that can still work even when there is no internet connection and can sync data between multiple devices without the need for a central server to facilitate the synchronization. This makes it possible for a peer-to-peer network and database like DefraDB to function in a trustless environment, where no one device is more important or trustworthy than any other. This aligns with the goals of a decentralized, private, and user-centric database.
+- All devices are equal—each can send and receive data independently.
+- No central authority manages synchronization.
+- Improves data privacy, autonomy, and reliability.
 
-P2P networking is the primary method of communication used in DefraDB, a decentralized database. The libp2p library was developed specifically for this purpose and forms the technological foundation of the database. In DefraDB, documents are replicated and combined into an update graph, similar to a version control client like Git or a hash chain or a hash graph. P2P networking allows nodes in DefraDB to communicate directly with each other, without the need for an intermediate node, making it easier to synchronize the updates within the update graph of a document.
+DefraDB leverages P2P infrastructure instead of the traditional client-server model, enabling efficient, local-first software applications that can function seamlessly even without an internet connection.
 
-Libp2p is a decentralized network framework that enables the development of P2P applications. It consists of a set of protocols, specifications, and libraries created by Protocol Labs for the IPFS project. As the network layer for IPFS, libp2p provides various features for P2P communication such as transport, security, peer routing, and content discovery.
+- Applications can synchronize data across multiple devices autonomously.
+- No need for a central entity to manage synchronization.
+- This design fosters data privacy, autonomy, and resilience, ensuring applications continue working in low-connectivity or offline environments.
 
-Libp2p is modular, meaning it can be customized and integrated into different P2P projects and applications. It is designed to work with the IPLD (Inter Planetary Linked Data) data model, which is a suite of technologies for representing and navigating hash-linked data. IPLD allows for the unification of all data models that link data with hashes as instances of IPLD, making it a suitable choice for use with libp2p in P2P networking.
+DefraDB operates in a trustless environment, where no single device holds authority over others.
+
+- Direct Node Communication – Peers exchange updates without intermediaries.
+- Increased Reliability – No single point of failure.
+
+A core component of this system is libp2p, a modular networking framework that powers DefraDB’s communication layer. Originally developed for the IPFS project by Protocol Labs, libp2p provides transport, security, peer routing, and content discovery, making it a robust foundation for local-first software.  
+
+In DefraDB, documents are replicated and structured into an update graph, similar to version control systems like Git or hash-linked data structures such as hash chains and hash graphs. P2P infrastructure enables nodes to exchange updates directly, ensuring seamless synchronization of documents within the update graph.  
+
+The libp2p framework is designed to be modular and adaptable, allowing for integration into diverse P2P-based applications. It works seamlessly with IPLD (InterPlanetary Linked Data)—a data model designed for structuring and linking hash-based data. IPLD unifies various hash-linked data models, providing an efficient mechanism for navigating and managing distributed data structures.  
+
+By combining libp2p’s infrastructure capabilities with IPLD’s data linking model, DefraDB ensures that applications remain distributed, secure, and highly scalable, while maintaining efficient document synchronization across devices in a local-first software infrastructure.  
 
 ## Documents and Collections
 
-The high-level distinction between a document is as follows:
+In DefraDB, data is structured using documents and collections:  
 
-* A document is a single record that contains multiple fields. These documents are bound by schema. For example, each row in an SQL table has multiple individual columns. These rows are analogous to documents with multiple individual fields.
+- **Documents**: A document is a single record composed of multiple fields, governed by a defined schema. This is similar to a row in an SQL table, where each row contains multiple columns. In this analogy, the row represents the document, and the columns represent individual fields.  
 
-* A collection refers to a collection of documents under a single schema. For example, a table from an SQL database comprising of rows and columns is analogous to collections.
+- **Collections**: A collection is a group of documents that share a common schema. This is analogous to a table in an SQL database, where multiple rows (documents) adhere to the same column structure (schema).  
 
-## Need for P2P Networking in DefraDB
+## Why DefraDB needs P2P Infrastructure
 
-The DefraDB database requires peer-to-peer (P2P) networking to facilitate data synchronization between nodes. This is necessary because DefraDB can store documents and individual IPLD blocks on various nodes around the world, which may be used by a single application or multiple applications. P2P networking allows local instances of DefraDB, whether on a single device or in a web browser, to replicate information with other devices owned by the user or with trusted third parties. These third parties may serve as historical archival nodes or may be other users with whom the user is collaborating. For example, if a collaborative document powered by DefraDB is being shared with others, it should be transmitted over a P2P network to avoid the need for a trusted intermediary node. DefraDB offers two types of replication over the P2P network:
+DefraDB relies on peer-to-peer (P2P) infrastructure to facilitate efficient data synchronization between nodes. This is crucial because DefraDB manages documents and IPLD blocks across multiple nodes, which may be accessed by a single application or multiple interconnected applications.  
 
-* Passive replication
+P2P infrastructure allows local instances of DefraDB—whether on a single device or embedded within a browser—to replicate and synchronize information with other devices belonging to the same entity or trusted collaborators. These collaborators could serve as historical archival nodes or participate in data-sharing workflows without relying on a cloud-based intermediary.  
 
-* Active replication
+For example, in a collaborative document-sharing scenario, DefraDB ensures that data is transmitted directly between peers, removing the need for a central server to manage synchronization.  
+
+DefraDB supports two distinct types of P2P replication:  
+
+- **Passive Replication** – Allows nodes to passively receive updates to documents they have subscribed to, ensuring efficient synchronization of frequently accessed data.  
+- **Active Replication** – Enables direct, point-to-point synchronization of entire collections or specific documents, ensuring up-to-date data across multiple nodes.  
+
+By leveraging local-first software and edge computing principles, DefraDB provides a resilient, scalable, and privacy-focused approach to data management.
 
 ## How it works
 
-There are two, concrete types of data replication within DefraDB, i.e., active, and passive replication. Both these replication types serve different use cases and are implemented using different mechanics.
+DefraDB supports two distinct data replication methods: passive replication and active replication. Each method serves different use cases and operates using unique mechanisms to ensure efficient data synchronization across nodes.  
 
 ### Passive Replication
 
-In DefraDB, passive replication is a type of data replication in which updates are automatically broadcast to the network and its peers without explicit coordination. This occurs over a global publish-subscrib network (PubSub), which is a way to broadcast updates on a specific topic and receive updates on that topic. 
+Passive replication enables automatic data broadcasting across the network without explicit coordination. This mechanism operates over a publish-subscribe (PubSub) network, where updates are shared on a specific topic, allowing subscribed peers to receive relevant data in real time.
 
-This is called passive replication because it is similar to a "fire and forget" scenario. Passive replication is enabled for all nodes by default and all nodes will always publish to the larger PubSub network. Passive replication can be compared to the connectionless protocol UDP, while active replication can be compared to the connection-oriented protocol TCP.
+#### Key Characteristics of Passive Replication
+
+- "Fire and Forget" approach: Updates are broadcasted without requiring direct acknowledgments from recipients.
+- Default Behavior: Enabled for all nodes by default, ensuring seamless data propagation across the infrastructure.
+- Analogy to UDP: Similar to the User Datagram Protocol (UDP), passive replication operates in a connectionless manner, where messages are sent without guaranteeing delivery confirmation.  
+
+#### Use Case
+
+Ideal for **collaborative environments** where multiple applications or entities need to stay synchronized with minimal coordination. For instance, in a **shared document scenario**, multiple collaborators can receive real-time updates without direct peer-to-peer interactions.  
+
+---
 
 ### Active Replication
 
-In active replication, data is replicated between nodes in a direct, point-to-point manner. This means that a specific node is chosen to constantly receive updates from the local node. In contrast, passive replication uses the Gossip protocol, which is a peer-to-peer communication mechanism in which nodes exchange state information about themselves and other nodes they know about. In the Gossip protocol, each node initiates a gossip round every second to exchange information with another random node, and the process is repeated until the whole system is synchronized. One difference between active and passive replication is that the Gossip protocol is a multi-hop protocol, meaning that there may be multiple connections between nodes in the network. Active replication, on the other hand, creates a direct connection between two nodes and ensures that updates are actively pushed to the other node, which then acknowledges receipt of the update to establish two-way communication.
+Active replication establishes **direct, point-to-point synchronization** between nodes, ensuring **reliable data transfer** and **acknowledged receipt** of updates.  
 
-Passive replication is a good choice for situations where you want your peers to be able to follow your updates without requiring much coordination from you. It is often used in collaborative environments where multiple people are working on a document and want to ensure that both peers are in sync with each other. On the other hand, active replication is better for situations where you have a specific peer you are collaborating with and want to ensure that all of your data is being replicated to an archival node. This is because active replication involves a direct, point-to-point connection between the two nodes, allowing for more efficient and reliable data replication.
+Unlike passive replication, which relies on the **Gossip protocol** (a mechanism where nodes periodically exchange state information to achieve synchronization), active replication maintains a **persistent connection** between two specific nodes. This allows data to be continuously pushed and acknowledged in a structured manner.  
+
+### **Key Characteristics of Active Replication:**  
+
+- **Direct Node-to-Node Synchronization**: A dedicated peer is selected to receive updates from the local node.  
+
+- **Acknowledgment-Based Communication**: Ensures that updates are successfully received and confirmed, unlike passive replication.  
+
+- **Analogy to TCP**: Similar to the **Transmission Control Protocol (TCP)**, active replication maintains a reliable, ordered, and error-checked data transmission channel.  
+
+- **Multi-Hop vs. Direct Connection**: The **Gossip protocol (used in passive replication)** spreads updates across multiple network hops, while active replication forms a **direct communication channel** between two nodes.  
+
+### **Use Case:**  
+
+Best suited for scenarios where **reliable, dedicated synchronization** is required. For example:  
+
+- **Ensuring complete data replication to an archival node** for backup purposes.  
+- **One-on-one collaboration**, where two entities must remain in perfect sync with **guaranteed data consistency**.  
+
+---
+
+## **Choosing the Right Replication Method**  
+
+| **Replication Type** | **Best For** | **Network Behavior** | **Delivery Guarantee** |
+|:-------------------|:------------|:--------------------|:---------------------|
+| **Passive Replication** | Broad synchronization with minimal overhead | Broadcasts updates to a publish-subscribe network | No direct delivery confirmation (like UDP) |
+| **Active Replication** | Reliable, point-to-point synchronization | Direct connection between two nodes | Guaranteed delivery with acknowledgments (like TCP) |
+
+By leveraging both replication strategies, DefraDB ensures a flexible, scalable, and efficient approach to managing local-first software and edge computing environments.
 
 ## Implementation of Peer-to-Peer Networking in DefraDB
 
-In the DefraDB software architecture, a PubSub system is used for peer-to-peer networking. In this system, publishers send messages without specifying specific receivers, and subscribers express interest in certain types of messages without knowing which publishers they come from. This allows for a more dynamic network topology and better scalability. In the DefraDB PubSub network, nodes can publish or subscribe to specific topics. When a node publishes a message in passive replication, it is broadcasted to all nodes in the network. These nodes then coordinate with each other, re-broadcast the message, and use a process called "gossiping" to spread the published information through multiple connections, or "hops." This is known as the Gossip protocol.
+In the DefraDB software architecture, peer-to-peer networking is implemented using a **Publish-Subscribe (PubSub)** system. Here's how it works:
 
-In passive replication, updates are broadcasted on a per-document level over the global PubSub network. Each document has its own topic, and nodes can subscribe to the topic corresponding to a specific document to receive updates passively. This is useful in environments where certain documents are in high demand or are being frequently updated, as the connections to these "hot documents" can be kept open to ensure they are kept up-to-date. However, if a document has not been accessed in a while, it is less important for it to be constantly updated and it is easy to resync these "cold documents" by submitting a query for the relevant updates. Passive replication and the PubSub system are therefore focused on individual documents.
+### PubSub System Overview
 
-One major difference between active and passive networks is that an active network can focus on both collections and individual documents, while a passive network is only focused on individual documents. Active networks operate over a direct, point-to-point connection and allow you to select an entire collection to replicate to another node. For example, if you have a collection of books and specify a target node for active replication, the entire collection will be replicated to that node, including any updates to individual books. However, it is also possible to replicate granularly by selecting specific books within the collection for replication. Passive networks, on the other hand, are only concerned with replicating individual documents.
+- **Publishers** send messages without targeting specific receivers.
+- **Subscribers** express interest in specific types of messages, regardless of who sends them.
+- This model allows for:
+  - Dynamic network topology
+  - Enhanced scalability
+- Nodes in the network can:
+  - **Publish** messages to specific topics
+  - **Subscribe** to topics to receive relevant messages
 
+### Passive Replication Using Gossip Protocol
+
+- When a node **publishes a message**:
+  - It is **broadcasted** to all nodes in the network.
+  - Nodes **re-broadcast** and **gossip** the message via multiple hops.
+  - This behavior is governed by the **Gossip protocol**, ensuring wide dissemination.
+- **Per-document topics**:
+  - Each document is assigned its own topic.
+  - Nodes can subscribe to specific document topics to receive updates.
+- **Hot vs. Cold documents**:
+  - Frequently accessed or updated documents (“hot documents”) keep open connections for timely syncing.
+  - Infrequently accessed ones (“cold documents”) are easily resynced by querying updates as needed.
+
+### Focus of Passive Replication
+
+- Designed for **individual document-level synchronization**
+- Ideal for:
+  - High-demand documents
+  - Environments with dynamic collaboration
+
+### Comparison with Active Replication
+
+- **Active Replication**:
+  - Works over **direct, point-to-point connections**
+  - Supports:
+    - Entire **collection-level replication**
+    - **Granular replication** of selected documents within a collection
+- **Passive Replication**:
+  - Limited to **individual document-level** replication
+  - Operates via the **PubSub network** using the **Gossip protocol**
+
+### Example Use Case
+
+- If you have a **collection of books**:
+  - **Active replication** can replicate the entire collection or just selected books to a specific node.
+  - **Passive replication** focuses only on syncing individual books that nodes are subscribed to.
 
 ## Concrete Features of P2P in DefraDB
 
+DefraDB is designed for local-first software and edge environments, replacing the traditional cloud-based model with distributed, application-centric infrastructure. At its core, it leverages libp2p, a modular networking stack, to support flexible peer-to-peer data synchronization. Below are the concrete capabilities of DefraDB’s peer-to-peer infrastructure, categorized into Passive Replication and Active Replication.
+
 ### Passive Replication Features
 
-The Defra Command Line Interface (CLI) allows you to modify the behavior of the peer-to-peer data network. When a DefraDB node starts up, it is assigned a libp2p host by default.
+Passive replication enables automatic, per-document data broadcasting across the distributed infrastructure. This system is enabled by default when a node is started using the Defra Command Line Interface (CLI).
 
-```bash
-$ defradb start
-...
-Jan  2 10:15:49.124 INF cli Starting DefraDB
-Jan  2 10:15:49.161 INF net Created LibP2P host PeerId=12D3KooWEFCQ1iGMobsmNTPXb758kJkFc7XieQyGKpsuMxeDktz4 Address=[/ip4/127.0.0.1/tcp/9171]
-Jan  2 10:15:49.162 INF net Starting internal broadcaster for pubsub network
-Jan  2 10:15:49.163 INF node Providing HTTP API at http://127.0.0.1:9181 PlaygroundEnabled=false
-Jan  2 10:15:49.163 INF node Providing GraphQL endpoint at http://127.0.0.1:9181/api/v0/graphql
-```
+1. **Node Initialization with libp2p Host**
+    When starting a DefraDB node, it automatically sets up a libp2p host with a unique Peer ID derived from a secret private key:
 
-This host has a Peer ID, which is a function of a secret private key generated when the node is started for the first time. The Peer ID is important to know as it may be relevant for different parts of the peer-to-peer networking system. The libp2p networking stack can be enabled or disabled.
+    ```sh
+    $ defradb start
+    ...
+    Jan  2 10:15:49.124 INF cli Starting DefraDB
+    Jan  2 10:15:49.161 INF net Created LibP2P host PeerId=12D3KooWEFCQ1iGMobsmNTPXb758kJkFc7XieQyGKpsuMxeDktz4 Address=[/ip4/127.0.0.1/tcp/9171]
+    Jan  2 10:15:49.162 INF net Starting internal broadcaster for pubsub network
+    Jan  2 10:15:49.163 INF node Providing HTTP API at http://127.0.0.1:9181 PlaygroundEnabled=false
+    Jan  2 10:15:49.163 INF node Providing GraphQL endpoint at http://127.0.0.1:9181/api/v0/graphql
+    ```
 
-```bash
-$ defradb start --no-p2p
-```
+    - The Peer ID is critical for node discovery and participation in distributed document synchronization.
+    - The libp2p stack can be toggled on or off:
 
-The passive networking system can also be enabled or disabled. By default, if the P2P network is online, the passive networking system is turned on.
+    ```sh
+    defradb start --no-p2p
+    ```
 
-```bash
-$ defradb start --peers /ip4/0.0.0.0/tcp/9171/p2p/<peerID_of_node_to_replicate_to>
-```
+1. **Managing Passive Networking Behavior**
 
-A node automatically listens on multiple addresses or ports when the P2P module is instantiated. These are referred to as the peer-to-peer address, which is expressed as a multi-address. A multi-address is a string that represents a network address and includes information about the transport protocol and addresses for multiple layers of the network stack.
+   - To enable passive replication and specify target peers:
 
+   ```sh
+   defradb start --peers /ip4/0.0.0.0/tcp/9171/p2p/<peerID>
+   ```
 
-```bash
-/ip4/0.0.0.0/tcp/9171/p2p/<peerID_of_node_to_replicate_to>
+   - To change the peer-to-peer listening address:
 
-scheme/ip_address/protocol/port/protocol/peer_id
-```
-The peer listens in on the p2p port 9171​ by default, which can be customized through the CLI or the configuration file.
+   ```sh
+   defradb start --p2paddr /ip4/0.0.0.0/tcp/9172
+   ```
 
-```bash
-$ defradb start --p2paddr /ip4/0.0.0.0/tcp/9172
-```
+2. **Understanding Multi-Addresses**
+Multi-addresses define how a node communicates, detailing protocol and addressing layers:
 
-The peer-to-peer address is the first of the addresses that the peer listens in on.
+    ```sh
+    /ip4/0.0.0.0/tcp/9171/p2p/<peerID>
+    Format: scheme/ip_address/protocol/port/protocol/peer_id
+    ```
 
-At the start of a node, flags can be specified to enable, disable, or switch the host that the peer is listening on. When a new node is started, every existing or new document goes through an LRU (Least Recently Used) cache to identify the most important, relevant, or frequently used documents over a specific period of time. Then, by default, the passive replication system automatically subscribes to and creates the corresponding document topics on the PubSub network.
+    The default P2P port is 9171, but this is customizable.
 
-When a node is started, it specifies a list of peers that it wants to stay connected to. The peer-to-peer node is self-organizing, meaning that if a node joins a new topic, it asks the larger network for other peers that are sharing information on that topic. This ensures that the node is always connected to some relevant nodes. A node also tries to find other relevant nodes, particularly when an individual topic is joined, subscribed to, or published.
+1. **Document-Based Subscription Logic**
+   - On startup, each document in DefraDB is evaluated through an LRU (Least Recently Used) cache, determining the most relevant or frequently used ones.
+   - The node automatically subscribes to topics associated with these documents on the PubSub network.
+   - Nodes self-organize by discovering and maintaining connections with other relevant nodes in the same document topic.
+
+1. **Network Awareness and Peer Discovery**
+   - When joining a document topic, the node queries the distributed network to discover additional peers sharing the same topic.
+   - This dynamic discovery ensures robust and up-to-date communication with trusted collaborators.
 
 ### Active Replication Features
 
-To use the active replication feature in DefraDB, you can submit an add replicator Remote Procedure Call (RPC) command through the client API. You will need to specify the multi-address and Peer ID of the peer that you want to include in the replicator set, as well as the name of the collection that you want to replicate to that peer. These steps handle the process of defining which peers you want to connect to, enabling or disabling the underlying subsystems, and sending additional RPC commands to add any necessary replicators.
+Active replication allows entities to define precise synchronization rules at both document and collection levels using direct point-to-point communication.
+
+To replicate a specific collection (e.g., Books) to another peer, use the following RPC command:
 
 ```bash
-$ defradb client p2p replicator set -c Books <peerID_of_node_to_replicate_to>
+defradb client p2p replicator set -c Books <peerID>
 ```
+
+This command:
+
+- Adds the specified peer to the replicator set
+- Enables the node to sync an entire collection or selected documents within it
+- Handles the creation of direct sync pathways between designated peers
+
+| Feature                 | Passive Replication                         | Active Replication                             |
+|:------------------------|:---------------------------------------------|:-----------------------------------------------|
+| Granularity             | Document-level only                          | Collection and document-level                  |
+| Topology                | PubSub (broadcast + gossiping)              | Point-to-point                                 |
+| Peer Discovery          | Automatic via topic subscriptions           | Manual via replicator commands                 |
+| Use Case                | High-frequency document updates             | Full dataset sharing or selective replication  |
+| Configuration Method    | CLI flags + topic auto-subscription         | RPC-based replicator setup                     |
+
+By emphasizing local-first software principles, DefraDB ensures robust, offline-capable, and privacy-respecting data synchronization between applications—without reliance on cloud intermediaries.
 
 ## Benefits of the P2P System
 
-One of the main benefits of the peer-to-peer (P2P) system is its robustness and ability to work even in the event of network failures. This allows developers to create local-first, offline-first applications. If a developer's node loses its internet connection, the P2P system will continue making changes and queue up updates. When the system is back online and reconnects to the network, it will automatically resolve the updates and resume publishing or replicating to the nodes specified by the developer. This means that the developer can rely on a trustless mechanism and does not need to rely on a central, trusted peer for data replication or repositories to save data. Instead, data is directly passed from the developer's node to any other collaborating node. This global P2P network allows developers to collaborate with anyone across the internet with no fundamental limitations. Additionally, since the P2P system is built on top of libp2p, developers have access to other useful features as well. These factors make it highly advantageous to work with a P2P network, especially from a local-first perspective.
+The peer-to-peer (P2P) system offers key advantages, especially in the context of local-first software and edge computing. One of the most important benefits is its robustness, which allows for continuous operation even during network disruptions. In the event that an entity’s node loses internet connectivity, the P2P system ensures that changes continue locally and updates are queued. Once the connection is restored, the system seamlessly synchronizes updates, resolving any discrepancies and resuming data replication to specified nodes. This approach eliminates the need for a trusted intermediary and allows data to be exchanged directly between entities. Developers can collaborate across the distributed infrastructure with no limitations, regardless of location. Additionally, the underlying libp2p framework provides added features to enhance the functionality of the P2P system, making it an excellent choice for local-first, edge-driven applications.
 
-In DefraDB, the peer-to-peer system has several benefits. It is easy to connect to a server in a data center because each server has its own individual IP address. However, in a home network, there is a single IP for the modem and multiple devices connected to it are protected by a NAT firewall, making it difficult for other nodes to connect directly. The libp2p framework offers two solutions to this problem:
+In scenarios where nodes are behind NAT firewalls—common in home networks—P2P communication faces potential obstacles. However, the system utilizes two solutions to overcome these challenges:
 
-Circuit Relays - This allow you to specify a third-party node that acts as an intermediary to resolve the NAT firewall issue. This works when you connect to the firewall/circuit relay node, which is a publicly accessible node, and another node connects to it as well. The third-party node acts as a conduit in this situation. This process requires trust in the third-party node to properly relay information, but it operates over encrypted transport layers, so the third-party node cannot use man-in-the-middle attacks to listen in on the data exchange. However, it does require the third-party node to be online and accessible.
-
-NAT Hole Punching - This is a technique that allows nodes to connect directly to a device behind a NAT firewall. This ensures that a user can directly connect with another node and vice versa, without the need for a trusted intermediary within the peer-to-peer network.
+- **Circuit Relays**: These allow for a third-party intermediary to resolve NAT firewall issues. The third-party node acts as a conduit for communication, requiring trust but maintaining security through encrypted layers to prevent man-in-the-middle attacks.
+- **NAT Hole Punching**: A technique that enables direct communication between nodes even if they are behind NAT firewalls. This eliminates the need for a trusted intermediary, enabling seamless peer-to-peer connections.
 
 ## Current Limitations and Future Outlook
 
-Here are some of the limitations of the P2P system:
+Despite its many benefits, there are several limitations to the P2P system that need to be addressed:
 
-One limitation of the peer-to-peer system is the potential scalability issue with having every document have its own independent topic. This can lead to overhead if a user has thousands or tens of thousands of documents in their node, or if an application developer has hundreds of thousands or millions of documents in their node. To address this issue, the team is exploring ways to create aggregate topics that can be scoped to subnets. These subnets can be group-specific or application-specific. Multiple hops are required between subnets. This means that if a user wants to synchronize and broadcast updates from their subnet to another subnet, they have to go from their subnet to the global net and back to the other subnet. The team is exploring ways to navigate this limitation through multi-hop mechanisms.
+1. **Scalability of Independent Document Topics**: The current model assigns each document a unique topic, which can create overhead for entities managing large datasets. To resolve this, the team is exploring the use of aggregate topics, scoped to specific subnets—whether application-specific or group-specific. This would require multiple hops between subnets, but multi-hop mechanisms are being investigated to enhance efficiency.
 
-In a peer-to-peer network, when a user broadcasts an update, it is sent to other nodes on the network. However, if a node is offline or experiences some other issue, it may miss some updates. In DefraDB's passive replication mode, the most recent update is broadcasted through the network using a Merkle DAG (directed acyclic graph). The broadcasting node does not verify that the receiving node has received all previous updates, so it is the responsibility of the receiving node to ensure it has received all necessary updates. If a node misses a couple of updates and then receives a new update, it must synchronize all previous updates before considering the document up to date. This is because the internal data model of the document is based on all changes made over time, not just the most recent change. When broadcasting the most recent update, it is sent over the peer-to-peer PubSub network. However, if a node needs to go back in time through the Merkle DAG to get updates from previous broadcasts, it uses a different system called the Distributed Hash Table (DHT).
+1. **Missed Updates in Passive Replication**: In passive replication, updates are broadcasted via a Merkle DAG (directed acyclic graph). If a node is offline or misses an update, it is the responsibility of that node to synchronize all previous changes before the document is considered up-to-date. The Distributed Hash Table (DHT) is used to retrieve missing updates, but the scalability of Bitswap and DHT needs improvement. To address these concerns, two new protocols are under consideration:
 
-The scalability of Bitswap and the Distributed Hash Table (DHT) have been identified as limitations in the peer-to-peer (P2P) system. To address these issues, we are exploring the use of two new protocols.:
+   - **PubSub-based Query System**: This system allows entities to query and receive updates through global PubSub topics, independent of document topics. This flexibility can significantly enhance scalability.
+   - **Graph Sync**: Developed by Protocol Labs, this protocol has the potential to resolve the scalability challenges of Bitswap and DHT, further improving the efficiency of the distributed P2P infrastructure.
 
-PubSub based query system - This that allows users to query and receive updates through the global PubSub network using query topics that are independent of document topics.
+1. **Replicator Persistence**: Currently, when replicators are added to a node, they do not persist across updates or restarts. This means that entities must re-add replicators after each restart. This limitation will be addressed in the next system release.
 
-Graph Sync - This is a protocol developed by Protocol Labs, which has the potential to resolve issues with the Bitswap algorithm and DHT. These two approaches show promise in improving the scalability of the P2P system.
+1. **Head Exchange Protocol**: A new protocol called Head Exchange is under development to address synchronization issues in the Merkle DAG, especially when updates are missed or when divergent updates occur. This protocol aims to efficiently identify the most recent update seen by each node and synchronize the network with minimal communication.
 
-There are currently some limitations with the peer-to-peer system being used. One issue is that replicators, which are added to a node, do not persist through updates or restarts. This means that the user must re-add the replicators every time the node is restarted. However, this issue will be resolved in the next version of the system.
+1. **NAT Firewall Connectivity**: A significant challenge in local-first development is the difficulty for nodes to connect when they are running within the same home network, behind a NAT firewall. These firewalls protect private networks but can make direct peer-to-peer communication difficult. To solve this, the system uses NAT hole punching and circuit relays to enable secure and direct communication between nodes.
 
-Currently, when a replicator is added to a node, it doesn't persist between node updates or node restarts. This means that every time there is a restart, the user must re-add these replicators. This is a minor oversight that the Source team plans to fix in a future release. In the meantime, they are also wWorking on a new protocol called Head Exchange to address issues with syncing the Merkel DAG when updates have been missed or concurrent, diverged updates have been made. The Head Exchange protocol aims to efficiently establish the most recent update seen by each node, determine if there are any divergent updates, and figure out the most efficient way to synchronize the nodes with the least amount of communication.
-
-One issue with peer-to-peer local-first development is that it can be difficult for nodes to connect with each other when they are running on devices within the same home Wi-Fi network. This is due to a NAT firewall, which is a router that operates to protect private networks. A NAT firewall only allows internet traffic to pass through if it was requested by a device on the private network. It protects the identity of a network by not exposing internal IP addresses to the internet. This can make it difficult for other nodes to connect directly to a node running behind a NAT firewall.
+Overall, while there are some challenges to overcome, the development team is focused on enhancing the scalability, synchronization, and connectivity of the P2P system, ensuring it remains a powerful and reliable tool for local-first, edge-driven applications.
