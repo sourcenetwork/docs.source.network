@@ -2,66 +2,198 @@
 sidebar_label: Merkle CRDT Guide
 sidebar_position: 30
 ---
-# A Guide to Merkle CRDTs in DefraDB
+
+# Merkle CRDTs in DefraDB
 
 ## Overview
-Merkle CRDTs are a type of Conflict-free Replicated Data Type (CRDT). They are designed to update or modify independent sets of data without any human intervention, ensuring that updates made by multiple actors are merged without conflicts. The goal of Merkle CRDT is to perform deterministic, automatic data merging and synchronization without any inconsistencies. CRDTs were first formalized in 2011 and have become a useful tool in distributed computing. Merkle CRDTs are a new kind of CRDT that allows data to be merged without conflicts, ensuring that data is deterministically synchronized across multiple actors. This can be useful in a variety of distributed computing applications where data needs to be updated and merged in a consistent and conflict-free manner.
 
-## Background on Regular CRDTs 
-Conflict-free Replicated Data Types (CRDTs) are a useful tool in local and offline-first applications. They allow multiple actors or peers to collaborate and update the state of a data structure without worrying about synchronizing that state. CRDTs come in many different forms and can be applied to a variety of data types, such as simple registers, counters, sets, lists, and maps. The key feature of CRDTs is their ability to merge data deterministically, ensuring that all actors eventually reach the same state.
+**Merkle Conflict-free Replicated Data Types (CRDTs)** are a class of data structures that simplify data synchronization across distributed systems. They allow multiple entities to update the same data structure simultaneously—even while offline—without risk of data conflicts.
 
-To achieve this, CRDTs rely on the concept of causality or ordering of events. This determines how the merge algorithm works and ensures that if all events or updates are applied to a data type, the resulting state will be the same for all actors. In distributed systems, however, the concept of time and causality can be more complex than it appears. This is because it is often difficult to determine the relative order of events occurring on different computers in a network. As a result, CRDTs often rely on some sort of clock or a different mechanism for tracking the relative order of events.
+Merkle CRDTs enable software to update data locally without human intervention and later synchronize it with other systems in a conflict-free manner. This is achieved by encoding **deterministic merge rules** and **causal history** directly in the data.
 
-## Need for CRDTs
+First introduced in 2011, CRDTs have since become essential to **local-first** and **offline-capable** software. **Merkle CRDTs** enhance traditional CRDTs by incorporating **Merkle clocks**, making them especially useful for high-churn distributed infrastructure.
 
-It can be difficult to determine the relative order of events occurring on different computers in a network, which is why CRDTs can enable the user to ensure data can be merged without conflicts. For example, consider a situation where two actors, A and B, are making updates to the same data at the same time. If actor A stamps their update with a system time of 2:39:56 PM EST on September 6, 2022, and actor B stamps their update with a system time of 2:40:00 PM, it would look like actor B's update occurred after actor A's. However, system times are not always reliable because they can be easily changed by actors, leading to inconsistencies in the relative order of events. To solve this problem, distributed systems use alternative clocks such as logical clocks or vector clocks to track the causality of events.
+---
 
+## Background on Regular CRDTs
 
-To track the relative causality of events, CRDTs often rely on clocks such as logical clocks or vector clocks. However, these clocks have limitations when used in high-churn networks with a large number of peers. For example, in a peer-to-peer network with a high rate of churn, logical and vector clocks require additional metadata for each peer that an actor interacts with. This metadata must be constantly maintained for each peer, which can be inefficient if the number of peers is unbounded. Additionally, in high churn environments, the amount of metadata grows linearly with the churn rate, making it infeasible to use these clocks in certain situations. Therefore, existing CRDT clock implementations may not be sufficient for use in high churn networks with an unbounded number of peers.
+**Conflict-free Replicated Data Types (CRDTs)** are data structures that support **eventual consistency** across distributed systems without requiring coordination or locking.
 
-## Formalization of Merkle CRDT
+They can represent common structures such as:
 
-Merkle CRDTs are a type of CRDT that combines traditional CRDTs with a new approach to CRDT clocks called a Merkle clock. This clock allows us to solve the issue of maintaining a constant amount of metadata per peer in a high churn network. Instead of tracking this metadata, we can use the inherent causality of Merkle DAGs (Directed Acyclic Graphs). In these graphs, each node is identified using its content identifiable data (CID) and is embedded in another node. The edges in these graphs are directed, meaning one node points to another, forming a DAG structure. If a node points to another node, the CID of the first node is embedded in the value of the second. The inherent nature of Merkle graphs is the embedded relation of hashing or CIDs from one node to another, providing us with useful properties.
+- Registers (single value storage)
+- Counters
+- Sets (e.g. G-Set, OR-Set)
+- Lists (e.g. RGA - Replicated Growable Array)
+- Maps
 
+The defining characteristic of CRDTs is that **concurrent, independent changes** can be merged **deterministically**. This enables:
 
-To create a Merkle CRDT, we take an existing Merkle clock and embed any CRDT that satisfies the requirements. A CRDT is made up of three components: the data type, the CRDT type (operation-based or state-based), and the semantic type. For our specific implementation, we use delta state based CRDTs with different data types and semantic types for different applications. The formal structure of a CRDT is simple - it consists of a Merkle CRDT outer box containing two inner boxes, a Merkle clock and a regular CRDT.
+- Local updates without coordination
+- Automatic conflict resolution
+- Convergence across all replicas
 
+To achieve this, CRDTs must encode **causal ordering**—the order in which operations happened. In most implementations, this is done using logical clocks, like **vector clocks**, which are used to track the versions of data at each replica.
 
+However, vector clocks can become inefficient when:
 
-## Merkle Clock
+- The number of peers increases significantly
+- Peers frequently join and leave (high churn)
+- System resources (memory/bandwidth) are limited
 
-Merkle clocks are a type of clock used in distributed systems to solve the issue of tracking metadata for each peer that an actor interacts with. They are based on Merkle DAGs that function like hash chains, similar to a blockchain. These graphs are made up of nodes and edges, where the edges are directed, meaning that one node points to another. The head of a Merkle DAG is the most recent node added to the graph, and the entire graph can be referred to by the CID of the head node. The size of the CID hash does not grow with the number of nodes in the graph, making it a useful tool for high churn networks with a large number of peers.
+---
 
-The Merkle clock is created by adding an additional metadata field to each node of the Merkle DAG, called the height value, which acts as an incremental counter that increases with each new node added to the system. This allows the Merkle clock to provide a rough sense of causality, meaning that it can determine if one event happened before, at the same time, or after another event. The inherent causality of the Merkle DAG ensures that events are recorded in the correct order, making it a useful tool for tracking changes in a distributed system.
+## Why CRDTs Are Essential in Distributed Systems
 
-The embedding of CID into the parent node that produces the hash chain provides a causality guarantee that, for example a B is pointed to by node A, node C is pointed to by node B and so on till the node Z, A had to exist before B, because the value of A is embedded inside B, and B could not exist before A, otherwise it would result in breaking the causality of time because the value of A is embedded inside the value of B which then gets embedded inside the value of C, which means that C has to come after B and so on, all the way till the user gets back to Z. And hence if the user has constructed a Merkle DAG correctly, then A has to happen before B, B has to happen before C, C has to happen before D, all the way until they get to Z. This inherent causality of time with respect to CIDs and Merkle DAG provides the user with a causality-adhering system.
+Distributed systems require **synchronization mechanisms** that are robust against network partitions, latency, and peer failures. CRDTs are ideal for:
 
-## Delta State Semantics
+- **Offline-first applications** like note-taking apps, messaging, or CRMs
+- **Multi-device sync** (phones, tablets, desktops)
+- **Peer-to-peer networks** (e.g., IPFS, Secure Scuttlebutt)
+- **Edge computing** and **IoT devices** with intermittent connectivity
 
-There are two types of Delta State Semantics: Operation-Based CRDTs and State-Based CRDTs. Operation-Based CRDTs use the intent of an operation as the body or content of the message, while State-Based CRDTs use the resulting state as the body or content of the message. Both have their own advantages and disadvantages, and the appropriate choice depends on the specific use case. Operation-Based CRDTs express actions such as setting a value to 10 or incrementing a counter by 4 through the intent of the operation. State-Based CRDTs, on the other hand, include the resulting state in the message. For example, a message to set a value to 10 would include the value 10 as the body or content of the message.
+They work by ensuring that:
 
-Operation-Based CRDTs tend to be smaller because their messages only contain the operation being performed, while State-Based CRDTs are larger because their messages contain both the current state and the state being changed. It is important to consider the trade-offs between these two types of Delta State Semantics when choosing which one to use in a given situation.
+1. **Local changes are safe** — They don't require global consensus.
+2. **Synchronization is eventual** — Systems can merge states later.
+3. **Conflicts are mathematically impossible** — Merge rules are built-in.
 
-Delta State Semantics is an optimization of the State-based CRDTs. While both Operation-based CRDTs and State-based CRDTs have their own pros and cons, Delta State CRDTs offer a hybrid approach that uses the state as the message content, but with the same size as an operation.
+Traditional CRDTs, however, struggle with scalability due to metadata overhead, particularly in systems with **large or dynamic peer populations**.
 
-In a Delta State CRDT, the message body includes only the minimum amount, or "delta," necessary to transform the previous state to the target state. For example, if we have a set of nine fruit names, and we want to add a banana to the set, the Delta State CRDT would only include the delta, or the value "banana," rather than expressing the entire set of 10 fruit names as in traditional State-based CRDTs. This is like an operation because it has the size of only one action, but it expresses the difference in state between the previous and target rather than the intent of the action.
+---
 
+## Merkle CRDTs: A Scalable Solution
+
+Merkle CRDTs address the scalability limitations of traditional CRDTs by using **Merkle clocks** to encode causality instead of peer-specific metadata.
+
+### What Is a Merkle Clock?
+
+A **Merkle clock** is a **Directed Acyclic Graph (DAG)** where:
+
+- Each node represents an update or operation.
+- Nodes are linked via **parent hashes**, forming a causally-ordered chain of updates.
+- Each node has a unique **Content Identifier (CID)** derived from its contents and parent(s).
+
+Merkle clocks:
+
+- Are content-addressed (immutable)
+- Encode causal history directly in structure
+- Support branching and merging
+- Avoid the need for tracking individual peers
+
+This makes them ideal for **decentralized** or **high-churn** environments.
+
+---
+
+## Anatomy of a Merkle CRDT
+
+A Merkle CRDT is a combination of:
+
+1. **Data type**: The base structure (e.g., Set, Map, List)
+2. **CRDT type**:
+   - **Operation-based**: Sends operations (e.g., add/remove)
+   - **State-based**: Sends the entire state
+   - **Delta-based**: Sends only the minimal state change
+3. **Semantic type**: The application logic (e.g., counter, register)
+
+Each update is:
+
+- Encapsulated in a node
+- Assigned a CID
+- Linked to its predecessors (parent nodes)
+
+This model allows for decentralized state evolution and deterministic conflict-free merging.
+
+---
+
+## Delta State Semantics in CRDTs
+
+There are three main semantics in CRDTs:
+
+| Type           | Description                                 | Efficiency       |
+|----------------|---------------------------------------------|------------------|
+| Operation-based| Sends intent of operation (e.g., “+1”)      | Moderate         |
+| State-based    | Sends full current state                    | Least efficient  |
+| Delta-based    | Sends minimal change (delta)                | Most efficient   |
+
+**Delta CRDTs** are best suited for resource-constrained systems:
+
+- Require less bandwidth
+- Lower memory and compute overhead
+- Enable fast and lightweight updates
+
+**Example**:
+
+Instead of transmitting a whole list, a delta CRDT for a shopping list update may just send: `["+banana"]`.
+
+---
 
 ## Branching and Merging State
 
+### Branching in Merkle CRDTs
 
-### Branching of Merkle CRDTs
+Branching occurs when multiple updates happen concurrently from the same base node. Each update becomes a new branch in the DAG.
 
+- Useful in offline-first scenarios
+- Each device maintains its own update stream
+- No coordination needed during branch creation
 
-Merkle CRDTs are based on the concept of a Merkle clock, which is in turn based on the idea of a Merkle DAG. The structure of a Merkle DAG allows it to branch and merge at any point, as long as it adheres to the requirement of being a DAG and does not create a recursive loop.
+### Merging in Merkle CRDTs
 
+When peers resynchronize, branches are merged using CRDT merge logic:
 
-Branching in a Merkle CRDT system occurs when two peers make independent changes to a common ancestor node and then share those changes, resulting in two distinct states. Neither of these states is considered the correct or canonical version in a Merkle CRDT system. Instead, both are treated as their own local main copies. From these divergent states, further updates can be made, causing the divergence to increase. For example, if there are 10 nodes in common between the two states, one branch may have five new nodes while the other has six. These branches exist independently of each other, and changes can be made to each branch independently without the need for immediate synchronization. This makes CRDTs useful for local-first or offline-first applications that can operate without network connectivity. The structure of a Merkle DAG, on which a Merkle CRDT is based, naturally supports branching.
+1. **Find lowest common ancestor (LCA)** in the DAG
+2. **Walk paths** from ancestor to each branch tip
+3. **Apply CRDT merge function** to combine updates
+4. **Create new node** with combined state and both parents
 
-### Merging of Merkle CRDTs
+This ensures deterministic, conflict-free convergence across peers.
 
-Merging in a Merkle CRDT system involves bringing two divergent states back together into a single, canonical graph. This is done by adding a new head node, known as a merge node, to the history of the graph. The merge node has two or more previous parents, as opposed to the traditional single parent of most nodes. To merge these states, merge semantics must be applied to the new system. The Merkle clock provides two pieces of information that facilitate this process: the use of a CID for each parent and the ability to go back in time through both branches of the divergent state, parent by parent, before officially merging the state. Each type of CRDT defines its own merge semantics.
+---
 
+## Real-World Applications of Merkle CRDTs
 
-The process begins by finding a common ancestral node between the two divergent states. Each node in the system includes a height parameter, which is the number of nodes preceding it. This, along with the CID of the ancestral node, is provided to the embedded CRDT's merge system to facilitate the merging process. The Merkle CRDT coordinates the logistics of the Merkle DAG and passes information about the multiple parents of the merge node to the embedded CRDT's merge system, which is responsible for defining the merge semantics. As long as the CRDT and the Merkle DAG are functioning correctly, the resulting Merkle clock will also operate correctly.
+Merkle CRDTs are increasingly being adopted in:
 
+- **Decentralized databases** like [DefraDB](https://github.com/defradb)
+- **P2P collaboration platforms** (e.g., peer-to-peer document editors)
+- **Blockchain off-chain storage** systems
+- **Federated machine learning** where models sync asynchronously
+- **Edge computing networks** needing fault-tolerant sync
+
+They are especially powerful in **IPFS-based systems**, where Merkle DAGs are native.
+
+---
+
+## Challenges and Considerations
+
+Despite their advantages, Merkle CRDTs come with trade-offs:
+
+- **Storage complexity**: DAGs can grow large over time
+- **Garbage collection**: Old nodes may need pruning
+- **Complexity**: Requires understanding Merkle structures and CID management
+- **Latency**: Merge complexity can introduce processing delay in large DAGs
+
+Tools like DefraDB address these issues through DAG pruning, snapshotting, and efficient storage engines.
+
+---
+
+## Summary
+
+**Merkle CRDTs** are an evolution of traditional CRDTs designed for **scalability**, **efficiency**, and **decentralized synchronization**. By combining CRDT semantics with **Merkle clocks**, they:
+
+- Encode causality in a scalable, metadata-free manner
+- Support seamless branching and merging
+- Optimize for bandwidth and compute constraints
+- Provide deterministic, conflict-free sync
+
+They are ideal for **local-first applications**, **high-churn networks**, and **edge or embedded systems** where robustness and autonomy are essential.
+
+---
+
+## Further Reading
+
+- [CRDTs: A Comprehensive Guide (University of Lisbon)](https://hal.inria.fr/file/index/docid/555588/filename/techreport.pdf)
+- [Merkle DAGs in IPFS](https://docs.ipfs.tech/concepts/merkle-dag/)
+- [DefraDB GitHub](https://github.com/defradb)
+- [CRDT Types and Implementations - Automerge, Yjs, RGA, etc.](https://crdt.tech)
