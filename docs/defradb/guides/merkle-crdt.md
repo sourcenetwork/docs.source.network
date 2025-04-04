@@ -155,7 +155,7 @@ This ensures deterministic, conflict-free convergence across peers.
 
 Merkle CRDTs are increasingly being adopted in:
 
-- **Decentralized databases** like [DefraDB](https://github.com/defradb)
+- **Decentralized databases** like [DefraDB](https://docs.source.network/defradb)
 - **P2P collaboration platforms** (e.g., peer-to-peer document editors)
 - **Blockchain off-chain storage** systems
 - **Federated machine learning** where models sync asynchronously
