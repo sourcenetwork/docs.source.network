@@ -2,91 +2,107 @@
 sidebar_label: Akash Deployment Guide
 sidebar_position: 60
 ---
-# Deploy DefraDB on Akash
+# Akash Deployment Guide
 
 ## Overview
 
-This guide will walk you through the required steps to deploy DefraDB on Akash.
+This guide walks you through deploying DefraDB—a local-first data management solution—on Akash, a distributed infrastructure platform optimized for edge compute.
+
+By following these steps, applications can seamlessly manage data close to where it's generated, leveraging edge resources and embedded infrastructure.
 
 ## Prerequisites
 
-Before you get started you will need an Akash account with at least 5 AKT. If don't have an Akash account you can create one by installing [Keplr](https://www.keplr.app/).
+Before proceeding, ensure you have:
+
+- An Akash account with at least 5 AKT available.
+- The Keplr wallet installed. If not, download it from [Keplr's official site](https://www.keplr.app/).
 
 ## Deploy
 
 ![Cloudmos console](/img/akash/deploy.png "Cloudmos console")
 
-Deploying on Akash can be done through the [Cloudmos console](https://deploy.cloudmos.io/new-deployment). Click on the "Empty" deployment type and copy the config below into the editor.
+The easiest way to deploy on Akash is by using the [Cloudmos console](https://deploy.cloudmos.io/new-deployment).
 
-```yaml
----
-version: "2.0"
+1. **Open Cloudmos** and select the **“Empty”** deployment type.
+1. **Paste the configuration** below into the editor.
 
-services:
-  defradb:
-    image: sourcenetwork/defradb:develop
-    args:
-      - start
-      - --url=0.0.0.0:9181
-    expose:
-      - port: 9171
-        as: 9171
-        to:
-          - global: true
-      - port: 9181
-        as: 80
-        to:
-          - global: true
+    ```yaml
+    ---
+    version: "2.0"
 
-profiles:
-  compute:
-    defradb:
-      resources:
-        cpu:
-          units: 1.0
-        memory:
-          size: 1Gi
-        storage:
-          size: 1Gi
-  placement:
-    akash:
-      attributes:
-        host: akash
-      signedBy:
-        anyOf:
-          - "akash1365yvmc4s7awdyj3n2sav7xfx76adc6dnmlx63"
-          - "akash18qa2a2ltfyvkyj0ggj3hkvuj6twzyumuaru9s4"
-      pricing:
-        defradb: 
-          denom: uakt
-          amount: 10000
+    services:
+      defradb:
+        image: sourcenetwork/defradb:develop
+        args:
+          - start
+          - --url=0.0.0.0:9181
+        expose:
+          - port: 9171
+            as: 9171
+            to:
+              - global: true
+          - port: 9181
+            as: 80
+            to:
+              - global: true
 
-deployment:
-  defradb:
-    akash:
-      profile: defradb
-      count: 1 
-```
+    profiles:
+      compute:
+        defradb:
+          resources:
+            cpu:
+              units: 1.0
+            memory:
+              size: 1Gi
+            storage:
+              size: 1Gi
+      placement:
+        akash:
+          attributes:
+            host: akash
+          signedBy:
+            anyOf:
+              - "akash1365yvmc4s7awdyj3n2sav7xfx76adc6dnmlx63"
+              - "akash18qa2a2ltfyvkyj0ggj3hkvuj6twzyumuaru9s4"
+          pricing:
+            defradb: 
+              denom: uakt
+              amount: 10000
 
-Next click the "Create Deployment" button. A pop-up will appear asking you to confirm the configuration transaction.
+    deployment:
+      defradb:
+        akash:
+          profile: defradb
+          count: 1 
+    ```
 
-After confirming you will be prompted to select a provider. Select a provider with a price and location that makes sense for your use case.
+1. Click **"Create Deployment."**  
+   Confirm the configuration transaction when prompted.
 
-A final pop-up will appear asking you to confirm the deployment transaction. If the deployment is successful you should now see deployment info similar to the image below.
+1. **Choose a provider**—select one that meets your location and pricing needs.
 
-## Deployment Info
+1. Finalize by approving the **deployment transaction**.
+
+Upon successful deployment, you’ll be presented with status details as shown in the sample image below.
 
 ![Cloudmos deployment](/img/akash/info.png "Cloudmos deployment")
 
-To configure and interact with your DefraDB node, you will need the P2P and API addresses. They can be found at the labeled locations in the image above.
+## Accessing Deployment Details
 
-## P2P Replication
+To manage and interact with your **DefraDB** node, you’ll need two key components:
 
-To replicate documents from a local DefraDB instance to your Akash deployment you will need to create a shared schema on both nodes.
+- **API Address**
+- **P2P Address**
 
-Run the commands below to create the shared schema. 
+These addresses can be found in your deployment summary. They enable communication between your local-first application and the embedded remote instance.
 
-First on the local node:
+## Enabling P2P Replication
+
+To replicate data between your **local DefraDB node** and your **edge-deployed Akash node**, follow these steps:
+
+### 1. Create a Shared Schema
+
+Run the following command on your **local node** to define a schema:
 
 ```bash
 defradb client schema add '
@@ -97,7 +113,7 @@ defradb client schema add '
 '
 ```
 
-Then on the Akash node:
+Then, create the same schema on the **Akash node**, replacing `<api_address>` with your actual deployed endpoint:
 
 ```bash
 defradb client schema add --url <api_address> '
@@ -108,15 +124,19 @@ defradb client schema add --url <api_address> '
 '
 ```
 
-> The API address can be found in the [deployment info](#deployment-info).
+> Your API address can be found in the **Deployment Info** section.
 
-Next you will need the peer ID of the Akash node. Run the command below to view the node's peer info. 
+### 2. Retrieve Peer Information
+
+To connect your local node to the edge deployment, you’ll need the Akash node’s **Peer ID** and P2P bind address.
+
+Run this command:
 
 ```bash
 defradb client p2p info --url <api_address>
 ```
 
-If the command is successful, you should see output similar to the text below.
+Example output:
 
 ```json
 {
@@ -127,9 +147,11 @@ If the command is successful, you should see output similar to the text below.
 }
 ```
 
-> The address here is the node's p2p bind address. The public p2p address can be found in the [deployment info](#deployment-info).
+Note: This is the **bind address**. The **public P2P address** for external communication is found in your deployment info.
 
-Setup the replicator from your local node to the Akash node by running the command below.
+### 3. Set Up the Replicator
+
+Establish a replicator from your **local node** to the **embedded node** by executing:
 
 ```bash
 defradb client p2p replicator set --collection User '{
@@ -140,6 +162,13 @@ defradb client p2p replicator set --collection User '{
 }'
 ```
 
-> The p2p host and port can be found in the [deployment info](#deployment-info). For example: if your p2p address is http://provider.bdl.computer:32582/ the host would be provider.bdl.computer and the port would be 32582.
+Replace:
 
-The local node should now be replicating all User documents to the Akash node.
+- `<p2p_address_host>` with your node's host (e.g., `provider.bdl.computer`)
+- `<p2p_address_port>` with the respective port (e.g., `32582`)
+
+> These details are available in the deployment panel.
+
+## Conclusion
+
+Your **local-first application** is now replicating data to the **edge node** hosted on Akash. This setup supports fault-tolerant, resilient data management across distributed infrastructure, optimized for embedded systems and proximity to the data source.
