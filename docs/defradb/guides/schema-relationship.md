@@ -134,6 +134,7 @@ type Book {
   author: Author
 }
 ```
+> Note: `authoredBooks` is optional, and is only required if users wish to traverse the relationship from this side.
 
 Here, the Author type has a list of authoredBooks, establishing the one-to-many relationship.
 
