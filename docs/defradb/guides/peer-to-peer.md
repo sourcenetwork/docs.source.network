@@ -210,7 +210,7 @@ Multi-addresses define how a node communicates, detailing protocol and addressin
     Format: scheme/ip_address/protocol/port/protocol/peer_id
     ```
 
-    The default P2P port is 9171, but this is customizable.
+The default P2P port is 9171, but this is customizable.
 
 1. **Document-Based Subscription Logic**
    - On startup, each document in DefraDB is evaluated through an LRU (Least Recently Used) cache, determining the most relevant or frequently used ones.
