@@ -160,7 +160,7 @@ In the DefraDB software architecture, peer-to-peer networking is implemented usi
   - **Active replication** can replicate the entire collection or just selected books to a specific node.
   - **Passive replication** focuses only on syncing individual books that nodes are subscribed to.
 
-## Concrete Features of P2P in DefraDB
+## Features of P2P in DefraDB
 
 DefraDB is designed for local-first software and edge environments, replacing the traditional cloud-based model with distributed, application-centric infrastructure. At its core, it leverages libp2p, a modular networking stack, to support flexible peer-to-peer data synchronization. Below are the concrete capabilities of DefraDB’s peer-to-peer infrastructure, categorized into Passive Replication and Active Replication.
 
