@@ -14,8 +14,7 @@ html[data-theme="dark"] {
 
 :root {
   // Colors
-  // --ifm-color-primary: rgb(31, 96, 233);
-  --ifm-color-primary: #00CD50;
+  --ifm-color-primary: #00cd50;
   --ifm-color-primary-dark: #1554d8;
   --ifm-color-primary-darker: #144fcc;
   --ifm-color-primary-darkest: #1141a8;
@@ -63,26 +62,21 @@ html[data-theme="dark"] {
   --ifm-alert-border-left-width: 2px;
 
   /* Horizontal Rules. */
-  // --ifm-breadcrumb-border-radius: 1.5rem;
   --ifm-breadcrumb-spacing: 0rem;
   --ifm-breadcrumb-color-active: inherit;
   --ifm-breadcrumb-item-background-active: transparent;
-  // --ifm-breadcrumb-padding-horizontal: 0.8rem;
-  // --ifm-breadcrumb-padding-vertical: 0.4rem;
-  // --ifm-breadcrumb-size-multiplier: 1;
   --ifm-breadcrumb-separator: none;
-  // --ifm-breadcrumb-separator-filter: none;
-  // --ifm-breadcrumb-separator-size: 0.5rem;
-  // --ifm-breadcrumb-separator-size-multiplier: 1.25;
+  --ifm-menu-color: var(--ifm-color-emphasis-700);
+  --ifm-menu-color-active: var(--ifm-color-primary);
 }
 
 html[data-theme="dark"] {
-  // --ifm-color-primary: #5087fd;
-  --ifm-color-primary: #00CD50;
+  --ifm-color-primary: #00cd50;
   --ifm-background-color: #000000;
   --ifm-background-surface-color: var(--ifm-background-color);
   --docs-title-border: #343434;
   --ifm-toc-border-color: transparent;
+  --ifm-menu-color: var(--ifm-color-emphasis-400);
 }
 
 .markdown {

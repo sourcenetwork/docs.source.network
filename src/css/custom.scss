@@ -126,6 +126,38 @@ body {
 // Sidebar menu
 
 .main-wrapper {
+  .menu__list {
+    .menu__list {
+      position: relative;
+
+      &:before {
+        content: "";
+        display: block;
+        width: rem(1px);
+        background: var(--docs-title-border);
+        position: absolute;
+        left: rem(15px);
+        top: 0;
+        bottom: 0;
+      }
+
+      .menu__link--active:not(.menu__link--sublist) {
+        position: relative;
+
+        &:before {
+          content: "";
+          display: block;
+          width: rem(1px);
+          background: var(--ifm-color-primary);
+          position: absolute;
+          left: 0;
+          top: 0;
+          bottom: 0;
+        }
+      }
+    }
+  }
+
   .menu {
     $self: &;
 
@@ -136,14 +168,14 @@ body {
       font-size: rem(14px);
 
       &--active {
-        font-weight: bold;
+        font-weight: 500;
       }
 
       &--sublist {
         position: relative;
+
         &.menu__link--active {
           color: var(--ifm-menu-color);
-          font-weight: bold;
         }
 
         &:after {
@@ -171,7 +203,6 @@ body {
         .menu__link--sublist {
           &:after {
             transform: rotate(45deg);
-            // background: var(--menu-indicator-color);
           }
         }
       }
@@ -179,18 +210,19 @@ body {
 
     ul {
       font-weight: 400;
-      > li {
-        ul {
-          padding-left: rem(10px);
-          margin-top: rem(10px);
-          margin-bottom: rem(10px);
-          li {
-            padding: rem(2px) 0;
-            margin: 0;
-            position: relative;
-          }
-        }
-      }
+
+      // > li {
+      //   ul {
+      //     padding-left: rem(10px);
+      //     margin-top: rem(10px);
+      //     margin-bottom: rem(10px);
+      //     li {
+      //       padding: rem(2px) 0;
+      //       margin: 0;
+      //       position: relative;
+      //     }
+      //   }
+      // }
     }
   }
 }
@@ -214,7 +246,6 @@ body {
 
     &:last-child {
       color: var(--ifm-color-primary);
-      opacity: 0.8;
     }
 
     &:not(:last-child):after {
@@ -236,7 +267,7 @@ body {
 
 .theme-edit-this-page {
   color: var(--ifm-menu-color);
-  font-weight: 700;
+  font-weight: 500;
   font-size: 14px;
   // border-top: 1px solid var(--docs-title-border);
 
