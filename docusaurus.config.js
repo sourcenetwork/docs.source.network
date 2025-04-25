@@ -54,15 +54,16 @@ const config = {
         },
       },
       colorMode: {
-        respectPrefersColorScheme: true,
+        respectPrefersColorScheme: false,
+        defaultMode: "dark",
       },
       navbar: {
         title: null,
         hideOnScroll: false,
         logo: {
           alt: "Source Network Documentation",
-          src: "img/source-docs-full-light.svg",
-          srcDark: "img/source-docs-full-dark.svg",
+          src: "img/source-docs-logo_v2.svg",
+          srcDark: "img/source-docs-logo-w_v2.svg",
         },
         items: [
           {
@@ -97,8 +98,8 @@ const config = {
       footer: {
         logo: {
           alt: "Facebook Open Source Logo",
-          src: "img/source-full-light.svg",
-          srcDark: "img/source-full-dark.svg",
+          src: "img/source-logo_v2.svg",
+          srcDark: "img/source-logo-w_v2.svg",
           href: "https://source.network",
         },
         links: [

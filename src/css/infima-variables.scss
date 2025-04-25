@@ -1,20 +1,21 @@
 // Custom vars
 :root {
-  --card-color: rgb(255, 255, 255, 0.8);
+  --card-color: rgb(255, 255, 255, 0.9);
   --card-border-color: #e8e8e8;
   --card-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   --card-box-shadow-highlight: 0 2px 25px rgba(31, 96, 233, 0.05);
 }
 
 html[data-theme="dark"] {
-  --card-color: rgb(29, 29, 29, 0.8);
+  --card-color: rgb(29, 29, 29, 0.4);
   --card-border-color: #313131;
   --card-box-shadow: 0 2px 25px rgba(238, 238, 238, 0.05);
 }
 
 :root {
   // Colors
-  --ifm-color-primary: rgb(31, 96, 233);
+  // --ifm-color-primary: rgb(31, 96, 233);
+  --ifm-color-primary: #00CD50;
   --ifm-color-primary-dark: #1554d8;
   --ifm-color-primary-darker: #144fcc;
   --ifm-color-primary-darkest: #1141a8;
@@ -30,12 +31,13 @@ html[data-theme="dark"] {
     "Segoe UI Symbol";
   --ifm-font-size-base: 1rem;
   --ifm-font-weight-bold: 800;
+  --ifm-heading-font-family: "Funnel Display", sans-serif;
+  --ifm-heading-font-weight: 400;
 
   // Base
   --ifm-global-radius: 0rem;
 
   // Code
-
   --ifm-code-background: rgb(226, 226, 226);
   --ifm-code-font-size: 80%;
   --ifm-pre-padding: 1rem;
@@ -75,8 +77,9 @@ html[data-theme="dark"] {
 }
 
 html[data-theme="dark"] {
-  --ifm-color-primary: #5087fd;
-  --ifm-background-color: #1d1d1d;
+  // --ifm-color-primary: #5087fd;
+  --ifm-color-primary: #00CD50;
+  --ifm-background-color: #000000;
   --ifm-background-surface-color: var(--ifm-background-color);
   --docs-title-border: #343434;
   --ifm-toc-border-color: transparent;

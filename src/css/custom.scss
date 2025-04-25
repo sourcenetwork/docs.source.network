@@ -28,19 +28,6 @@ body {
 
 // html[data-theme="dark"] {}
 
-//  Pages
-
-.home-page {
-  background-image: url(/img/hero_grid_black_1.png);
-  background-repeat: no-repeat;
-  background-position: 100% 10%;
-  background-size: rem(350px);
-
-  &[data-theme="dark"] {
-    background-image: url(/img/hero_grid_white_1.png);
-  }
-}
-
 //  Layout
 
 .footer > .container,
@@ -308,7 +295,7 @@ body {
     }
 
     html[data-theme="dark"] & {
-      background-color: #202020;
+      background-color: #000000;
       border-color: rgb(56, 56, 56);
     }
   }
