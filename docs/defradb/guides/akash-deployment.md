@@ -1,6 +1,7 @@
 ---
 sidebar_label: Akash Deployment Guide
 sidebar_position: 70
+draft: true
 ---
 # Deploy DefraDB on Akash
 
