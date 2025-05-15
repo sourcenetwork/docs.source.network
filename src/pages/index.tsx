@@ -35,7 +35,7 @@ const HomepageFeatures: FC<{}> = () => {
       link: "/sourcehub",
       image: "./img/product/sourcehub.svg",
       title: "SourceHub",
-      subTitle: "Build trust & interopability",
+      subTitle: "Build trust & interoperability",
     },
     {
       link: "/orbis",
