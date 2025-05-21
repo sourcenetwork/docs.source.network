@@ -23,6 +23,10 @@ html[data-theme="dark"] {
   --ifm-color-primary-lightest: #6793f0;
   --ifm-color-secondary-contrast-background: rgb(236, 236, 236);
 
+  --ifm-color-info-dark: rgb(0, 205, 80);
+  --ifm-color-info-darker: rgb(7, 160, 66);
+  --ifm-color-info-darkest: rgb(4, 146, 59);
+
   // Fonts
   --ifm-font-family-base: "Inter", system-ui, -apple-system, Segoe UI, Roboto,
     Ubuntu, Cantarell, Noto Sans, sans-serif, BlinkMacSystemFont, "Segoe UI",
@@ -61,6 +65,7 @@ html[data-theme="dark"] {
   --docs-title-border: #e0e0e0;
 
   --ifm-alert-border-left-width: 2px;
+  --ifm-alert-border-radius: 0.5rem;
 
   /* Horizontal Rules. */
   --ifm-breadcrumb-spacing: 0rem;
@@ -69,6 +74,9 @@ html[data-theme="dark"] {
   --ifm-breadcrumb-separator: none;
   --ifm-menu-color: var(--ifm-color-emphasis-700);
   --ifm-menu-color-active: var(--ifm-color-primary);
+
+  --ifm-color-info-contrast-background: rgb(255, 255, 255);
+  --ifm-color-info-contrast-foreground: rgb(0, 0, 0);
 }
 
 html[data-theme="dark"] {
@@ -78,6 +86,9 @@ html[data-theme="dark"] {
   --docs-title-border: #343434;
   --ifm-toc-border-color: transparent;
   --ifm-menu-color: var(--ifm-color-emphasis-400);
+
+  --ifm-color-info-contrast-background: rgb(0, 0, 0);
+  --ifm-color-info-contrast-foreground: rgb(255, 255, 255);
 }
 
 .markdown {

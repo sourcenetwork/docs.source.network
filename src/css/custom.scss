@@ -37,7 +37,7 @@ body {
   --code-token-punctuation: hsl(var(--foreground-light) / 1);
   --code-token-link: hsl(var(--foreground-light) / 1);
   --code-token-number: hsl(var(--foreground-light) / 1);
-  --code-token-property: #15593b;
+  --code-token-property: rgb(105, 76, 156);
   --code-highlight-color: #1c1c1c;
 }
 
@@ -63,7 +63,7 @@ html[data-theme="dark"] {
   --code-token-punctuation: #ffffff;
   --code-token-link: #ffffff;
   --code-token-number: #ffffff;
-  --code-token-property: #3ecf8e;
+  --code-token-property: rgb(180, 148, 234);
   --code-highlight-color: #232323;
 }
 
