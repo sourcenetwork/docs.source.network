@@ -22,11 +22,50 @@ body {
 :root {
   --root-wrapper-width: 90rem;
   --menu-indicator-color: #ccc;
+
+  // Light theme
+  --code-foreground: #000000;
+  --code-background: #f3f3f3;
+  --code-border: #d1d1d1;
+  --code-token-keyword: #5a2cbc;
+  --code-token-constant: #1a7032;
+  --code-token-string: #d18c0c;
+  --code-token-comment: #7e7e7e;
+  --code-token-parameter: hsl(var(--foreground-light) / 1);
+  --code-token-function: #1a7032;
+  --code-token-string-expression: #f1a10d;
+  --code-token-punctuation: hsl(var(--foreground-light) / 1);
+  --code-token-link: hsl(var(--foreground-light) / 1);
+  --code-token-number: hsl(var(--foreground-light) / 1);
+  --code-token-property: #15593b;
+  --code-highlight-color: #1c1c1c;
+}
+
+pre {
+  border: 2px solid var(--code-border);
 }
 
 // Dark overrides
 
-// html[data-theme="dark"] {}
+html[data-theme="dark"] {
+  // Dark theme
+  --code-foreground: #fffff;
+  --code-background: #191919;
+  --code-border: #252525;
+  --code-token-keyword: #aca4ff;
+  --code-foreground: #ffffff;
+  --code-token-constant: #3ecf6e;
+  --code-token-string: #e7bb94;
+  --code-token-comment: #7e7e7e;
+  --code-token-parameter: #ffffff;
+  --code-token-function: #3ecf6e;
+  --code-token-string-expression: #ffcda1;
+  --code-token-punctuation: #ffffff;
+  --code-token-link: #ffffff;
+  --code-token-number: #ffffff;
+  --code-token-property: #3ecf8e;
+  --code-highlight-color: #232323;
+}
 
 //  Layout
 
