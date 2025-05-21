@@ -27,19 +27,19 @@ const HomepageFeatures: FC<{}> = () => {
   const features = [
     {
       link: "/defradb",
-      image: "./img/icon-defradb.svg",
+      image: "./img/product/defradb.svg",
       title: "DefraDB",
       subTitle: "Deploy decentralized databases",
     },
     {
       link: "/sourcehub",
-      image: "./img/icon-sourcehub.svg",
+      image: "./img/product/sourcehub.svg",
       title: "SourceHub",
-      subTitle: "Build trust & interopability",
+      subTitle: "Build trust & interoperability",
     },
     {
       link: "/orbis",
-      image: "./img/icon-orbis.svg",
+      image: "./img/product/orbis.svg",
       title: "Orbis",
       subTitle: "Distributed secrets management",
     }

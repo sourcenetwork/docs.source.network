@@ -1,8 +1,7 @@
 // @ts-check
 // Note: type annotations allow type checking and IDEs autocompletion
 
-const lightCodeTheme = require("./src/code-theme/code-theme-light");
-const darkCodeTheme = require("prism-react-renderer/themes/oceanicNext");
+const variableCodeTheme = require("./src/code-theme/code-theme");
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
@@ -54,15 +53,16 @@ const config = {
         },
       },
       colorMode: {
-        respectPrefersColorScheme: true,
+        respectPrefersColorScheme: false,
+        defaultMode: "dark",
       },
       navbar: {
         title: null,
         hideOnScroll: false,
         logo: {
           alt: "Source Network Documentation",
-          src: "img/source-docs-full-light.svg",
-          srcDark: "img/source-docs-full-dark.svg",
+          src: "img/source-docs-logo_v2.svg",
+          srcDark: "img/source-docs-logo-w_v2.svg",
         },
         items: [
           {
@@ -97,8 +97,8 @@ const config = {
       footer: {
         logo: {
           alt: "Facebook Open Source Logo",
-          src: "img/source-full-light.svg",
-          srcDark: "img/source-full-dark.svg",
+          src: "img/source-logo_v2.svg",
+          srcDark: "img/source-logo-w_v2.svg",
           href: "https://source.network",
         },
         links: [
@@ -149,8 +149,7 @@ const config = {
         copyright: `Copyright © ${new Date().getFullYear()} Source, Inc & Democratized Data Foundation. Built with Docusaurus.`,
       },
       prism: {
-        theme: lightCodeTheme,
-        darkTheme: darkCodeTheme,
+        theme: variableCodeTheme,
       },
     }),
   plugins: [
