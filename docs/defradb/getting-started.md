@@ -30,34 +30,9 @@ export PATH=$PATH:$(go env GOPATH)/bin
 
 We recommend experimenting with queries using a native GraphQL client. [GraphiQL](https://altairgraphql.dev/#download) is a popular option.
 
-## Start
+## Key Management - Initial Setup
 
-Start a node by executing:
-
-```bash
-defradb start
-```
-
-Verify the local connection:
-
-```bash
-defradb client collection describe
-```
-
-## Configuration
-
-DefraDB uses a default configuration:
-
-- Data directory: `~/.defradb/`
-- GraphQL endpoint: `http://localhost:9181/api/v0/graphql`
-
-The `client` command interacts with the locally running node.
-
-The GraphQL endpoint can be used with a GraphQL client (e.g., Altair) to conveniently perform requests (`query`, `mutation`) and obtain schema introspection.  Read more about [configuration options](./references/config.md).
-
-## Key Management
-
-DefraDB has a built-in keyring for storing private keys securely. Keys are loaded at startup, and a secret must be provided via the `DEFRA_KEYRING_SECRET` environment variable. The following keys are loaded from the keyring on start:
+DefraDB has a built-in keyring for storing private keys securely. Keys are loaded at startup, and <b>a secret must be provided via the `DEFRA_KEYRING_SECRET` environment variable</b>. The following keys are loaded from the keyring on start:
 
 - `peer-key` Ed25519 private key (required)
 - `encryption-key` AES-128, AES-192, or AES-256 key (optional)
@@ -84,6 +59,31 @@ defradb keyring --help
 ```
 
 NOTE: Node identity is an identity assigned to the node. It is used to exchange encryption keys with other nodes.
+
+## Start
+
+Start a node by executing:
+
+```bash
+defradb start
+```
+
+Verify the local connection:
+
+```bash
+defradb client collection describe
+```
+
+## Configuration
+
+DefraDB uses a default configuration:
+
+- Data directory: `~/.defradb/`
+- GraphQL endpoint: `http://localhost:9181/api/v0/graphql`
+
+The `client` command interacts with the locally running node.
+
+The GraphQL endpoint can be used with a GraphQL client (e.g., Altair) to conveniently perform requests (`query`, `mutation`) and obtain schema introspection.  Read more about [configuration options](./references/config.md).
 
 ## Add a schema type
 
