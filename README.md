@@ -19,10 +19,11 @@ Most changes are reflected live without having to restart the server.
 
 This website is built using [Docusaurus 2](https://docusaurus.io/).
 
+Documentation is written using [common markdown syntax](https://commonmark.org/help/) or [MDX syntax](https://mdxjs.com/docs/what-is-mdx/#mdx-syntax) - the file extension will determine the syntax (.md for common markdown and .mdx for MDX).
+
 ## Deployment
 
 The website is automatically deployed using Cloudfare Pages.
-
 
 ## Contributing
 
