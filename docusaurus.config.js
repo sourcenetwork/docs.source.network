@@ -90,7 +90,7 @@ const config = {
             type: "docSidebar",
             position: "left",
             sidebarId: "lensvmSidebar",
-            label: "LensVMM",
+            label: "LensVM",
             className: "header-docs-link-lensvm",
           },
           {
