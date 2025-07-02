@@ -43,6 +43,12 @@ const HomepageFeatures: FC<{}> = () => {
       title: "Orbis",
       subTitle: "Distributed secrets management",
     }
+    {
+      link: "/lensvm",
+      image: "./img/product/lensvm.svg",
+      title: "LensVM",
+      subTitle: "Bidirectional data transformation",
+    }
   ]
 
   return (
