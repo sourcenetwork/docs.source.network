@@ -76,3 +76,86 @@ Example Lenses written in:
 - [AssemblyScript](https://www.assemblyscript.org/)
 
 can be found in this repository and in [DefraDB](https://github.com/worldsibu/defradb).
+
+## Building
+
+Once you have the listed prerequisites installed, you should be able to build everything in the repository and run all the tests by running `make test` from the repository root.
+
+### Prerequisites
+
+The following tools need to be installed and added to your PATH before you can build the full contents of the repository:
+
+- [rustup](https://www.rust-lang.org/tools/install) and Cargo/rustc, typically installed via rustup.
+  - Please pay attention to any prerequisites, for example if on Ubuntu you may need to install the `build-essential` package
+- If connection errors are experienced when retrieving rust package dependencies from crates.io, you might need to tweak your `.gitconfig` as per this [comment](https://github.com/rust-lang/cargo/issues/3381#issuecomment-1193730972).
+- `npm`, typically installed via [nvm](https://github.com/nvm-sh/nvm#install--update-script)
+- [Go](https://golang.google.cn/doc/install)
+
+## Basic Lens Example
+
+The easiest way to get started writing a Lens is by using Rust, thanks to the [`lens_sdk`](https://docs.rs/lens_sdk/0.8.0/lens_sdk) crate, which provides helpful macros and utilities for Lens development.
+
+A minimal example is shown in the [`define!` macro documentation](https://docs.rs/lens_sdk/0.8.0/lens_sdk/macro.define.html#examples). This example demonstrates a simple forward transformation that iterates through input documents and increments the `age` field by 1.
+
+## Writing a Lens (SDK)
+
+Writing a simple Lens using the Rust SDK is straightforward, and the process is well documented in the [`lens_sdk` crate documentation](https://docs.rs/lens_sdk/0.8.0/lens_sdk).
+
+As shown in the [Basic Lens Example](#basic-lens-example), the first example demonstrates a minimal forward transformation. The second example in the [`define!` macro docs](https://docs.rs/lens_sdk/0.8.0/lens_sdk/macro.define.html#examples) builds upon this by introducing parameters and an inverse function, showcasing how Lenses can support bi-directional transformations.
+
+For more real-world and test-driven examples, explore the following repositories:
+
+- [Lens test modules](https://github.com/lens-vm/lens/blob/main/tests/modules)
+- [DefraDB lens tests](https://github.com/sourcenetwork/defradb/tree/develop/tests/lenses)
+
+These examples provide additional context and cover a range of use cases, including schema-aware transformations and reversible pipelines.
+
+## Writing a Lens (without SDK)
+
+Writing a Lens without using the Rust SDK is significantly more involved and intended for advanced users who want to build in languages other than Rust, or prefer full control over serialization and transformation logic.
+
+Currently, the only working example we have is written in [AssemblyScript](https://www.assemblyscript.org/introduction.html). You can find it here:
+
+- [AssemblyScript Lens example](https://github.com/lens-vm/lens/blob/main/tests/modules/as_wasm32_simple/assembly/index.ts)
+
+This example demonstrates a minimal Lens implementation without the support of an SDK. However, it requires:
+
+- A deep understanding of the Lens transfer protocol
+- Manual implementation of (de)serialization logic
+- Proficiency in AssemblyScript or your language of choice
+
+**Note:** The AssemblyScript example was created as a proof of concept and may not reflect best practices. It was also the author’s first and only project in that language.
+
+### Recommendation
+
+For most use cases, we recommend using the [Rust SDK](https://docs.rs/lens_sdk/0.8.0/lens_sdk), even partially. The SDK simplifies the process considerably and can be adopted incrementally — you can start with full SDK support and gradually replace pieces with handcrafted logic as needed.
+
+However, this approach is limited to Rust. If you plan to write Lenses in other languages, you’ll need to implement everything from scratch, including the data model handling and WASM interface.
+
+## Composing Lenses
+
+Lenses can be composed into transformation pipelines using the Go `config` sub-package:
+
+- [Go Config Package](https://github.com/lens-vm/lens/tree/main/host-go/config)
+
+Composition is handled via the `model.Lens` type:
+
+- [`model.Lens` definition](https://github.com/lens-vm/lens/blob/main/host-go/config/model/lens.go)
+
+You can configure composition by supplying either a `model.Lens` object directly or by referencing a JSON file (from the local filesystem or an HTTP URL) that conforms to the `model.Lens` schema.
+
+> **Note:** Configuring Lenses does **not** execute them. Instead, it returns an enumerable pipeline that you can iterate through to apply the configured transformations.
+
+This enumerable can be extended by:
+
+- Composing additional Lenses using the `config` package
+- Chaining in native enumerable implementations to enrich or customize the pipeline
+
+### Examples
+
+You can find working examples and test coverage of Lens composition in the following repositories:
+
+- [Go engine tests](https://github.com/lens-vm/lens/tree/main/host-go/engine/tests)
+- [CLI integration tests](https://github.com/lens-vm/lens/tree/main/tests/integration/cli)
+
+These examples demonstrate how to declaratively build and extend Lens pipelines for different execution environments.
