@@ -44,7 +44,7 @@ Each Lens must implement the following interface:
 
 Data passed across the WASM boundary—into `set_param()`, `transform()`, and `inverse()`—follows this binary format:
 
-```
+```json
 
 [TypeId][Length][Payload]
 ```
