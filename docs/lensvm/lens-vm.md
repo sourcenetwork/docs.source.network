@@ -64,7 +64,7 @@ Data passed across the WASM boundary—into `set_param()`, `transform()`, and `i
 
 ### Rust SDK
 
-To simplify Lens development, a [Rust SDK](https://docs.rs/lens_sdk) is available. It handles memory allocation, pointer management, and payload formatting, so you can focus on writing transformation logic.
+To simplify Lens development, a [Rust SDK](https://docs.rs/lens_sdk) is available. It handles the boilerplate required to fullfill the above interfaces and safely transfer data across the wasm boundary, so you can focus on writing transformation logic.
 
 Available on [crates.io](https://crates.io/crates/lens_sdk) and GitHub: [lens-vm/lens](https://github.com/lens-vm/lens)
 
@@ -75,33 +75,19 @@ Example Lenses written in:
 - [Rust](https://www.rust-lang.org/)
 - [AssemblyScript](https://www.assemblyscript.org/)
 
-can be found in this repository and in [DefraDB](https://github.com/worldsibu/defradb).
-
-## Building
-
-Once you have the listed prerequisites installed, you should be able to build everything in the repository and run all the tests by running `make test` from the repository root.
-
-### Prerequisites
-
-The following tools need to be installed and added to your PATH before you can build the full contents of the repository:
-
-- [rustup](https://www.rust-lang.org/tools/install) and Cargo/rustc, typically installed via rustup.
-  - Please pay attention to any prerequisites, for example if on Ubuntu you may need to install the `build-essential` package
-- If connection errors are experienced when retrieving rust package dependencies from crates.io, you might need to tweak your `.gitconfig` as per this [comment](https://github.com/rust-lang/cargo/issues/3381#issuecomment-1193730972).
-- `npm`, typically installed via [nvm](https://github.com/nvm-sh/nvm#install--update-script)
-- [Go](https://golang.google.cn/doc/install)
+can be found in this repository and in [DefraDB](https://github.com/sourcenetwork/defradb).
 
 ## Basic Lens Example
 
-The easiest way to get started writing a Lens is by using Rust, thanks to the [`lens_sdk`](https://docs.rs/lens_sdk/0.8.0/lens_sdk) crate, which provides helpful macros and utilities for Lens development.
+The easiest way to get started writing a Lens is by using Rust, thanks to the [`lens_sdk`](https://docs.rs/lens_sdk) crate, which provides helpful macros and utilities for Lens development.
 
-A minimal example is shown in the [`define!` macro documentation](https://docs.rs/lens_sdk/0.8.0/lens_sdk/macro.define.html#examples). This example demonstrates a simple forward transformation that iterates through input documents and increments the `age` field by 1.
+A minimal example is shown in the [`define!` macro documentation](https://docs.rs/lens_sdk/latest/lens_sdk/macro.define.html#examples). This example demonstrates a simple forward transformation that iterates through input documents and increments the `age` field by 1.
 
 ## Writing a Lens (SDK)
 
-Writing a simple Lens using the Rust SDK is straightforward, and the process is well documented in the [`lens_sdk` crate documentation](https://docs.rs/lens_sdk/0.8.0/lens_sdk).
+Writing a simple Lens using the Rust SDK is straightforward, and the process is well documented in the [`lens_sdk` crate documentation](https://docs.rs/lens_sdk).
 
-As shown in the [Basic Lens Example](#basic-lens-example), the first example demonstrates a minimal forward transformation. The second example in the [`define!` macro docs](https://docs.rs/lens_sdk/0.8.0/lens_sdk/macro.define.html#examples) builds upon this by introducing parameters and an inverse function, showcasing how Lenses can support bi-directional transformations.
+As shown in the [Basic Lens Example](#basic-lens-example), the first example demonstrates a minimal forward transformation. The second example in the [`define!` macro docs](https://docs.rs/lens_sdk/latest/lens_sdk/macro.define.html#examples) builds upon this by introducing parameters and an inverse function, showcasing how Lenses can support bi-directional transformations.
 
 For more real-world and test-driven examples, explore the following repositories:
 
@@ -123,8 +109,6 @@ This example demonstrates a minimal Lens implementation without the support of a
 - A deep understanding of the Lens transfer protocol
 - Manual implementation of (de)serialization logic
 - Proficiency in AssemblyScript or your language of choice
-
-**Note:** The AssemblyScript example was created as a proof of concept and may not reflect best practices. It was also the author’s first and only project in that language.
 
 ### Recommendation
 
