@@ -29,11 +29,11 @@ Each Lens must implement the following interface:
 
 | Function               | Type      | Required | Description |
 |:-----------------------|:----------|:---------|:------------|
-| `alloc(unsigned64)`    | Exported  | Yes        | Allocates memory for LensVM to store input data. |
-| `next() -> unsigned8`  | Imported  | Yes        | Retrieves the next input item from the LensVM engine. |
-| `set_param(unsigned8) -> unsigned8` | Exported | No | (Optional) Accepts configuration data before input processing begins. |
-| `transform() -> unsigned8` | Exported | Yes     | Core transformation function. Applies logic to one or more inputs and returns the output. |
-| `inverse() -> unsigned8`   | Exported | No     | (Optional) Performs reverse transformation using the same interface as `transform()`. |
+| `alloc(unsigned64)`    | Exported  | Yes        | Allocates a memory block of the given size. Called by the LensVM engine. |
+| `next() -> unsigned8`  | Imported  | Yes        | Called by the Lens to retrieve a pointer to the next input data item from the engine. |
+| `set_param(unsigned8) -> unsigned8` | Exported | No | Accepts static configuration data at initialization. Receives a pointer to the config and returns a pointer to an OK or error response. Called once before any input is processed. |
+| `transform() -> unsigned8` | Exported | Yes     | Core transformation logic. Pulls zero or more inputs using `next()`, applies transformation, and returns a pointer to a single output item. Supports stateful transformations. |
+| `inverse() -> unsigned8`   | Exported | No     | Optional reverse transformation logic, same interface as `transform()`. |
 
 ### WASM data format
 
