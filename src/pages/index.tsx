@@ -42,6 +42,12 @@ const HomepageFeatures: FC<{}> = () => {
       image: "./img/product/orbis.svg",
       title: "Orbis",
       subTitle: "Distributed secrets management",
+    },
+    {
+      link: "/lensvm",
+      image: "./img/product/lensvm.svg",
+      title: "LensVM",
+      subTitle: "Bidirectional data transformation",
     }
   ]
 

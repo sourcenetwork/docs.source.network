@@ -87,6 +87,13 @@ const config = {
             className: "header-docs-link-orbis",
           },
           {
+            type: "docSidebar",
+            position: "left",
+            sidebarId: "lensvmSidebar",
+            label: "LensVM",
+            className: "header-docs-link-lensvm",
+          },
+          {
             href: "https://github.com/sourcenetwork/docs.source.network",
             "aria-label": "GitHub repository",
             className: "header-github-link",
