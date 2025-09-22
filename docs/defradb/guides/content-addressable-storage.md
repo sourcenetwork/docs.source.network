@@ -37,7 +37,14 @@ CAS in DefraDB provides several important architectural advantages:
 * **Efficient versioning**: All previous states of data remain accessible, making advanced features like time-travel queries possible.
 
 # CAS in Action
-Walk through a practical example: storing data, retrieving it by hash, and how updates flow across peers.
+*Walk through a practical example: storing data, retrieving it by hash, and how updates flow across peers.
+
+Here’s how it works step by step:  
+
+- **Storing Data**: When you create a document (for example, a User record), DefraDB calculates a CID for it and saves that initial version.  
+- **Updating Data**: Each time you make a change, DefraDB adds a new commit to the document’s Merkle DAG. Every update gets its own CID.  
+- **Retrieving by Hash**: To look up a specific version, you query using its CID. DefraDB then reconstructs that version by walking the DAG and applying the stored changes.  
+- **Sharing Updates**: In a peer-to-peer setup, updates (CIDs and deltas) are sent to other peers. They verify the changes and merge them using CRDT rules. Because every peer keeps the full history, the system supports conflict resolution and even works offline.  
 
 # How It Connects
 show how CAS underpins CRDTs, synchronization, and offline-first patterns.
