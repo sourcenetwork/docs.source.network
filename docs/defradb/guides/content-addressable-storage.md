@@ -9,7 +9,7 @@ sidebar_position: 80
 
 Content-Addressable Storage (CAS) is a way to store data that works differently from what you might be used to. Normally, when you save something on your computer or online, you find it by where it is stored, like a file path or a website address. But with CAS, each piece of data gets its own special ID based on what it actually is.
 
-This special ID comes from running the data through a hash function, which turns it into a unique code. If the data changes even a little, the code changes too. Content-addressable storage can tell if someone tried to change or mess with the data. It also saves space because if two pieces of data are exactly the same, it stores that data only once.
+This special ID comes from running the data through a hash function, which turns it into a unique digest. If the data changes even a little, the digest changes too. Content-addressable storage can tell if someone tried to change or mess with the data. It also saves space because if two pieces of data are exactly the same, it stores that data only once.
 
 This method matters because it helps keep data safe and trustworthy. It makes it easy to track different versions over time and works well in systems where many computers share data with each other.
 
@@ -43,7 +43,7 @@ Using CAS in DefraDB brings many benefits that make data safer, easier to manage
 
 Here’s how it works step by step:  
 
-* **Storing data**: When you create a new document, like a user profile, DefraDB calculates a unique code called a CID by hashing the document content. The CID becomes the document’s permanent ID. DefraDB stores the document under that CID. If two documents have the same content, then they share the same CID and DefraDB stores the data only once.
+* **Storing data**: When you create a new document, like a user profile, DefraDB calculates a unique digest called a CID by hashing the document content. The CID becomes the document’s permanent ID. DefraDB stores the document under that CID. If two documents have the same content, then they share the same CID and DefraDB stores the data only once.
 
 * **Updating data**: When you change a document, DefraDB does not replace the old data. It saves the update as a separate new node, linking it to the previous version and forming a chain called a Merkle DAG. Each update gets its own CID representing a new version. DefraDB keeps the full change history this way.
 
