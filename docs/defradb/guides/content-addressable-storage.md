@@ -96,7 +96,3 @@ DefraDB implements **Merkle CRDTs**, a specialized type of Conflict-free Replica
 1. This process ensures all peers arrive at the same up-to-date data without conflicts or loss.
 
 Overall, content-addressable storage lets DefraDB create reliable, easy-to-sync, and conflict-free data systems that work online and offline.
-
-## For Developers
-
-*Add code snippets, commands, and API references*
