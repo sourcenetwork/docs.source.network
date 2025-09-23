@@ -51,7 +51,7 @@ Here’s how it works step by step:
 
 Content-addressable storage gives DefraDB a strong foundation to manage data across devices, users, and network conditions. Here is how it supports key features step by step:
 
-### Supporting CRDTs for Conflict-Free Collaboration
+### Supporting CRDTs for Conflict-free Collaboration
 
 DefraDB implements **Merkle CRDTs**, a specialized type of Conflict-free Replicated Data Type that combines traditional CRDT merge semantics with Merkle DAGs for efficient distributed collaboration:
 
