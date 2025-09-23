@@ -51,7 +51,7 @@ Here’s how it works step by step:
 
 * **Sharing updates**: When users or computers connect in a peer-to-peer network, they share new CIDs and updates. Each peer verifies the content against its hash to prevent tampering. Using special rules called CRDTs, peers merge updates even if changes happen at the same time. Since every peer saves the full history, DefraDB syncs changes correctly, handles conflicts, and works well offline before syncing back online.
 
-## How it connects
+## Synchronization process
 
 Content-addressable storage gives DefraDB a strong foundation to manage data across devices, users, and network conditions. Here is how it supports key features step by step:
 
