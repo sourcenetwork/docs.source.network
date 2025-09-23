@@ -59,9 +59,9 @@ Content-addressable storage gives DefraDB a strong foundation to manage data acr
 
 1. Each change to a document gets its own CID based on the content, so every update is unique and easy to identify.
 
-2. DefraDB links all changes in the Merkle DAG, creating a clear history chain.
+1. DefraDB links all changes in the Merkle DAG, creating a clear history chain.
 
-3. When users edit the same data on different devices simultaneously, DefraDB uses CRDT rules to merge those changes automatically without losing anyone’s work.
+1. When users edit the same data on different devices simultaneously, DefraDB uses CRDT rules to merge those changes automatically without losing anyone’s work.
 
 ### Enabling Efficient Synchronization Across Peers
 
