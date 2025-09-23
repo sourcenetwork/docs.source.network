@@ -57,11 +57,29 @@ Content-addressable storage gives DefraDB a strong foundation to manage data acr
 
 ### Supporting CRDTs for Conflict-Free Collaboration
 
-1. Each change to a document gets its own CID based on the content, so every update is unique and easy to identify.
+DefraDB implements **Merkle CRDTs**, a specialized type of Conflict-free Replicated Data Type that combines traditional CRDT merge semantics with Merkle DAGs for efficient distributed collaboration:
 
-1. DefraDB links all changes in the Merkle DAG, creating a clear history chain.
+**Merkle Clock Implementation:**
+1. Each document change creates a new node in the Merkle DAG with a unique CID and a height value (incremental counter)
+2. The Merkle clock uses the inherent causality of the DAG structure—since node A's CID is embedded in node B, A must exist before B
+3. This eliminates the need to maintain per-peer metadata, making DefraDB efficient in high-churn networks with unlimited peers
 
-1. When users edit the same data on different devices simultaneously, DefraDB uses CRDT rules to merge those changes automatically without losing anyone’s work.
+**Delta State CRDT Semantics:**
+1. DefraDB uses delta state-based CRDTs that only transmit the minimum "delta" needed to transform one state to another
+2. Instead of sending entire document states, only the changed portion (like adding "banana" to a fruit set) is transmitted
+3. This hybrid approach provides the benefits of both operation-based (small message size) and state-based (reliable delivery) CRDTs
+
+**Branching and Merging:**
+1. When peers make concurrent edits, the Merkle DAG naturally branches into independent states
+2. Each branch maintains its own valid history until synchronization occurs
+3. Merging creates a new "merge node" with multiple parents, applying CRDT-specific merge semantics
+4. The system finds common ancestral nodes using height parameters and CIDs to resolve conflicts deterministically
+
+**Conflict Resolution Process:**
+1. When conflicts occur, DefraDB traverses both branches back to their common ancestor
+2. The embedded CRDT type (register, counter, set, etc.) defines the specific merge rules
+3. All changes are preserved in the final merged state, ensuring no data loss
+4. The resulting merge maintains the DAG structure and provides a new canonical head
 
 ### Enabling Efficient Synchronization Across Peers
 
