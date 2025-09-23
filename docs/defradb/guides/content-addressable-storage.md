@@ -9,7 +9,7 @@ sidebar_position: 80
 
 Content-Addressable Storage (CAS) is a way to store data that works differently from what you might be used to. Normally, when you save something on your computer or online, you find it by where it is stored, like a file path or a website address. But with CAS, each piece of data gets its own special ID based on what it actually is.
 
-This special ID comes from taking the data and running it through a math process called a hash, which turns it into a unique code. If the data changes even a little, the code changes too. Content-addressable storage can tell if someone tried to change or mess with the data. It also saves space because if two pieces of data are exactly the same, it stores that data only once.
+This special ID comes from taking the data and running it through a hash function, which turns it into a unique code. If the data changes even a little, the code changes too. Content-addressable storage can tell if someone tried to change or mess with the data. It also saves space because if two pieces of data are exactly the same, it stores that data only once.
 
 This method matters because it helps keep data safe and trustworthy. It makes it easy to track different versions over time and works well in systems where many computers share data with each other.
 
