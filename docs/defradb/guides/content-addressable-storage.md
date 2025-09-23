@@ -47,10 +47,6 @@ Here’s how it works step by step:
 
 * **Updating data**: When you change a document, DefraDB does not replace the old data. It saves the update as a separate new node, linking it to the previous version and forming a chain called a Merkle DAG. Each update gets its own CID representing a new version. DefraDB keeps the full change history this way.
 
-* **Retrieving by Hash**: When you want a specific version, you request it using its CID. DefraDB follows the chain in the Merkle DAG and applies all updates in order to reconstruct the exact version you asked for. This process ensures the data matches the CID perfectly.
-
-* **Sharing updates**: When users or computers connect in a peer-to-peer network, they share new CIDs and updates. Each peer verifies the content against its hash to prevent tampering. Using special rules called CRDTs, peers merge updates even if changes happen at the same time. Since every peer saves the full history, DefraDB syncs changes correctly, handles conflicts, and works well offline before syncing back online.
-
 ## Synchronization process
 
 Content-addressable storage gives DefraDB a strong foundation to manage data across devices, users, and network conditions. Here is how it supports key features step by step:
@@ -60,22 +56,26 @@ Content-addressable storage gives DefraDB a strong foundation to manage data acr
 DefraDB implements **Merkle CRDTs**, a specialized type of Conflict-free Replicated Data Type that combines traditional CRDT merge semantics with Merkle DAGs for efficient distributed collaboration:
 
 **Merkle Clock Implementation:**
+
 1. Each document change creates a new node in the Merkle DAG with a unique CID and a height value (incremental counter)
 2. The Merkle clock uses the inherent causality of the DAG structure—since node A's CID is embedded in node B, A must exist before B
 3. This eliminates the need to maintain per-peer metadata, making DefraDB efficient in high-churn networks with unlimited peers
 
 **Delta State CRDT Semantics:**
+
 1. DefraDB uses delta state-based CRDTs that only transmit the minimum "delta" needed to transform one state to another
 2. Instead of sending entire document states, only the changed portion (like adding "banana" to a fruit set) is transmitted
 3. This hybrid approach provides the benefits of both operation-based (small message size) and state-based (reliable delivery) CRDTs
 
 **Branching and Merging:**
+
 1. When peers make concurrent edits, the Merkle DAG naturally branches into independent states
 2. Each branch maintains its own valid history until synchronization occurs
 3. Merging creates a new "merge node" with multiple parents, applying CRDT-specific merge semantics
 4. The system finds common ancestral nodes using height parameters and CIDs to resolve conflicts deterministically
 
 **Conflict Resolution Process:**
+
 1. When conflicts occur, DefraDB traverses both branches back to their common ancestor
 2. The embedded CRDT type (register, counter, set, etc.) defines the specific merge rules
 3. All changes are preserved in the final merged state, ensuring no data loss
@@ -84,21 +84,15 @@ DefraDB implements **Merkle CRDTs**, a specialized type of Conflict-free Replica
 ### Enabling Efficient Synchronization Across Peers
 
 1. Peers exchange CIDs representing the latest document versions.
-
 1. Each peer compares received CIDs with its own and requests only missing data.
-
 1. Peers verify data by recalculating the hash and matching it to the CID. Peers reject any data that does not match.
-
-1.Verified data is added to the local Merkle DAG to update the document history.
+1. Verified data is added to the local Merkle DAG to update the document history.
 
 ### Making Offline-First Work Smoothly
 
 1. Users make changes locally even without internet. Each update gets a new CID and joins the local Merkle DAG.
-
 1. When online again, devices share new CIDs and sync changes.
-
 1. DefraDB merges updates from different peers using CRDT rules using full change histories.
-
 1. This process ensures all peers arrive at the same up-to-date data without conflicts or loss.
 
 Overall, content-addressable storage lets DefraDB create reliable, easy-to-sync, and conflict-free data systems that work online and offline.
