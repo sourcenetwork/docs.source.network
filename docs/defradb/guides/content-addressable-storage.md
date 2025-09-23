@@ -3,44 +3,88 @@ sidebar_label: Content Addressable Storage
 sidebar_position: 80
 ---
 
-# Overview
-*Intro to CAS, why it matters, and how it’s different from location-based storage.*
+# Content Addressable Storage
 
-Content-Addressable Storage (CAS) is a way of storing data where each piece is identified by the cryptographic hash of its content, rather than by its physical or network location. In traditional storage systems, such as filesystems or cloud buckets, data is located through a path or a URI. With CAS, every unique piece of content gets its own globally unique, unchanging identifier: its content hash. This makes data tamper-evident, automatically deduplicated, and easy to share across peer-to-peer networks. CAS is important because it supports trust, versioning, and decentralization in modern data systems.
+## Overview
 
-# How DefraDB Uses CAS
-*Explain IPLD, Merkle DAGs, and hash-based addressing in plain language. How records are stored/retrieved.*
+Content-Addressable Storage (CAS) is a way to store data that works differently from what you might be used to. Normally, when you save something on your computer or online, you find it by where it is stored, like a file path or a website address. But with CAS, each piece of data gets its own special ID based on what it actually is.
+
+This special ID comes from taking the data and running it through a math process called a hash, which turns it into a unique code. If the data changes even a little, the code changes too. Content-addressable storage can tell if someone tried to change or mess with the data. It also saves space because if two pieces of data are exactly the same, it stores that data only once.
+
+This method matters because it helps keep data safe and trustworthy. It makes it easy to track different versions over time and works well in systems where many computers share data with each other.
+
+## How DefraDB uses CAS
 
 DefraDB’s data model is built on IPLD (InterPlanetary Linked Data), which uses Merkle Directed Acyclic Graphs (Merkle DAGs) and hash-based addressing. Here’s what that means in plain language:
 
 * **IPLD**: This is a way to represent and connect data across distributed systems using hashes. It makes data universally linkable and verifiable.
+
 * **Merkle DAGs**: In DefraDB, every document and every update is a node in a Merkle DAG. Each change creates a “commit,” similar to Git. The commit has its own hash and also links back to earlier commits by their hashes.
+
 * **Hash-based addressing**: Each version of a document, or even a field update, is given a unique identifier called a CID (Content Identifier). The CID is generated from the content itself, so if the content changes, the CID changes too.
-**Storage and retrieval**: When you create or update a document, DefraDB saves the difference (the part that changed) and assigns it a CID. To fetch the data, a user or peer asks for the CID. The system then finds the content and verifies it by recalculating the hash.
 
-# Why It Matters
-*Benefits to be detailed*
+* **Storage and retrieval**: When you create or update a document, DefraDB saves the difference (the part that changed) and assigns it a CID. To fetch the data, a user or peer asks for the CID. The system then finds the content and verifies it by recalculating the hash.
 
-CAS in DefraDB provides several important architectural advantages:
+## Why it matters
 
-* **Immutability and auditability**: Every update to a document is recorded permanently and can be verified independently.
-* **Deduplication**: Because each piece of data is identified by its content, identical data is automatically stored only once.
-* **Tamper-evidence**: If someone tries to alter data, the hash no longer matches, making unauthorized changes easy to detect.
-* **Peer-to-Peer friendly**: CAS works seamlessly with Merkle DAGs to support peer-to-peer syncing and local-first software, which is especially valuable for offline and edge environments.
-* **Efficient versioning**: All previous states of data remain accessible, making advanced features like time-travel queries possible.
+Using CAS in DefraDB brings many benefits that make data safer, easier to manage, and more flexible.
 
-# CAS in Action
-*Walk through a practical example: storing data, retrieving it by hash, and how updates flow across peers.*
+* **Immutability and auditability**: Every time you change a document, DefraDB records that update permanently. You can always see what happened and when, making the data trustworthy.
+
+* **Deduplication**: DefraDB stores only one copy of identical data because it identifies data by its content. This saves space and makes storage efficient.
+
+* **Tamper-evidence**: If someone changes data without permission, the content hash stops matching. DefraDB can detect this easily.
+
+* **Peer-to-peer friendly**: CAS works well when many computers share data directly. DefraDB syncs updates quickly, even when offline or on weak networks.
+
+* **Efficient versioning**: DefraDB saves every change with its own ID. You can go back to any earlier version of the data, making “time travel” through history possible.
+
+## CAS in action
 
 Here’s how it works step by step:  
 
-- **Storing Data**: When you create a document (for example, a User record), DefraDB calculates a CID for it and saves that initial version.  
-- **Updating Data**: Each time you make a change, DefraDB adds a new commit to the document’s Merkle DAG. Every update gets its own CID.  
-- **Retrieving by Hash**: To look up a specific version, you query using its CID. DefraDB then reconstructs that version by walking the DAG and applying the stored changes.  
-- **Sharing Updates**: In a peer-to-peer setup, updates (CIDs and deltas) are sent to other peers. They verify the changes and merge them using CRDT rules. Because every peer keeps the full history, the system supports conflict resolution and even works offline.  
+* **Storing data**: When you create a new document, like a user profile, DefraDB calculates a unique code called a CID by hashing the document content. The CID becomes the document’s permanent ID. DefraDB stores the document under that CID. If two documents have the same content, then they share the same CID and DefraDB stores the data only once.
 
-# How It Connects
-*show how CAS underpins CRDTs, synchronization, and offline-first patterns.
-*
-# For Developers
+* **Updating data**: When you change a document, DefraDB does not replace the old data. It saves the update as a separate new node, linking it to the previous version and forming a chain called a Merkle DAG. Each update gets its own CID representing a new version. DefraDB keeps the full change history this way.
+
+* **Retrieving by Hash**: When you want a specific version, you request it using its CID. DefraDB follows the chain in the Merkle DAG and applies all updates in order to reconstruct the exact version you asked for. This process ensures the data matches the CID perfectly.
+
+* **Sharing updates**: When users or computers connect in a peer-to-peer network, they share new CIDs and updates. Each peer verifies the content against its hash to prevent tampering. Using special rules called CRDTs, peers merge updates even if changes happen at the same time. Since every peer saves the full history, DefraDB syncs changes correctly, handles conflicts, and works well offline before syncing back online.
+
+## How it connects
+
+Content-addressable storage gives DefraDB a strong foundation to manage data across devices, users, and network conditions. Here is how it supports key features step by step:
+
+### Supporting CRDTs for Conflict-Free Collaboration
+
+1. Each change to a document gets its own CID based on the content, so every update is unique and easy to identify.
+
+2. DefraDB links all changes in the Merkle DAG, creating a clear history chain.
+
+3. When users edit the same data on different devices simultaneously, DefraDB uses CRDT rules to merge those changes automatically without losing anyone’s work.
+
+### Enabling Efficient Synchronization Across Peers
+
+1. Peers exchange CIDs representing the latest document versions.
+
+1. Each peer compares received CIDs with its own and requests only missing data.
+
+1. Peers verify data by recalculating the hash and matching it to the CID. Peers reject any data that does not match.
+
+1.Verified data is added to the local Merkle DAG to update the document history.
+
+### Making Offline-First Work Smoothly
+
+1. Users make changes locally even without internet. Each update gets a new CID and joins the local Merkle DAG.
+
+1. When online again, devices share new CIDs and sync changes.
+
+1. DefraDB merges updates from different peers using CRDT rules using full change histories.
+
+1. This process ensures all peers arrive at the same up-to-date data without conflicts or loss.
+
+Overall, content-addressable storage lets DefraDB create reliable, easy-to-sync, and conflict-free data systems that work online and offline.
+
+## For Developers
+
 *Add code snippets, commands, and API references*
