@@ -15,7 +15,7 @@ This method matters because it helps keep data safe and trustworthy. It makes it
 
 ## How DefraDB uses CAS
 
-DefraDB’s data model is built on IPLD (InterPlanetary Linked Data), which uses Merkle Directed Acyclic Graphs (Merkle DAGs) and hash-based addressing. Here’s what that means in plain language:
+DefraDB’s data model which uses Merkle Directed Acyclic Graphs (Merkle DAGs) and hash-based addressing, is built on IPLD (InterPlanetary Linked Data). Here’s what that means in plain language:
 
 * **IPLD**: This is a way to represent and connect data across distributed systems using hashes. It makes data universally linkable and verifiable.
 
