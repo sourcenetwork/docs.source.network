@@ -88,7 +88,7 @@ DefraDB implements **Merkle CRDTs**, a specialized type of Conflict-free Replica
 1. Verify data by recalculating the hash and matching it to the CID. Peers reject any data that does not match.
 1. Verified data is added to the local Merkle DAG to update the document history.
 
-### Making Offline-First Work Smoothly
+### Making Offline-first Work Smoothly
 
 1. Users make changes locally even without internet. Each update gets a new CID and joins the local Merkle DAG.
 1. When online again, devices share new CIDs and sync changes.
