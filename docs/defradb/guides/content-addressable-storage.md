@@ -9,13 +9,13 @@ sidebar_position: 80
 
 Content-Addressable Storage (CAS) is a way to store data that works differently from what you might be used to. Normally, when you save something on your computer or online, you find it by where it is stored, like a file path or a website address. But with CAS, each piece of data gets its own special ID based on what it actually is.
 
-This special ID comes from taking the data and running it through a hash function, which turns it into a unique code. If the data changes even a little, the code changes too. Content-addressable storage can tell if someone tried to change or mess with the data. It also saves space because if two pieces of data are exactly the same, it stores that data only once.
+This special ID comes from running the data through a hash function, which turns it into a unique code. If the data changes even a little, the code changes too. Content-addressable storage can tell if someone tried to change or mess with the data. It also saves space because if two pieces of data are exactly the same, it stores that data only once.
 
 This method matters because it helps keep data safe and trustworthy. It makes it easy to track different versions over time and works well in systems where many computers share data with each other.
 
 ## How DefraDB uses CAS
 
-DefraDB’s data model which uses Merkle Directed Acyclic Graphs (Merkle DAGs) and hash-based addressing, is built on IPLD (InterPlanetary Linked Data). Here’s what that means in plain language:
+DefraDB’s data model is built on IPLD (InterPlanetary Linked Data), which connects and represents data using Merkle Directed Acyclic Graphs (Merkle DAGs) and hash-based addressing. Here’s what these terms mean in simple language:
 
 * **IPLD**: This is a way to represent and connect data across distributed systems using hashes. It makes data universally linkable and verifiable.
 
@@ -39,7 +39,7 @@ Using CAS in DefraDB brings many benefits that make data safer, easier to manage
 
 * **Efficient versioning**: DefraDB saves every change with its own ID. You can go back to any earlier version of the data, making “time travel” through history possible.
 
-## CAS in action
+## CAS in Action
 
 Here’s how it works step by step:  
 
@@ -47,7 +47,7 @@ Here’s how it works step by step:
 
 * **Updating data**: When you change a document, DefraDB does not replace the old data. It saves the update as a separate new node, linking it to the previous version and forming a chain called a Merkle DAG. Each update gets its own CID representing a new version. DefraDB keeps the full change history this way.
 
-## Synchronization process
+## Synchronization Process
 
 Content-addressable storage gives DefraDB a strong foundation to manage data across devices, users, and network conditions. Here is how it supports key features step by step:
 
@@ -84,8 +84,8 @@ DefraDB implements **Merkle CRDTs**, a specialized type of Conflict-free Replica
 ### Enabling Efficient Synchronization Across Peers
 
 1. Peers exchange CIDs representing the latest document versions.
-1. Each peer compares received CIDs with its own and requests only missing data.
-1. Peers verify data by recalculating the hash and matching it to the CID. Peers reject any data that does not match.
+1. Compare received CIDs with its own and requests only missing data.
+1. Verify data by recalculating the hash and matching it to the CID. Peers reject any data that does not match.
 1. Verified data is added to the local Merkle DAG to update the document history.
 
 ### Making Offline-First Work Smoothly
