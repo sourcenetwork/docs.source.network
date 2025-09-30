@@ -158,6 +158,11 @@ const config = {
       prism: {
         theme: variableCodeTheme,
       },
+      algolia: {
+        appId: "N3M9YBYYQY",
+        apiKey: "909584ed5214e2d24ae2a85a5cd8664a",
+        indexName: "source-docs",
+      },
     }),
   plugins: [
     [
