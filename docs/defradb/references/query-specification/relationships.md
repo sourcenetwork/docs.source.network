@@ -67,6 +67,7 @@ Let us define a many-to-many relationship between students and courses below. A 
 type Student {
   name: String
   age: Int
+  enrollment: [Enrollment]
 }
 
 type Course {
