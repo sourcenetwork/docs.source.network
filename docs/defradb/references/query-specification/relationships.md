@@ -88,7 +88,21 @@ In this example, the `Enrollment` type acts as the intermediary (or join type) t
 
 Unlike traditional SQL databases that require manually created join tables, DefraDB uses a regular type definition for the intermediary. This approach leverages the non-normative nature of NoSQL document objects while maintaining clear relationship semantics through the schema.
 
-You can query the relationships directly from either the `Student` or `Course` type, or through the intermediary `Enrollment` type:
+You can access the enrollment directly from the Student or Course type, without needing to go through the intermediary.
+
+```graphql
+# Access the enrollment directly from the Student or Course type without intermediary
+query {
+  Student {
+    _docID
+    name
+    enrollment {
+      course {
+        title
+      }
+    }
+  }
+}
 
 ```graphql
 # Get all enrollments with student and course details
