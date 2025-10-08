@@ -103,6 +103,7 @@ query {
     }
   }
 }
+```
 
 ```graphql
 # Get all enrollments with student and course details
@@ -118,7 +119,9 @@ query {
     }
   }
 }
+```
 
+```graphql
 # Get a specific student with their enrollments
 query {
   Student(filter: {name: {_eq: "Alice"}}) {
@@ -126,7 +129,7 @@ query {
     _docID
   }
 }
-
+```
 The intermediary type can also include additional fields specific to the relationship, such as enrollment date, grade, or status:
 
 ```graphql
