@@ -107,7 +107,7 @@ query {
 query {
   Student(filter: {name: {_eq: "Alice"}}) {
     name
-    _id
+    _docID
   }
 }
 
