@@ -111,17 +111,6 @@ query {
   }
 }
 
-# Then use the student's _id to find their enrollments
-query {
-  Enrollment(filter: {student_id: {_eq: "bafyrei..."}}) {
-    course {
-      title
-      code
-    }
-  }
-}
-```
-
 The intermediary type can also include additional fields specific to the relationship, such as enrollment date, grade, or status:
 
 ```graphql
