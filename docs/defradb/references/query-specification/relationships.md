@@ -73,6 +73,7 @@ type Student {
 type Course {
   title: String
   code: String
+  enrollment: [Enrollment]
 }
 
 type Enrollment {
