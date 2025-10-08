@@ -9,6 +9,7 @@ DefraDB supports a number of common relational models that an application may ne
 Relationships are defined through the Document Schemas, using a series of GraphQL directives, and inferencing. They are always defined on both sides of the relation, meaning both objects involved in the relationship.
 
 #### One-to-One
+
 The simplest relationship is a "one-to-one" which directly maps one document to another. The code below defines a one-to-one relationship between the `Author` and their `Address`:
 
 ```graphql
@@ -35,6 +36,7 @@ The notable distinction of "one-to-one" relationships is that only the DocKey of
 On the other hand, if you simply embed the Address within the Author type without the internal relational system, you can include the `@embed` directive, which will embed it within. Objects embedded inside another using the `@embed` directive do not expose a query endpoint, so they can *only* be accessed through their parent object. Additionally they are not assigned a DocKey.
 
 #### One-to-Many
+
 A "one-to-many" relationship allows us to relate several objects of one type, to a single instance of another. 
 
 Let us define a one-to-many relationship between an author and their books below. This example differs from the above relationship example because we relate the author to an array of books, instead of a single address.
@@ -57,7 +59,69 @@ In this case, the books object is defined within the Author object to be an arra
 
 #### Many-to-Many
 
-*to be updated*
+A "many-to-many" relationship allows multiple instances of one type to be related to multiple instances of another type. This is a bidirectional relationship where both sides can have multiple related objects.
+
+Let us define a many-to-many relationship between students and courses below. A student can enroll in many courses, and a course can have many students enrolled.
+
+```graphql
+type Student {
+  name: String
+  courses: [Course]
+}
+
+type Course {
+  title: String
+  code: String
+  students: [Student]
+}
+```
+
+In this example, both sides of the relationship are defined as arrays, indicating that each Student can be related to multiple Courses, and each Course can be related to multiple Students. This creates a true many-to-many relationship.
+
+Internally, DefraDB handles the complexity of many-to-many relationships without requiring explicit join tables. The system maintains the relationship references automatically on both sides. Unlike traditional SQL databases where you would need to create a separate junction table, DefraDB manages these associations within its document structure.
+
+When querying, you can traverse the relationship from either direction:
+
+```graphql
+# Get all courses for a specific student
+query {
+  Student {
+    name
+    courses {
+      title
+      code
+    }
+  }
+}
+
+# Get all students enrolled in a specific course
+query {
+  Course {
+    title
+    students {
+      name
+    }
+  }
+}
+```
+
+Like with one-to-many relationships, you can also use the `@relation` directive with many-to-many relationships when you need multiple relationships between the same types or want to be explicit about the relationship name:
+
+```graphql
+type Student {
+  name: String
+  enrolledCourses: [Course] @relation(name: "course_enrollment")
+  completedCourses: [Course] @relation(name: "course_completion")
+}
+
+type Course {
+  title: String
+  currentStudents: [Student] @relation(name: "course_enrollment")
+  graduates: [Student] @relation(name: "course_completion")
+}
+```
+
+This allows you to maintain multiple distinct many-to-many relationships between the same pair of types.
 
 #### Multiple Relationships
 
