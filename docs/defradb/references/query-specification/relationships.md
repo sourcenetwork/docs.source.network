@@ -60,7 +60,7 @@ In this case, the books object is defined within the Author object to be an arra
 
 ## Many-to-Many
 
-A "many-to-many" relationship allows multiple instances of one type to be related to multiple instances of another type. In DefraDB, many-to-many relationships are implemented using an explicit join type that connects the two related types. DefraDB does not support direct many-to-many relationships. Instead, it requires an explicit join type to connect the two related types. This simulates a many-to-many relationship by effectively creating a many-to-one-to-one-to-many pattern.
+A "many-to-many" relationship allows multiple instances of one type to be related to multiple instances of another type. DefraDB does not support direct many-to-many relationships. In DefraDB, many-to-many relationships are implemented using an explicit join type that connects the two related types. This simulates a many-to-many relationship by effectively creating a many-to-one-to-one-to-many pattern.
 
 Let us define a many-to-many relationship between students and courses below. A student can enroll in many courses, and a course can have many students enrolled.
 
@@ -83,14 +83,14 @@ type Enrollment {
 }
 ```
 
-In this example, the `Enrollment` type acts as the join type that creates the many-to-many relationship between `Student` and `Course`. The join type has a one-to-many relationship with both `Student` and `Course`. Each enrollment links one student to one course. The `@relation` directive with unique names ensures that the relationships are properly distinguished.
+In this example, the `Enrollment` type acts as the join type that creates the many-to-many relationship between `Student` and `Course`. The join type has a one-to-many relationship with both Student and Course. Each enrollment links one student to one course. The `@relation` directive with unique names ensures that the relationships are properly distinguished.
 
-Unlike traditional SQL databases that require manually created join tables, DefraDB uses a regular type definition for the intermediary. This approach leverages the non-normative nature of NoSQL document objects while maintaining clear relationship semantics through the schema.
+Unlike traditional SQL databases that require manually created join tables, DefraDB uses a regular type definition for the join type. This approach leverages the non-normative nature of NoSQL document objects while maintaining clear relationship semantics through the schema.
 
-You can query the relationships directly from either the `Student` or `Course` type, or through the intermediary `Enrollment` type:
+You can query from either the `Student` or `Course` type depending on your requirement:
 
 ```graphql
-# Access the enrollment directly from the Student or Course type without intermediary
+# Get students with their enrolled courses
 query {
   Student {
     _docID
@@ -98,11 +98,30 @@ query {
     enrollment {
       course {
         title
+        code
       }
     }
   }
 }
 ```
+
+```graphql
+# Get courses with their enrolled students
+query {
+  Course {
+    _docID
+    title
+    enrollment {
+      student {
+        name
+        age
+      }
+    }
+  }
+}
+```
+
+You can also query the join type directly:
 
 ```graphql
 # Get all enrollments with student and course details
@@ -120,19 +139,9 @@ query {
 }
 ```
 
-```graphql
-# Get a specific student with their enrollments
-query {
-  Student(filter: {name: {_eq: "Alice"}}) {
-    name
-    _docID
-  }
-}
-```
-
 This pattern is more convenient than manually querying for a student's `_docID` and then running a separate query on the `Enrollment` join type. DefraDB handles the traversal through the join type automatically, allowing you to express complex many-to-many queries in a single request.
 
-The intermediary type can also include additional fields specific to the relationship, such as enrollment date, grade, or status:
+The join type can also include additional fields specific to the relationship, such as enrollment date, grade, or status:
 
 ```graphql
 type Enrollment {
