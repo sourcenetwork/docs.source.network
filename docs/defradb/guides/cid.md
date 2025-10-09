@@ -179,12 +179,14 @@ print(f"Generated CID: {cid}")
 
 ```javascript
 // Creating a Merkle DAG structure using IPLD concepts
+
 import { CID } from 'multiformats/cid'
 import * as Block from 'multiformats/block'
 import { sha256 } from 'multiformats/hashes/sha2'
 import * as dagCBOR from '@ipld/dag-cbor'
 
 const createLinkedData = async () => {
+  
   // Create individual data blocks
   const doc1Data = { 
     content: 'First document content',
@@ -234,7 +236,9 @@ const createLinkedData = async () => {
   console.log('Document 2 CID:', block2.cid.toString());
 
   // The directory's CID can be used to retrieve and traverse the structure
+  
   // Each CID is a cryptographic hash of its content
+  
   return {
     rootCID: rootBlock.cid,
     blocks: [rootBlock, block1, block2]
