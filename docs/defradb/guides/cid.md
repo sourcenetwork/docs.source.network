@@ -9,6 +9,8 @@ sidebar_position: 90
 
 Content Identifiers (CIDs) are foundational in content-addressable storage (CAS) systems, providing a globally unique, self-describing reference to digital content based on its data rather than its location. CIDs allow systems to retrieve, verify, link, and manage data efficiently and securely, enabling immutable and decentralized data storage solutions such as IPFS, IPLD, and DefraDB.
 
+> **Note**: A cryptographic hash is a mathematical function that takes input data of any size and transforms it into a fixed-length string of bits, called a hash value or digest. This process is deterministic, which means that the same input always produces the same output, but even a tiny change in the input results in a completely different hash value.
+
 Content-Addressable Data uses these identifiers to store and access data by its cryptographic fingerprint, ensuring integrity and deduplication.
 
 ## Content Identifier (CID) Basics
@@ -28,29 +30,39 @@ A CID uniquely identifies data by incorporating a cryptographic hash of the cont
 | **Integrity verification** | CIDs ensure the authenticity of retrieved data | Cryptographic proof of data integrity |
 | **Versioning** | Unique CIDs support tracking content over time | Natural version control system |
 
-CIDs are foundational in systems like IPFS, IPLD, and other decentralized storage protocols.
-
-> **Note**: A cryptographic hash is a mathematical function that takes input data of any size and transforms it into a fixed-length string of bits, called a hash value or digest. This process is deterministic, which means that the same input always produces the same output, but even a tiny change in the input results in a completely different hash value.
-
 ### Example: How CID Changes with Content
 
 ```javascript
-// Example showing how even a tiny change creates a different CID
-const IPFS = require('ipfs-core');
+// Example showing how even a tiny change creates a different CID using IPLD
+
+import { CID } from 'multiformats/cid'
+import * as Block from 'multiformats/block'
+import { sha256 } from 'multiformats/hashes/sha2'
+import * as raw from 'multiformats/codecs/raw'
 
 async function demonstrateCIDUniqueness() {
-  const ipfs = await IPFS.create();
-  
+
   // Original content
-  const content1 = "Hello, World!";
-  const result1 = await ipfs.add(content1);
-  console.log("Original CID:", result1.cid.toString());
+  const content1 = new TextEncoder().encode("Hello, World!");
+  const block1 = await Block.encode({
+    value: content1,
+    codec: raw,
+    hasher: sha256
+  });
+  console.log("Original CID:", block1.cid.toString());
+
   // Output: bafkreigaknpexyvxt76zgkitavbwx6ejgfheup5oybpm77f3pxzrvwpfdi
   
   // Slightly modified content (added a space)
-  const content2 = "Hello, World! ";
-  const result2 = await ipfs.add(content2);
-  console.log("Modified CID:", result2.cid.toString());
+
+  const content2 = new TextEncoder().encode("Hello, World! ");
+  const block2 = await Block.encode({
+    value: content2,
+    codec: raw,
+    hasher: sha256
+  });
+  console.log("Modified CID:", block2.cid.toString());
+  
   // Output: bafkreifjjcie6lypi6ny7amxnfftagclbuxndqonfipmb64f2km2devei4
   
   // Completely different CIDs for slightly different content
@@ -59,7 +71,7 @@ async function demonstrateCIDUniqueness() {
 
 ## CID Structure
 
-CIDs are composed of several parts, making them self-describing and extensible.
+CIDs are composed of several parts:
 
 ### Technical Components
 
@@ -163,22 +175,17 @@ cid = generate_cid_v1(content)
 print(f"Generated CID: {cid}")
 ```
 
-### Using a CID
-
-#### Linking Data with CIDs
+### Linking Data with CIDs
 
 ```javascript
 // Creating a Merkle DAG structure using IPLD concepts
-
 import { CID } from 'multiformats/cid'
 import * as Block from 'multiformats/block'
 import { sha256 } from 'multiformats/hashes/sha2'
 import * as dagCBOR from '@ipld/dag-cbor'
 
 const createLinkedData = async () => {
-  
   // Create individual data blocks
-
   const doc1Data = { 
     content: 'First document content',
     type: 'document'
@@ -190,7 +197,6 @@ const createLinkedData = async () => {
   };
 
   // Encode and hash the first document
-
   const block1 = await Block.encode({
     value: doc1Data,
     codec: dagCBOR,
@@ -198,7 +204,6 @@ const createLinkedData = async () => {
   });
 
   // Encode and hash the second document
-
   const block2 = await Block.encode({
     value: doc2Data,
     codec: dagCBOR,
@@ -206,7 +211,6 @@ const createLinkedData = async () => {
   });
 
   // Create a parent structure that links to the documents via their CIDs
-
   const directory = {
     documents: {
       document1: block1.cid,  // Link to first document via CID
@@ -219,7 +223,6 @@ const createLinkedData = async () => {
   };
 
   // Encode the directory structure
-
   const rootBlock = await Block.encode({
     value: directory,
     codec: dagCBOR,
@@ -231,9 +234,7 @@ const createLinkedData = async () => {
   console.log('Document 2 CID:', block2.cid.toString());
 
   // The directory's CID can be used to retrieve and traverse the structure
-
   // Each CID is a cryptographic hash of its content
-
   return {
     rootCID: rootBlock.cid,
     blocks: [rootBlock, block1, block2]
@@ -395,11 +396,11 @@ class MerkleDAG {
 
 Content-Addressable Data (CAD) improves on the limitations of traditional web (Web2) systems that rely on centralized servers and location-based URLs. Instead of identifying where data is stored, CAD identifies what the data is, using a cryptographic hash of its content.
 
-### Key Benefits - Detailed Comparison
+### Comparison with Traditional Systems
 
 | Aspect | Traditional (Location-Based) | Content-Addressable | Real-World Impact |
 |--------|------------------------------|---------------------|-------------------|
-| **Verification** | Trust the server | Self-verifying | Eliminates MITM attacks |
+| **Verification** | Trust the server | Self-verifying through CID validation | Eliminates MITM attacks |
 | **Availability** | Single point of failure | Multiple sources | 99.99% uptime possible |
 | **Storage** | Duplicate copies everywhere | Global deduplication | 30-70% storage savings |
 | **Links** | Break when servers move | Permanent references | No more 404 errors |
@@ -454,7 +455,7 @@ DefraDB uses Content-Addressable Data (CAD) to enable global data replication ac
 
 ### Role of Content Identifiers (CIDs) in DefraDB
 
-In DefraDB, data is identified using Content Identifiers (CIDs) — unique, collision-resistant hashes generated from the data itself.
+In DefraDB, data is identified using Content Identifiers (CIDs) — unique, collision-resistant hashes generated from the data itself. When a user or application queries data using a CID, the network locates and returns the matching content. The data is self-verifiable, meaning the recipient can recompute the hash to confirm its integrity and authenticity.
 
 ```graphql
 # Example DefraDB query using CIDs
@@ -529,18 +530,18 @@ class DefraDBNode {
 }
 ```
 
-When a user or application queries data using a CID, the network locates and returns the matching content. The data is self-verifiable, meaning the recipient can recompute the hash to confirm its integrity and authenticity.
+### DefraDB Capabilities
 
-### Why It Matters
-
-Using CAD and CIDs allows DefraDB to:
+Using CAD and CIDs allows DefraDB to provide:
 
 | Capability | Implementation | Benefit |
 |------------|---------------|---------|
 | **Global Distribution** | Content routing via DHT | Data available from nearest node |
-| **Tamper-Proof** | Cryptographic verification | Byzantine fault tolerance |
-| **Efficient Replication** | Delta synchronization | Minimal bandwidth usage |
+| **Tamper-Proof** | Cryptographic verification on every read | Byzantine fault tolerance |
+| **Efficient Replication** | Delta synchronization using CID diffs | Minimal bandwidth usage |
 | **Conflict-Free** | CRDT on top of CIDs | Automatic merge resolution |
+| **Reliability** | Content routing protocol finds nearest copy | CDN automatically formed by popular content |
+| **Scalability** | Horizontal scaling by adding nodes | Each user contributes storage and bandwidth |
 
 ### Real-World DefraDB Example
 
@@ -595,27 +596,5 @@ async function setupDistributedDatabase() {
 }
 ```
 
-## What Content-Addressable Data Enables
+This example demonstrates how DefraDB leverages CIDs to create a distributed database where data is automatically deduplicated, verified, and accessible from any node in the network.
 
-Content-Addressable Data (CAD) allows developers and applications to manage and retrieve data more efficiently, securely, and reliably than traditional centralized systems.
-
-By addressing data through its content hash instead of its physical location, CAD removes the need for centralized intermediaries and reduces redundancy across the network.
-
-### Key Advantages for Applications
-
-| Advantage | Technical Implementation | Use Case Example |
-|-----------|-------------------------|------------------|
-| **Reliability** | Content routing protocol finds nearest copy | CDN automatically formed by popular content |
-| **Scalability** | Horizontal scaling by adding nodes | Each user contributes storage and bandwidth |
-| **Data Integrity** | SHA-256 verification on every read | Detecting corrupted blockchain data |
-| **Efficiency** | Block-level deduplication | Virtual machine images share common layers |
-| **Developer Experience** | Familiar APIs with CAD benefits | SQL queries over distributed data |
-
-### Building CAD-Enabled Applications
-
-```javascript
-// Example: Building a decentralized social media app with CAD
-class DecentralizedSocialApp {
-  constructor(storage) {
-    this.
-```
