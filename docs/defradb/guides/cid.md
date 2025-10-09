@@ -62,7 +62,7 @@ async function demonstrateCIDUniqueness() {
     hasher: sha256
   });
   console.log("Modified CID:", block2.cid.toString());
-  
+
   // Output: bafkreifjjcie6lypi6ny7amxnfftagclbuxndqonfipmb64f2km2devei4
   
   // Completely different CIDs for slightly different content
@@ -452,6 +452,8 @@ class CADPerformanceAnalyzer {
 ## How DefraDB Leverages Content-Addressable Data
 
 DefraDB uses Content-Addressable Data (CAD) to enable global data replication across its peer-to-peer network. By addressing data through its content rather than its location, any node in the network can provide the requested data, eliminating the need for centralized or siloed storage systems.
+
+> **Note**: See [Content Addressable Storage](/defradb/guides/content-addressable-storage.md) for more information.
 
 ### Role of Content Identifiers (CIDs) in DefraDB
 
