@@ -840,3 +840,4 @@ By addressing data through its content hash instead of its physical location, CA
 class DecentralizedSocialApp {
   constructor(storage) {
     this.
+```
