@@ -87,7 +87,7 @@ In this example, the `Enrollment` type acts as the join type that creates the ma
 
 Unlike traditional SQL databases that require manually created join tables, DefraDB uses a regular type definition for the join type. This approach leverages the non-normative nature of NoSQL document objects while maintaining clear relationship semantics through the schema.
 
-You can query from either the `Student` or `Course` type depending on your requirement:
+You can query the relationships directly from either the `Student` or `Course` type, or through the intermediary `Enrollment` type.
 
 ```graphql
 # Get students with their enrolled courses
