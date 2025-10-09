@@ -603,4 +603,3 @@ async function setupDistributedDatabase() {
 ```
 
 This example demonstrates how DefraDB leverages CIDs to create a distributed database where data is automatically deduplicated, verified, and accessible from any node in the network.
-
