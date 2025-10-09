@@ -139,7 +139,9 @@ query {
 }
 ```
 
-This pattern is more convenient than manually querying for a student's `_docID` and then running a separate query on the `Enrollment` join type. DefraDB handles the traversal through the join type automatically, allowing you to express complex many-to-many queries in a single request.
+This pattern is more convenient than manually querying for a student's `_docID` and then running a separate query on the `Enrollment` join type. 
+
+DefraDB handles the traversal through the join type automatically, allowing you to express complex many-to-many queries in a single request, but it still must go through the join type.
 
 The join type can also include additional fields specific to the relationship, such as enrollment date, grade, or status:
 
