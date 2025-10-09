@@ -85,7 +85,6 @@ type Enrollment {
 
 In this example, the `Enrollment` type acts as the join type that creates the many-to-many relationship between `Student` and `Course`. The join type has a one-to-many relationship with both `Student` and `Course`. Each enrollment links one student to one course. The `@relation` directive with unique names ensures that the relationships are properly distinguished.
 
-
 Unlike traditional SQL databases that require manually created join tables, DefraDB uses a regular type definition for the intermediary. This approach leverages the non-normative nature of NoSQL document objects while maintaining clear relationship semantics through the schema.
 
 You can query the relationships directly from either the `Student` or `Course` type, or through the intermediary `Enrollment` type:
