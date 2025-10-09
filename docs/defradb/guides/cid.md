@@ -233,7 +233,7 @@ const createLinkedData = async () => {
   // The directory's CID can be used to retrieve and traverse the structure
 
   // Each CID is a cryptographic hash of its content
-  
+
   return {
     rootCID: rootBlock.cid,
     blocks: [rootBlock, block1, block2]
@@ -293,6 +293,8 @@ const isValid = await validateCID(
 ```
 
 Libraries like multiformats help developers validate and manipulate CIDs programmatically.
+
+<!--
 
 ## CIDs in Practice
 
