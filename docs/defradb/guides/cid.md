@@ -165,47 +165,79 @@ print(f"Generated CID: {cid}")
 
 ### Using a CID
 
-#### Retrieving Content
-
-```bash
-# Using IPFS CLI
-ipfs cat bafybeigdyrzt5sfp7udm7hu76uh7y26nf3efuylqabf3oclgtqy55fbzdi
-
-# Using IPFS HTTP Gateway
-curl https://ipfs.io/ipfs/bafybeigdyrzt5sfp7udm7hu76uh7y26nf3efuylqabf3oclgtqy55fbzdi
-
-# Using JavaScript
-const content = await ipfs.cat('bafybeigdyrzt5sfp7udm7hu76uh7y26nf3efuylqabf3oclgtqy55fbzdi')
-```
-
 #### Linking Data with CIDs
 
 ```javascript
-// Creating a Merkle DAG structure with linked CIDs
-const createLinkedData = async (ipfs) => {
-  // Add individual pieces of content
-  const file1 = await ipfs.add('First document content');
-  const file2 = await ipfs.add('Second document content');
+// Creating a Merkle DAG structure using IPLD concepts
+
+import { CID } from 'multiformats/cid'
+import * as Block from 'multiformats/block'
+import { sha256 } from 'multiformats/hashes/sha2'
+import * as dagCBOR from '@ipld/dag-cbor'
+
+const createLinkedData = async () => {
   
-  // Create a directory structure linking to these files
-  const directory = {
-    Data: {
-      document1: file1.cid,
-      document2: file2.cid,
-      metadata: {
-        created: new Date().toISOString(),
-        version: '1.0.0'
-      }
-    }
+  // Create individual data blocks
+
+  const doc1Data = { 
+    content: 'First document content',
+    type: 'document'
   };
   
-  // Add the directory (it will reference the file CIDs)
-  const result = await ipfs.dag.put(directory);
-  console.log('Root CID:', result.toString());
+  const doc2Data = { 
+    content: 'Second document content',
+    type: 'document'
+  };
+
+  // Encode and hash the first document
+
+  const block1 = await Block.encode({
+    value: doc1Data,
+    codec: dagCBOR,
+    hasher: sha256
+  });
+
+  // Encode and hash the second document
+
+  const block2 = await Block.encode({
+    value: doc2Data,
+    codec: dagCBOR,
+    hasher: sha256
+  });
+
+  // Create a parent structure that links to the documents via their CIDs
+
+  const directory = {
+    documents: {
+      document1: block1.cid,  // Link to first document via CID
+      document2: block2.cid   // Link to second document via CID
+    },
+    metadata: {
+      created: new Date().toISOString(),
+      version: '1.0.0'
+    }
+  };
+
+  // Encode the directory structure
+
+  const rootBlock = await Block.encode({
+    value: directory,
+    codec: dagCBOR,
+    hasher: sha256
+  });
+
+  console.log('Root CID:', rootBlock.cid.toString());
+  console.log('Document 1 CID:', block1.cid.toString());
+  console.log('Document 2 CID:', block2.cid.toString());
+
+  // The directory's CID can be used to retrieve and traverse the structure
+
+  // Each CID is a cryptographic hash of its content
   
-  // Later, traverse the DAG
-  const retrieved = await ipfs.dag.get(result);
-  console.log('Retrieved structure:', retrieved.value);
+  return {
+    rootCID: rootBlock.cid,
+    blocks: [rootBlock, block1, block2]
+  };
 };
 ```
 
@@ -395,6 +427,7 @@ class ContentVersioning {
 | Content verification fails | Data corruption | Re-fetch from different node, check hash algorithm |
 | CID format unrecognized | Version incompatibility | Update libraries, check CID version support |
 
+<!--
 ## Content Addressable Data (CAD)
 
 Content-addressable data (or Content-Addressable Storage) is a data management approach where each piece of data is retrieved based on its content rather than its location.
@@ -403,7 +436,7 @@ Instead of using file paths or memory addresses, CAS systems generate a unique i
 
 ### Technical Architecture
 
-```
+```json
 ┌─────────────────────────────────────────────┐
 │              Input Data                      │
 │         "Hello, World!"                      │
@@ -515,6 +548,8 @@ print(f"Profile stored at: {profile_hash}")
 retrieved_user = cas.get(user_hash)
 print(f"Retrieved user: {retrieved_user}")
 ```
+
+-->
 
 ## Integration in Distributed Systems
 
