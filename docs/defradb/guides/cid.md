@@ -1,9 +1,9 @@
 ---
-sidebar_label: Content Identifiers (CID) and Content-Addressable Data
+sidebar_label: Content Identifiers (CID)
 sidebar_position: 90
 ---
 
-# Content Identifiers (CID) and Content-Addressable Data
+# Content Identifiers (CID)
 
 ## Overview
 
