@@ -9,17 +9,37 @@ sidebar_position: 90
 
 Content Identifiers (CIDs) are foundational in content-addressable storage (CAS) systems, providing a globally unique, self-describing reference to digital content based on its data rather than its location. CIDs allow systems to retrieve, verify, link, and manage data efficiently and securely, enabling immutable and decentralized data storage solutions such as IPFS, IPLD, and DefraDB.
 
-> **Note**: A cryptographic hash is a mathematical function that takes input data of any size and transforms it into a fixed-length string of bits, called a hash value or digest. This process is deterministic, which means that the same input always produces the same output, but even a tiny change in the input results in a completely different hash value.
+## Why Content Identifiers Matter
 
-Content-Addressable Data uses these identifiers to store and access data by its cryptographic fingerprint, ensuring integrity and deduplication.
+Traditional web addresses (URLs) tell you where data lives—on a specific server, at a specific location. Content Identifiers tell you what the data is—a unique fingerprint of the content itself. This fundamental shift enables:
+
+- Decentralized architecture: Any node can serve data, not just the original source
+- Self-verifying data: Content proves its own integrity through cryptographic hashing
+- Permanent links: References that never break, even when data moves
+- Automatic deduplication: The same content always has the same identifier, eliminating redundant storage
+- True data portability: Content can move freely between platforms while maintaining its identity
+
+This transformation from location-based to content-based addressing is as significant as the shift from IP addresses to domain names—but instead of making locations human-readable, CIDs make content itself addressable.
 
 ## Content Identifier (CID) Basics
 
 A CID uniquely identifies data by incorporating a cryptographic hash of the content alongside metadata about the encoding and hashing method used. This makes a CID:
 
-- **Self-describing**: The identifier encodes what the data is and how to verify it.
-- **Unique**: Different content results in different CIDs.
-- **Consistent across locations**: The same content always produces the same CID.
+- **Deterministic**: No randomness—the same input always yields the same CID
+- **Consistent across locations**: The same content always produces the same CID
+- **Unique**: Different content results in different CIDs
+- **Self-describing**: The identifier encodes what the data is and how to verify it
+
+### Understanding Cryptographic Hashes
+
+A cryptographic hash is a mathematical function that takes input data of any size and transforms it into a fixed-length string of bits, called a hash value or digest. This process is:
+
+- **Deterministic**: The same input always produces the same output
+- **Collision-resistant**: Different inputs produce different outputs (with astronomical probability)
+- **One-way**: Cannot reverse the hash to get the original data
+- **Sensitive**: Even a tiny change in input results in a completely different hash value
+
+Content-Addressable Storage (CAS) uses these cryptographic fingerprints to store and access data, ensuring integrity and enabling efficient deduplication.
 
 ### Key CID Properties
 
@@ -29,6 +49,28 @@ A CID uniquely identifies data by incorporating a cryptographic hash of the cont
 | **Deduplication** | Same content anywhere yields the same CID | Reduces storage by ~30-50% in typical datasets |
 | **Integrity verification** | CIDs ensure the authenticity of retrieved data | Cryptographic proof of data integrity |
 | **Versioning** | Unique CIDs support tracking content over time | Natural version control system |
+
+## Understanding CID Structure
+
+### Visual Overview
+
+A CID consists of multiple components that work together to create a self-describing content identifier:
+
+```bash
+bafybeigdyrzt5sfp7udm7hu76uh7y26nf3efuylqabf3oclgtqy55fbzdi
+│ └┬┘└───────────────────────────────────────────────────────┘
+│  │                              │
+│  │                              └── Base32-encoded multihash
+│  └──────────────────────────────── Multicodec (dag-pb)
+└──────────────────────────────────── Multibase prefix (b = base32)
+```
+
+### What Each Part Does
+
+- **Multibase prefix**: Indicates how the CID is encoded (like choosing between binary and text). This allows CIDs to be represented in different formats for different use cases
+- **Multicodec**: Specifies what format the content uses (raw bytes, JSON, CBOR, etc.). This tells systems how to interpret the data
+- **Multihash**: Contains the actual cryptographic fingerprint of your content, along with information about which hash function was used
+
 
 ### Example: How CID Changes with Content
 
@@ -81,16 +123,7 @@ CIDs are composed of several parts:
 | **Multicodec** | Identifies content type/format | Varint-encoded codec identifier | `0x70` (dag-pb), `0x71` (dag-cbor), `0x55` (raw) |
 | **Multihash** | Hash function and digest | Function ID + digest length + digest | SHA-256, Blake2b-256, SHA-3 |
 
-### Detailed CID Anatomy
 
-```bash
-bafybeigdyrzt5sfp7udm7hu76uh7y26nf3efuylqabf3oclgtqy55fbzdi
-│ └┬┘└───────────────────────────────────────────────────────┘
-│  │                              │
-│  │                              └── Base32-encoded multihash
-│  └──────────────────────────────── Multicodec (dag-pb)
-└──────────────────────────────────── Multibase prefix (b = base32)
-```
 
 ### CID Versions
 
