@@ -60,8 +60,7 @@ In this case, the books object is defined within the Author object to be an arra
 
 ## Many-to-Many
 
-A "many-to-many" relationship allows multiple instances of one type to be related to multiple instances of another type. In DefraDB, many-to-many relationships are implemented using an explicit join type that connects the two related types. Unlike one-to-one or one-to-many relationships that are automatically managed, many-to-many relationships require an intermediary join type to be explicitly defined. This simulates a many-to-many relationship by effectively creating a many-to-one-to-one-to-many pattern.
-
+A "many-to-many" relationship allows multiple instances of one type to be related to multiple instances of another type. In DefraDB, many-to-many relationships are implemented using an explicit join type that connects the two related types. Unlike one-to-one or one-to-many relationships that are automatically managed, many-to-many relationships require an intermediary join type to be explicitly defined.
 
 Let us define a many-to-many relationship between students and courses below. A student can enroll in many courses, and a course can have many students enrolled.
 
