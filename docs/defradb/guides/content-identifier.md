@@ -7,37 +7,43 @@ sidebar_position: 90
 
 ## Overview
 
-Content Identifiers (CIDs) are foundational in content-addressable storage (CAS) systems, providing a globally unique, self-describing reference to digital content based on its data rather than its location. CIDs allow systems to retrieve, verify, link, and manage data efficiently and securely, enabling immutable and decentralized data storage solutions such as IPFS, IPLD, and DefraDB.
+Content Identifiers (CIDs) are foundational in content-addressable storage (CAS) systems, providing a globally unique, self-describing reference to digital content based on its data rather than its location. CIDs enable systems to efficiently and securely retrieve, verify, link, and manage data, enabling immutable and decentralized data storage solutions such as IPFS, IPLD, and DefraDB.
 
 ## Why Content Identifiers Matter
 
-Traditional web addresses (URLs) tell you where data lives—on a specific server, at a specific location. Content Identifiers tell you what the data is—a unique fingerprint of the content itself. This fundamental shift enables:
+Traditional web addresses (URLs) tell you **where** data lives—on a specific server, at a specific location. 
 
-- Decentralized architecture: Any node can serve data, not just the original source
-- Self-verifying data: Content proves its own integrity through cryptographic hashing
-- Permanent links: References that never break, even when data moves
-- Automatic deduplication: The same content always has the same identifier, eliminating redundant storage
-- True data portability: Content can move freely between platforms while maintaining its identity
+Content Identifiers tell you **what** the data is—a unique fingerprint of the content itself.
+
+This fundamental shift enables:
+
+- **Decentralized architecture:** Any node can serve data, not just the original source
+- **Self-verifying data:** Content proves its own integrity through cryptographic hashing
+- **Permanent links:** References that never break, even when data moves
+- **Automatic deduplication:** The same content always has the same identifier, eliminating redundant storage
+- **True data portability:** Content can move freely between platforms while maintaining its identity
 
 This transformation from location-based to content-based addressing is as significant as the shift from IP addresses to domain names—but instead of making locations human-readable, CIDs make content itself addressable.
 
-## Content Identifier (CID) Basics
+## Content Identifier Basics
 
-A CID uniquely identifies data by incorporating a cryptographic hash of the content alongside metadata about the encoding and hashing method used. This makes a CID:
+A **CID** uniquely identifies data by combining a cryptographic hash with encoding metadata. This makes a CID:
 
-- **Deterministic**: No randomness—the same input always yields the same CID
-- **Consistent across locations**: The same content always produces the same CID
-- **Unique**: Different content results in different CIDs
-- **Self-describing**: The identifier encodes what the data is and how to verify it
+- **Deterministic:** No randomness—the same input always yields the same CID
+- **Consistent across locations:** The same content always produces the same CID
+- **Unique:** Different content results in different CIDs
+- **Self-describing:** The identifier encodes what the data is and how to verify it
 
 ### Understanding Cryptographic Hashes
 
-A cryptographic hash is a mathematical function that takes input data of any size and transforms it into a fixed-length string of bits, called a hash value or digest. This process is:
+To understand how CIDs achieve these properties, we first need to understand the cryptographic hashes that power them.
 
-- **Deterministic**: The same input always produces the same output
-- **Collision-resistant**: Different inputs produce different outputs (with astronomical probability)
-- **One-way**: Cannot reverse the hash to get the original data
-- **Sensitive**: Even a tiny change in input results in a completely different hash value
+A **cryptographic hash** is a mathematical function that takes input data of any size and transforms it into a fixed-length string of bits, called a hash value or digest. This process is:
+
+- **Deterministic:** The same input always produces the same output
+- **Collision-resistant:** Different inputs produce different outputs
+- **One-way:** Cannot reverse the hash to get the original data
+- **Sensitive:** Even a tiny change in input results in a completely different hash value
 
 Content-Addressable Storage (CAS) uses these cryptographic fingerprints to store and access data, ensuring integrity and enabling efficient deduplication.
 
@@ -45,17 +51,18 @@ Content-Addressable Storage (CAS) uses these cryptographic fingerprints to store
 
 | Property | Description | Technical Benefit |
 |----------|-------------|-------------------|
-| **Immutability** | Any change to content changes the CID | Enables trust without central authority |
-| **Deduplication** | Same content anywhere yields the same CID | Reduces storage by ~30-50% in typical datasets |
+| **Immutability** | Any change to content changes the CID | Enables trustless verification |
+| **Deduplication** | Same content anywhere yields the same CID | Reduces storage significantly in typical datasets |
 | **Integrity verification** | CIDs ensure the authenticity of retrieved data | Cryptographic proof of data integrity |
-| **Versioning** | Unique CIDs support tracking content over time | Natural version control system |
+| **Versioning** | Unique CIDs support tracking content over time | Implicit version control |
 
-## Understanding CID Structure
+## CID Structure
+
+With these fundamentals in place, let's examine how CIDs are actually structured and what each component does.
 
 ### Visual Overview
 
 A CID consists of multiple components that work together to create a self-describing content identifier:
-
 ```bash
 bafybeigdyrzt5sfp7udm7hu76uh7y26nf3efuylqabf3oclgtqy55fbzdi
 │ └┬┘└───────────────────────────────────────────────────────┘
@@ -65,16 +72,30 @@ bafybeigdyrzt5sfp7udm7hu76uh7y26nf3efuylqabf3oclgtqy55fbzdi
 └──────────────────────────────────── Multibase prefix (b = base32)
 ```
 
-### What Each Part Does
+### Component Breakdown
 
-- **Multibase prefix**: Indicates how the CID is encoded (like choosing between binary and text). This allows CIDs to be represented in different formats for different use cases
-- **Multicodec**: Specifies what format the content uses (raw bytes, JSON, CBOR, etc.). This tells systems how to interpret the data
-- **Multihash**: Contains the actual cryptographic fingerprint of your content, along with information about which hash function was used
+- **Multibase prefix:** Indicates how the CID is encoded (like choosing between binary and text). This allows CIDs to be represented in different formats for different use cases
+- **Multicodec:** Specifies what format the content uses (raw bytes, JSON, CBOR, etc.). This tells systems how to interpret the data
+- **Multihash:** Contains the actual cryptographic fingerprint of your content, along with information about which hash function was used
 
-### Example: How CID Changes with Content
+### Technical Components
 
+| Component | Description | Details | Example Values |
+|-----------|-------------|---------|----------------|
+| **Multibase prefix** | Specifies encoding format | First character(s) of the CID | `b` (base32), `z` (base58btc), `f` (base16) |
+| **Multicodec** | Identifies content type/format | Varint-encoded codec identifier | `0x70` (dag-pb), `0x71` (dag-cbor), `0x55` (raw) |
+| **Multihash** | Hash function and digest | Function ID + digest length + digest | SHA-256, Blake2b-256, SHA-3 |
+
+### CID Versions
+
+| Version | Details | Example CID | Binary Structure |
+|---------|---------|-------------|------------------|
+| **CIDv0** | Base58btc encoding, supports only dag-pb and SHA-256 | `QmYwAPJzv5CZsnA...` | `<multihash>` only |
+| **CIDv1** | Supports multiple codecs, hash functions, and encodings | `bafybeigdyrzt5sf...` | `<version><codec><multihash>` |
+
+### Example: How Content Changes Affect CIDs
 ```javascript
-// Example showing how even a tiny change creates a different CID using IPLD
+// Demonstrating CID uniqueness - even tiny changes create different CIDs
 
 import { CID } from 'multiformats/cid'
 import * as Block from 'multiformats/block'
@@ -91,11 +112,9 @@ async function demonstrateCIDUniqueness() {
     hasher: sha256
   });
   console.log("Original CID:", block1.cid.toString());
-
   // Output: bafkreigaknpexyvxt76zgkitavbwx6ejgfheup5oybpm77f3pxzrvwpfdi
   
   // Slightly modified content (added a space)
-
   const content2 = new TextEncoder().encode("Hello, World! ");
   const block2 = await Block.encode({
     value: content2,
@@ -103,37 +122,16 @@ async function demonstrateCIDUniqueness() {
     hasher: sha256
   });
   console.log("Modified CID:", block2.cid.toString());
-
   // Output: bafkreifjjcie6lypi6ny7amxnfftagclbuxndqonfipmb64f2km2devei4
   
   // Completely different CIDs for slightly different content
 }
 ```
 
-## CID Structure
-
-CIDs are composed of several parts:
-
-### Technical Components
-
-| Component | Description | Details | Example Values |
-|-----------|-------------|---------|----------------|
-| **Multibase prefix** | Specifies encoding format | First character(s) of the CID | `b` (base32), `z` (base58btc), `f` (base16) |
-| **Multicodec** | Identifies content type/format | Varint-encoded codec identifier | `0x70` (dag-pb), `0x71` (dag-cbor), `0x55` (raw) |
-| **Multihash** | Hash function and digest | Function ID + digest length + digest | SHA-256, Blake2b-256, SHA-3 |
-
-
-
-### CID Versions
-
-| Version | Details | Example CID | Binary Structure |
-|---------|---------|-------------|------------------|
-| **CIDv0** | Base58btc encoding, supports only dag-pb and SHA-256 | `QmYwAPJzv5CZsnA...` | `<multihash>` only |
-| **CIDv1** | Supports multiple codecs, hash functions, and encodings | `bafybeigdyrzt5sf...` | `<version><codec><multihash>` |
-
-### Version Comparison Code
-
+### Comparing CID Versions
 ```go
+// Comparing CIDv0 and CIDv1 for the same content
+
 package main
 
 import (
@@ -147,12 +145,12 @@ func compareCIDVersions() {
     data := []byte("Hello IPFS!")
     hash, _ := mh.Sum(data, mh.SHA2_256, -1)
     
-    // CIDv0
+    // CIDv0 - legacy format
     cidV0 := cid.NewCidV0(hash)
     fmt.Printf("CIDv0: %s\n", cidV0.String())
     // Output: QmWATWQ7fVPP2EFGu71UkfnqhYXDYH566qy47CnJDgvs8u
     
-    // CIDv1
+    // CIDv1 - modern format with more flexibility
     cidV1 := cid.NewCidV1(cid.DagProtobuf, hash)
     fmt.Printf("CIDv1: %s\n", cidV1.String())
     // Output: bafybeie5745rpv2m6tjyuugywy4d5ewrqgqqhfnf445he3omzpjbx5xqxe
@@ -161,6 +159,8 @@ func compareCIDVersions() {
 
 ## Generating and Using CIDs
 
+Now that we understand CID structure, let's explore how to create and work with them in practice.
+
 ### Generating a CID - Step by Step
 
 1. **Select a hash function** (e.g., SHA-256)
@@ -168,8 +168,9 @@ func compareCIDVersions() {
 3. **Combine** the multibase, multicodec, and multihash to form the CID
 
 ### Complete CID Generation Example
-
 ```python
+# Generating a CIDv1 from scratch
+
 import hashlib
 import multihash
 import multibase
@@ -209,8 +210,10 @@ print(f"Generated CID: {cid}")
 
 ### Linking Data with CIDs
 
+CIDs enable building interconnected data structures where references are cryptographically verifiable.
+
 ```javascript
-// Creating a Merkle DAG structure using IPLD concepts
+// Creating a Merkle DAG structure with linked documents
 
 import { CID } from 'multiformats/cid'
 import * as Block from 'multiformats/block'
@@ -268,7 +271,6 @@ const createLinkedData = async () => {
   console.log('Document 2 CID:', block2.cid.toString());
 
   // The directory's CID can be used to retrieve and traverse the structure
-  
   // Each CID is a cryptographic hash of its content
   
   return {
@@ -280,9 +282,11 @@ const createLinkedData = async () => {
 
 ### Validating a CID
 
-Understanding and verifying CIDs is critical for data integrity:
+Understanding and verifying CIDs is critical for data integrity.
 
 ```javascript
+// Verifying that content matches its CID
+
 const CID = require('cids');
 const multihash = require('multihashes');
 
