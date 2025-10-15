@@ -330,4 +330,3 @@ const isValid = await validateCID(
 ```
 
 Libraries like multiformats help developers validate and manipulate CIDs programmatically.
-
