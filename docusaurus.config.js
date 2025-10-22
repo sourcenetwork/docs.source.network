@@ -60,12 +60,6 @@ const config = {
             className: "header-docs-link-defra",
           },
           {
-            type: "docsVersionDropdown",
-            position: "left",
-            docsPluginId: "defradb",
-            className: "header-version-dropdown-defra",
-          },
-          {
             type: "docSidebar",
             position: "left",
             docsPluginId: "sourcehub",
@@ -74,24 +68,12 @@ const config = {
             className: "header-docs-link-sourcehub",
           },
           {
-            type: "docsVersionDropdown",
-            position: "left",
-            docsPluginId: "sourcehub",
-            className: "header-version-dropdown-sourcehub",
-          },
-          {
             type: "docSidebar",
             position: "left",
             docsPluginId: "orbis",
             sidebarId: "orbisSidebar",
             label: "Orbis",
             className: "header-docs-link-orbis",
-          },
-          {
-            type: "docsVersionDropdown",
-            position: "left",
-            docsPluginId: "orbis",
-            className: "header-version-dropdown-orbis",
           },
           {
             type: "docSidebar",
@@ -103,9 +85,9 @@ const config = {
           },
           {
             type: "docsVersionDropdown",
-            position: "left",
-            docsPluginId: "lensvm",
-            className: "header-version-dropdown-lensvm",
+            position: "right",
+            dropdownItemsAfter: [],
+            dropdownActiveClassDisabled: true,
           },
           {
             href: "https://github.com/sourcenetwork/docs.source.network",
