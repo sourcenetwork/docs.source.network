@@ -1,4 +1,4 @@
-# libp2p: A Modular Peer-to-Peer Networking Framework  
+# LibP2P: Modular Peer-to-Peer Networking  
 
 ## Overview  
 
