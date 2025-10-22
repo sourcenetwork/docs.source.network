@@ -2,7 +2,7 @@ import React from 'react';
 import Translate from '@docusaurus/Translate';
 import { ThemeClassNames } from '@docusaurus/theme-common';
 import IconEdit from '@theme/Icon/Edit';
-import { GoMarkGithub } from "react-icons/go";
+import { VscGithub } from "react-icons/vsc";
 
 export default function EditThisPage({ editUrl }) {
   return (
@@ -12,7 +12,7 @@ export default function EditThisPage({ editUrl }) {
       rel="noreferrer noopener"
       className={ThemeClassNames.common.editThisPage}>
       {/* <IconEdit /> */}
-      <GoMarkGithub />
+      <VscGithub />
 
       <Translate
         id="theme.common.editThisPage"

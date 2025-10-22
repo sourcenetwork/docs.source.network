@@ -1,5 +1,6 @@
 import { useThemeConfig, useWindowSize } from "@docusaurus/theme-common";
-import { useDoc, useFilteredAndTreeifiedTOC } from "@docusaurus/theme-common/internal";
+import { useDoc } from "@docusaurus/plugin-content-docs/client";
+import { useFilteredAndTreeifiedTOC } from "@docusaurus/theme-common/internal";
 import DocBreadcrumbs from "@theme/DocBreadcrumbs";
 import DocItemContent from "@theme/DocItem/Content";
 import DocItemFooter from "@theme/DocItem/Footer";
