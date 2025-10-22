@@ -9,7 +9,7 @@ Patch existing collection descriptions.
 Uses JSON Patch to modify collection descriptions.
 
 Example: patch from an argument string:
-  defradb client collection patch '[{ "op": "add", "path": "...", "value": {...} }]'
+  defradb client collection patch '[\{ "op": "add", "path": "...", "value": \{...\} \}]'
 
 Example: patch from file:
   defradb client collection patch -p patch.json

@@ -8,7 +8,7 @@ Set a migration from a source schema version to a destination schema version for
 all collections that are on the given source schema version within the local DefraDB node.
 
 Example: set from an argument string:
-  defradb client schema migration set bae123 bae456 '{"lenses": [...'
+  defradb client schema migration set bae123 bae456 '\{"lenses": [...'
 
 Example: set from file:
   defradb client schema migration set bae123 bae456 -f schema_migration.lens

@@ -8,7 +8,7 @@ Applies the migration to the specified collection version.
 Documents is a list of documents to apply the migration to.		
 
 Example: migrate from string
-  defradb client schema migration up --collection 2 '[{"name": "Bob"}]'
+  defradb client schema migration up --collection 2 '[\{"name": "Bob"\}]'
 
 Example: migrate from file
   defradb client schema migration up --collection 2 -f documents.json

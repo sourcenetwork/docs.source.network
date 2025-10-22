@@ -7,7 +7,7 @@ Send a DefraDB GraphQL query request
 Send a DefraDB GraphQL query request to the database.
 
 A query request can be sent as a single argument. Example command:
-  defradb client query 'query { ... }'
+  defradb client query 'query \{ ... \}'
 
 Do a query request from a file by using the '-f' flag. Example command:
   defradb client query -f request.graphql
