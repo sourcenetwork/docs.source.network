@@ -10,19 +10,38 @@ export default function DocsVersionDropdownNavbarItemWrapper(props) {
   const pluginIds = ['defradb', 'sourcehub', 'orbis', 'lensvm'];
 
   return (
-    <div style={{ position: 'relative', display: 'inline-flex' }}>
-      {pluginIds.map((pluginId, index) => {
+    <div style={{
+      position: 'relative',
+      display: 'grid',
+      gridTemplateColumns: '1fr',
+      gridTemplateRows: '1fr',
+    }}>
+      {/* Invisible spacers to reserve space - all plugins rendered to find max width */}
+      {pluginIds.map((pluginId) => (
+        <div
+          key={`spacer-${pluginId}`}
+          style={{
+            gridColumn: 1,
+            gridRow: 1,
+            visibility: 'hidden',
+            pointerEvents: 'none',
+          }}
+        >
+          <DocsVersionDropdownNavbarItem {...props} docsPluginId={pluginId} />
+        </div>
+      ))}
+      {/* Visible dropdowns */}
+      {pluginIds.map((pluginId) => {
         const isActive = activePlugin?.pluginId === pluginId;
         return (
           <div
             key={pluginId}
             style={{
-              position: index === 0 ? 'relative' : 'absolute',
-              top: 0,
-              left: 0,
+              gridColumn: 1,
+              gridRow: 1,
               opacity: isActive ? 1 : 0,
               pointerEvents: isActive ? 'auto' : 'none',
-              transition: 'opacity 0s',
+              visibility: isActive ? 'visible' : 'hidden',
             }}
           >
             <DocsVersionDropdownNavbarItem {...props} docsPluginId={pluginId} />
