@@ -1,7 +1,7 @@
 ---
 sidebar_position: 1
 title: Getting Started
-slug: /defradb
+slug: /
 ---
 
 # DefraDB Overview

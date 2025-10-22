@@ -1,7 +1,7 @@
 ---
 sidebar_position: 1
 title: LensVM
-slug: /lensvm
+slug: /
 ---
 
 ## Introduction

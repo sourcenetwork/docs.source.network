@@ -1,7 +1,7 @@
 ---
 sidebar_position: 1
 title: Overview
-slug: /sourcehub
+slug: /
 ---
 # SourceHub Overview
 

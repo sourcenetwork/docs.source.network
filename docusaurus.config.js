@@ -24,6 +24,7 @@ const config = {
           routeBasePath: "/sourcehub/api",
         },
         docs: false, // Disable the default docs plugin
+        proxy: false, // Disable the proxy plugin to avoid webpack-dev-server config errors
         theme: {
           customCss: require.resolve("./src/css/custom.scss"),
         },
