@@ -1,5 +1,5 @@
 ---
-sidebar_label: Peer-to-Peer Guide
+sidebar_label: Peer-to-Peer Networking
 sidebar_position: 10
 ---
 # A Guide to Peer-to-Peer Networking in DefraDB
