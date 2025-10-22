@@ -1,17 +1,100 @@
 ---
-sidebar_label: Secondary Index
+sidebar_label: Secondary Indexes
 sidebar_position: 60
 ---
+# Seconday Indexes
 
 ## Introduction
 
 DefraDB provides a powerful and flexible secondary indexing system that enables efficient document lookups and queries.
 
-## About
+## Usage
 
-The following sections provide an overview of performance considerations, indexing related objects, and JSON field indexing.
+The `@index` directive can be used on GraphQL schema objects and field definitions to configure indexes.
 
-### Performance considerations
+```graphql
+@index(name: String, unique: Bool, direction: ORDERING, includes: [{ field: String, direction: ORDERING }])
+```
+
+### `name` 
+Sets the index name. Defaults to concatenated field names with direction.
+
+### `unique` 
+Makes the index unique. Defaults to false.
+
+### `direction`
+Sets the default index direction for all fields. Can be one of ASC (ascending) or DESC (descending). Defaults to ASC.
+		
+If a field in the includes list does not specify a direction the default direction from this value will be used instead.
+
+### `includes` 
+Sets the fields the index is created on.
+
+When used on a field definition and the field is not in the includes list it will be implicitly added as the first entry.
+
+## Examples
+
+### Field level usage
+
+Creates an index on the User name field with DESC direction.
+
+```graphql
+type User {
+    name: String @index(direction: DESC)
+}
+```
+
+### Schema level usage
+
+Creates an index on the User name field with default direction (ASC).
+
+```graphql
+type User @index(includes: {field: "name"}) {
+    name: String
+    age: Int 
+}
+```
+
+### Unique index
+
+Creates a unique index on the User name field with default direction (ASC).
+
+```graphql
+type User {
+    name: String @index(unique: true)
+}
+```
+
+### Composite index
+
+Creates a composite index on the User name and age fields with default direction (ASC).
+
+```graphql
+type User @index(includes: [{field: "name"}, {field: "age"}]) {
+    name: String
+    age: Int 
+}
+```
+
+### Relationship index
+
+Creates a unique index on the User relationship to Address. The unique index constraint ensures that no two Users can reference the same Address document.
+
+```graphql
+type User {
+    name: String 
+    age: Int
+    address: Address @primary @index(unique: true)
+} 
+
+type Address {
+    user: User
+    city: String
+    street: String 
+}
+```
+
+## Performance considerations
 
 Indexes can greatly improve query performance, but they also impact system performance during writes. Each index adds write overhead since every document update must also update the relevant indexes. Despite this, the boost in read performance for indexed queries usually makes this trade-off worthwhile.
 
@@ -72,7 +155,7 @@ query {
 - Fetch address documents matching the city value directly.
 - Retrieve the corresponding User documents. This method is much faster because indexes enable direct lookups.
 
-#### Enforcing relationship cardinality
+### Enforcing unique relationships
 Indexes can also enforce one-to-one relationships. For instance, to ensure each User has exactly one unique Address:
 
 ```graphql
@@ -93,23 +176,15 @@ Here, the @index(unique: true) constraint ensures no two Users can share the sam
 
 By combining relationship indexing with cardinality constraints, you can create highly efficient and logically consistent data structures.
 
-### JSON field indexing
+## JSON field indexing
 
 DefraDB offers a specialized indexing system for JSON fields, designed to handle their hierarchical structure efficiently.
 
-#### JSON indexing overview
+### Overview
 
-JSON fields differ from other field types (e.g., Int, String, Bool) because they are structured hierarchically. DefraDB uses a path-aware system to manage these complexities, enabling traversal and indexing of all leaf nodes in a JSON document.
+JSON fields differ from other field types (e.g., Int, String, Bool) because they are semi-structured and encoded. DefraDB uses a path-aware system to manage these complexities, enabling traversal and indexing of all leaf nodes in a JSON document.
 
-#### JSON Interface
-
-DefraDB's JSON interface, defined in client/json.go, is essential for managing JSON fields. It allows the system to:
-
-Traverse all leaf nodes in a JSON document.
-Represent a JSON value as either a complete document or a single node within the structure.
-Each JSON value also stores its path information, which is crucial for creating accurate and efficient indexes.
-
-##### Example JSON Document
+### Example
 
 ```json
 {
@@ -123,16 +198,28 @@ Each JSON value also stores its path information, which is crucial for creating 
 
 Here, the `iPhone` value is represented with its complete path: [`user`, `device`, `model`]. This path-aware representation ensures that the system knows not just the value, but where it resides within the document.
 
+Retrieve documents where the model is "iPhone":
+
+```graphql
+query {
+    Collection(filter: {
+        jsonField: {
+            user: {
+                device: {
+                    model: {_eq: "iPhone"}
+                }
+            }
+        }
+    })
+}
+```
+
+With indexes, the system directly retrieves matching documents, avoiding the need to scan and parse the JSON during queries.
+
+### How it works
+
 #### Inverted Indexes for JSON
 DefraDB uses inverted indexes for JSON fields. These indexes reverse the traditional "document-to-value" relationship by starting with a value and quickly locating all documents containing that value.
-
-#### Key Format for JSON Indexes
-
-```
-<collection_id>/<index_id>(/<json_path>/<json_value>)+/<doc_id>
-```
-
-##### How It Differs
 
 - Regular fields map to a single index entry.
 - JSON fields generate multiple entries—one for each leaf node, incorporating both the path and the value.
@@ -154,110 +241,7 @@ When indexing a document with JSON fields, the system:
 1. Generates index entries for every leaf node, combining path and normalized value.
 1. Stores entries efficiently, enabling direct querying.
 
-##### Query example
-Retrieve documents where the model is "iPhone":
-
-```
-query {
-    Collection(filter: {
-        jsonField: {
-            user: {
-                device: {
-                    model: {_eq: "iPhone"}
-                }
-            }
-        }
-    })
-}
-```
-
-With indexes, the system directly retrieves matching documents, avoiding the need to scan and parse the JSON during queries.
-
 #### Benefits of JSON field indexing
 - **Efficient queries**: Leverages inverted indexes for fast lookups, even in deeply nested structures.
 - **Precise path tracking**: Maintains path information for accurate indexing and retrieval.
 - **Scalable structure**: Handles complex JSON documents with minimal performance overhead.
-
-## Usage
-
-The `@index` directive can be used on GraphQL schema objects and field definitions to configure indexes.
-
-`@index(name: String, unique: Bool, direction: ORDERING, includes: [{ field: String, direction: ORDERING }])`
-
-### `name` 
-Sets the index name. Defaults to concatenated field names with direction.
-
-### `unique` 
-Makes the index unique. Defaults to false.
-
-### `direction`
-Sets the default index direction for all fields. Can be one of ASC (ascending) or DESC (descending). Defaults to ASC.
-		
-If a field in the includes list does not specify a direction the default direction from this value will be used instead.
-
-### `includes` 
-Sets the fields the index is created on.
-
-When used on a field definition and the field is not in the includes list it will be implicitly added as the first entry.
-
-## Examples
-
-### Field level usage
-
-Creates an index on the User name field with DESC direction.
-
-```gql
-type User {
-    name: String @index(direction: DESC)
-}
-```
-
-### Schema level usage
-
-Creates an index on the User name field with default direction (ASC).
-
-```gql
-type User @index(includes: {field: "name"}) {
-    name: String
-    age: Int 
-}
-```
-
-### Unique index
-
-Creates a unique index on the User name field with default direction (ASC).
-
-```gql
-type User {
-    name: String @index(unique: true)
-}
-```
-
-### Composite index
-
-Creates a composite index on the User name and age fields with default direction (ASC).
-
-```gql
-type User @index(includes: [{field: "name"}, {field: "age"}]) {
-    name: String
-    age: Int 
-}
-```
-
-### Relationship index
-
-Creates a unique index on the User relationship to Address. The unique index constraint ensures that no two Users can reference the same Address document.
-
-```gql
-type User {
-    name: String 
-    age: Int
-    address: Address @primary @index(unique: true)
-} 
-
-type Address {
-    user: User
-    city: String
-    street: String 
-}
-```
