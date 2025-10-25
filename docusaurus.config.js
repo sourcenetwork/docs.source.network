@@ -124,15 +124,11 @@ const config = {
             items: [
               {
                 label: "Discord",
-                href: "https://discord.source.network",
+                href: "https://source.network/discord",
               },
               {
                 label: "Twitter",
-                href: "https://twitter.com/sourcenetwrk",
-              },
-              {
-                label: "Telegram",
-                href: "https://t.me/source_network",
+                href: "https://x.com/edgeofsource",
               },
             ],
           },

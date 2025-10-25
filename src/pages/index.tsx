@@ -103,7 +103,7 @@ const HomepageReferenceLinks: FC<{}> = () => {
 const HomepageCommunity: FC<{}> = () => {
   const links = [
     {
-      link: "https://discord.source.network/",
+      link: "https://source.network/discord",
       title: "Discord",
       linkText: "Join our server"
     },
@@ -113,14 +113,9 @@ const HomepageCommunity: FC<{}> = () => {
       linkText: "Contritube to Source"
     },
     {
-      link: "https://x.com/sourcenetwrk",
+      link: "https://x.com/edgeofsource",
       title: "Twitter",
       linkText: "Follow us on Twitter"
-    },
-    {
-      link: "https://t.me/source_network",
-      title: "Telegram",
-      linkText: "Join the chat"
     }
   ]
 
@@ -130,7 +125,7 @@ const HomepageCommunity: FC<{}> = () => {
       <p>Engage with our developer community and the Source team to get help, exchange ideas & collaborate.</p>
       <div className={clsx('row', styles.communityLinks)}>
         {links.map((lnk, i) => {
-          return <div key={i} className={clsx('col col--3')}>
+          return <div key={i} className={clsx('col col--4')}>
             <Link className={styles.communityLink} to={lnk.link}>
               <div>
                 <h3>{lnk.title}</h3>
