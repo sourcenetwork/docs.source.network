@@ -415,8 +415,33 @@ html[data-theme="dark"] {
 body .DocSearch {
   --docsearch-modal-width: 800px;
 
+  &-Button-Placeholder {
+    font-size: 0.8rem;
+    padding-right: 10rem;
+    &:after {
+      content: " ...";
+    }
+  }
+
   &-Button {
+    border: 1px solid var(--card-border-color);
     margin-left: 1rem;
+
+    &-Keys {
+      min-width: 0;
+      align-items: center;
+    }
+
+    &-Key {
+      padding: 0;
+      box-shadow: none;
+      background: var(--ifm-background-color);
+      color: var(--card-border-color);
+      width: auto;
+      font-size: 0.8rem;
+      height: auto;
+      top: 0;
+    }
   }
 
   &-Search-Icon {
@@ -435,6 +460,12 @@ body .DocSearch {
 
   &-Logo {
     filter: grayscale(100%);
+  }
+
+  &-Commands-Key {
+    box-shadow: none;
+    background: var(--ifm-background-color);
+    color: var(--ifm-color-primary);
   }
 }
 
@@ -477,7 +508,7 @@ body .DocSearch {
   /* --docsearch-primary-color: var(--ifm-color-primary); */
   /* --docsearch-text-color: var(--ifm-font-color-base); */
   --docsearch-muted-color: var(--ifm-color-secondary-darkest);
-  --docsearch-container-background: rgba(94, 100, 112, 0.7);
+  --docsearch-container-background: rgba(36, 36, 36, 0.8);
   /* Modal */
   --docsearch-modal-background: var(--ifm-color-secondary-lighter);
   /* Search box */
