@@ -103,28 +103,44 @@ defradb client schema add '
 
 For more examples of schema type definitions, see the [examples/schema/](examples/schema/) folder.
 
-## Create a document
+## Create documents
 
-Submit a `mutation` request to create a document of the `User` type:
+Submit a `mutation` request to create documents of the `User` type:
 
 ```bash
 defradb client query '
   mutation {
-      create_User(input: {age: 31, verified: true, points: 90, name: "Bob"}) {
+      user1: create_User(input: {age: 31, verified: true, points: 90, name: "Bob"}) {
+          _docID
+      }
+      user2: create_User(input: {age: 28, verified: false, points: 15, name: "Alice"}) {
+          _docID
+      }
+      user3: create_User(input: {age: 35, verified: true, points: 100, name: "Charlie"}) {
           _docID
       }
   }
 '
 ```
 
-Expected response:
+Expected response (_docID will be different):
 
 ```json
 {
   "data": {
-    "create_User": [
+    "user1": [
       {
-        "_docID": "bae-91171025-ed21-50e3-b0dc-e31bccdfa1ab",
+        "_docID": "bae-206bdf93-9364-5252-a227-17d827eed50c"
+      }
+    ],
+    "user2": [
+      {
+        "_docID": "bae-457f5b48-29b7-5084-8e00-837aca8ffb55"
+      }
+    ],
+    "user3": [
+      {
+        "_docID": "bae-18f3fc7f-530f-5cab-a149-e9efb7e718ef"
       }
     ]
   }
