@@ -17,7 +17,7 @@ Disclaimer: At this early stage, DefraDB does not offer data encryption, and the
 Install `defradb` by [downloading an executable](https://github.com/sourcenetwork/defradb/releases) or building it locally using the [Go toolchain](https://golang.org/):
 
 ```bash
-git clone git@github.com:sourcenetwork/defradb.git
+git clone https://github.com/sourcenetwork/defradb.git
 cd defradb
 make install
 ```
