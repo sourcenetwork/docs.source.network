@@ -40,9 +40,10 @@ DefraDB has a built-in keyring for storing private keys securely. Keys are loade
 
 If a `.env` file is available in the working directory, the secret can be stored there or via a file at a path defined by the `--secret-file` flag.
 
-Keys will be randomly generated on the initial start of the node if they are not found. If not, to generate keys:
+Keys will be randomly generated on the initial start of the node if they are not found. To generate keys:
 
 ```bash
+DEFRA_KEYRING_SECRET=<make_a_password>
 defradb keyring generate
 ```
 
@@ -175,7 +176,7 @@ DefraDB's data model is based on [MerkleCRDTs](https://arxiv.org/pdf/2004.00107.
 ```bash
 defradb client query '
   query {
-    latestCommits(docID: "bae-91171025-ed21-50e3-b0dc-e31bccdfa1ab") {
+    _latestCommits(docID: "bae-91171025-ed21-50e3-b0dc-e31bccdfa1ab") {
       cid
       delta
       height
@@ -227,7 +228,7 @@ Obtain a specific commit by its content identifier (`cid`):
 ```graphql
 defradb client query '
   query {
-    commits(cid: "bafybeifhtfs6vgu7cwbhkojneh7gghwwinh5xzmf7nqkqqdebw5rqino7u") {
+    _commits(cid: "bafybeifhtfs6vgu7cwbhkojneh7gghwwinh5xzmf7nqkqqdebw5rqino7u") {
       cid
       delta
       height
