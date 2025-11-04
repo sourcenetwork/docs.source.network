@@ -187,12 +187,29 @@ This returns only user documents which have a value for the `points` field *Grea
 
 ## Obtain document commits
 
-DefraDB's data model is based on [MerkleCRDTs](https://arxiv.org/pdf/2004.00107.pdf). Each document has a graph of all of its updates, similar to Git. The updates are called `commit`s and are identified by `cid`, a content identifier. Each references its parents by their `cid`s. To get the most recent commit in the MerkleDAG for the document identified as `bae-91171025-ed21-50e3-b0dc-e31bccdfa1ab`:
+DefraDB's data model is based on [MerkleCRDTs](https://arxiv.org/pdf/2004.00107.pdf). Each document has a graph of all of its updates, similar to Git. The updates are called `commit`s and are identified by `cid`, a content identifier. Each references its parents by their `cid`s. First let's store the docID of the first User in a shell variable:
 
 ```bash
-defradb client query '
+FIRST_DOC_ID=$(defradb client query '
   query {
-    _latestCommits(docID: "bae-91171025-ed21-50e3-b0dc-e31bccdfa1ab") {
+    User(filter: {points: {_ge: 50}}) {
+      _docID
+      age
+      name
+      points
+    }
+  }
+' | jq -r '.data.User[0]._docID')
+
+echo "The first _docID is: $FIRST_DOC_ID"
+```
+
+Then to get the most recent commit in the MerkleDAG for this document:
+
+```bash
+defradb client query "
+  query {
+    _latestCommits(docID: \"$FIRST_DOC_ID\") {
       cid
       delta
       height
@@ -202,7 +219,7 @@ defradb client query '
       }
     }
   }
-'
+"
 ```
 
 It returns a structure similar to the following, which contains the update payload that caused this new commit (`delta`) and any subgraph commits it references.
@@ -239,12 +256,12 @@ It returns a structure similar to the following, which contains the update paylo
 }
 ```
 
-Obtain a specific commit by its content identifier (`cid`):
+Now let's obtain a specific commit by its content identifier (`cid`). First let's store the cid of the selected user in a shell variable:
 
-```graphql
-defradb client query '
+```bash
+FIRST_CID=$(defradb client query "
   query {
-    _commits(cid: "bafybeifhtfs6vgu7cwbhkojneh7gghwwinh5xzmf7nqkqqdebw5rqino7u") {
+    _latestCommits(docID: \"$FIRST_DOC_ID\") {
       cid
       delta
       height
@@ -254,7 +271,26 @@ defradb client query '
       }
     }
   }
-'
+" | jq -r '.data._latestCommits[0].cid')
+
+echo "The first CID is: $FIRST_CID"
+```
+to obtain the specific commit from this content identifier:
+
+```bash
+defradb client query "
+  query {
+    _commits(cid:\"$FIRST_CID\") {
+      cid
+      delta
+      height
+      links {
+        cid
+        name
+      }
+    }
+  }
+"
 ```
 
 ## DefraDB Query Language (DQL)
