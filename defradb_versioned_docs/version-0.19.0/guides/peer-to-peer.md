@@ -38,7 +38,7 @@ There are two, concrete types of data replication within DefraDB, i.e., active, 
 
 ### Passive Replication
 
-In DefraDB, passive replication is a type of data replication in which updates are automatically broadcast to the network and its peers without explicit coordination. This occurs over a global publish-subscrib network (PubSub), which is a way to broadcast updates on a specific topic and receive updates on that topic. 
+In DefraDB, passive replication is a type of data replication in which updates are automatically broadcast to the network and its peers without explicit coordination. This occurs over a global publish-subscribe network (PubSub), which is a way to broadcast updates on a specific topic and receive updates on that topic. 
 
 This is called passive replication because it is similar to a "fire and forget" scenario. Passive replication is enabled for all nodes by default and all nodes will always publish to the larger PubSub network. Passive replication can be compared to the connectionless protocol UDP, while active replication can be compared to the connection-oriented protocol TCP.
 
