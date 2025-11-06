@@ -1,5 +1,5 @@
 ---
-sidebar_label: Time Traveling Queries Guide
+sidebar_label: Time Traveling Query
 sidebar_position: 40
 ---
 # A Guide to Time Traveling Queries in DefraDB

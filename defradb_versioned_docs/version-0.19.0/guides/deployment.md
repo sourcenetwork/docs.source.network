@@ -1,5 +1,5 @@
 ---
-sidebar_label: Deployment Guide
+sidebar_label: Deployment
 sidebar_position: 80
 ---
 # A Guide to DefraDB Deployment
@@ -37,12 +37,9 @@ Refer to the Playground Basics Guide for detailed instructions.
 3. Set the environment variable using the [NodeJS language toolchain](https://nodejs.org/en/download/current) and npm to build locally on your machine. The JavaScript and Typescript code create an output bundle for the frontend code to work.
 4. Build a specific playground version of DefraDB. Use the go flags environment variable, instructing the compiler to include the playground directly embedded in all files. Execute the [go binary embed](https://pkg.go.dev/embed) command, producing a binary of approximately 4MB.
 
-
-
-- ### Docker Deployments
+### Docker Deployments
 
 Docker deployments are designed for containerized environments. The main prerequisite is that Docker should be installed on your machine.
-
 
 The steps for Docker deployment are as follows:
 
@@ -50,7 +47,6 @@ The steps for Docker deployment are as follows:
 2. Navigate to the root of the repository where the Dockerfile is located.
 3. Run the following command: 
 `docker build -t defra -f tools/defradb.containerfile `
-
 
 **Note**: The period at the end is important and the -f flag specifies the file location.
 
@@ -65,8 +61,6 @@ Docker images streamline the deployment process, requiring fewer dependencies. T
 DefraDB is a single statically built binary with no third-party dependencies. Similar to bare metal, it can run on any cloud or machine. Execute the following command to start DefraDB:
 `defradb start --store badger`
 
-
-
 ### AWS Environment
 
 For deploying to an AWS environment, note the following:
@@ -76,21 +70,11 @@ For deploying to an AWS environment, note the following:
 - Refer to [AWS documentation](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EC2_GetStarted.html) for an easy EC2 instance launch with your specified image size.
 - Customize your setup using Packer and Terraform scripts in this directory: `tools/cloud/aws/packer`
 
- 
-
-### Akash Deployments
-
-For detailed instructions on deploying DefraDB with Akash, refer to the [Akash Deployment Guide](https://nasdf-feat-akash-deploy.docs-source-network.pages.dev/guides/akash-deployment).
-
- 
-
 ## Configurations
 
 - The default root directory on Unix machines is `$HOME/.defradb`. For Windows it is `%USERPROFILE%\.defradb`​.
 - Specifiy the DefraDB folder with this command: `defradb --rootdir <path> start`.
 - The default directory for where data is specified is `<rootdir>/data`.
-
- 
 
 ## Storage Engine
 
@@ -99,23 +83,15 @@ The storage engines currently used include:
 - Fileback persistent storage powered the [Badger](https://github.com/dgraph-io/badger%5D ) database.
 - [In-Memory Storage](https://github.com/sourcenetwork/defradb/blob/develop/datastore/memory/memory.go) which is B-Tree based, ideal for testing does not work with the file system. It is specified with this flag: `--store memory`
 
- 
-
 ## Network and Connectivity
 
 As a P2P database, DefraDB requires two ports for node communication, they include:
-
- 
 
 1. **API Port**: It powers the HTTP API, handling queries  from the client to the database  and various API commands. The default port number is *9181*.
 
 2. **P2P Port**: It facilitates communication between nodes, supporting data sharing, synchronization, and replication. The default port no is *9171*.
 
- 
-
 The P2P networking functionality can't be disabled entirely, but you can use the `defradb start --no-p2p`​ command through the config files and CLI to deactivate it.
-
- 
 
 ### Port Customization
 
@@ -129,12 +105,9 @@ For P2P use the P2P adder to a multi-address:
 
 Here is an [infographic](https://images.ctfassets.net/efgoat6bykjh/XQrDLqpkV06rFhT24viJc/1c2c72ddebe609c80fc848bfa9c4771e/multiaddress.png) to further understand multi-address.
 
-
 ## The Peer Key
 
 Secure communication between nodes in DefraDB is established with a unique peer key for each node. Key details include:
-
- 
 
 - The peer key is automatically generated on startup, replacing the key file in a specific path.
 - There is no current method for generating a new key except for overwriting an existing one.
@@ -152,5 +125,3 @@ As DefraDB evolves, the roadmap includes expanding compatibility with diverse de
 - **Kubernetes**: Optimization for Kubernetes deployments, ensuring scalability and flexibility.
 - **Embedded/IoT for Small Environments**: Adaptations to cater to the unique demands of embedded systems and IoT applications.
 - **Web Assembly (WASM) Deployments**: Exploring deployment strategies utilizing Web Assembly for enhanced cross-platform compatibility.
-
- 

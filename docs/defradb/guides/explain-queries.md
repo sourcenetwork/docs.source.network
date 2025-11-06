@@ -1,5 +1,5 @@
 ---
-sidebar_label: Explain Systems Guide
+sidebar_label: Explain Queries
 sidebar_position: 20
 ---
 # A Guide to Explain Systems in DefraDB

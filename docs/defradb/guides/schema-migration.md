@@ -1,5 +1,5 @@
 ---
-sidebar_label: Schema Migration Guide
+sidebar_label: Schema Migration
 sidebar_position: 90
 ---
 # A Guide to Schema Migration in DefraDB

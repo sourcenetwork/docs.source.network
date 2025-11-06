@@ -1,5 +1,5 @@
 ---
-sidebar_label: Schema Relationship Guide
+sidebar_label: Schema Relationship
 sidebar_position: 50
 ---
 # A Guide to Schema Relationship in DefraDB
