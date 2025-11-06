@@ -1,6 +1,5 @@
 ---
 sidebar_label: Content Identifiers (CID)
-sidebar_position: 90
 ---
 
 # Content Identifiers (CID)

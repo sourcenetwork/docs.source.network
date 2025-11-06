@@ -1,6 +1,5 @@
 ---
-sidebar_label: Content Addressable Storage
-sidebar_position: 80
+sidebar_label: Content Addressable Storage (CAS)
 ---
 
 # Content Addressable Storage

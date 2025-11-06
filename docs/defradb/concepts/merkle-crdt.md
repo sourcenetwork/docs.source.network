@@ -1,8 +1,7 @@
 ---
 sidebar_label: Merkle CRDTs
-sidebar_position: 30
 ---
-# A Guide to Merkle CRDTs in DefraDB
+# Understanding Merkle CRDTs in DefraDB
 
 ## Overview
 
