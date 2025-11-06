@@ -23,21 +23,8 @@ const config = {
           path: "openapi.yml",
           routeBasePath: "/sourcehub/api",
         },
-        docs: {
-          routeBasePath: "/",
-          sidebarPath: require.resolve("./sidebars.js"),
-          editUrl:
-            "https://github.com/sourcenetwork/docs.source.network/edit/master/",
-
-          // Reorder changelog sidebar
-          async sidebarItemsGenerator({
-            defaultSidebarItemsGenerator,
-            ...args
-          }) {
-            const sidebarItems = await defaultSidebarItemsGenerator(args);
-            return reverseSidebarChangelog(sidebarItems);
-          },
-        },
+        docs: false, // Disable the default docs plugin
+        proxy: false, // Disable the proxy plugin to avoid webpack-dev-server config errors
         theme: {
           customCss: require.resolve("./src/css/custom.scss"),
         },
@@ -68,6 +55,7 @@ const config = {
           {
             type: "docSidebar",
             position: "left",
+            docsPluginId: "defradb",
             sidebarId: "defraSidebar",
             label: "DefraDB",
             className: "header-docs-link-defra",
@@ -75,6 +63,7 @@ const config = {
           {
             type: "docSidebar",
             position: "left",
+            docsPluginId: "sourcehub",
             sidebarId: "sourcehubSidebar",
             label: "SourceHub",
             className: "header-docs-link-sourcehub",
@@ -82,6 +71,7 @@ const config = {
           {
             type: "docSidebar",
             position: "left",
+            docsPluginId: "orbis",
             sidebarId: "orbisSidebar",
             label: "Orbis",
             className: "header-docs-link-orbis",
@@ -89,9 +79,16 @@ const config = {
           {
             type: "docSidebar",
             position: "left",
+            docsPluginId: "lensvm",
             sidebarId: "lensvmSidebar",
             label: "LensVM",
             className: "header-docs-link-lensvm",
+          },
+          {
+            type: "docsVersionDropdown",
+            position: "right",
+            dropdownItemsAfter: [],
+            dropdownActiveClassDisabled: true,
           },
           {
             href: "https://github.com/sourcenetwork/docs.source.network",
@@ -170,6 +167,130 @@ const config = {
       {
         sassOptions: {
           includePaths: ["./src/css"],
+        },
+      },
+    ],
+    // DefraDB instance
+    [
+      "@docusaurus/plugin-content-docs",
+      {
+        id: "defradb",
+        path: "docs/defradb",
+        routeBasePath: "defradb",
+        sidebarPath: require.resolve("./sidebars.js"),
+        editUrl:
+          "https://github.com/sourcenetwork/docs.source.network/edit/master/",
+        lastVersion: "0.19.0",
+        versions: {
+          "0.19.0": {
+            banner: "none",
+          },
+          current: {
+            label: "Next",
+            path: "next",
+            banner: "unreleased",
+          },
+        },
+        // Reorder changelog sidebar
+        async sidebarItemsGenerator({
+          defaultSidebarItemsGenerator,
+          ...args
+        }) {
+          const sidebarItems = await defaultSidebarItemsGenerator(args);
+          return reverseSidebarChangelog(sidebarItems);
+        },
+      },
+    ],
+    // SourceHub instance
+    [
+      "@docusaurus/plugin-content-docs",
+      {
+        id: "sourcehub",
+        path: "docs/sourcehub",
+        routeBasePath: "sourcehub",
+        sidebarPath: require.resolve("./sidebars.js"),
+        editUrl:
+          "https://github.com/sourcenetwork/docs.source.network/edit/master/",
+        lastVersion: "0.3.2",
+        versions: {
+          "0.3.2": {
+            banner: "none",
+          },
+          current: {
+            label: "Next",
+            path: "next",
+            banner: "unreleased",
+          },
+        },
+        // Reorder changelog sidebar
+        async sidebarItemsGenerator({
+          defaultSidebarItemsGenerator,
+          ...args
+        }) {
+          const sidebarItems = await defaultSidebarItemsGenerator(args);
+          return reverseSidebarChangelog(sidebarItems);
+        },
+      },
+    ],
+    // Orbis instance
+    [
+      "@docusaurus/plugin-content-docs",
+      {
+        id: "orbis",
+        path: "docs/orbis",
+        routeBasePath: "orbis",
+        sidebarPath: require.resolve("./sidebars.js"),
+        editUrl:
+          "https://github.com/sourcenetwork/docs.source.network/edit/master/",
+        lastVersion: "0.2.3",
+        versions: {
+          "0.2.3": {
+            banner: "none",
+          },
+          current: {
+            label: "Next",
+            path: "next",
+            banner: "unreleased",
+          },
+        },
+        // Reorder changelog sidebar
+        async sidebarItemsGenerator({
+          defaultSidebarItemsGenerator,
+          ...args
+        }) {
+          const sidebarItems = await defaultSidebarItemsGenerator(args);
+          return reverseSidebarChangelog(sidebarItems);
+        },
+      },
+    ],
+    // LensVM instance
+    [
+      "@docusaurus/plugin-content-docs",
+      {
+        id: "lensvm",
+        path: "docs/lensvm",
+        routeBasePath: "lensvm",
+        sidebarPath: require.resolve("./sidebars.js"),
+        editUrl:
+          "https://github.com/sourcenetwork/docs.source.network/edit/master/",
+        lastVersion: "0.9.3",
+        versions: {
+          "0.9.3": {
+            banner: "none",
+          },
+          current: {
+            label: "Next",
+            path: "next",
+            banner: "unreleased",
+          },
+        },
+        // Reorder changelog sidebar
+        async sidebarItemsGenerator({
+          defaultSidebarItemsGenerator,
+          ...args
+        }) {
+          const sidebarItems = await defaultSidebarItemsGenerator(args);
+          return reverseSidebarChangelog(sidebarItems);
         },
       },
     ],
