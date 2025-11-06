@@ -6,11 +6,11 @@ import {
   PageMetadata,
 } from '@docusaurus/theme-common';
 import {
-  docVersionSearchTag,
+  getDocsVersionSearchTag,
   DocsSidebarProvider,
   DocsVersionProvider,
-  useDocRouteMetadata,
-} from '@docusaurus/theme-common/internal';
+  useDocRootMetadata,
+} from '@docusaurus/plugin-content-docs/client';
 import DocPageLayout from '@theme/DocPage/Layout';
 import NotFound from '@theme/NotFound';
 import SearchMetadata from '@theme/SearchMetadata';
@@ -20,7 +20,7 @@ function DocPageMetadata(props) {
     <>
       <SearchMetadata
         version={versionMetadata.version}
-        tag={docVersionSearchTag(
+        tag={getDocsVersionSearchTag(
           versionMetadata.pluginId,
           versionMetadata.version,
         )}
@@ -35,7 +35,7 @@ function DocPageMetadata(props) {
 }
 export default function DocPage(props) {
   const {versionMetadata} = props;
-  const currentDocRouteMetadata = useDocRouteMetadata(props);
+  const currentDocRouteMetadata = useDocRootMetadata(props);
   if (!currentDocRouteMetadata) {
     return <NotFound />;
   }

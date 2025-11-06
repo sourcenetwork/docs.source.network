@@ -113,9 +113,9 @@ A **rule** functions as a **transformation** on a **Relation Node** `(object, re
 
 #### Example
 
-Let **A** be a **Relation Node** and **R** be a **Rewrite Rule**. Then:  
+Let **A** be a **Relation Node** and **R** be a **Rewrite Rule**. Then:
 
-R(A) → {B, C, D}
+R(A) → \{B, C, D\}
 
 This means that applying **R** to **A** produces a **set of descendant Relation Nodes** `{B, C, D}`.  
 
@@ -244,5 +244,5 @@ The Relation Tuples define a graph of object relationships, which is used to res
 
 # References
 
-- Zanzibar: <https://research.google/pubs/pub48190/>
-- RelBAC: <https://ieeexplore.ieee.org/abstract/document/4725889/>
+- Zanzibar: https://research.google/pubs/pub48190/
+- RelBAC: https://ieeexplore.ieee.org/abstract/document/4725889/

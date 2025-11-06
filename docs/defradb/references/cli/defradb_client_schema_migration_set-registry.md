@@ -8,7 +8,7 @@ Set a migration to a collection within the LensRegistry of the local DefraDB nod
 Does not persist the migration after restart.
 
 Example: set from an argument string:
-  defradb client schema migration set-registry 2 '{"lenses": [...'
+  defradb client schema migration set-registry 2 '\{"lenses": [...'
 
 Learn more about the DefraDB GraphQL Schema Language on https://docs.source.network.
 

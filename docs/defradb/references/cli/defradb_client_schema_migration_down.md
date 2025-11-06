@@ -8,7 +8,7 @@ Reverses the migration to the specified collection version.
 Documents is a list of documents to reverse the migration from.
 
 Example: migrate from string
-  defradb client schema migration down --collection 2 '[{"name": "Bob"}]'
+  defradb client schema migration down --collection 2 '[\{"name": "Bob"\}]'
 
 Example: migrate from file
   defradb client schema migration down --collection 2 -f documents.json

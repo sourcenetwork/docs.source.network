@@ -12,7 +12,7 @@ Schema Object with a '@policy(id:".." resource: "..")' linked will only be accep
   - Learn more about [ACP & DPI Rules](/acp/README.md)
 
 Example: add from an argument string:
-  defradb client schema add 'type Foo { ... }'
+  defradb client schema add 'type Foo \{ ... \}'
 
 Example: add from file:
   defradb client schema add -f schema.graphql
