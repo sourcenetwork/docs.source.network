@@ -4,6 +4,23 @@ sidebar_position: 50
 ---
 # A Guide to Schema Relationship in DefraDB
 
+:::tip[Key Points]
+
+DefraDB provides managed relationships where the database automatically handles foreign keys, correlations, and join operations. Developers specify the relationship type (one-to-one or one-to-many) without manually managing keys or join logic.
+
+**Supported relationship types:**
+- **One-to-One** – Single reference between documents (specify `@primary` side for efficient queries)
+- **One-to-Many** – One document referenced by many (the "many" side is always primary and holds the foreign key)
+- **Many-to-Many** – Not supported; use junction tables to connect one-to-many relationships
+
+**Key features:** Type joins replace traditional field joins, querying from primary to secondary is more efficient (point lookup vs. table scan), and filtering works on both parent and related child objects with different semantics.
+
+**Important notes:** All related types must be added simultaneously in the Schema Definition Language (SDL), and documents must be created in specific order (secondary side first, then primary side with the secondary ID).
+
+**Current limitations:** cannot create related documents in a single mutation, no cascading deletes, and cannot manually define foreign keys and joins.
+
+:::
+
 ## Overview
 Schema systems allow developers to enforce a structure on a given object type or database, which might be represented as rows in a SQL-based database or documents in a no SQL-based database. This enables developers to understand the structure of these objects so they can have type safety, structure safety, or the ability to enforce certain invariance or priorities syntactically or semantically.
 

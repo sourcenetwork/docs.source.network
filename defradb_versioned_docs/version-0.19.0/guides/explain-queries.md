@@ -4,6 +4,24 @@ sidebar_position: 20
 ---
 # A Guide to Explain Systems in DefraDB
 
+:::tip[Key Points]
+
+The DefraDB Explain System lets developers introspect query execution by adding a single `@explain` directive to requests. It reveals the Plan Graph – a directed graph showing the operations DefraDB performs to resolve queries.
+
+**Two explanation modes:**
+- **Simple Explain** (`@explain`) – Returns Plan Graph structure without execution (fast, no overhead)
+- **Execute Explain** (`@explain(type: execute)`) – Executes the plan and returns runtime metrics (similar to PostgreSQL's EXPLAIN ANALYZE)
+
+**Why use it:**
+- Identify inefficient full table scans vs. index usage
+- Optimize query performance before executing
+- Understand multi-step operation flows and bottlenecks
+- Make informed decisions about adding secondary indexes
+
+The Explain System transforms DefraDB from a black box into a transparent, optimizable database by showing exactly how queries are resolved.
+
+:::
+
 ## Overview
 
 The DefraDB Explain System is a powerful tool designed to introspect requests, examine plan graphs, and deliver insights into the execution of queries and mutations in DefraDB. These requests can range from basic information queries to highly intricate multi-step operations, all enabled with a single directive added to the request.
