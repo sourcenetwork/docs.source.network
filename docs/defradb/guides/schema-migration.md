@@ -4,6 +4,24 @@ sidebar_position: 90
 ---
 # A Guide to Schema Migration in DefraDB
 
+:::tip[Key Points]
+
+Lens is DefraDB's bi-directional schema migration engine that transforms data between schema versions without requiring upfront migration of all documents. Built on WebAssembly, it enables language-agnostic transformations executed safely in a sandbox.
+
+**Key features:**
+- **Lazy evaluation** – Migrations execute only when documents are read, queried, or updated (no upfront cost)
+- **Bi-directional** – Define both forward (`transform`) and reverse (`inverse`) migrations between schema versions
+- **Language-agnostic** – Write migrations in any language that compiles to WebAssembly
+- **P2P compatible** – Peers on different schema versions can sync seamlessly
+
+**How it works:** Migrations are defined as WebAssembly modules with four functions: `alloc`, `set_param`, `transform`, and optionally `inverse`. Documents are transformed on-demand at query time, allowing rapid toggling between schema versions.
+
+**Trade-offs:** Lazy execution means errors surface at query time rather than migration time, and current performance is secondary to functionality as the system matures.
+
+**Use cases:** Safe schema progression, handling P2P version complexity, A/B testing with on-demand schema selection, and maintaining data consistency across evolving applications.
+
+:::
+
 ## Overview
 In a database system, an application’s requirements can change at any given time, to meet this change, Schema migrations are necessary. This is where Lens comes in, as a migration engine that produces effective schema migration.
 
