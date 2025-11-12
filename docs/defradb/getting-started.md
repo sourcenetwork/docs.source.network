@@ -17,7 +17,7 @@ Disclaimer: At this early stage, DefraDB does not offer data encryption, and the
 Install `defradb` by [downloading an executable](https://github.com/sourcenetwork/defradb/releases) or building it locally using the [Go toolchain](https://golang.org/):
 
 ```bash
-git clone git@github.com:sourcenetwork/defradb.git
+git clone https://github.com/sourcenetwork/defradb.git
 cd defradb
 make install
 ```
@@ -40,9 +40,10 @@ DefraDB has a built-in keyring for storing private keys securely. Keys are loade
 
 If a `.env` file is available in the working directory, the secret can be stored there or via a file at a path defined by the `--secret-file` flag.
 
-Keys will be randomly generated on the initial start of the node if they are not found. If not, to generate keys:
+Keys will be randomly generated on the initial start of the node if they are not found. To generate keys:
 
 ```bash
+DEFRA_KEYRING_SECRET=<make_a_password>
 defradb keyring generate
 ```
 
@@ -102,28 +103,44 @@ defradb client schema add '
 
 For more examples of schema type definitions, see the [examples/schema/](examples/schema/) folder.
 
-## Create a document
+## Create documents
 
-Submit a `mutation` request to create a document of the `User` type:
+Submit a `mutation` request to create documents of the `User` type:
 
 ```bash
 defradb client query '
   mutation {
-      create_User(input: {age: 31, verified: true, points: 90, name: "Bob"}) {
+      user1: create_User(input: {age: 31, verified: true, points: 90, name: "Bob"}) {
+          _docID
+      }
+      user2: create_User(input: {age: 28, verified: false, points: 15, name: "Alice"}) {
+          _docID
+      }
+      user3: create_User(input: {age: 35, verified: true, points: 100, name: "Charlie"}) {
           _docID
       }
   }
 '
 ```
 
-Expected response:
+Expected response (_docID will be different):
 
 ```json
 {
   "data": {
-    "create_User": [
+    "user1": [
       {
-        "_docID": "bae-91171025-ed21-50e3-b0dc-e31bccdfa1ab",
+        "_docID": "bae-206bdf93-9364-5252-a227-17d827eed50c"
+      }
+    ],
+    "user2": [
+      {
+        "_docID": "bae-457f5b48-29b7-5084-8e00-837aca8ffb55"
+      }
+    ],
+    "user3": [
+      {
+        "_docID": "bae-18f3fc7f-530f-5cab-a149-e9efb7e718ef"
       }
     ]
   }
@@ -170,12 +187,29 @@ This returns only user documents which have a value for the `points` field *Grea
 
 ## Obtain document commits
 
-DefraDB's data model is based on [MerkleCRDTs](https://arxiv.org/pdf/2004.00107.pdf). Each document has a graph of all of its updates, similar to Git. The updates are called `commit`s and are identified by `cid`, a content identifier. Each references its parents by their `cid`s. To get the most recent commit in the MerkleDAG for the document identified as `bae-91171025-ed21-50e3-b0dc-e31bccdfa1ab`:
+DefraDB's data model is based on [MerkleCRDTs](https://arxiv.org/pdf/2004.00107.pdf). Each document has a graph of all of its updates, similar to Git. The updates are called `commit`s and are identified by `cid`, a content identifier. Each references its parents by their `cid`s. First let's store the docID of the first User in a shell variable:
 
 ```bash
-defradb client query '
+FIRST_DOC_ID=$(defradb client query '
   query {
-    latestCommits(docID: "bae-91171025-ed21-50e3-b0dc-e31bccdfa1ab") {
+    User(filter: {points: {_ge: 50}}) {
+      _docID
+      age
+      name
+      points
+    }
+  }
+' | jq -r '.data.User[0]._docID')
+
+echo "The first _docID is: $FIRST_DOC_ID"
+```
+
+Then to get the most recent commit in the MerkleDAG for this document:
+
+```bash
+defradb client query "
+  query {
+    _latestCommits(docID: \"$FIRST_DOC_ID\") {
       cid
       delta
       height
@@ -185,7 +219,7 @@ defradb client query '
       }
     }
   }
-'
+"
 ```
 
 It returns a structure similar to the following, which contains the update payload that caused this new commit (`delta`) and any subgraph commits it references.
@@ -222,12 +256,12 @@ It returns a structure similar to the following, which contains the update paylo
 }
 ```
 
-Obtain a specific commit by its content identifier (`cid`):
+Now let's obtain a specific commit by its content identifier (`cid`). First let's store the cid of the selected user in a shell variable:
 
-```graphql
-defradb client query '
+```bash
+FIRST_CID=$(defradb client query "
   query {
-    commits(cid: "bafybeifhtfs6vgu7cwbhkojneh7gghwwinh5xzmf7nqkqqdebw5rqino7u") {
+    _latestCommits(docID: \"$FIRST_DOC_ID\") {
       cid
       delta
       height
@@ -237,7 +271,26 @@ defradb client query '
       }
     }
   }
-'
+" | jq -r '.data._latestCommits[0].cid')
+
+echo "The first CID is: $FIRST_CID"
+```
+to obtain the specific commit from this content identifier:
+
+```bash
+defradb client query "
+  query {
+    _commits(cid:\"$FIRST_CID\") {
+      cid
+      delta
+      height
+      links {
+        cid
+        name
+      }
+    }
+  }
+"
 ```
 
 ## DefraDB Query Language (DQL)

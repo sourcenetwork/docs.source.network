@@ -157,6 +157,9 @@ const config = {
         indexName: "source-docs",
       },
     }),
+  clientModules: [
+    require.resolve('./src/components/posthog.js'),
+  ],
   plugins: [
     [
       "docusaurus-plugin-sass",

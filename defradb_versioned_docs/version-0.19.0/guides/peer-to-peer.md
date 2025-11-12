@@ -4,6 +4,20 @@ sidebar_position: 10
 ---
 # A Guide to Peer-to-Peer Networking in DefraDB
 
+:::tip[Key Points]
+
+DefraDB leverages P2P networking via libp2p to synchronize data directly between distributed nodes, enabling **offline-first applications without a central server**.
+
+**Key capabilities:**
+- **Passive replication** – Automatic broadcasting of updates via PubSub (similar to UDP)
+- **Active replication** – Direct, point-to-point synchronization between specific nodes (similar to TCP)
+- **NAT traversal** – Circuit relays and hole punching to connect nodes behind firewalls
+- **Resilient synchronization** – Updates queue offline and sync automatically when connectivity returns
+
+DefraDB stores documents as update graphs (similar to Git) using IPLD blocks distributed across nodes.
+
+:::
+
 ## Overview
 
 P2P networking is a way for devices to communicate and share data directly with each other without the need for a central server. In a P2P network, all devices, also known as peers, are equal and can both send and receive data. DefraDB is a database that uses P2P networking instead of the traditional client-server model.
@@ -38,7 +52,7 @@ There are two, concrete types of data replication within DefraDB, i.e., active, 
 
 ### Passive Replication
 
-In DefraDB, passive replication is a type of data replication in which updates are automatically broadcast to the network and its peers without explicit coordination. This occurs over a global publish-subscrib network (PubSub), which is a way to broadcast updates on a specific topic and receive updates on that topic. 
+In DefraDB, passive replication is a type of data replication in which updates are automatically broadcast to the network and its peers without explicit coordination. This occurs over a global publish-subscribe network (PubSub), which is a way to broadcast updates on a specific topic and receive updates on that topic. 
 
 This is called passive replication because it is similar to a "fire and forget" scenario. Passive replication is enabled for all nodes by default and all nodes will always publish to the larger PubSub network. Passive replication can be compared to the connectionless protocol UDP, while active replication can be compared to the connection-oriented protocol TCP.
 
@@ -139,6 +153,6 @@ Graph Sync - This is a protocol developed by Protocol Labs, which has the potent
 
 There are currently some limitations with the peer-to-peer system being used. One issue is that replicators, which are added to a node, do not persist through updates or restarts. This means that the user must re-add the replicators every time the node is restarted. However, this issue will be resolved in the next version of the system.
 
-Currently, when a replicator is added to a node, it doesn't persist between node updates or node restarts. This means that every time there is a restart, the user must re-add these replicators. This is a minor oversight that the Source team plans to fix in a future release. In the meantime, they are also wWorking on a new protocol called Head Exchange to address issues with syncing the Merkel DAG when updates have been missed or concurrent, diverged updates have been made. The Head Exchange protocol aims to efficiently establish the most recent update seen by each node, determine if there are any divergent updates, and figure out the most efficient way to synchronize the nodes with the least amount of communication.
+Currently, when a replicator is added to a node, it doesn't persist between node updates or node restarts. This means that every time there is a restart, the user must re-add these replicators. This is a minor oversight that the Source team plans to fix in a future release. In the meantime, they are also working on a new protocol called Head Exchange to address issues with syncing the Merkel DAG when updates have been missed or concurrent, diverged updates have been made. The Head Exchange protocol aims to efficiently establish the most recent update seen by each node, determine if there are any divergent updates, and figure out the most efficient way to synchronize the nodes with the least amount of communication.
 
 One issue with peer-to-peer local-first development is that it can be difficult for nodes to connect with each other when they are running on devices within the same home Wi-Fi network. This is due to a NAT firewall, which is a router that operates to protect private networks. A NAT firewall only allows internet traffic to pass through if it was requested by a device on the private network. It protects the identity of a network by not exposing internal IP addresses to the internet. This can make it difficult for other nodes to connect directly to a node running behind a NAT firewall.

@@ -4,6 +4,18 @@ sidebar_position: 40
 ---
 # A Guide to Time Traveling Queries in DefraDB
 
+:::tip[Key Points]
+
+Time Traveling Queries let you query documents at any previous state by specifying a commit's Content Identifier (CID). Unlike traditional databases that overwrite data, DefraDB preserves every update in an immutable update graph.
+
+**How to use:** Add a `cid` parameter to your query with the 32-bit hexadecimal version identifier. Works with minimal changes to regular queries – same syntax, just add the CID.
+
+**Key mechanism:** Every document update is stored as a delta payload in a Merkle CRDT update graph. Queries traverse from the target state back to genesis, then replay operations forward to reconstruct the historical state.
+
+**Current limitations:** Cannot traverse relationships to related documents in time-travel mode, and performance degrades with large numbers of updates between genesis and target states.
+
+:::
+
 ## Overview
 Time Traveling queries allow users to query previous states of documents within the query interface. Essentially, it returns data as it had appeared at a specific commit. This is a powerful tool as it allows users to inspect and verify arbitrary states and time regardless of the number of updates made or who made these updates if the user has the current state. Since a current state is always going to be based on some previous state and that previous state is going to be based on another previous state, hence time-traveling queries provide the ability to “go back in time” and look at previous states with minimal changes to the working of the query. A special quality of this query is that there is minimal distinction between a regular query run versus a time-traveling query since both apply almost the same logic to fetch the result of the query.
 
