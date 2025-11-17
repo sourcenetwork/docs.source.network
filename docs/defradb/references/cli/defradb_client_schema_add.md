@@ -8,17 +8,8 @@ Add new schema.
 
 Schema Object with a '@policy(id:".." resource: "..")' linked will only be accepted if:
   - ACP is available (i.e. ACP is not disabled).
-  - The specified resource adheres to the Document Access Control DPI Rules.
-  - Learn more about [ACP & DPI Rules](/acp/README.md)
-
-Example: add from an argument string:
-  defradb client schema add 'type Foo \{ ... \}'
-
-Example: add from file:
-  defradb client schema add -f schema.graphql
-
-Example: add from stdin:
-  cat schema.graphql | defradb client schema add -
+  - The specified resource adheres to the document resource interface (DRI).
+  - Learn more about the DefraDB [ACP System](https://docs.source.network/defradb/references/acp)
 
 Learn more about the DefraDB GraphQL Schema Language on https://docs.source.network.
 
@@ -26,11 +17,30 @@ Learn more about the DefraDB GraphQL Schema Language on https://docs.source.netw
 defradb client schema add [schema] [flags]
 ```
 
+### Examples
+
+```
+add from an argument string:  
+  defradb client schema add 'type Foo { ... }'
+
+add from file:  
+  defradb client schema add -f schema.graphql
+
+add from multiple files:  
+  defradb client schema add -f schema1.graphql -f schema2.graphql
+
+add from multiple files (comma-separated):  
+  defradb client schema add -f schema1.graphql,schema2.graphql
+
+add from stdin:  
+  cat schema.graphql | defradb client schema add -
+```
+
 ### Options
 
 ```
-  -f, --file string   File to load a schema from
-  -h, --help          help for add
+  -f, --file strings   File to load schema from
+  -h, --help           help for add
 ```
 
 ### Options inherited from parent commands

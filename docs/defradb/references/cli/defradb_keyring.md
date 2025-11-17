@@ -15,7 +15,7 @@ To randomly generate the required keys, run the following command:
 	defradb keyring generate
 
 To import externally generated keys, run the following command:
-	defradb keyring import \<name\> \<private-key-hex\>
+	defradb keyring import <name> <private-key-hex>
 
 To learn more about the available options:
 	defradb keyring --help
