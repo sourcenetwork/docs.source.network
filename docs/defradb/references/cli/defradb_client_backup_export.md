@@ -4,18 +4,23 @@ Export the database to a file
 
 ### Synopsis
 
-Export the database to a file. If a file exists at the `<output_path>` location, it will be overwritten.
+Export the database to a file. If a file exists at the <output_path> location, it will be overwritten.
 		
 If the --collection flag is provided, only the data for that collection will be exported.
 Otherwise, all collections in the database will be exported.
 
 If the --pretty flag is provided, the JSON will be pretty printed.
 
-Example: export data for the 'Users' collection:
-  defradb client export --collection Users user_data.json
 
 ```
 defradb client backup export  [-c --collections | -p --pretty | -f --format] <output_path> [flags]
+```
+
+### Examples
+
+```
+Export data for the 'Users' collection:  
+  defradb client backup export --collections Users user_data.json
 ```
 
 ### Options
