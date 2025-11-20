@@ -19,6 +19,8 @@
     "@docusaurus/core": "3.9.0",
     "@docusaurus/preset-classic": "3.9.0",
     "@mdx-js/react": "^3.0.0",
+    "@sourcenetwork/acp-js": "^1.0.4",
+    "@sourcenetwork/hublet": "^1.0.2",
     "@svgr/webpack": "^7.0.0",
     "clsx": "^1.2.1",
     "docusaurus-plugin-sass": "^0.2.5",

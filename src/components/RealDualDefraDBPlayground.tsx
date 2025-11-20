@@ -2,20 +2,39 @@ import React, { useState, useEffect, useRef } from 'react';
 import BrowserOnly from '@docusaurus/BrowserOnly';
 
 /**
- * Real Dual DefraDB WASM Playground - Proof of Concept
+ * Real Dual DefraDB WASM Playground with Proper ACP.js Integration
  * 
- * NOTE: The current DefraDB playground WASM only supports ONE global client instance.
- * This implementation uses namespace prefixes to simulate two isolated nodes sharing
- * the same underlying WASM instance. Each "node" uses prefixed collection names.
+ * This implementation properly uses @sourcenetwork/acp-js to instantiate
+ * DefraDB WASM and calls window.defradb.open() to get the actual client.
  * 
  * Prerequisites:
- * 1. Build defradb.wasm:
- *    GOOS=js GOARCH=wasm go build -o defradb.wasm ./cmd/defradb
+ * 1. Install dependencies:
+ *    npm install @sourcenetwork/acp-js @sourcenetwork/hublet
  * 
- * 2. Copy to static/:
+ * 2. Build defradb.wasm:
+ *    GOOS=js GOARCH=wasm go build -tags=playground -o defradb.wasm ./cmd/defradb
+ * 
+ * 3. Copy to static/:
  *    cp defradb.wasm /path/to/docs/static/
- *    cp $(go env GOROOT)/misc/wasm/wasm_exec.js /path/to/docs/static/
  */
+
+// Extend Window interface
+declare global {
+  interface Window {
+    defradb?: {
+      open(acpType?: string): Promise<any>;
+    };
+    defradbClient?: any;
+    globalACPConfig?: {
+      apiUrl: string;
+      rpcUrl: string;
+      grpcUrl: string;
+      chainId: string;
+      denom: string;
+      useZeroFees: boolean;
+    };
+  }
+}
 
 interface DefraDBInstance {
   id: string;
@@ -85,92 +104,68 @@ function RealDualDefraDBPlaygroundInner() {
     }
   };
 
-  // Load external script dynamically
-  const loadScript = (src: string): Promise<void> => {
-    return new Promise((resolve, reject) => {
-      if (document.querySelector(`script[src="${src}"]`)) {
-        resolve();
-        return;
-      }
-
-      const script = document.createElement('script');
-      script.src = src;
-      script.onload = () => resolve();
-      script.onerror = () => reject(new Error(`Failed to load script: ${src}`));
-      document.head.appendChild(script);
-    });
-  };
-
-  // Create a namespaced wrapper around the global DefraDB client
-  const createNamespacedClient = (namespace: string, originalClient: any) => {
+  // Create a namespaced wrapper around the DefraDB client
+  const createNamespacedClient = (namespace: string, dbClient: any) => {
     return {
       execRequest: async (query: string, variables?: any, context?: any) => {
         // Prefix collection names in queries with namespace
         const namespacedQuery = query.replace(/\b(User|create_User)\b/g, `${namespace}_$1`);
-        return originalClient.execRequest(namespacedQuery, variables, context);
+        return await dbClient.execRequest(namespacedQuery, variables || {}, context || {});
       },
       addSchema: async (schema: string) => {
         // Prefix type names with namespace
         const namespacedSchema = schema.replace(/type\s+(\w+)/g, `type ${namespace}_$1`);
-        return originalClient.addSchema(namespacedSchema);
+        return await dbClient.addSchema(namespacedSchema);
+      },
+      getNodeIdentity: async () => {
+        return await dbClient.getNodeIdentity();
       }
     };
   };
 
-  // Initialize DefraDB WASM
+  // Initialize DefraDB WASM with ACP.js
   const initializeDefraDB = async () => {
     try {
       setGlobalError(null);
 
-      // Load Go WASM runtime script
-      addLog('node1', 'Loading Go WASM runtime (wasm_exec.js)...');
-      addLog('node2', 'Loading Go WASM runtime (wasm_exec.js)...');
+      addLog('node1', '=== Starting DefraDB WASM Initialization ===');
+      addLog('node2', '=== Starting DefraDB WASM Initialization ===');
+
+      // Set up global ACP config before loading
+      addLog('node1', 'Setting up global ACP config...');
+      addLog('node2', 'Setting up global ACP config...');
       
-      await loadScript('/wasm_exec.js');
+      window.globalACPConfig = {
+        apiUrl: `${window.location.origin}/api`,
+        rpcUrl: `${window.location.origin}/rpc`,
+        grpcUrl: `${window.location.origin}/api`,
+        chainId: 'sourcehub-dev',
+        denom: 'uopen',
+        useZeroFees: true,
+      };
+
+      addLog('node1', '✓ ACP config set');
+      addLog('node2', '✓ ACP config set');
+
+      // Dynamically import ACP.js
+      addLog('node1', 'Loading @sourcenetwork/acp-js...');
+      addLog('node2', 'Loading @sourcenetwork/acp-js...');
+
+      const { instantiate } = await import('@sourcenetwork/acp-js');
       
-      addLog('node1', '✓ Go WASM runtime loaded');
-      addLog('node2', '✓ Go WASM runtime loaded');
+      addLog('node1', '✓ ACP.js module loaded');
+      addLog('node2', '✓ ACP.js module loaded');
 
-      // Check if Go is available
-      if (!window.Go) {
-        throw new Error('window.Go is not available after loading wasm_exec.js');
-      }
+      // Instantiate DefraDB WASM
+      addLog('node1', 'Calling instantiate("/defradb.wasm")...');
+      addLog('node2', 'Calling instantiate("/defradb.wasm")...');
 
-      // Initialize the single DefraDB WASM instance
-      addLog('node1', '=== Initializing DefraDB WASM ===');
-      addLog('node2', '=== Initializing DefraDB WASM ===');
-
-      const go = new window.Go();
-      addLog('node1', 'Created Go runtime instance');
-      addLog('node2', 'Created Go runtime instance');
-
-      // Fetch WASM binary
-      addLog('node1', 'Fetching defradb.wasm...');
-      addLog('node2', 'Fetching defradb.wasm...');
-      const response = await fetch('/defradb.wasm');
+      await instantiate('/defradb.wasm');
       
-      if (!response.ok) {
-        throw new Error(`Failed to fetch WASM: ${response.status} ${response.statusText}`);
-      }
+      addLog('node1', '✓ WASM instantiated');
+      addLog('node2', '✓ WASM instantiated');
 
-      const wasmBuffer = await response.arrayBuffer();
-      const sizeMB = (wasmBuffer.byteLength / 1024 / 1024).toFixed(2);
-      addLog('node1', `Loaded WASM binary (${sizeMB} MB)`);
-      addLog('node2', `Loaded WASM binary (${sizeMB} MB)`);
-
-      // Instantiate WASM module
-      addLog('node1', 'Instantiating WASM module...');
-      addLog('node2', 'Instantiating WASM module...');
-      const wasmModule = await WebAssembly.instantiate(wasmBuffer, go.importObject);
-      addLog('node1', '✓ WASM module instantiated');
-      addLog('node2', '✓ WASM module instantiated');
-
-      // Run Go runtime
-      addLog('node1', 'Starting Go runtime...');
-      addLog('node2', 'Starting Go runtime...');
-      go.run(wasmModule.instance);
-
-      // Wait for window.defradb to be available (NOT window.defradbClient)
+      // Wait for window.defradb to be available
       addLog('node1', 'Waiting for window.defradb...');
       addLog('node2', 'Waiting for window.defradb...');
       
@@ -183,45 +178,75 @@ function RealDualDefraDBPlaygroundInner() {
       }
 
       if (!window.defradb) {
-        throw new Error(`DefraDB client failed to initialize after ${attempts} attempts (${attempts/10} seconds)`);
+        throw new Error(`window.defradb not available after ${attempts} attempts (${attempts/10} seconds)`);
       }
 
       addLog('node1', `✓ Found window.defradb after ${attempts} attempts`);
       addLog('node2', `✓ Found window.defradb after ${attempts} attempts`);
 
-      // Check what methods are available
-      const methods = Object.keys(window.defradb).filter(k => typeof window.defradb[k] === 'function');
-      addLog('node1', `Available methods: ${methods.join(', ')}`);
-      addLog('node2', `Available methods: ${methods.join(', ')}`);
+      // CRITICAL: Call window.defradb.open() to get the actual client
+      addLog('node1', 'Calling window.defradb.open() to get client...');
+      addLog('node2', 'Calling window.defradb.open() to get client...');
+
+      const dbClient = await window.defradb.open();
+      
+      if (!dbClient) {
+        throw new Error('window.defradb.open() returned null or undefined');
+      }
+
+      // Store the client globally for reference
+      window.defradbClient = dbClient;
+
+      addLog('node1', '✓ DefraDB client opened successfully');
+      addLog('node2', '✓ DefraDB client opened successfully');
+
+      // Log available methods
+      const clientMethods = Object.keys(dbClient).filter(k => typeof dbClient[k] === 'function');
+      addLog('node1', `Available methods: ${clientMethods.join(', ')}`);
+      addLog('node2', `Available methods: ${clientMethods.join(', ')}`);
+
+      // Verify required methods exist
+      if (typeof dbClient.execRequest !== 'function') {
+        throw new Error(`Client missing execRequest method. Available: ${clientMethods.join(', ')}`);
+      }
+      if (typeof dbClient.addSchema !== 'function') {
+        throw new Error(`Client missing addSchema method. Available: ${clientMethods.join(', ')}`);
+      }
+
+      addLog('node1', '✓ Verified client has required methods');
+      addLog('node2', '✓ Verified client has required methods');
 
       // Create namespaced clients
       addLog('node1', 'Creating namespaced client (Node1_*)...');
       addLog('node2', 'Creating namespaced client (Node2_*)...');
       
-      const client1 = createNamespacedClient('Node1', window.defradb);
-      const client2 = createNamespacedClient('Node2', window.defradb);
+      const client1 = createNamespacedClient('Node1', dbClient);
+      const client2 = createNamespacedClient('Node2', dbClient);
 
       setInstance1(prev => ({
         ...prev,
         client: client1,
         status: 'ready'
       }));
-      addLog('node1', '✓ Node 1 is READY');
+      addLog('node1', '✓✓✓ Node 1 is READY ✓✓✓');
 
       setInstance2(prev => ({
         ...prev,
         client: client2,
         status: 'ready'
       }));
-      addLog('node2', '✓ Node 2 is READY');
+      addLog('node2', '✓✓✓ Node 2 is READY ✓✓✓');
 
     } catch (error) {
       const errorMsg = `Failed to initialize: ${error.message}`;
       setGlobalError(errorMsg);
-      addLog('node1', `✗ ${errorMsg}`);
-      addLog('node2', `✗ ${errorMsg}`);
+      addLog('node1', `✗✗✗ ${errorMsg} ✗✗✗`);
+      addLog('node2', `✗✗✗ ${errorMsg} ✗✗✗`);
       setInstance1(prev => ({ ...prev, status: 'error' }));
       setInstance2(prev => ({ ...prev, status: 'error' }));
+      
+      console.error('Initialization error:', error);
+      console.error('Stack:', error.stack);
     }
   };
 
@@ -243,14 +268,18 @@ function RealDualDefraDBPlaygroundInner() {
 
     try {
       addLog(instanceId, 'Executing query...');
-      const result = await instance.client.execRequest(query, {}, {});
+      addLog(instanceId, `Query: ${query.substring(0, 100)}...`);
+      
+      const result = await instance.client.execRequest(query);
+      
       const resultStr = JSON.stringify(result, null, 2);
       setResult(resultStr);
-      addLog(instanceId, `✓ Query executed (${resultStr.length} chars)`);
+      addLog(instanceId, `✓ Query executed successfully (${resultStr.length} chars)`);
     } catch (error) {
       const errorMsg = error.message || String(error);
       addLog(instanceId, `✗ Query error: ${errorMsg}`);
       setResult(`Error: ${errorMsg}`);
+      console.error('Query execution error:', error);
     }
   };
 
@@ -271,16 +300,18 @@ type User {
 }`;
 
     try {
-      addLog(instanceId, 'Adding User schema...');
+      addLog(instanceId, `Adding User schema (will be ${instance.namespace}_User)...`);
       const result = await instance.client.addSchema(schema);
-      addLog(instanceId, `✓ Schema added (will be ${instance.namespace}_User)`);
+      addLog(instanceId, `✓ Schema added successfully`);
       
-      if (result && result.message) {
-        addLog(instanceId, `Response: ${result.message}`);
+      if (result) {
+        const resultStr = JSON.stringify(result, null, 2);
+        addLog(instanceId, `Response: ${resultStr}`);
       }
     } catch (error) {
       const errorMsg = error.message || String(error);
       addLog(instanceId, `✗ Schema error: ${errorMsg}`);
+      console.error('Schema error:', error);
     }
   };
 
@@ -309,15 +340,16 @@ mutation {
 }`;
 
     try {
-      addLog(instanceId, 'Creating sample document...');
-      const result = await instance.client.execRequest(mutation, {}, {});
+      addLog(instanceId, `Creating sample document in ${instance.namespace}_User...`);
+      const result = await instance.client.execRequest(mutation);
       const resultStr = JSON.stringify(result, null, 2);
       setResult(resultStr);
-      addLog(instanceId, '✓ Document created');
+      addLog(instanceId, '✓ Document created successfully');
     } catch (error) {
       const errorMsg = error.message || String(error);
       addLog(instanceId, `✗ Document creation error: ${errorMsg}`);
       setResult(`Error: ${errorMsg}`);
+      console.error('Document creation error:', error);
     }
   };
 
@@ -550,8 +582,8 @@ mutation {
         border: '1px solid #ffc107',
         fontSize: '14px'
       }}>
-        <strong>ℹ️ Implementation Note:</strong> The current DefraDB playground WASM only supports one global client. 
-        This demo uses namespace prefixes to simulate two independent nodes sharing the same underlying database.
+        <strong>ℹ️ Implementation Note:</strong> Uses @sourcenetwork/acp-js to properly instantiate DefraDB WASM with keyring support. 
+        The client is obtained by calling <code>window.defradb.open()</code> after instantiation.
       </div>
 
       {/* Global Error Display */}
@@ -615,7 +647,7 @@ mutation {
         </ol>
       </div>
 
-      {/* Architecture Note */}
+      {/* Setup Instructions */}
       <div style={{
         marginTop: '20px',
         padding: '16px',
@@ -624,9 +656,26 @@ mutation {
         border: '1px solid #3b82f6',
         fontSize: '14px'
       }}>
-        <strong>🏗️ Architecture:</strong> This loads the <code>defradb.wasm</code> binary and creates 
-        wrapper clients that automatically prefix collection names. While not true multi-instance, it demonstrates 
-        data isolation patterns and the capability to run DefraDB in the browser.
+        <strong>🔧 Setup Required:</strong>
+        <ol style={{ marginBottom: 0, marginTop: '8px' }}>
+          <li>Install: <code>npm install @sourcenetwork/acp-js @sourcenetwork/hublet</code></li>
+          <li>Build WASM: <code>GOOS=js GOARCH=wasm go build -tags=playground -o defradb.wasm ./cmd/defradb</code></li>
+          <li>Copy to static: <code>cp defradb.wasm ./static/</code></li>
+        </ol>
+      </div>
+
+      {/* Architecture Note */}
+      <div style={{
+        marginTop: '20px',
+        padding: '16px',
+        borderRadius: '8px',
+        backgroundColor: '#f3e8ff',
+        border: '1px solid #9333ea',
+        fontSize: '14px'
+      }}>
+        <strong>🏗️ Key Fix:</strong> The critical step is calling <code>await window.defradb.open()</code> after 
+        instantiation. This returns the actual DefraDB client with methods like <code>execRequest</code> and <code>addSchema</code>. 
+        The previous version was trying to use <code>window.defradb</code> directly without opening the client first.
       </div>
     </div>
   );
