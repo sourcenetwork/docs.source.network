@@ -2,23 +2,27 @@ import React, { useState, useEffect, useRef } from 'react';
 import BrowserOnly from '@docusaurus/BrowserOnly';
 
 /**
- * Real Dual DefraDB WASM Playground with Proper ACP.js Integration
- * 
- * This implementation properly uses @sourcenetwork/acp-js to instantiate
- * DefraDB WASM and calls window.defradb.open() to get the actual client.
- * 
- * Prerequisites:
- * 1. Install dependencies:
- *    npm install @sourcenetwork/acp-js @sourcenetwork/hublet
- * 
- * 2. Build defradb.wasm:
- *    GOOS=js GOARCH=wasm go build -tags=playground -o defradb.wasm ./cmd/defradb
- * 
- * 3. Copy to static/:
- *    cp defradb.wasm /path/to/docs/static/
+ * Source Network Themed DefraDB WASM Playground
+ * * visual-identity: Source Network (Black, Neon Green, Monospace, Grid)
+ * * fix: Corrected regex logic for namespaced mutations (create_User -> create_Node1_User)
  */
 
-// Extend Window interface
+// --- Theme Constants ---
+const THEME = {
+  bg: '#000000',
+  surface: '#0A0A0A',
+  surfaceHighlight: '#111111',
+  border: '#333333',
+  primary: '#00FF94', // The specific Source Network green
+  primaryDim: 'rgba(0, 255, 148, 0.1)',
+  text: '#FFFFFF',
+  textDim: '#888888',
+  error: '#FF3333',
+  fontMono: '"Fira Code", "Courier New", monospace',
+  fontSans: '"Inter", -apple-system, BlinkMacSystemFont, sans-serif',
+};
+
+// --- Types ---
 declare global {
   interface Window {
     defradb?: {
@@ -45,10 +49,42 @@ interface DefraDBInstance {
   namespace: string;
 }
 
+// --- Icons & Visual Elements ---
+const DotGridBackground = () => (
+  <div style={{
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundImage: `radial-gradient(${THEME.border} 1px, transparent 1px)`,
+    backgroundSize: '20px 20px',
+    opacity: 0.3,
+    pointerEvents: 'none',
+    zIndex: 0
+  }} />
+);
+
+const CubeIcon = ({ color }: { color: string }) => (
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.5">
+    <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
+    <polyline points="3.27 6.96 12 12.01 20.73 6.96" />
+    <line x1="12" y1="22.08" x2="12" y2="12" />
+  </svg>
+);
+
+const TerminalIcon = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+    <polyline points="4 17 10 11 4 5" />
+    <line x1="12" y1="19" x2="20" y2="19" />
+  </svg>
+);
+
+// --- Main Component ---
 function RealDualDefraDBPlaygroundInner() {
   const [instance1, setInstance1] = useState<DefraDBInstance>({
     id: 'node1',
-    name: 'Node 1 (Namespace: Node1)',
+    name: 'EDGE_NODE_01',
     client: null,
     status: 'initializing',
     logs: [],
@@ -57,7 +93,7 @@ function RealDualDefraDBPlaygroundInner() {
 
   const [instance2, setInstance2] = useState<DefraDBInstance>({
     id: 'node2',
-    name: 'Node 2 (Namespace: Node2)',
+    name: 'EDGE_NODE_02',
     client: null,
     status: 'initializing',
     logs: [],
@@ -69,6 +105,8 @@ function RealDualDefraDBPlaygroundInner() {
     _docID
     name
     age
+    points
+    verified
   }
 }`);
 
@@ -77,43 +115,53 @@ function RealDualDefraDBPlaygroundInner() {
     _docID
     name
     age
+    points
+    verified
   }
 }`);
 
   const [result1, setResult1] = useState('');
   const [result2, setResult2] = useState('');
   const [globalError, setGlobalError] = useState<string | null>(null);
-
   const initializationStarted = useRef(false);
 
-  // Add log entry with timestamp
+  // --- Logic ---
   const addLog = (instanceId: string, message: string) => {
-    const timestamp = new Date().toLocaleTimeString();
+    const timestamp = new Date().toLocaleTimeString([], { hour12: false });
     const formattedLog = `[${timestamp}] ${message}`;
-
-    if (instanceId === 'node1') {
-      setInstance1(prev => ({
-        ...prev,
-        logs: [...prev.logs, formattedLog]
-      }));
-    } else {
-      setInstance2(prev => ({
-        ...prev,
-        logs: [...prev.logs, formattedLog]
-      }));
-    }
+    const setter = instanceId === 'node1' ? setInstance1 : setInstance2;
+    setter(prev => ({ ...prev, logs: [...prev.logs, formattedLog] }));
   };
 
-  // Create a namespaced wrapper around the DefraDB client
+  /**
+   * Creates a wrapper that automatically prefixes types and mutations
+   * to simulate namespacing on a shared WASM client.
+   */
   const createNamespacedClient = (namespace: string, dbClient: any) => {
     return {
       execRequest: async (query: string, variables?: any, context?: any) => {
-        // Prefix collection names in queries with namespace
-        const namespacedQuery = query.replace(/\b(User|create_User)\b/g, `${namespace}_$1`);
+        let namespacedQuery = query;
+
+        // FIX: Handle standard CRUD operations specifically
+        // create_User -> create_Node1_User
+        // update_User -> update_Node1_User
+        // delete_User -> delete_Node1_User
+        namespacedQuery = namespacedQuery.replace(
+          /\b(create|update|delete|get)_User\b/g, 
+          `$1_${namespace}_User`
+        );
+
+        // FIX: Handle the Type name itself (for queries)
+        // query { User { ... } } -> query { Node1_User { ... } }
+        namespacedQuery = namespacedQuery.replace(
+          /\bUser\b/g, 
+          `${namespace}_User`
+        );
+
         return await dbClient.execRequest(namespacedQuery, variables || {}, context || {});
       },
       addSchema: async (schema: string) => {
-        // Prefix type names with namespace
+        // Prefix type definition: type User -> type Node1_User
         const namespacedSchema = schema.replace(/type\s+(\w+)/g, `type ${namespace}_$1`);
         return await dbClient.addSchema(namespacedSchema);
       },
@@ -123,17 +171,11 @@ function RealDualDefraDBPlaygroundInner() {
     };
   };
 
-  // Initialize DefraDB WASM with ACP.js
   const initializeDefraDB = async () => {
     try {
       setGlobalError(null);
-
-      addLog('node1', '=== Starting DefraDB WASM Initialization ===');
-      addLog('node2', '=== Starting DefraDB WASM Initialization ===');
-
-      // Set up global ACP config before loading
-      addLog('node1', 'Setting up global ACP config...');
-      addLog('node2', 'Setting up global ACP config...');
+      addLog('node1', '>> INITIALIZING KERNEL...');
+      addLog('node2', '>> INITIALIZING KERNEL...');
       
       window.globalACPConfig = {
         apiUrl: `${window.location.origin}/api`,
@@ -144,416 +186,346 @@ function RealDualDefraDBPlaygroundInner() {
         useZeroFees: true,
       };
 
-      addLog('node1', '✓ ACP config set');
-      addLog('node2', '✓ ACP config set');
-
-      // Dynamically import ACP.js
-      addLog('node1', 'Loading @sourcenetwork/acp-js...');
-      addLog('node2', 'Loading @sourcenetwork/acp-js...');
-
       const { instantiate } = await import('@sourcenetwork/acp-js');
-      
-      addLog('node1', '✓ ACP.js module loaded');
-      addLog('node2', '✓ ACP.js module loaded');
-
-      // Instantiate DefraDB WASM
-      addLog('node1', 'Calling instantiate("/defradb.wasm")...');
-      addLog('node2', 'Calling instantiate("/defradb.wasm")...');
-
       await instantiate('/defradb.wasm');
       
-      addLog('node1', '✓ WASM instantiated');
-      addLog('node2', '✓ WASM instantiated');
-
-      // Wait for window.defradb to be available
-      addLog('node1', 'Waiting for window.defradb...');
-      addLog('node2', 'Waiting for window.defradb...');
-      
       let attempts = 0;
-      const maxAttempts = 100;
-      
-      while (!window.defradb && attempts < maxAttempts) {
+      while (!window.defradb && attempts < 100) {
         await new Promise(resolve => setTimeout(resolve, 100));
         attempts++;
       }
 
-      if (!window.defradb) {
-        throw new Error(`window.defradb not available after ${attempts} attempts (${attempts/10} seconds)`);
-      }
-
-      addLog('node1', `✓ Found window.defradb after ${attempts} attempts`);
-      addLog('node2', `✓ Found window.defradb after ${attempts} attempts`);
-
-      // CRITICAL: Call window.defradb.open() to get the actual client
-      addLog('node1', 'Calling window.defradb.open() to get client...');
-      addLog('node2', 'Calling window.defradb.open() to get client...');
-
-      const dbClient = await window.defradb.open();
+      if (!window.defradb) throw new Error(`Timeout waiting for window.defradb`);
       
-      if (!dbClient) {
-        throw new Error('window.defradb.open() returned null or undefined');
-      }
-
-      // Store the client globally for reference
+      const dbClient = await window.defradb.open();
+      if (!dbClient) throw new Error('Client open failed');
       window.defradbClient = dbClient;
 
-      addLog('node1', '✓ DefraDB client opened successfully');
-      addLog('node2', '✓ DefraDB client opened successfully');
-
-      // Log available methods
-      const clientMethods = Object.keys(dbClient).filter(k => typeof dbClient[k] === 'function');
-      addLog('node1', `Available methods: ${clientMethods.join(', ')}`);
-      addLog('node2', `Available methods: ${clientMethods.join(', ')}`);
-
-      // Verify required methods exist
-      if (typeof dbClient.execRequest !== 'function') {
-        throw new Error(`Client missing execRequest method. Available: ${clientMethods.join(', ')}`);
-      }
-      if (typeof dbClient.addSchema !== 'function') {
-        throw new Error(`Client missing addSchema method. Available: ${clientMethods.join(', ')}`);
-      }
-
-      addLog('node1', '✓ Verified client has required methods');
-      addLog('node2', '✓ Verified client has required methods');
-
-      // Create namespaced clients
-      addLog('node1', 'Creating namespaced client (Node1_*)...');
-      addLog('node2', 'Creating namespaced client (Node2_*)...');
-      
       const client1 = createNamespacedClient('Node1', dbClient);
       const client2 = createNamespacedClient('Node2', dbClient);
 
-      setInstance1(prev => ({
-        ...prev,
-        client: client1,
-        status: 'ready'
-      }));
-      addLog('node1', '✓✓✓ Node 1 is READY ✓✓✓');
+      setInstance1(prev => ({ ...prev, client: client1, status: 'ready' }));
+      addLog('node1', '>> SYSTEM ONLINE');
 
-      setInstance2(prev => ({
-        ...prev,
-        client: client2,
-        status: 'ready'
-      }));
-      addLog('node2', '✓✓✓ Node 2 is READY ✓✓✓');
+      setInstance2(prev => ({ ...prev, client: client2, status: 'ready' }));
+      addLog('node2', '>> SYSTEM ONLINE');
 
     } catch (error) {
-      const errorMsg = `Failed to initialize: ${error.message}`;
+      const errorMsg = `CRITICAL FAILURE: ${error.message}`;
       setGlobalError(errorMsg);
-      addLog('node1', `✗✗✗ ${errorMsg} ✗✗✗`);
-      addLog('node2', `✗✗✗ ${errorMsg} ✗✗✗`);
       setInstance1(prev => ({ ...prev, status: 'error' }));
       setInstance2(prev => ({ ...prev, status: 'error' }));
-      
-      console.error('Initialization error:', error);
-      console.error('Stack:', error.stack);
     }
   };
 
-  // Execute query on specific instance
   const executeQuery = async (instanceId: string) => {
     const instance = instanceId === 'node1' ? instance1 : instance2;
     const query = instanceId === 'node1' ? query1 : query2;
     const setResult = instanceId === 'node1' ? setResult1 : setResult2;
 
-    if (!instance.client) {
-      addLog(instanceId, '✗ Client not ready');
-      return;
-    }
-
-    if (!query.trim()) {
-      addLog(instanceId, '✗ Query is empty');
-      return;
-    }
+    if (!instance.client) return;
 
     try {
-      addLog(instanceId, 'Executing query...');
-      addLog(instanceId, `Query: ${query.substring(0, 100)}...`);
-      
+      addLog(instanceId, `> EXEC: ${query.replace(/\n/g, ' ').substring(0, 40)}...`);
       const result = await instance.client.execRequest(query);
-      
       const resultStr = JSON.stringify(result, null, 2);
       setResult(resultStr);
-      addLog(instanceId, `✓ Query executed successfully (${resultStr.length} chars)`);
+      addLog(instanceId, `> SUCCESS (${resultStr.length} bytes)`);
     } catch (error) {
-      const errorMsg = error.message || String(error);
-      addLog(instanceId, `✗ Query error: ${errorMsg}`);
-      setResult(`Error: ${errorMsg}`);
-      console.error('Query execution error:', error);
+      const msg = error.message || String(error);
+      addLog(instanceId, `> ERROR: ${msg}`);
+      setResult(`Error: ${msg}`);
     }
   };
 
-  // Add sample schema to specific instance
   const addSampleSchema = async (instanceId: string) => {
     const instance = instanceId === 'node1' ? instance1 : instance2;
+    if (!instance.client) return;
 
-    if (!instance.client) {
-      addLog(instanceId, '✗ Client not ready');
-      return;
-    }
-
-    const schema = `
-type User {
-  name: String
-  age: Int
-  email: String
+    const schema = `type User { 
+  name: String 
+  age: Int 
+  points: Int
+  verified: Boolean
 }`;
-
     try {
-      addLog(instanceId, `Adding User schema (will be ${instance.namespace}_User)...`);
-      const result = await instance.client.addSchema(schema);
-      addLog(instanceId, `✓ Schema added successfully`);
-      
-      if (result) {
-        const resultStr = JSON.stringify(result, null, 2);
-        addLog(instanceId, `Response: ${resultStr}`);
-      }
+      addLog(instanceId, `> INJECTING SCHEMA...`);
+      await instance.client.addSchema(schema);
+      addLog(instanceId, `> SCHEMA REGISTERED`);
     } catch (error) {
-      const errorMsg = error.message || String(error);
-      addLog(instanceId, `✗ Schema error: ${errorMsg}`);
-      console.error('Schema error:', error);
+      addLog(instanceId, `> ERROR: ${error.message}`);
     }
   };
 
-  // Add sample document to specific instance
   const addSampleDocument = async (instanceId: string) => {
     const instance = instanceId === 'node1' ? instance1 : instance2;
     const setResult = instanceId === 'node1' ? setResult1 : setResult2;
+    if (!instance.client) return;
 
-    if (!instance.client) {
-      addLog(instanceId, '✗ Client not ready');
-      return;
-    }
-
-    const mutation = `
-mutation {
-  create_User(input: {
-    name: "Alice Johnson"
-    age: 28
-    email: "alice@example.com"
+    // FIX: Updated to use the batch mutation format requested
+    const mutation = `mutation {
+  user1: create_User(input: {
+    age: 31, 
+    verified: true, 
+    points: 90, 
+    name: "Bob_${instance.namespace}"
   }) {
     _docID
     name
-    age
-    email
+  }
+  user2: create_User(input: {
+    age: 28, 
+    verified: false, 
+    points: 15, 
+    name: "Alice_${instance.namespace}"
+  }) {
+    _docID
+    name
+  }
+  user3: create_User(input: {
+    age: 35, 
+    verified: true, 
+    points: 100, 
+    name: "Charlie_${instance.namespace}"
+  }) {
+    _docID
+    name
   }
 }`;
-
     try {
-      addLog(instanceId, `Creating sample document in ${instance.namespace}_User...`);
+      addLog(instanceId, `> BATCH WRITING DATA...`);
       const result = await instance.client.execRequest(mutation);
-      const resultStr = JSON.stringify(result, null, 2);
-      setResult(resultStr);
-      addLog(instanceId, '✓ Document created successfully');
+      setResult(JSON.stringify(result, null, 2));
+      addLog(instanceId, `> WRITE CONFIRMED`);
     } catch (error) {
-      const errorMsg = error.message || String(error);
-      addLog(instanceId, `✗ Document creation error: ${errorMsg}`);
-      setResult(`Error: ${errorMsg}`);
-      console.error('Document creation error:', error);
+      addLog(instanceId, `> ERROR: ${error.message}`);
+      setResult(JSON.stringify(error, null, 2));
     }
   };
 
-  // Clear logs for an instance
-  const clearLogs = (instanceId: string) => {
-    if (instanceId === 'node1') {
-      setInstance1(prev => ({ ...prev, logs: [] }));
-    } else {
-      setInstance2(prev => ({ ...prev, logs: [] }));
-    }
-  };
-
-  // Initialize on mount
   useEffect(() => {
     if (initializationStarted.current) return;
     initializationStarted.current = true;
-
     initializeDefraDB();
   }, []);
 
-  // Render a single instance panel
+  // --- Styled Components (Render Functions) ---
+
+  const ActionButton = ({ onClick, disabled, label, primary = false }: any) => (
+    <button
+      onClick={onClick}
+      disabled={disabled}
+      style={{
+        padding: '8px 16px',
+        background: primary ? THEME.primary : 'transparent',
+        color: primary ? THEME.bg : THEME.primary,
+        border: `1px solid ${THEME.primary}`,
+        borderRadius: '2px',
+        cursor: disabled ? 'not-allowed' : 'pointer',
+        opacity: disabled ? 0.5 : 1,
+        fontFamily: THEME.fontMono,
+        fontSize: '12px',
+        fontWeight: 'bold',
+        textTransform: 'uppercase',
+        transition: 'all 0.2s ease',
+        display: 'flex',
+        alignItems: 'center',
+        gap: '6px'
+      }}
+      onMouseEnter={(e) => {
+        if (!disabled && !primary) e.currentTarget.style.background = THEME.primaryDim;
+      }}
+      onMouseLeave={(e) => {
+        if (!disabled && !primary) e.currentTarget.style.background = 'transparent';
+      }}
+    >
+      {label}
+    </button>
+  );
+
   const renderInstance = (
     instance: DefraDBInstance,
     query: string,
     setQuery: (q: string) => void,
     result: string,
-    onExecuteQuery: () => void,
-    onAddSchema: () => void,
-    onAddDocument: () => void,
-    onClearLogs: () => void
+    onExecute: () => void,
+    onSchema: () => void,
+    onDoc: () => void,
+    onClear: () => void
   ) => {
-    const isNode1 = instance.id === 'node1';
-    const emoji = isNode1 ? '🟦' : '🟩';
-    const color = isNode1 ? '#3b82f6' : '#22c55e';
-
+    const isReady = instance.status === 'ready';
+    
     return (
       <div style={{
-        border: `2px solid ${color}`,
-        borderRadius: '8px',
-        padding: '20px',
-        backgroundColor: 'var(--ifm-background-surface-color)',
+        backgroundColor: THEME.surface,
+        border: `1px solid ${THEME.border}`,
+        borderRadius: '4px',
+        position: 'relative',
+        overflow: 'hidden',
         display: 'flex',
         flexDirection: 'column',
-        gap: '16px'
+        boxShadow: isReady ? `0 0 20px ${THEME.primaryDim}` : 'none',
+        transition: 'box-shadow 0.5s ease'
       }}>
-        {/* Header */}
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <h3 style={{ margin: 0, color }}>
-            {emoji} {instance.name}
-          </h3>
-          <span style={{
-            padding: '4px 12px',
-            borderRadius: '12px',
-            fontSize: '12px',
-            fontWeight: 'bold',
-            backgroundColor: 
-              instance.status === 'ready' ? '#22c55e' :
-              instance.status === 'error' ? '#ef4444' : '#f59e0b',
-            color: 'white'
+        {/* Header Bar */}
+        <div style={{
+          padding: '12px 16px',
+          borderBottom: `1px solid ${THEME.border}`,
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          backgroundColor: THEME.surfaceHighlight
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <CubeIcon color={isReady ? THEME.primary : '#666'} />
+            <span style={{ 
+              fontFamily: THEME.fontMono, 
+              fontWeight: 'bold', 
+              color: THEME.text,
+              letterSpacing: '0.05em' 
+            }}>
+              {instance.name}
+            </span>
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <div style={{
+              width: '8px',
+              height: '8px',
+              borderRadius: '50%',
+              backgroundColor: isReady ? THEME.primary : '#F59E0B',
+              boxShadow: isReady ? `0 0 8px ${THEME.primary}` : 'none'
+            }} />
+            <span style={{ 
+              fontSize: '11px', 
+              fontFamily: THEME.fontMono,
+              color: isReady ? THEME.primary : '#F59E0B'
+            }}>
+              {instance.status.toUpperCase()}
+            </span>
+          </div>
+        </div>
+
+        <div style={{ padding: '20px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
+          
+          {/* Controls */}
+          <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
+            <ActionButton onClick={onSchema} disabled={!isReady} label="[ + Schema ]" />
+            <ActionButton onClick={onDoc} disabled={!isReady} label="[ + Data ]" />
+          </div>
+
+          {/* Editor Area */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+            <div style={{ 
+              display: 'flex', 
+              justifyContent: 'space-between', 
+              fontFamily: THEME.fontMono, 
+              fontSize: '11px', 
+              color: THEME.textDim 
+            }}>
+              <span>// QUERY_INPUT</span>
+            </div>
+            <div style={{ position: 'relative' }}>
+              <textarea
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                style={{
+                  width: '100%',
+                  height: '140px',
+                  backgroundColor: '#000',
+                  border: `1px solid ${THEME.border}`,
+                  color: THEME.text,
+                  fontFamily: THEME.fontMono,
+                  fontSize: '13px',
+                  padding: '12px',
+                  borderRadius: '2px',
+                  outline: 'none',
+                  resize: 'vertical'
+                }}
+                spellCheck={false}
+              />
+              <div style={{ position: 'absolute', bottom: '12px', right: '12px', zIndex: 10 }}>
+                 <ActionButton onClick={onExecute} disabled={!isReady} label="▶ EXECUTE" primary />
+              </div>
+            </div>
+          </div>
+
+          {/* Results Area */}
+          <div style={{ 
+            display: 'flex', 
+            flexDirection: 'column', 
+            gap: '8px', 
+            opacity: result ? 1 : 0.5 
           }}>
-            {instance.status.toUpperCase()}
-          </span>
-        </div>
-
-        {/* Action Buttons */}
-        <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-          <button
-            onClick={onAddSchema}
-            disabled={instance.status !== 'ready'}
-            style={{
-              padding: '8px 16px',
-              borderRadius: '6px',
-              border: 'none',
-              backgroundColor: instance.status === 'ready' ? color : '#9ca3af',
-              color: 'white',
-              cursor: instance.status === 'ready' ? 'pointer' : 'not-allowed',
-              fontSize: '14px',
-              fontWeight: '500'
-            }}
-          >
-            📋 Add Schema
-          </button>
-          <button
-            onClick={onAddDocument}
-            disabled={instance.status !== 'ready'}
-            style={{
-              padding: '8px 16px',
-              borderRadius: '6px',
-              border: 'none',
-              backgroundColor: instance.status === 'ready' ? color : '#9ca3af',
-              color: 'white',
-              cursor: instance.status === 'ready' ? 'pointer' : 'not-allowed',
-              fontSize: '14px',
-              fontWeight: '500'
-            }}
-          >
-            ➕ Add Sample Doc
-          </button>
-        </div>
-
-        {/* Query Editor */}
-        <div>
-          <label style={{ display: 'block', marginBottom: '8px', fontWeight: '600' }}>
-            GraphQL Query:
-          </label>
-          <textarea
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            placeholder="Enter your GraphQL query or mutation..."
-            style={{
-              width: '100%',
-              minHeight: '120px',
-              padding: '12px',
-              borderRadius: '6px',
-              border: '1px solid var(--ifm-color-emphasis-300)',
-              backgroundColor: 'var(--ifm-background-color)',
-              color: 'var(--ifm-font-color-base)',
-              fontFamily: 'monospace',
-              fontSize: '13px',
-              resize: 'vertical'
-            }}
-          />
-          <button
-            onClick={onExecuteQuery}
-            disabled={instance.status !== 'ready' || !query.trim()}
-            style={{
-              marginTop: '8px',
-              padding: '10px 20px',
-              borderRadius: '6px',
-              border: 'none',
-              backgroundColor: instance.status === 'ready' && query.trim() ? color : '#9ca3af',
-              color: 'white',
-              cursor: instance.status === 'ready' && query.trim() ? 'pointer' : 'not-allowed',
-              fontSize: '14px',
-              fontWeight: '600',
-              width: '100%'
-            }}
-          >
-            ▶️ Execute Query
-          </button>
-        </div>
-
-        {/* Results */}
-        {result && (
-          <div>
-            <label style={{ display: 'block', marginBottom: '8px', fontWeight: '600' }}>
-              Result:
-            </label>
+            <div style={{ fontFamily: THEME.fontMono, fontSize: '11px', color: THEME.textDim }}>
+              <span>// RESPONSE_OUTPUT</span>
+            </div>
             <pre style={{
+              backgroundColor: '#000',
+              border: `1px solid ${result.includes('Error') || result.includes('errors') ? THEME.error : THEME.border}`,
               padding: '12px',
-              borderRadius: '6px',
-              backgroundColor: 'var(--ifm-code-background)',
-              overflow: 'auto',
-              maxHeight: '200px',
+              borderRadius: '2px',
+              color: result.includes('Error') || result.includes('errors') ? THEME.error : THEME.text,
+              fontFamily: THEME.fontMono,
               fontSize: '12px',
+              overflowX: 'auto',
+              minHeight: '100px',
               margin: 0
             }}>
-              {result}
+              {result || 'Waiting for input...'}
             </pre>
           </div>
-        )}
 
-        {/* Logs */}
-        <div>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-            <label style={{ fontWeight: '600' }}>Logs:</label>
-            <button
-              onClick={onClearLogs}
-              style={{
-                padding: '4px 8px',
-                borderRadius: '4px',
-                border: '1px solid var(--ifm-color-emphasis-300)',
-                backgroundColor: 'transparent',
-                color: 'var(--ifm-font-color-base)',
-                cursor: 'pointer',
-                fontSize: '12px'
-              }}
-            >
-              Clear
-            </button>
-          </div>
-          <div style={{
-            maxHeight: '200px',
-            overflowY: 'auto',
-            padding: '12px',
-            borderRadius: '6px',
-            backgroundColor: '#1e1e1e',
-            color: '#d4d4d4',
-            fontFamily: 'monospace',
-            fontSize: '12px',
-            lineHeight: '1.5'
-          }}>
-            {instance.logs.length === 0 ? (
-              <div style={{ color: '#888' }}>No logs yet...</div>
-            ) : (
-              instance.logs.map((log, idx) => (
-                <div key={idx} style={{ 
-                  marginBottom: '4px',
-                  color: log.includes('✓') ? '#22c55e' : log.includes('✗') ? '#ef4444' : '#d4d4d4'
-                }}>
-                  {log}
-                </div>
-              ))
-            )}
+          {/* Logs Terminal */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0' }}>
+            <div style={{ 
+              display: 'flex', 
+              justifyContent: 'space-between', 
+              alignItems: 'center',
+              backgroundColor: THEME.surfaceHighlight,
+              padding: '4px 8px',
+              border: `1px solid ${THEME.border}`,
+              borderBottom: 'none'
+            }}>
+              <div style={{ display: 'flex', gap: '6px', alignItems: 'center' }}>
+                <TerminalIcon />
+                <span style={{ fontFamily: THEME.fontMono, fontSize: '11px', color: THEME.textDim }}>SYSTEM_LOGS</span>
+              </div>
+              <button 
+                onClick={onClear}
+                style={{ 
+                  background: 'none', 
+                  border: 'none', 
+                  color: THEME.textDim, 
+                  cursor: 'pointer', 
+                  fontSize: '10px' 
+                }}
+              >
+                CLEAR
+              </button>
+            </div>
+            <div style={{
+              height: '120px',
+              overflowY: 'auto',
+              backgroundColor: '#000',
+              border: `1px solid ${THEME.border}`,
+              padding: '8px',
+              fontFamily: THEME.fontMono,
+              fontSize: '11px',
+              lineHeight: '1.4'
+            }}>
+              {instance.logs.length === 0 ? (
+                <span style={{ color: '#333' }}>_cursor_awaiting_events</span>
+              ) : (
+                instance.logs.map((log, i) => (
+                  <div key={i} style={{ 
+                    color: log.includes('ERROR') ? THEME.error : THEME.primary,
+                    opacity: 0.8 
+                  }}>
+                    {log}
+                  </div>
+                ))
+              )}
+            </div>
           </div>
         </div>
       </div>
@@ -561,130 +533,136 @@ mutation {
   };
 
   return (
-    <div style={{ padding: '20px' }}>
-      {/* Title and Introduction */}
-      <div style={{ marginBottom: '30px', textAlign: 'center' }}>
-        <h2 style={{ fontSize: '28px', marginBottom: '12px' }}>
-          🚀 Dual DefraDB WASM Playground
-        </h2>
-        <p style={{ color: 'var(--ifm-color-emphasis-700)', maxWidth: '800px', margin: '0 auto' }}>
-          This demonstrates two simulated DefraDB nodes using <strong>namespace prefixes</strong> to achieve data isolation. 
-          Each "node" uses prefixed collection names (Node1_User, Node2_User) sharing the same WASM instance.
-        </p>
-      </div>
-
-      {/* Implementation Note */}
-      <div style={{
-        marginBottom: '20px',
-        padding: '16px',
-        borderRadius: '8px',
-        backgroundColor: '#fff3cd',
-        border: '1px solid #ffc107',
-        fontSize: '14px'
-      }}>
-        <strong>ℹ️ Implementation Note:</strong> Uses @sourcenetwork/acp-js to properly instantiate DefraDB WASM with keyring support. 
-        The client is obtained by calling <code>window.defradb.open()</code> after instantiation.
-      </div>
-
-      {/* Global Error Display */}
-      {globalError && (
-        <div style={{
-          padding: '16px',
-          marginBottom: '20px',
-          borderRadius: '8px',
-          backgroundColor: '#fee2e2',
-          border: '2px solid #ef4444',
-          color: '#991b1b'
-        }}>
-          <strong>⚠️ Error:</strong> {globalError}
+    <div style={{ 
+      backgroundColor: THEME.bg, 
+      color: THEME.text, 
+      fontFamily: THEME.fontSans,
+      minHeight: '100vh',
+      padding: '40px 20px',
+      position: 'relative'
+    }}>
+      <DotGridBackground />
+      
+      <div style={{ position: 'relative', zIndex: 1, maxWidth: '1200px', margin: '0 auto' }}>
+        
+        {/* Hero Section */}
+        <div style={{ textAlign: 'center', marginBottom: '60px' }}>
+          <h1 style={{ 
+            fontSize: '42px', 
+            fontWeight: '700', 
+            letterSpacing: '-0.02em', 
+            marginBottom: '16px',
+            background: `linear-gradient(180deg, #fff 0%, #aaa 100%)`,
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent'
+          }}>
+            Edge Data Playground
+          </h1>
+          <p style={{ 
+            color: THEME.textDim, 
+            fontSize: '18px', 
+            maxWidth: '600px', 
+            margin: '0 auto',
+            lineHeight: '1.6'
+          }}>
+            Harness the power of <span style={{ color: THEME.primary }}>DefraDB WASM</span>. 
+            Two isolated nodes, one browser runtime.
+          </p>
         </div>
-      )}
 
-      {/* Instance Panels */}
-      <div style={{
-        display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(450px, 1fr))',
-        gap: '24px',
-        marginBottom: '30px'
-      }}>
-        {renderInstance(
-          instance1,
-          query1,
-          setQuery1,
-          result1,
-          () => executeQuery('node1'),
-          () => addSampleSchema('node1'),
-          () => addSampleDocument('node1'),
-          () => clearLogs('node1')
+        {/* Status Bar */}
+        {globalError && (
+          <div style={{ 
+            border: `1px solid ${THEME.error}`, 
+            backgroundColor: 'rgba(255, 51, 51, 0.1)',
+            color: THEME.error,
+            padding: '12px 20px',
+            marginBottom: '30px',
+            borderRadius: '4px',
+            fontFamily: THEME.fontMono
+          }}>
+            ⚠ SYSTEM ALERT: {globalError}
+          </div>
         )}
 
-        {renderInstance(
-          instance2,
-          query2,
-          setQuery2,
-          result2,
-          () => executeQuery('node2'),
-          () => addSampleSchema('node2'),
-          () => addSampleDocument('node2'),
-          () => clearLogs('node2')
-        )}
-      </div>
+        {/* The Grid */}
+        <div style={{ 
+          display: 'grid', 
+          gridTemplateColumns: 'repeat(auto-fit, minmax(480px, 1fr))', 
+          gap: '40px' 
+        }}>
+          {renderInstance(
+            instance1, query1, setQuery1, result1,
+            () => executeQuery('node1'),
+            () => addSampleSchema('node1'),
+            () => addSampleDocument('node1'),
+            () => setInstance1(p => ({...p, logs: []}))
+          )}
+          
+          {renderInstance(
+            instance2, query2, setQuery2, result2,
+            () => executeQuery('node2'),
+            () => addSampleSchema('node2'),
+            () => addSampleDocument('node2'),
+            () => setInstance2(p => ({...p, logs: []}))
+          )}
+        </div>
 
-      {/* Instructions */}
-      <div style={{
-        padding: '20px',
-        borderRadius: '8px',
-        backgroundColor: 'var(--ifm-background-surface-color)',
-        border: '1px solid var(--ifm-color-emphasis-300)'
-      }}>
-        <h4 style={{ marginTop: 0 }}>📝 How to Use:</h4>
-        <ol style={{ marginBottom: 0, lineHeight: '1.8' }}>
-          <li>Wait for both nodes to initialize (status shows "READY")</li>
-          <li>Click <strong>"Add Schema"</strong> on each node - creates Node1_User and Node2_User types</li>
-          <li>Click <strong>"Add Sample Doc"</strong> to create documents in each namespace</li>
-          <li>Execute queries - they'll automatically target the correct namespace</li>
-          <li>Notice that data created in Node1 doesn't appear in Node2 queries</li>
-        </ol>
-      </div>
-
-      {/* Setup Instructions */}
-      <div style={{
-        marginTop: '20px',
-        padding: '16px',
-        borderRadius: '8px',
-        backgroundColor: '#dbeafe',
-        border: '1px solid #3b82f6',
-        fontSize: '14px'
-      }}>
-        <strong>🔧 Setup Required:</strong>
-        <ol style={{ marginBottom: 0, marginTop: '8px' }}>
-          <li>Install: <code>npm install @sourcenetwork/acp-js @sourcenetwork/hublet</code></li>
-          <li>Build WASM: <code>GOOS=js GOARCH=wasm go build -tags=playground -o defradb.wasm ./cmd/defradb</code></li>
-          <li>Copy to static: <code>cp defradb.wasm ./static/</code></li>
-        </ol>
-      </div>
-
-      {/* Architecture Note */}
-      <div style={{
-        marginTop: '20px',
-        padding: '16px',
-        borderRadius: '8px',
-        backgroundColor: '#f3e8ff',
-        border: '1px solid #9333ea',
-        fontSize: '14px'
-      }}>
-        <strong>🏗️ Key Fix:</strong> The critical step is calling <code>await window.defradb.open()</code> after 
-        instantiation. This returns the actual DefraDB client with methods like <code>execRequest</code> and <code>addSchema</code>. 
-        The previous version was trying to use <code>window.defradb</code> directly without opening the client first.
+        {/* Documentation Footer */}
+        <div style={{ 
+          marginTop: '60px', 
+          borderTop: `1px solid ${THEME.border}`, 
+          paddingTop: '40px',
+          display: 'grid',
+          gridTemplateColumns: '1fr 1fr',
+          gap: '40px'
+        }}>
+          <div>
+            <h4 style={{ color: THEME.primary, marginBottom: '16px', fontFamily: THEME.fontMono }}>
+              // ARCHITECTURE
+            </h4>
+            <p style={{ color: THEME.textDim, fontSize: '14px', lineHeight: '1.6' }}>
+              This environment demonstrates true data isolation within a single browser session. 
+              By leveraging namespace prefixes (Node1_*, Node2_*), both virtual nodes share the 
+              same WASM kernel while maintaining distinct data graphs.
+            </p>
+          </div>
+          <div>
+            <h4 style={{ color: THEME.primary, marginBottom: '16px', fontFamily: THEME.fontMono }}>
+              // SETUP_INSTRUCTIONS
+            </h4>
+            <code style={{ 
+              display: 'block', 
+              backgroundColor: THEME.surface, 
+              padding: '12px', 
+              borderRadius: '4px',
+              color: '#ccc',
+              fontSize: '12px',
+              fontFamily: THEME.fontMono,
+              border: `1px solid ${THEME.border}`
+            }}>
+              npm install @sourcenetwork/acp-js @sourcenetwork/hublet<br/>
+              GOOS=js GOARCH=wasm go build -tags=playground -o defradb.wasm
+            </code>
+          </div>
+        </div>
       </div>
     </div>
   );
 }
 
-// Export with BrowserOnly wrapper to ensure client-side rendering
 export default function RealDualDefraDBPlayground() {
   return (
-    <BrowserOnly fallback={<div>Loading DefraDB Playground...</div>}>
+    <BrowserOnly fallback={
+      <div style={{ 
+        padding: '20px', 
+        backgroundColor: '#000', 
+        color: '#00FF94', 
+        fontFamily: 'monospace' 
+      }}>
+        > Loading Source Network Kernel...
+      </div>
+    }>
       {() => <RealDualDefraDBPlaygroundInner />}
     </BrowserOnly>
   );
