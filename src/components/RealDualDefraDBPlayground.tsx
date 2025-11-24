@@ -187,7 +187,7 @@ function RealDualDefraDBPlaygroundInner() {
       };
 
       const { instantiate } = await import('@sourcenetwork/acp-js');
-      await instantiate('/defradb.wasm');
+      await instantiate('https://defradbwasm.source.network/defradb.wasm');
       
       let attempts = 0;
       while (!window.defradb && attempts < 100) {
