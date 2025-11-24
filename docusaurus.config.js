@@ -169,6 +169,57 @@ const config = {
         },
       },
     ],
+    // Custom webpack configuration for browser-only packages
+    function customWebpackPlugin(context, options) {
+      return {
+        name: 'custom-webpack-config',
+        configureWebpack(config, isServer, utils) {
+          return {
+            resolve: {
+              fallback: isServer ? {} : {
+                // Browser fallbacks for Node.js modules
+                crypto: require.resolve('crypto-browserify'),
+                stream: require.resolve('stream-browserify'),
+                buffer: require.resolve('buffer/'),
+                process: require.resolve('process/browser'),
+                vm: false,
+                fs: false,
+                path: false,
+              },
+              alias: {
+                // Ensure process is available
+                process: 'process/browser',
+              },
+            },
+            plugins: isServer ? [] : [
+              new (require('webpack')).ProvidePlugin({
+                process: 'process/browser',
+                Buffer: ['buffer', 'Buffer'],
+              }),
+            ],
+            module: {
+              rules: [
+                {
+                  test: /\.m?js$/,
+                  resolve: {
+                    fullySpecified: false, // Disable the behavior for .mjs files
+                  },
+                },
+              ],
+            },
+            // Mark problematic packages as external during SSR
+            externals: isServer ? [
+              '@sourcenetwork/acp-js',
+              '@sourcenetwork/hublet',
+              'multiformats',
+              'uint8arrays',
+              '@noble/hashes',
+              '@noble/curves',
+            ] : {},
+          };
+        },
+      };
+    },
     // DefraDB instance
     [
       "@docusaurus/plugin-content-docs",

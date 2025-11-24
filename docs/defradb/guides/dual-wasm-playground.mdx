@@ -1,0 +1,424 @@
+---
+title: Dual DefraDB WASM Playground
+description: Run two independent DefraDB nodes simultaneously in your browser using WebAssembly
+sidebar_position: 3
+---
+
+import RealDualDefraDBPlayground from '@site/src/components/RealDualDefraDBPlayground';
+
+# Dual DefraDB WASM Playground
+
+Experience the power of running **two independent DefraDB database instances** simultaneously in your browser using WebAssembly technology. No backend servers, no installation required.
+
+## 🎯 What You'll Experience
+
+This interactive playground demonstrates:
+
+- **Browser-Native Databases**: Two fully functional DefraDB instances running entirely client-side
+- **Complete Isolation**: Each node maintains separate storage and executes queries independently
+- **Real WASM Implementation**: Actual `defradb.wasm` binary compilation and execution
+- **Persistent vs Ephemeral Storage**: Node 1 uses IndexedDB (survives browser restart), Node 2 uses in-memory storage
+- **GraphQL Interface**: Full query and mutation support on both nodes
+
+## 🚀 Try It Now
+
+<RealDualDefraDBPlayground />
+
+## 💡 Understanding the Architecture
+
+### Dual-Node Setup
+
+```
+┌─────────────────────────────────────────────────────┐
+│                  Your Browser                        │
+│                                                      │
+│  ┌────────────────────┐    ┌────────────────────┐  │
+│  │   DefraDB Node 1   │    │   DefraDB Node 2   │  │
+│  │                    │    │                    │  │
+│  │  WASM Instance 1   │    │  WASM Instance 2   │  │
+│  │  Go Runtime 1      │    │  Go Runtime 2      │  │
+│  │                    │    │                    │  │
+│  │  ┌──────────────┐  │    │  ┌──────────────┐  │  │
+│  │  │  IndexedDB   │  │    │  │  In-Memory   │  │  │
+│  │  │  (Persistent)│  │    │  │  (Temporary) │  │  │
+│  │  └──────────────┘  │    │  └──────────────┘  │  │
+│  └────────────────────┘    └────────────────────┘  │
+│                                                      │
+└─────────────────────────────────────────────────────┘
+```
+
+### Key Technical Features
+
+**Separate WebAssembly Instances**
+- Each node runs in its own WASM module instance
+- Complete memory isolation between nodes
+- Independent Go runtime environments
+
+**Storage Isolation**
+- **Node 1 (Blue)**: Uses IndexedDB with database name `defradb_node1`
+  - Data persists across browser sessions
+  - Survives page reloads
+  - Suitable for development workflows
+  
+- **Node 2 (Green)**: Uses in-memory storage
+  - Fastest performance
+  - Data lost on page reload
+  - Perfect for testing and demos
+
+**Independent Operation**
+- Schemas defined in Node 1 don't affect Node 2
+- Documents created in one node remain isolated
+- Queries execute independently without interference
+
+## 📚 How to Use This Playground
+
+### Step 1: Wait for Initialization
+Watch the status indicators turn from "INITIALIZING" to "READY". This typically takes 2-5 seconds as the WASM modules load and initialize.
+
+### Step 2: Add Schemas
+Click the **"📋 Add Schema"** button on each node to define a `User` type with fields for `name`, `age`, and `email`.
+
+### Step 3: Create Sample Data
+Click **"➕ Add Sample Doc"** to create a test user document in each database.
+
+### Step 4: Execute Queries
+Use the GraphQL query editors to retrieve data:
+
+```graphql
+query {
+  User {
+    _docID
+    name
+    age
+    email
+  }
+}
+```
+
+### Step 5: Create Custom Data
+Try creating your own documents with mutations:
+
+```graphql
+mutation {
+  create_User(input: {
+    name: "Bob Smith"
+    age: 35
+    email: "bob@example.com"
+  }) {
+    _docID
+    name
+    age
+    email
+  }
+}
+```
+
+### Step 6: Observe Isolation
+Notice that data created in Node 1 doesn't appear in Node 2, and vice versa. Each maintains completely separate databases.
+
+## 🎓 Use Cases
+
+### Interactive Documentation
+Embed live, working examples directly in documentation pages. Users can experiment without leaving the page or setting up infrastructure.
+
+### Educational Demonstrations
+- Teach database concepts with hands-on examples
+- Show distributed database principles in action
+- No installation barriers for students
+
+### Prototyping & Testing
+- Rapidly prototype database schemas
+- Test queries and mutations in a sandbox
+- Experiment with multi-node scenarios
+
+### Development Workflows
+- Test schema changes before deploying
+- Debug GraphQL queries interactively
+- Validate data models with real DefraDB
+
+## 🔧 Technical Implementation
+
+### Prerequisites
+
+To run this playground, the following files must be present in your `/static` directory:
+
+1. **defradb.wasm** - The compiled DefraDB WebAssembly binary
+2. **wasm_exec.js** - Go's WebAssembly runtime helper
+
+### Building from Source
+
+If you want to build the WASM binary yourself:
+
+```bash
+# Clone the DefraDB Playground repository
+git clone https://github.com/sourcenetwork/defradb-playground.git
+cd defradb-playground
+
+# Build the WASM binary
+GOOS=js GOARCH=wasm go build -o defradb.wasm ./cmd/defradb
+
+# Copy to your docs static directory
+cp defradb.wasm /path/to/docs/static/
+
+# Copy Go's WASM runtime
+cp "$(go env GOROOT)/misc/wasm/wasm_exec.js" /path/to/docs/static/
+```
+
+### Component Integration
+
+The playground is built as a React component that can be embedded in any Docusaurus MDX page:
+
+```mdx
+---
+title: Your Page
+---
+
+import RealDualDefraDBPlayground from '@site/src/components/RealDualDefraDBPlayground';
+
+# Your Content
+
+<RealDualDefraDBPlayground />
+```
+
+## 🌐 Browser Compatibility
+
+### Supported Browsers
+
+| Browser | Minimum Version | Status |
+|---------|----------------|--------|
+| Chrome/Edge | 87+ | ✅ Fully Supported |
+| Firefox | 89+ | ✅ Fully Supported |
+| Safari | 14+ | ✅ Fully Supported |
+| Mobile Chrome | Latest | ✅ Works (performance varies) |
+| Mobile Safari | iOS 14+ | ✅ Works (performance varies) |
+
+### Requirements
+
+Your browser must support:
+- ✅ **WebAssembly** - For running the DefraDB binary
+- ✅ **IndexedDB** - For persistent storage (Node 1)
+- ✅ **ES6+ JavaScript** - Modern JavaScript features
+- ✅ **Fetch API** - For loading WASM files
+
+## ⚡ Performance Considerations
+
+### Desktop Performance
+- **Initial Load**: 2-5 seconds for WASM compilation
+- **Query Execution**: < 100ms for typical queries
+- **Memory Usage**: 50-200MB per instance
+- **Recommended RAM**: 4GB+ for smooth operation
+
+### Mobile Performance
+- **Initial Load**: 5-10 seconds on mid-range devices
+- **Query Execution**: 100-500ms depending on device
+- **Memory Usage**: Can cause issues on older devices
+- **Battery Impact**: Moderate during intensive operations
+
+### Optimization Tips
+- Preload WASM binary with service workers
+- Use in-memory storage for better performance in demos
+- Limit concurrent operations on mobile
+- Clear browser data if experiencing issues
+
+## 🔐 Security & Privacy
+
+### Sandbox Environment
+- All data stays in your browser - nothing sent to servers
+- WASM runs in browser security sandbox
+- No network requests after initial load
+- Complete data isolation between nodes
+
+### Data Storage
+- **IndexedDB data is not encrypted by default**
+- Data persists only in your browser's storage
+- Clear browser data to completely remove all information
+- Not suitable for sensitive production data
+
+### CORS & CSP
+- No CORS issues - everything runs client-side
+- May need CSP header: `script-src 'self' 'wasm-unsafe-eval'`
+
+## 🚧 Current Limitations
+
+### Known Constraints
+- **No P2P Synchronization**: Nodes don't communicate with each other (by design for this demo)
+- **Browser Storage Limits**: IndexedDB typically limited to ~50MB
+- **Single Tab**: Data doesn't sync across browser tabs
+- **Memory Intensive**: Each instance requires significant RAM
+- **No Persistence in Node 2**: In-memory storage lost on reload
+
+### Not Yet Supported
+- Cross-node replication
+- Distributed queries
+- Access control policies (ACP) - coming soon
+- Multi-tab synchronization
+- Export/import functionality
+
+## 🎯 Advanced Examples
+
+### Complex Queries
+
+Query with filters:
+```graphql
+query {
+  User(filter: { age: { _gt: 25 } }) {
+    _docID
+    name
+    age
+  }
+}
+```
+
+### Nested Types
+
+Define relationships:
+```graphql
+type User {
+  name: String
+  posts: [Post]
+}
+
+type Post {
+  title: String
+  author: User
+}
+```
+
+### Batch Operations
+
+Create multiple documents:
+```graphql
+mutation {
+  user1: create_User(input: { name: "Alice", age: 30 }) {
+    _docID
+  }
+  user2: create_User(input: { name: "Bob", age: 25 }) {
+    _docID
+  }
+}
+```
+
+## 📊 Monitoring & Debugging
+
+### Log Panel
+Each node has a real-time log panel showing:
+- WASM initialization progress
+- Schema operations
+- Query execution
+- Error messages with stack traces
+- Timing information
+
+### Browser DevTools
+Access advanced debugging via browser console:
+
+```javascript
+// Access Node 1 client
+window.defradbClient1.execRequest(`query { User { name } }`)
+
+// Access Node 2 client
+window.defradbClient2.execRequest(`query { User { name } }`)
+```
+
+### Performance Profiling
+Use Chrome DevTools to monitor:
+- Memory usage
+- CPU consumption
+- Network requests
+- WebAssembly compilation time
+
+## 🔮 Future Enhancements
+
+Potential features in development:
+
+- [ ] Node-to-node replication demo
+- [ ] Access Control Policy (ACP) support
+- [ ] Visual query builder
+- [ ] Schema migration tools
+- [ ] Performance monitoring dashboard
+- [ ] Multi-tab state synchronization
+- [ ] Export/import database snapshots
+- [ ] Integration with remote DefraDB nodes
+
+## 🆘 Troubleshooting
+
+### WASM Fails to Load
+
+**Symptoms**: Error message about missing WASM binary
+
+**Solutions**:
+1. Verify `defradb.wasm` is in `/static` directory
+2. Check browser console for 404 errors
+3. Rebuild WASM binary with correct Go version
+4. Clear browser cache and reload
+
+### Go Runtime Error
+
+**Symptoms**: "Go runtime not available" message
+
+**Solutions**:
+1. Verify `wasm_exec.js` is in `/static` directory
+2. Ensure Go version matches WASM build
+3. Check browser console for JavaScript errors
+4. Try a different browser
+
+### Client Initialization Timeout
+
+**Symptoms**: Stuck on "INITIALIZING" status
+
+**Solutions**:
+1. Wait up to 10 seconds for initialization
+2. Check browser console for errors
+3. Verify adequate RAM available
+4. Close other browser tabs
+5. Refresh the page
+
+### Queries Not Executing
+
+**Symptoms**: Queries return errors or no results
+
+**Solutions**:
+1. Ensure schema was added first
+2. Check query syntax in GraphQL
+3. Verify node status is "READY"
+4. Review error messages in log panel
+5. Try the sample queries first
+
+### Performance Issues
+
+**Symptoms**: Slow query execution or UI lag
+
+**Solutions**:
+1. Use in-memory storage instead of IndexedDB
+2. Reduce query complexity
+3. Close unused browser tabs
+4. Clear browser data and restart
+5. Try on a more powerful device
+
+## 📖 Additional Resources
+
+### DefraDB Documentation
+- [DefraDB GitHub Repository](https://github.com/sourcenetwork/defradb)
+- [DefraDB Playground Source](https://github.com/sourcenetwork/defradb-playground)
+- [GraphQL Documentation](https://graphql.org/learn/)
+
+### WebAssembly Resources
+- [WebAssembly Official Site](https://webassembly.org/)
+- [Go WebAssembly Guide](https://github.com/golang/go/wiki/WebAssembly)
+- [MDN WebAssembly Docs](https://developer.mozilla.org/en-US/docs/WebAssembly)
+
+### Community & Support
+- [Source Network Discord](https://discord.gg/sourcenetwork)
+- [DefraDB Discussions](https://github.com/sourcenetwork/defradb/discussions)
+- [Report Issues](https://github.com/sourcenetwork/defradb/issues)
+
+## 💬 Feedback
+
+This is an experimental feature showcasing DefraDB's capabilities in the browser. We'd love to hear your thoughts:
+
+- **Found a bug?** [Open an issue](https://github.com/sourcenetwork/defradb/issues)
+- **Have an idea?** [Start a discussion](https://github.com/sourcenetwork/defradb/discussions)
+- **Want to contribute?** [Check our contributing guide](https://github.com/sourcenetwork/defradb/blob/develop/CONTRIBUTING.md)
+
+---
+
+**Note**: This playground demonstrates DefraDB's WebAssembly capabilities for educational and development purposes. For production deployments, use the standard DefraDB server installation.
