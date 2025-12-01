@@ -414,7 +414,6 @@ defradb client query --url localhost:9182 '
 This should return the following:
 
 ```json
------- Request Results ------
 {
   "data": {
     "User": [
@@ -506,7 +505,6 @@ defradb client query --url localhost:9182 '
 You should see the following returned:
 
 ```json
------- Request Results ------
 {
   "data": {
     "Article": [
