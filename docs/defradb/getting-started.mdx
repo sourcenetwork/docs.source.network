@@ -4,13 +4,17 @@ title: Getting Started
 slug: /
 ---
 
+import { RunButton } from '@site/src/components/MiniPlayground';
+
 # DefraDB Overview
 
 ![DefraDB Overview](/img/defradb-cover.png)
 
 DefraDB is an application-centric database that prioritizes data ownership, personal privacy, and information security. Its data model, powered by the convergence of [MerkleCRDTs](https://arxiv.org/pdf/2004.00107.pdf) and the content-addressability of [IPLD](https://docs.ipld.io/), enables a multi-write-master architecture. It features [DQL](./references/query-specification/query-language-overview.md), a query language compatible with GraphQL but providing extra convenience. By leveraging peer-to-peer infrastructure, it can be deployed nimbly in novel topologies. Access control is determined by a relationship-based DSL, supporting document or field-level policies, secured by the SourceHub infrastructure. DefraDB is a core part of the [Source technologies](https://source.network/) that enable new paradigms of local-first software, edge compute, access-control management, application-centric features, data trustworthiness, and much more.
 
-Disclaimer: At this early stage, DefraDB does not offer data encryption, and the default configuration exposes the database to the infrastructure. The software is provided "as is" and is not guaranteed to be stable, secure, or error-free. We encourage you to experiment with DefraDB and provide feedback, but please do not use it for production purposes until it has been thoroughly tested and developed.
+:::warning Disclaimer
+At this early stage, DefraDB does not offer data encryption, and the default configuration exposes the database to the infrastructure. The software is provided "as is" and is not guaranteed to be stable, secure, or error-free. We encourage you to experiment with DefraDB and provide feedback, but please do not use it for production purposes until it has been thoroughly tested and developed.
+:::
 
 ## Install
 
@@ -32,7 +36,7 @@ We recommend experimenting with queries using a native GraphQL client. [GraphiQL
 
 ## Key Management - Initial Setup
 
-DefraDB has a built-in keyring for storing private keys securely. Keys are loaded at startup, and <b>a secret must be provided via the `DEFRA_KEYRING_SECRET` environment variable</b>. The following keys are loaded from the keyring on start:
+DefraDB has a built-in keyring for storing private keys securely. Keys are loaded at startup, and **a secret must be provided via the `DEFRA_KEYRING_SECRET` environment variable**. The following keys are loaded from the keyring on start:
 
 - `peer-key` Ed25519 private key (required)
 - `encryption-key` AES-128, AES-192, or AES-256 key (optional)
@@ -59,7 +63,9 @@ To learn more about the available options:
 defradb keyring --help
 ```
 
-NOTE: Node identity is an identity assigned to the node. It is used to exchange encryption keys with other nodes.
+:::note
+Node identity is an identity assigned to the node. It is used to exchange encryption keys with other nodes.
+:::
 
 ## Start
 
@@ -84,11 +90,22 @@ DefraDB uses a default configuration:
 
 The `client` command interacts with the locally running node.
 
-The GraphQL endpoint can be used with a GraphQL client (e.g., Altair) to conveniently perform requests (`query`, `mutation`) and obtain schema introspection.  Read more about [configuration options](./references/config.md).
+The GraphQL endpoint can be used with a GraphQL client (e.g., Altair) to conveniently perform requests (`query`, `mutation`) and obtain schema introspection. Read more about [configuration options](./references/config.md).
 
 ## Add a schema type
 
 Define and add a schema type.
+
+<RunButton 
+  type="schema" 
+  label="ADD USER SCHEMA" 
+  code={`type User {
+  name: String 
+  age: Int 
+  verified: Boolean 
+  points: Float
+}`} 
+/>
 
 ```bash
 defradb client schema add '
@@ -106,6 +123,22 @@ For more examples of schema type definitions, see the [examples/schema/](example
 ## Create documents
 
 Submit a `mutation` request to create documents of the `User` type:
+
+<RunButton 
+  type="query" 
+  label="CREATE USERS (BOB, ALICE, CHARLIE)" 
+  code={`mutation {
+  user1: create_User(input: {age: 31, verified: true, points: 90, name: "Bob"}) {
+    _docID
+  }
+  user2: create_User(input: {age: 28, verified: false, points: 15, name: "Alice"}) {
+    _docID
+  }
+  user3: create_User(input: {age: 35, verified: true, points: 100, name: "Charlie"}) {
+    _docID
+  }
+}`} 
+/>
 
 ```bash
 defradb client query '
@@ -153,6 +186,19 @@ Expected response (_docID will be different):
 
 Once you have populated your node with data, you can query it:
 
+<RunButton 
+  type="query" 
+  label="GET ALL USERS" 
+  code={`query {
+  User {
+    _docID
+    age
+    name
+    points
+  }
+}`} 
+/>
+
 ```bash
 defradb client query '
   query {
@@ -169,6 +215,19 @@ defradb client query '
 This query obtains *all* users and returns their fields `_docID, age, name, points`. GraphQL queries only return the exact fields requested.
 
 You can further filter results with the `filter` argument.
+
+<RunButton 
+  type="query" 
+  label="FILTER USERS (POINTS >= 50)" 
+  code={`query {
+  User(filter: {points: {_ge: 50}}) {
+    _docID
+    age
+    name
+    points
+  }
+}`} 
+/>
 
 ```bash
 defradb client query '
@@ -275,7 +334,8 @@ FIRST_CID=$(defradb client query "
 
 echo "The first CID is: $FIRST_CID"
 ```
-to obtain the specific commit from this content identifier:
+
+To obtain the specific commit from this content identifier:
 
 ```bash
 defradb client query "
@@ -379,7 +439,7 @@ defradb client schema add --url localhost:9182 '
 '
 ```
 
- After setting up 2 nodes as shown in the [Pubsub example](#pubsub-example) section, we can subscribe to collections updates on *nodeA* from *nodeB* by using the following command:
+After setting up 2 nodes as shown in the [Pubsub example](#pubsub-example) section, we can subscribe to collections updates on *nodeA* from *nodeB* by using the following command:
 
 ```bash
 defradb client p2p collection add --url localhost:9182 User
@@ -445,6 +505,15 @@ defradb start
 
 In another terminal, add this example schema to it:
 
+<RunButton 
+  type="schema" 
+  label="ADD ARTICLE SCHEMA" 
+  code={`type Article {
+  content: String
+  published: Boolean
+}`} 
+/>
+
 ```bash
 defradb client schema add '
   type Article {
@@ -475,6 +544,19 @@ defradb client schema add --url localhost:9182 '
 
 Now add some data entries to *nodeA*.
 
+<RunButton 
+  type="query" 
+  label="CREATE ARTICLES" 
+  code={`mutation {
+  article1: create_Article(input: {content: "hello", published: true}) {
+    _docID
+  }
+  article2: create_Article(input: {content: "world", published: false}) {
+    _docID
+  }
+}`} 
+/>
+
 ```bash
 defradb client query '                                
   mutation {
@@ -498,11 +580,23 @@ defradb client p2p replicator set -c Article $NODE_B_PEER_INFO
 
 Now all documents in the Article collection on *nodeA* will be actively pushed to *nodeB*. Verify this with the following command:
 
+<RunButton 
+  type="query" 
+  label="GET ALL ARTICLES" 
+  code={`query {
+  Article {
+    content
+    published
+  }
+}`} 
+/>
+
 ```bash
 defradb client query --url localhost:9182 ' 
   query { Article { content published } }
 '
 ```
+
 You should see the following returned:
 
 ```json
@@ -547,7 +641,6 @@ Then to start the server with TLS, using your generated keys in custom path:
 
 ```bash
 defradb start --tls --pubkeypath ~/path-to-pubkey.key --privkeypath ~/path-to-privkey.crt
-
 ```
 
 ## Access Control System
