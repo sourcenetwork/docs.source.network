@@ -19,15 +19,21 @@
     "@docusaurus/core": "3.9.0",
     "@docusaurus/preset-classic": "3.9.0",
     "@mdx-js/react": "^3.0.0",
+    "@sourcenetwork/acp-js": "^1.0.4",
+    "@sourcenetwork/hublet": "^1.0.2",
     "@svgr/webpack": "^7.0.0",
+    "buffer": "^6.0.3",
     "clsx": "^1.2.1",
+    "crypto-browserify": "^3.12.0",
     "docusaurus-plugin-sass": "^0.2.5",
     "docusaurus-preset-openapi": "^0.7.1",
     "prism-react-renderer": "^2.1.0",
+    "process": "^0.11.10",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
     "react-icons": "^4.8.0",
     "sass": "^1.60.0",
+    "stream-browserify": "^3.0.0",
     "url": "^0.11.3"
   },
   "browserslist": {
@@ -49,5 +55,8 @@
     "simple-git": "^3.17.0",
     "tmp": "^0.2.1",
     "typescript": "^5.0.2"
+  },
+  "engines": {
+    "node": ">=20.0.0"
   }
 }
