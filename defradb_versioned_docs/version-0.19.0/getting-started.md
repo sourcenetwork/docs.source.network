@@ -326,24 +326,25 @@ Pubsub peers can be specified on the command line using the `--peers` flag, whic
 
 Let's go through an example of two nodes (*nodeA* and *nodeB*) connecting with each other over pubsub, on the same machine.
 
-Start *nodeA* with a default configuration:
+In the first terminal, start *nodeA* with a default configuration:
 
 ```bash
+DEFRA_KEYRING_SECRET=<make_a_password>
 defradb start
 ```
 
-Obtain the node's peer info:
+In a second terminal, obtain the node's peer info and save the ID:
 
 ```bash
-defradb client p2p info
+PEER_ID=$(defradb client p2p info 2>/dev/null | grep -oE '12D3[a-zA-Z0-9]+')
+echo $PEER_ID
 ```
 
-In this example, we use `12D3KooWNXm3dmrwCYSxGoRUyZstaKYiHPdt8uZH5vgVaEJyzU8B`, but locally it will be different.
-
-For *nodeB*, we provide the following configuration:
+In this second terminal, start *nodeB*, configured to connect with *nodeA*:
 
 ```bash
-defradb start --rootdir ~/.defradb-nodeB --url localhost:9182 --p2paddr /ip4/127.0.0.1/tcp/9172 --peers /ip4/127.0.0.1/tcp/9171/p2p/12D3KooWNXm3dmrwCYSxGoRUyZstaKYiHPdt8uZH5vgVaEJyzU8B
+DEFRA_KEYRING_SECRET=<make_a_password_for_node_B>
+defradb start --rootdir ~/.defradb-nodeB --url localhost:9182 --p2paddr /ip4/127.0.0.1/tcp/9172 --peers /ip4/127.0.0.1/tcp/9171/p2p/$PEER_ID
 ```
 
 About the flags:
@@ -359,18 +360,75 @@ This starts two nodes and connects them via pubsub networking.
 <details>
 <summary>Subscription example</summary>
 
-It is possible to subscribe to updates on a given collection by using its ID as the pubsub topic. The ID of a collection is found as the field `collectionID` in one of its documents. Here we use the collection ID of the `User` type we created above. After setting up 2 nodes as shown in the [Pubsub example](#pubsub-example) section, we can subscribe to collections updates on *nodeA* from *nodeB* by using the following command:
+It is possible to subscribe to updates on a given collection by using its Name as the pubsub topic. To see the available collections, run the following command:
 
 ```bash
-defradb client p2p collection add --url localhost:9182 bafkreibpnvkvjqvg4skzlijka5xe63zeu74ivcjwd76q7yi65jdhwqhske
+defradb client collection describe
 ```
 
-Multiple collection IDs can be added at once.
+Nodes need to know the collection schema before they can subscribe to updates. Add the User collection schema to *nodeB* with this command:
 
 ```bash
-defradb client p2p collection add --url localhost:9182 <collection1ID>,<collection2ID>,<collection3ID>
+defradb client schema add --url localhost:9182 '
+  type User {
+    name: String
+    age: Int
+    verified: Boolean
+    points: Float
+  }
+'
 ```
 
+ After setting up 2 nodes as shown in the [Pubsub example](#pubsub-example) section, we can subscribe to collections updates on *nodeA* from *nodeB* by using the following command:
+
+```bash
+defradb client p2p collection add --url localhost:9182 User
+```
+
+Multiple collections can be added at once.
+
+```bash
+defradb client p2p collection add --url localhost:9182 <collection1Name>,<collection2Name>,<collection3Name>
+```
+
+Now let's add a new user to *nodeA*.
+
+```bash
+defradb client query '
+  mutation {
+      create_User(input: {age: 22, verified: true, points: 5, name: "Zara"}) {         
+          _docID
+      }
+  }
+'
+```
+
+You can now see this data published from *nodeA* to *nodeB*.
+
+```bash
+defradb client query --url localhost:9182 '
+  query { User { name age verified points } }
+'
+```
+
+This should return the following:
+
+```json
+{
+  "data": {
+    "User": [
+      {
+        "age": 22,
+        "name": "Zara",
+        "points": 5,
+        "verified": true
+      }
+    ]
+  }
+}
+```
+
+Note that *nodeB* is **passively** synchronizing with *nodeA*. *nodeB* will only receive new updates to the User collection. The previous users we setup on *nodeA* won't sync with *nodeB* unless we setup Replicator peering.
 </details>
 
 <details>
@@ -414,19 +472,56 @@ defradb client schema add --url localhost:9182 '
 '
 ```
 
-Then copy the peer info from *nodeB*:
+Now add some data entries to *nodeA*.
 
 ```bash
-defradb client p2p info --url localhost:9182
+defradb client query '                                
+  mutation {
+      article1: create_Article(input: {content: "hello", published: true}) {
+          _docID
+      }
+      article2: create_Article(input: {content: "world", published: false}) {
+          _docID
+      }
+  }
+'
 ```
 
-Set *nodeA* to actively replicate the Article collection to *nodeB*:
+Then copy the peer info from *nodeB* and set *nodeA* to actively replicate the Article collection to *nodeB*:
 
 ```bash
-defradb client p2p replicator set -c Article <nodeB_peer_info_json>
+NODE_B_PEER_INFO=$(defradb client p2p info --url localhost:9182 2>/dev/null | grep -oE '"/ip4/127\.0\.0\.1/tcp/[^"]+' | tr -d '"')
+echo $NODE_B_PEER_INFO
+defradb client p2p replicator set -c Article $NODE_B_PEER_INFO
 ```
 
-As we add or update documents in the Article collection on *nodeA*, they will be actively pushed to *nodeB*. Note that changes to *nodeB* will still be passively published back to *nodeA*, via pubsub.
+Now all documents in the Article collection on *nodeA* will be actively pushed to *nodeB*. Verify this with the following command:
+
+```bash
+defradb client query --url localhost:9182 ' 
+  query { Article { content published } }
+'
+```
+You should see the following returned:
+
+```json
+{
+  "data": {
+    "Article": [
+      {
+        "content": "world",
+        "published": false
+      },
+      {
+        "content": "hello",
+        "published": true
+      }
+    ]
+  }
+}
+```
+
+All future documents in the Article collection added to *nodeA* will be actively pushed to *nodeB*.
 </details>
 
 ## Securing the HTTP API with TLS
