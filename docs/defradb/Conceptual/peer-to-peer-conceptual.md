@@ -6,6 +6,20 @@ Peer-to-peer (P2P) networking is a way for devices or peers to communicate direc
 
 DefraDB is a decentralized database built on this idea. Instead of the traditional client-server setup, DefraDB uses P2P networking so apps can sync data locally and share information without relying on a trusted middleman. This supports a decentralized, private, and user-focused approach.
 
+:::tip[Key Points]
+
+DefraDB leverages P2P networking via libp2p to synchronize data directly between distributed nodes, enabling **offline-first applications without a central server**.
+
+**Key capabilities:**
+- **Passive replication** – Automatic broadcasting of updates via PubSub (similar to UDP)
+- **Active replication** – Direct, point-to-point synchronization between specific nodes (similar to TCP)
+- **NAT traversal** – Circuit relays and hole punching to connect nodes behind firewalls
+- **Resilient synchronization** – Updates queue offline and sync automatically when connectivity returns
+
+DefraDB stores documents as update graphs (similar to Git) using IPLD blocks distributed across nodes.
+
+:::
+
 ## Key concepts
 
 ### Libp2p networking framework
