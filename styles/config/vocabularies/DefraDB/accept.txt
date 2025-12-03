@@ -18,6 +18,9 @@ ArangoDB
 CouchDB
 Redis
 
+# Services & Platforms
+Cloudflare
+
 # Technical Terms - Edge Computing
 [Ee]dge-first
 [Ll]ocal-first
@@ -87,6 +90,15 @@ DSL
 ACP
 CID
 CIDs
+
+# License acronyms (Creative Commons)
+CC
+BY
+SA
+
+# File extensions and formats
+mdx
+MDX
 
 # Industry Terms
 Big Tech
