@@ -8,7 +8,7 @@ Before following these guides, ensure you have:
 
 - DefraDB installed on your system
 - Basic familiarity with command-line interfaces
-- Understanding of [P2P networking concepts](link-to-concepts-page)
+- Understanding of [P2P networking concepts](/defradb/Conceptual/peer-to-peer-conceptual.md)
 
 ## Start and configure DefraDB
 
@@ -22,7 +22,7 @@ defradb start
 
 You'll see output similar to:
 
-```
+```bash
 Jan 2 10:15:49.124 INF cli Starting DefraDB
 Jan 2 10:15:49.161 INF net Created LibP2P host PeerId=12D3KooWEFCQ1iGMobsmNTPXb758kJkFc7XieQyGKpsuMxeDktz4 Address=[/ip4/127.0.0.1/tcp/9171]
 Jan 2 10:15:49.162 INF net Starting internal broadcaster for pubsub network
@@ -51,6 +51,7 @@ defradb start --p2paddr /ip4/0.0.0.0/tcp/9172
 ```
 
 **Parameters**:
+
 - Replace `<ip_address>` with your actual IP address (use `0.0.0.0` to listen on all interfaces)
 - Replace `<port>` with your desired port number
 
@@ -83,6 +84,7 @@ defradb start --peers /ip4/192.168.1.100/tcp/9171/p2p/12D3KooWEFCQ1iGMobsmNTPXb7
 ```
 
 **Parameters**:
+
 - Replace `<ip_address>` with the peer's IP address
 - Replace `<port>` with the peer's P2P port
 - Replace `<peer_id>` with the peer's Peer ID
@@ -170,6 +172,7 @@ curl -X POST http://localhost:9181/api/p2p/replicators \
 ```
 
 **Parameters**:
+
 - `ID`: The Peer ID of the node you want to replicate to
 - `Addrs`: Array of multi-addresses for the peer
 - `Collections`: Array of collection names to replicate (e.g., `["Books"]`)
@@ -215,4 +218,4 @@ If peers can't connect within the same home Wi-Fi network, this is typically due
 2. Configuring NAT hole punching
 3. Connecting peers through the internet rather than the local network
 
-See the [P2P concepts](link-to-concepts-page) page for more information on NAT traversal.
+See the [P2P Conceptual](/defradb/Conceptual/peer-to-peer-conceptual.md) page for more information on NAT traversal.
