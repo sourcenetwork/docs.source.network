@@ -1,0 +1,17 @@
+extends: existence
+message: "Use standard note format: '**Note:** text' instead of '%s'"
+level: suggestion
+link: https://docs.source.network
+ignorecase: false
+scope: text
+nonword: true
+tokens:
+  - 'Note:'
+  - 'NOTE:'
+  - '\*Note\*:'
+  - '\*NOTE\*:'
+raw:
+  - '^Note: '
+  - '^NOTE: '
+  - '^\*Note\*: '
+  - '^\*NOTE\*: '

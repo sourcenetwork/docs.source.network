@@ -22,3 +22,7 @@ yarn-error.log*
 # VSCode Settings
 .vscode
 .history/
+
+# Vale packages (downloaded by `vale sync`)
+styles/Google/
+styles/write-good/
