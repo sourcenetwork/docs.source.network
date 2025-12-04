@@ -36,6 +36,9 @@ Param
 params
 Params
 
+# Services & Platforms
+Cloudflare
+
 # Technical Terms - Edge Computing
 edge-first
 Edge-first
@@ -219,6 +222,15 @@ SA
 # File extensions and formats
 mdx
 Mdx
+MDX
+
+# License acronyms (Creative Commons)
+CC
+BY
+SA
+
+# File extensions and formats
+mdx
 MDX
 
 # Industry Terms
