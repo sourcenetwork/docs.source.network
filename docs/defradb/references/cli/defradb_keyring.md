@@ -12,13 +12,13 @@ The following keys are loaded from the keyring on start:
 	encryption-key: AES-128, AES-192, or AES-256 key (optional)
 
 To randomly generate the required keys, run the following command:
-	defradb keyring generate
+	`defradb keyring generate`
 
 To import externally generated keys, run the following command:
-	defradb keyring import \<name\> \<private-key-hex\>
+	`defradb keyring import <name> <private-key-hex>`
 
 To learn more about the available options:
-	defradb keyring --help
+	`defradb keyring --help`
 
 
 ### Options
