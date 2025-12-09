@@ -11,6 +11,7 @@ DefraDB is a decentralized database built on this idea. Instead of the tradition
 DefraDB leverages P2P networking via libp2p to synchronize data directly between distributed nodes, enabling **offline-first applications without a central server**.
 
 **Key capabilities:**
+
 - **Passive replication** – Automatic broadcasting of updates via PubSub (similar to UDP)
 - **Active replication** – Direct, point-to-point synchronization between specific nodes (similar to TCP)
 - **NAT traversal** – Circuit relays and hole punching to connect nodes behind firewalls
@@ -127,12 +128,14 @@ When DefraDB starts, it creates a Peer ID—a unique identifier based on a priva
 A node automatically listens on multiple addresses or ports when the P2P module is instantiated. These are expressed as multi-addresses—strings that represent network addresses and include information about transport protocols and multiple network stack layers.
 
 Format:
-```
+
+```bash
 /ip4/<ip_address>/tcp/<port>/p2p/<peer_id>
 ```
 
 Example:
-```
+
+```bash
 /ip4/0.0.0.0/tcp/9171/p2p/12D3KooWEFCQ1iGMobsmNTPXb758kJkFc7XieQyGKpsuMxeDktz4
 ```
 
@@ -147,12 +150,14 @@ By default, DefraDB listens on P2P port `9171`.
 **Multi-hop between subnets**: Currently, synchronizing between subnets requires going through the global network, requiring multiple hops. The team is exploring multi-hop mechanisms to address this.
 
 **Bitswap and DHT scalability**: Current limitations are being addressed through:
+
 - **PubSub-based query system**: Allows queries and updates through the global PubSub network using query topics independent of document topics.
 - **GraphSync**: A Protocol Labs protocol that may resolve Bitswap algorithm and DHT issues.
 
 ### Future improvements
 
 **Head Exchange protocol**: A new protocol in development to address issues with syncing the Merkle DAG when updates have been missed or concurrent, diverged updates have been made. It aims to efficiently:
+
 - Establish the most recent update seen by each node
 - Determine if there are divergent updates
 - Find the most efficient way to synchronize nodes with minimal communication
