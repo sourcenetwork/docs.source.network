@@ -9,6 +9,7 @@ sidebar_position: 10
 DefraDB leverages P2P networking via libp2p to synchronize data directly between distributed nodes, enabling **offline-first applications without a central server**.
 
 **Key capabilities:**
+
 - **Passive replication** – Automatic broadcasting of updates via PubSub (similar to UDP)
 - **Active replication** – Direct, point-to-point synchronization between specific nodes (similar to TCP)
 - **NAT traversal** – Circuit relays and hole punching to connect nodes behind firewalls
@@ -34,17 +35,17 @@ Libp2p is modular, meaning it can be customized and integrated into different P2
 
 The high-level distinction between a document is as follows:
 
-* A document is a single record that contains multiple fields. These documents are bound by schema. For example, each row in an SQL table has multiple individual columns. These rows are analogous to documents with multiple individual fields.
+- A document is a single record that contains multiple fields. These documents are bound by schema. For example, each row in an SQL table has multiple individual columns. These rows are analogous to documents with multiple individual fields.
 
-* A collection refers to a collection of documents under a single schema. For example, a table from an SQL database comprising of rows and columns is analogous to collections.
+- A collection refers to a collection of documents under a single schema. For example, a table from an SQL database comprising of rows and columns is analogous to collections.
 
 ## Need for P2P Networking in DefraDB
 
 The DefraDB database requires peer-to-peer (P2P) networking to facilitate data synchronization between nodes. This is necessary because DefraDB can store documents and individual IPLD blocks on various nodes around the world, which may be used by a single application or multiple applications. P2P networking allows local instances of DefraDB, whether on a single device or in a web browser, to replicate information with other devices owned by the user or with trusted third parties. These third parties may serve as historical archival nodes or may be other users with whom the user is collaborating. For example, if a collaborative document powered by DefraDB is being shared with others, it should be transmitted over a P2P network to avoid the need for a trusted intermediary node. DefraDB offers two types of replication over the P2P network:
 
-* Passive replication
+- Passive replication
 
-* Active replication
+- Active replication
 
 ## How it works
 
@@ -52,7 +53,7 @@ There are two, concrete types of data replication within DefraDB, i.e., active, 
 
 ### Passive Replication
 
-In DefraDB, passive replication is a type of data replication in which updates are automatically broadcast to the network and its peers without explicit coordination. This occurs over a global publish-subscribe network (PubSub), which is a way to broadcast updates on a specific topic and receive updates on that topic. 
+In DefraDB, passive replication is a type of data replication in which updates are automatically broadcast to the network and its peers without explicit coordination. This occurs over a global publish-subscribe network (PubSub), which is a way to broadcast updates on a specific topic and receive updates on that topic.
 
 This is called passive replication because it is similar to a "fire and forget" scenario. Passive replication is enabled for all nodes by default and all nodes will always publish to the larger PubSub network. Passive replication can be compared to the connectionless protocol UDP, while active replication can be compared to the connection-oriented protocol TCP.
 
@@ -69,7 +70,6 @@ In the DefraDB software architecture, a PubSub system is used for peer-to-peer n
 In passive replication, updates are broadcasted on a per-document level over the global PubSub network. Each document has its own topic, and nodes can subscribe to the topic corresponding to a specific document to receive updates passively. This is useful in environments where certain documents are in high demand or are being frequently updated, as the connections to these "hot documents" can be kept open to ensure they are kept up-to-date. However, if a document has not been accessed in a while, it is less important for it to be constantly updated and it is easy to resync these "cold documents" by submitting a query for the relevant updates. Passive replication and the PubSub system are therefore focused on individual documents.
 
 One major difference between active and passive networks is that an active network can focus on both collections and individual documents, while a passive network is only focused on individual documents. Active networks operate over a direct, point-to-point connection and allow you to select an entire collection to replicate to another node. For example, if you have a collection of books and specify a target node for active replication, the entire collection will be replicated to that node, including any updates to individual books. However, it is also possible to replicate granularly by selecting specific books within the collection for replication. Passive networks, on the other hand, are only concerned with replicating individual documents.
-
 
 ## Concrete Features of P2P in DefraDB
 
@@ -90,27 +90,27 @@ Jan  2 10:15:49.163 INF node Providing GraphQL endpoint at http://127.0.0.1:9181
 This host has a Peer ID, which is a function of a secret private key generated when the node is started for the first time. The Peer ID is important to know as it may be relevant for different parts of the peer-to-peer networking system. The libp2p networking stack can be enabled or disabled.
 
 ```bash
-$ defradb start --no-p2p
+defradb start --no-p2p
 ```
 
 The passive networking system can also be enabled or disabled. By default, if the P2P network is online, the passive networking system is turned on.
 
 ```bash
-$ defradb start --peers /ip4/0.0.0.0/tcp/9171/p2p/<peerID_of_node_to_replicate_to>
+defradb start --peers /ip4/0.0.0.0/tcp/9171/p2p/<peerID_of_node_to_replicate_to>
 ```
 
 A node automatically listens on multiple addresses or ports when the P2P module is instantiated. These are referred to as the peer-to-peer address, which is expressed as a multi-address. A multi-address is a string that represents a network address and includes information about the transport protocol and addresses for multiple layers of the network stack.
-
 
 ```bash
 /ip4/0.0.0.0/tcp/9171/p2p/<peerID_of_node_to_replicate_to>
 
 scheme/ip_address/protocol/port/protocol/peer_id
 ```
+
 The peer listens in on the p2p port 9171​ by default, which can be customized through the CLI or the configuration file.
 
 ```bash
-$ defradb start --p2paddr /ip4/0.0.0.0/tcp/9172
+defradb start --p2paddr /ip4/0.0.0.0/tcp/9172
 ```
 
 The peer-to-peer address is the first of the addresses that the peer listens in on.
@@ -124,7 +124,7 @@ When a node is started, it specifies a list of peers that it wants to stay conne
 To use the active replication feature in DefraDB, you can submit an add replicator Remote Procedure Call (RPC) command through the client API. You will need to specify the multi-address and Peer ID of the peer that you want to include in the replicator set, as well as the name of the collection that you want to replicate to that peer. These steps handle the process of defining which peers you want to connect to, enabling or disabling the underlying subsystems, and sending additional RPC commands to add any necessary replicators.
 
 ```bash
-$ defradb client p2p replicator set -c Books <peerID_of_node_to_replicate_to>
+defradb client p2p replicator set -c Books <peerID_of_node_to_replicate_to>
 ```
 
 ## Benefits of the P2P System
