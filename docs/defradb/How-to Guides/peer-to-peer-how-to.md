@@ -67,7 +67,7 @@ defradb start --p2paddr /ip4/0.0.0.0/tcp/9172
 To retrieve your node's Peer ID using HTTP:
 
 ```bash
-curl -H "Accept: application/json" http://localhost:9181/api/p2p/info
+defradb client p2p info
 ```
 
 The Peer ID is generated from a private key created during the first startup and remains consistent across restarts.
@@ -107,7 +107,7 @@ defradb client p2p document add <docID>
 Example:
 
 ```bash
-defradb client p2p document add bafybeihz5k3c2jzx7m4x5v6p7q8r9s0t1u2v3w4x5y6z7a8b9c0d1e2f3
+defradb client p2p document add bae-619ea0d2-35ba-5e8c-ac4d-2b769937213b
 ```
 
 ### Unsubscribe from document updates
@@ -144,44 +144,6 @@ defradb client p2p collection remove <collectionID>
 defradb client p2p collection getall
 ```
 
-## Enable active replication
-
-Active replication creates a direct, persistent connection to a specific peer for reliable data synchronization.
-
-### Add a replicator using HTTP
-
-```bash
-curl -X POST http://localhost:9181/api/p2p/replicators \
-  -H "Content-Type: application/json" \
-  -d '{
-    "Info": {
-      "ID": "<peer_id>",
-      "Addrs": ["<peer_address>"]
-    },
-    "Collections": ["<collection_name>"]
-  }'
-```
-
-Example:
-
-```bash
-curl -X POST http://localhost:9181/api/p2p/replicators \
-  -H "Content-Type: application/json" \
-  -d '{
-    "Info": {
-      "ID": "12D3KooWEFCQ1iGMobsmNTPXb758kJkFc7XieQyGKpsuMxeDktz4",
-      "Addrs": ["/ip4/192.168.1.100/tcp/9171"]
-    },
-    "Collections": ["Books"]
-  }'
-```
-
-**Parameters**:
-
-- `ID`: The Peer ID of the node you want to replicate to
-- `Addrs`: Array of multi-addresses for the peer
-- `Collections`: Array of collection names to replicate (e.g., `["Books"]`)
-
 ### Add a replicator using CLI
 
 ```bash
@@ -205,14 +167,6 @@ Check the startup logs for confirmation that the LibP2P host was created and the
 ```
 INF net Created LibP2P host PeerId=... Address=[...]
 INF net Starting internal broadcaster for pubsub network
-```
-
-### Check current peer connections
-
-Use the P2P info endpoint to see your current peer connections:
-
-```bash
-curl http://localhost:9181/api/p2p/info
 ```
 
 ### Connection issues within home networks
