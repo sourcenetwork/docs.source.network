@@ -70,5 +70,5 @@ Execute Explain constructs and executes the Plan Graph, collecting runtime metri
 
 ## Related Resources
 
-- [How to Run Explain Requests](explain-system-how-to.md) — Step-by-step instructions for running Simple and Execute Explain requests
+- [How to Run Explain Requests](../guides/explain-systems-how-to.md) — Step-by-step instructions for running Simple and Execute Explain requests
 - [Plan Node Reference](https://github.com/sourcenetwork/defradb/blob/develop/internal/planner/explain.go#L35) — Complete list of explainable plan nodes in DefraDB
