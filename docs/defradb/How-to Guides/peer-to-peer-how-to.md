@@ -177,4 +177,4 @@ If peers can't connect within the same home Wi-Fi network, this is typically due
 2. Configuring NAT hole punching
 3. Connecting peers through the internet rather than the local network
 
-See the [P2P Conceptual](/defradb/Concepts/peer-to-peer.md) page for more information on NAT traversal.
+See the [P2P Concepts](/Concepts/peer-to-peer) page for more information on NAT traversal.
