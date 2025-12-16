@@ -1,5 +1,6 @@
 ---
 sidebar_label: Peer-to-peer networking
+sidebar_position: 10
 ---
 
 # Peer-to-peer networking
