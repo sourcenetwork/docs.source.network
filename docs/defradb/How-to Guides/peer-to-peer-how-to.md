@@ -1,5 +1,5 @@
 ---
-sidebar_label: Peer-to-Peer How-to Guide
+sidebar_label: Peer-to-peer how-to guide
 sidebar_position: 10
 ---
 

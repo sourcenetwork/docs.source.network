@@ -1,3 +1,7 @@
+---
+sidebar_label: Peer-to-peer networking
+---
+
 # Peer-to-peer networking
 
 ## Overview
