@@ -1,5 +1,5 @@
 ---
-sidebar_label: Explain system how-to guide
+sidebar_label: Explain systems
 sidebar_position: 11
 ---
 
