@@ -1,9 +1,9 @@
 ---
-sidebar_label: Peer-to-peer how-to guide
+sidebar_label: Peer-to-peer
 sidebar_position: 10
 ---
 
-# Peer-to-peer how-to guides
+# Peer-to-peer
 
 This guide provides step-by-step instructions for configuring and managing peer-to-peer networking in DefraDB.
 
