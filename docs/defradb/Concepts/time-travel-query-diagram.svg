@@ -1,0 +1,139 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 500">
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#64748b"/>
+    </marker>
+    <marker id="arrowhead-blue" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#3b82f6"/>
+    </marker>
+    <marker id="arrowhead-green" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto-start-reverse">
+      <polygon points="10 0, 0 3.5, 10 7" fill="#22c55e"/>
+    </marker>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="900" height="500" fill="#f8fafc"/>
+  
+  <!-- Title -->
+  <text x="450" y="35" font-family="system-ui, -apple-system, sans-serif" font-size="20" font-weight="600" fill="#1e293b" text-anchor="middle">Time Travelling Query: Update Graph Traversal</text>
+  
+  <!-- Update Graph Section -->
+  <text x="450" y="70" font-family="system-ui, -apple-system, sans-serif" font-size="14" fill="#64748b" text-anchor="middle">Document Update Graph (DAG)</text>
+  
+  <!-- Genesis Node -->
+  <rect x="60" y="100" width="120" height="70" rx="8" fill="#e0f2fe" stroke="#0284c7" stroke-width="2"/>
+  <text x="120" y="125" font-family="system-ui, -apple-system, sans-serif" font-size="12" font-weight="600" fill="#0369a1" text-anchor="middle">Genesis</text>
+  <text x="120" y="145" font-family="ui-monospace, monospace" font-size="9" fill="#64748b" text-anchor="middle">bafyreig...a1b2</text>
+  <text x="120" y="162" font-family="system-ui, -apple-system, sans-serif" font-size="10" fill="#475569" text-anchor="middle">name: "Alice"</text>
+  
+  <!-- Arrow 1 -->
+  <line x1="180" y1="135" x2="218" y2="135" stroke="#64748b" stroke-width="2" marker-end="url(#arrowhead)"/>
+  
+  <!-- Update 1 Node -->
+  <rect x="230" y="100" width="120" height="70" rx="8" fill="#f1f5f9" stroke="#94a3b8" stroke-width="2"/>
+  <text x="290" y="125" font-family="system-ui, -apple-system, sans-serif" font-size="12" font-weight="600" fill="#475569" text-anchor="middle">Update 1</text>
+  <text x="290" y="145" font-family="ui-monospace, monospace" font-size="9" fill="#64748b" text-anchor="middle">bafyreih...c3d4</text>
+  <text x="290" y="162" font-family="system-ui, -apple-system, sans-serif" font-size="10" fill="#475569" text-anchor="middle">age: 28</text>
+  
+  <!-- Arrow 2 -->
+  <line x1="350" y1="135" x2="388" y2="135" stroke="#64748b" stroke-width="2" marker-end="url(#arrowhead)"/>
+  
+  <!-- Update 2 Node (Target) -->
+  <rect x="400" y="100" width="120" height="70" rx="8" fill="#dcfce7" stroke="#22c55e" stroke-width="3"/>
+  <text x="460" y="125" font-family="system-ui, -apple-system, sans-serif" font-size="12" font-weight="600" fill="#15803d" text-anchor="middle">Update 2</text>
+  <text x="460" y="145" font-family="ui-monospace, monospace" font-size="9" fill="#64748b" text-anchor="middle">bafyreij...e5f6</text>
+  <text x="460" y="162" font-family="system-ui, -apple-system, sans-serif" font-size="10" fill="#475569" text-anchor="middle">name: "Alicia"</text>
+  
+  <!-- Target Label -->
+  <rect x="415" y="78" width="90" height="18" rx="9" fill="#22c55e"/>
+  <text x="460" y="91" font-family="system-ui, -apple-system, sans-serif" font-size="10" font-weight="600" fill="white" text-anchor="middle">TARGET CID</text>
+  
+  <!-- Arrow 3 -->
+  <line x1="520" y1="135" x2="558" y2="135" stroke="#64748b" stroke-width="2" marker-end="url(#arrowhead)"/>
+  
+  <!-- Update 3 Node -->
+  <rect x="570" y="100" width="120" height="70" rx="8" fill="#f1f5f9" stroke="#94a3b8" stroke-width="2"/>
+  <text x="630" y="125" font-family="system-ui, -apple-system, sans-serif" font-size="12" font-weight="600" fill="#475569" text-anchor="middle">Update 3</text>
+  <text x="630" y="145" font-family="ui-monospace, monospace" font-size="9" fill="#64748b" text-anchor="middle">bafyreik...g7h8</text>
+  <text x="630" y="162" font-family="system-ui, -apple-system, sans-serif" font-size="10" fill="#475569" text-anchor="middle">age: 29</text>
+  
+  <!-- Arrow 4 -->
+  <line x1="690" y1="135" x2="728" y2="135" stroke="#64748b" stroke-width="2" marker-end="url(#arrowhead)"/>
+  
+  <!-- Current State Node -->
+  <rect x="740" y="100" width="120" height="70" rx="8" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
+  <text x="800" y="125" font-family="system-ui, -apple-system, sans-serif" font-size="12" font-weight="600" fill="#b45309" text-anchor="middle">Current</text>
+  <text x="800" y="145" font-family="ui-monospace, monospace" font-size="9" fill="#64748b" text-anchor="middle">bafyreil...i9j0</text>
+  <text x="800" y="162" font-family="system-ui, -apple-system, sans-serif" font-size="10" fill="#475569" text-anchor="middle">email: "a@b.com"</text>
+  
+  <!-- Step 1: Trace Backward -->
+  <rect x="40" y="210" width="400" height="130" rx="8" fill="#eff6ff" stroke="#3b82f6" stroke-width="1" stroke-dasharray="4"/>
+  <text x="240" y="235" font-family="system-ui, -apple-system, sans-serif" font-size="14" font-weight="600" fill="#1d4ed8" text-anchor="middle">Step 1: Trace Backward to Genesis</text>
+  
+  <!-- Step 1 nodes -->
+  <rect x="70" y="260" width="80" height="50" rx="6" fill="#dbeafe" stroke="#3b82f6" stroke-width="2"/>
+  <text x="110" y="282" font-family="system-ui, -apple-system, sans-serif" font-size="11" font-weight="500" fill="#1e40af" text-anchor="middle">Genesis</text>
+  <text x="110" y="298" font-family="ui-monospace, monospace" font-size="8" fill="#64748b" text-anchor="middle">...a1b2</text>
+  
+  <rect x="180" y="260" width="80" height="50" rx="6" fill="#dbeafe" stroke="#3b82f6" stroke-width="2"/>
+  <text x="220" y="282" font-family="system-ui, -apple-system, sans-serif" font-size="11" font-weight="500" fill="#1e40af" text-anchor="middle">Update 1</text>
+  <text x="220" y="298" font-family="ui-monospace, monospace" font-size="8" fill="#64748b" text-anchor="middle">...c3d4</text>
+  
+  <rect x="290" y="260" width="80" height="50" rx="6" fill="#bbf7d0" stroke="#22c55e" stroke-width="2"/>
+  <text x="330" y="282" font-family="system-ui, -apple-system, sans-serif" font-size="11" font-weight="600" fill="#15803d" text-anchor="middle">Target</text>
+  <text x="330" y="298" font-family="ui-monospace, monospace" font-size="8" fill="#64748b" text-anchor="middle">...e5f6</text>
+  
+  <!-- Backward arrows -->
+  <line x1="285" y1="285" x2="265" y2="285" stroke="#3b82f6" stroke-width="2" marker-end="url(#arrowhead-blue)"/>
+  <line x1="175" y1="285" x2="155" y2="285" stroke="#3b82f6" stroke-width="2" marker-end="url(#arrowhead-blue)"/>
+  
+  <!-- Step 2: Replay Forward -->
+  <rect x="460" y="210" width="400" height="130" rx="8" fill="#f0fdf4" stroke="#22c55e" stroke-width="1" stroke-dasharray="4"/>
+  <text x="660" y="235" font-family="system-ui, -apple-system, sans-serif" font-size="14" font-weight="600" fill="#15803d" text-anchor="middle">Step 2: Replay Deltas Forward</text>
+  
+  <!-- Step 2 nodes -->
+  <rect x="490" y="260" width="80" height="50" rx="6" fill="#dcfce7" stroke="#22c55e" stroke-width="2"/>
+  <text x="530" y="282" font-family="system-ui, -apple-system, sans-serif" font-size="11" font-weight="500" fill="#15803d" text-anchor="middle">Genesis</text>
+  <text x="530" y="298" font-family="ui-monospace, monospace" font-size="8" fill="#64748b" text-anchor="middle">...a1b2</text>
+  
+  <rect x="600" y="260" width="80" height="50" rx="6" fill="#dcfce7" stroke="#22c55e" stroke-width="2"/>
+  <text x="640" y="282" font-family="system-ui, -apple-system, sans-serif" font-size="11" font-weight="500" fill="#15803d" text-anchor="middle">Update 1</text>
+  <text x="640" y="298" font-family="ui-monospace, monospace" font-size="8" fill="#64748b" text-anchor="middle">...c3d4</text>
+  
+  <rect x="710" y="260" width="80" height="50" rx="6" fill="#22c55e" stroke="#15803d" stroke-width="2"/>
+  <text x="750" y="282" font-family="system-ui, -apple-system, sans-serif" font-size="11" font-weight="600" fill="white" text-anchor="middle">Target ✓</text>
+  <text x="750" y="298" font-family="ui-monospace, monospace" font-size="8" fill="#dcfce7" text-anchor="middle">...e5f6</text>
+  
+  <!-- Forward arrows -->
+  <line x1="575" y1="285" x2="595" y2="285" stroke="#22c55e" stroke-width="2" marker-end="url(#arrowhead-green)"/>
+  <line x1="685" y1="285" x2="705" y2="285" stroke="#22c55e" stroke-width="2" marker-end="url(#arrowhead-green)"/>
+  
+  <!-- Result Section -->
+  <rect x="250" y="365" width="400" height="110" rx="8" fill="white" stroke="#e2e8f0" stroke-width="2"/>
+  <text x="450" y="392" font-family="system-ui, -apple-system, sans-serif" font-size="14" font-weight="600" fill="#1e293b" text-anchor="middle">Reconstructed State at Target CID</text>
+  
+  <!-- Result content -->
+  <rect x="280" y="405" width="340" height="55" rx="4" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1"/>
+  <text x="300" y="425" font-family="ui-monospace, monospace" font-size="11" fill="#475569">{</text>
+  <text x="320" y="442" font-family="ui-monospace, monospace" font-size="11" fill="#475569">"name": "Alicia",  "age": 28</text>
+  <text x="300" y="455" font-family="ui-monospace, monospace" font-size="11" fill="#475569">}</text>
+  
+  <!-- Legend -->
+  <rect x="40" y="365" width="180" height="110" rx="8" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1"/>
+  <text x="130" y="385" font-family="system-ui, -apple-system, sans-serif" font-size="12" font-weight="600" fill="#475569" text-anchor="middle">Legend</text>
+  
+  <rect x="55" y="395" width="16" height="16" rx="3" fill="#e0f2fe" stroke="#0284c7" stroke-width="1"/>
+  <text x="80" y="407" font-family="system-ui, -apple-system, sans-serif" font-size="10" fill="#475569">Genesis state</text>
+  
+  <rect x="55" y="418" width="16" height="16" rx="3" fill="#dcfce7" stroke="#22c55e" stroke-width="2"/>
+  <text x="80" y="430" font-family="system-ui, -apple-system, sans-serif" font-size="10" fill="#475569">Target (queried CID)</text>
+  
+  <rect x="55" y="441" width="16" height="16" rx="3" fill="#fef3c7" stroke="#f59e0b" stroke-width="1"/>
+  <text x="80" y="453" font-family="system-ui, -apple-system, sans-serif" font-size="10" fill="#475569">Current state</text>
+  
+  <!-- Delta labels on main graph -->
+  <text x="205" y="185" font-family="system-ui, -apple-system, sans-serif" font-size="9" fill="#94a3b8" text-anchor="middle">Δ delta</text>
+  <text x="375" y="185" font-family="system-ui, -apple-system, sans-serif" font-size="9" fill="#94a3b8" text-anchor="middle">Δ delta</text>
+  <text x="545" y="185" font-family="system-ui, -apple-system, sans-serif" font-size="9" fill="#94a3b8" text-anchor="middle">Δ delta</text>
+  <text x="715" y="185" font-family="system-ui, -apple-system, sans-serif" font-size="9" fill="#94a3b8" text-anchor="middle">Δ delta</text>
+</svg>
