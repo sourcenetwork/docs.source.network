@@ -1,7 +1,6 @@
 ---
 sidebar_position: 3
-title: Time Travelling Queries
-description: How to query previous states of documents in DefraDB
+sidebar_label: Time Travelling Queries
 ---
 
 # Time Travelling Queries
