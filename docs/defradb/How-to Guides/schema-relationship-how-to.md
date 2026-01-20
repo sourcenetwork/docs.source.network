@@ -31,7 +31,7 @@ Before following this guide, ensure you have:
 
 - DefraDB installed and running
 - Basic understanding of GraphQL schema definitions
-- Familiarity with [schema relationship concepts](/defradb/next/Concepts/schema-relationships)
+- Familiarity with [schema relationship concepts](/defradb/concepts/schema-relationship)
 
 ## One-to-one relationships
 
