@@ -60,19 +60,24 @@ query {
 This query returns the document exactly as it appeared at the commit identified by the given CID. The syntax and behavior are otherwise identical to a normal query.
 
 :::note
+
 **GAP: Additional examples needed.** This section should include:
+
 1. A visual diagram showing the document's update graph and how the query relates to it
 2. Example response payloads showing what the returned data looks like
 3. An example showing multiple versions of the same document being queried at different CIDs
+
 :::
 
 ## Finding a Document's CIDs
 
 :::caution
 **GAP: Critical information missing.** The current documentation does not explain how developers obtain the CID values needed for time travelling queries. This section needs to cover:
+
 1. How to query a document's commit history to see available CIDs
 2. Whether CIDs are returned in mutation responses when creating/updating documents
 3. Example queries or commands for listing available versions
+
 :::
 
 ## Limitations
