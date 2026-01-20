@@ -173,7 +173,7 @@ You can further filter results with the `filter` argument.
 ```bash
 defradb client query '
   query {
-    User(filter: {points: {_ge: 50}}) {
+    User(filter: {points: {_geq: 50}}) {
       _docID
       age
       name
@@ -183,7 +183,7 @@ defradb client query '
 '
 ```
 
-This returns only user documents which have a value for the `points` field *Greater Than or Equal to* (`_ge`) 50.
+This returns only user documents which have a value for the `points` field *Greater Than or Equal to* (`geq`) 50.
 
 ## Obtain document commits
 
@@ -192,7 +192,7 @@ DefraDB's data model is based on [MerkleCRDTs](https://arxiv.org/pdf/2004.00107.
 ```bash
 FIRST_DOC_ID=$(defradb client query '
   query {
-    User(filter: {points: {_ge: 50}}) {
+    User(filter: {points: {_geq: 50}}) {
       _docID
       age
       name

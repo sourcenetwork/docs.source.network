@@ -203,7 +203,7 @@ mutation {
 
 ```graphql
 mutation {
-  	create_Book(input: {name: "Gulistan", genre: "Poetry", author_id: "bae-0e7c3bb5-4917-5d98-9fcf-b9db369ea6e4"}) {
+  	create_Book(input: {name: "Gulistan", genre: "Poetry", author_ID: "bae-0e7c3bb5-4917-5d98-9fcf-b9db369ea6e4"}) {
       	_key
     }
 }
