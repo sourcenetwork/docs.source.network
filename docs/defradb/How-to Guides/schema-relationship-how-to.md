@@ -10,20 +10,18 @@ This guide provides step-by-step instructions for creating and managing relation
 
 :::tip[Key Points]
 
-Lens is DefraDB's bi-directional schema migration engine that transforms data between schema versions without requiring upfront migration of all documents. Built on WebAssembly, it enables language-agnostic transformations executed safely in a sandbox.
+DefraDB provides managed relationships where the database automatically handles foreign keys, correlations, and join operations. Developers specify the relationship type (one-to-one or one-to-many) without manually managing keys or join logic.
 
-**Key features:**
+**Supported relationship types:**
+- **One-to-One** – Single reference between documents (specify `@primary` side for efficient queries)
+- **One-to-Many** – One document referenced by many (the "many" side is always primary and holds the foreign key)
+- **Many-to-Many** – Not supported; use junction tables to connect one-to-many relationships
 
-- **Lazy evaluation** – Migrations execute only when documents are read, queried, or updated (no upfront cost)
-- **Bi-directional** – Define both forward (`transform`) and reverse (`inverse`) migrations between schema versions
-- **Language-agnostic** – Write migrations in any language that compiles to WebAssembly
-- **P2P compatible** – Peers on different schema versions can sync seamlessly
+**Key features:** Type joins replace traditional field joins, querying from primary to secondary is more efficient (point lookup vs. table scan), and filtering works on both parent and related child objects with different semantics.
 
-**How it works:** Migrations are defined as WebAssembly modules with four functions: `alloc`, `set_param`, `transform`, and optionally `inverse`. Documents are transformed on-demand at query time, allowing rapid toggling between schema versions.
+**Important notes:** All related types must be added simultaneously in the Schema Definition Language (SDL), and documents must be created in specific order (secondary side first, then primary side with the secondary ID).
 
-**Trade-offs:** Lazy execution means errors surface at query time rather than migration time, and current performance is secondary to functionality as the system matures.
-
-**Use cases:** Safe schema progression, handling P2P version complexity, A/B testing with on-demand schema selection, and maintaining data consistency across evolving applications.
+**Current limitations:** cannot create related documents in a single mutation, no cascading deletes, and cannot manually define foreign keys and joins.
 
 :::
 
