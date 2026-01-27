@@ -10,10 +10,9 @@ sidebar_position: 10
 
 Schema relationships define how different document types connect and reference each other in DefraDB. Unlike traditional databases where you manually manage foreign keys and joins, DefraDB provides managed relationships that automatically handle the correlation between documents.
 
-**Key Points**
+## Key points
 
 DefraDB uses **managed relationships** where the database automatically handles foreign keys, correlations, and join operations. You specify the relationship type, and DefraDB manages the implementation details.
-
 **Supported relationship types:**
 
 - **One-to-one** – Single reference between documents (use `@primary` to designate the frequently queried side)
