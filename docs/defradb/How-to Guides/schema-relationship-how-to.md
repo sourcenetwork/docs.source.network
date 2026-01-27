@@ -13,6 +13,7 @@ This guide provides step-by-step instructions for creating and managing relation
 DefraDB provides managed relationships where the database automatically handles foreign keys, correlations, and join operations. Developers specify the relationship type (one-to-one or one-to-many) without manually managing keys or join logic.
 
 **Supported relationship types:**
+
 - **One-to-One** – Single reference between documents (specify `@primary` side for efficient queries)
 - **One-to-Many** – One document referenced by many (the "many" side is always primary and holds the foreign key)
 - **Many-to-Many** – Not supported; use junction tables to connect one-to-many relationships
@@ -84,7 +85,7 @@ mutation {
     streetName: "Test road"
     country: "Canada"
   }) {
-    _key
+    _docID
   }
 }
 ```
@@ -93,7 +94,7 @@ Response:
 
 ```json
 {
-  "_key": "bae-fd541c25-229e-5280-b44b-e5c2af3e374d"
+  "_docID": "bae-fd541c25-229e-5280-b44b-e5c2af3e374d"
 }
 ```
 
@@ -105,9 +106,9 @@ mutation {
     name: "Alice"
     username: "awesomealice"
     age: 35
-    address_id: "bae-fd541c25-229e-5280-b44b-e5c2af3e374d"
+    _addressID: "bae-fd541c25-229e-5280-b44b-e5c2af3e374d"
   }) {
-    _key
+    _docID
   }
 }
 ```
@@ -233,7 +234,7 @@ mutation {
     name: "Saadi"
     dateOfBirth: "1210-07-23T03:46:56.647Z"
   }) {
-    _key
+    _docID
   }
 }
 ```
@@ -242,7 +243,7 @@ Response:
 
 ```json
 {
-  "_key": "bae-0e7c3bb5-4917-5d98-9fcf-b9db369ea6e4"
+  "_docID": "bae-0e7c3bb5-4917-5d98-9fcf-b9db369ea6e4"
 }
 ```
 
@@ -255,7 +256,7 @@ mutation {
     genre: "Poetry"
     author_id: "bae-0e7c3bb5-4917-5d98-9fcf-b9db369ea6e4"
   }) {
-    _key
+    _docID
   }
 }
 ```
@@ -269,7 +270,7 @@ mutation {
     genre: "Poetry"
     author_id: "bae-0e7c3bb5-4917-5d98-9fcf-b9db369ea6e4"
   }) {
-    _key
+    _docID
   }
 }
 ```
@@ -284,7 +285,7 @@ mutation {
     id: "bae-0e7c3bb5-4917-5d98-9fcf-b9db369ea6e4"
     input: {name: "Saadi Shirazi"}
   ) {
-    _key
+    _docID
   }
 }
 ```
@@ -297,7 +298,7 @@ mutation {
     filter: {name: {_eq: "Gulistan"}}
     input: {description: "Persian poetry of ideas"}
   ) {
-    _key
+    _docID
   }
 }
 ```
@@ -419,19 +420,19 @@ type BookGenre {
 ```graphql
 mutation {
   create_Book(input: {name: "The Name of the Wind"}) {
-    _key
+    _docID
   }
 }
 
 mutation {
   create_Genre(input: {name: "Fantasy"}) {
-    _key
+    _docID
   }
 }
 
 mutation {
   create_Genre(input: {name: "Adventure"}) {
-    _key
+    _docID
   }
 }
 ```
@@ -444,7 +445,7 @@ mutation {
     book_id: "bae-book-key"
     genre_id: "bae-fantasy-key"
   }) {
-    _key
+    _docID
   }
 }
 
@@ -453,7 +454,7 @@ mutation {
     book_id: "bae-book-key"
     genre_id: "bae-adventure-key"
   }) {
-    _key
+    _docID
   }
 }
 ```

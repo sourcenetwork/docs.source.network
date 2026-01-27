@@ -42,7 +42,7 @@ In DefraDB, you designate one side as primary using the `@primary` directive. Th
 
 **Example structure:**
 
-```
+```text
 User ←→ Address
 ```
 
@@ -61,7 +61,7 @@ In one-to-many relationships, DefraDB automatically makes the "many" side the pr
 
 **Example structure:**
 
-```
+```text
 Author ←→ [Book, Book, Book]
 ```
 
@@ -80,7 +80,7 @@ DefraDB doesn't natively support many-to-many relationships due to the complexit
 
 **Example structure with junction table:**
 
-```
+```text
 Book ←→ [BookGenre] ←→ Genre
 ```
 
@@ -122,7 +122,7 @@ Querying from the primary side to the secondary side uses a **point lookup**—a
 
 **Example:**
 
-```
+```text
 User (primary) → Address (secondary)
 ```
 
@@ -134,7 +134,7 @@ Querying from the secondary side to the primary side requires a **table scan**�
 
 **Example:**
 
-```
+```text
 Address (secondary) → User (primary)
 ```
 
