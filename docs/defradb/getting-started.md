@@ -183,7 +183,7 @@ defradb client query '
 '
 ```
 
-This returns only user documents which have a value for the `points` field *Greater Than or Equal to* (`geq`) 50.
+This returns only user documents which have a value for the `points` field *Greater Than or Equal to* (`_geq`) 50.
 
 ## Obtain document commits
 
