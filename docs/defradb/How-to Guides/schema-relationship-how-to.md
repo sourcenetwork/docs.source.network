@@ -106,10 +106,8 @@ mutation {
     name: "Alice"
     username: "awesomealice"
     age: 35
-    _addressID: "bae-fd541c25-229e-5280-b44b-e5c2af3e374d"
-  }) {
-    _docID
-  }
+    address: { ... }   # or however your schema defines the relationship field
+  })
 }
 ```
 
