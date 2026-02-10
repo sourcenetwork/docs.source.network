@@ -20,7 +20,7 @@ DefraDB provides managed relationships where the database automatically handles 
 
 **Key features:** Type joins replace traditional field joins, querying from primary to secondary is more efficient (point lookup vs. table scan), and filtering works on both parent and related child objects with different semantics.
 
-**Important notes:** All related types must be added simultaneously in the Schema Definition Language (SDL), and documents must be created in specific order (secondary side first, then primary side with the secondary ID).
+**Important notes:** All related types must be added simultaneously in the Schema Definition Language (SDL), and documents must be created in specific order (secondary side first, then primary side referencing the secondary document).
 
 **Current limitations:** cannot create related documents in a single mutation, no cascading deletes, and cannot manually define foreign keys and joins.
 
@@ -74,7 +74,7 @@ DefraDB automatically creates the necessary foreign keys in both types.
 
 ### Create documents
 
-Create the secondary side (Address) first, then the primary side (User) with the foreign key reference.
+Create the secondary side (Address) first, then the primary side (User) with a reference to the Address document.
 
 **Step 1**: Create the Address:
 
@@ -98,7 +98,7 @@ Response:
 }
 ```
 
-**Step 2**: Create the User with the Address ID:
+**Step 2**: Create the User with the Address reference:
 
 ```graphql
 mutation {
@@ -106,8 +106,10 @@ mutation {
     name: "Alice"
     username: "awesomealice"
     age: 35
-    address: { ... }   # or however your schema defines the relationship field
-  })
+    address: { _docID: "bae-fd541c25-229e-5280-b44b-e5c2af3e374d" }
+  }) {
+    _docID
+  }
 }
 ```
 
@@ -245,14 +247,14 @@ Response:
 }
 ```
 
-**Step 2**: Create related Books with the Author ID:
+**Step 2**: Create related Books with the Author reference:
 
 ```graphql
 mutation {
   create_Book(input: {
     name: "Gulistan"
     genre: "Poetry"
-    author_id: "bae-0e7c3bb5-4917-5d98-9fcf-b9db369ea6e4"
+    author: { _docID: "bae-0e7c3bb5-4917-5d98-9fcf-b9db369ea6e4" }
   }) {
     _docID
   }
@@ -266,7 +268,7 @@ mutation {
   create_Book(input: {
     name: "Bustan"
     genre: "Poetry"
-    author_id: "bae-0e7c3bb5-4917-5d98-9fcf-b9db369ea6e4"
+    author: { _docID: "bae-0e7c3bb5-4917-5d98-9fcf-b9db369ea6e4" }
   }) {
     _docID
   }
@@ -440,8 +442,8 @@ mutation {
 ```graphql
 mutation {
   create_BookGenre(input: {
-    book_id: "bae-book-key"
-    genre_id: "bae-fantasy-key"
+    book: { _docID: "bae-book-key" }
+    genre: { _docID: "bae-fantasy-key" }
   }) {
     _docID
   }
@@ -449,8 +451,8 @@ mutation {
 
 mutation {
   create_BookGenre(input: {
-    book_id: "bae-book-key"
-    genre_id: "bae-adventure-key"
+    book: { _docID: "bae-book-key" }
+    genre: { _docID: "bae-adventure-key" }
   }) {
     _docID
   }
@@ -505,7 +507,7 @@ query {
 
 **Issue**: Cannot create documents with relationships.
 
-**Solution**: Create the secondary side (or "one" side in one-to-many) first, then create the primary side with the foreign key reference using the `*_id` field.
+**Solution**: Create the secondary side (or "one" side in one-to-many) first, then create the primary side referencing the secondary document via the schema's relationship field (e.g., `address: { _docID: "..." }` or `author: { _docID: "..." }`).
 
 ### Slow queries
 
