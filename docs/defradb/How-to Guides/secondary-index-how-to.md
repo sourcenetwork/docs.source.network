@@ -22,7 +22,7 @@ Before following this guide, ensure you have:
 
 - DefraDB installed and running
 - A defined schema for your collections
-- Understanding of [secondary index concepts](/defradb/next/Concepts/secondary-indexes)
+- Understanding of [secondary index concepts](/defradb/next/Concepts/secondary-index)
 
 ## Create a basic index
 
