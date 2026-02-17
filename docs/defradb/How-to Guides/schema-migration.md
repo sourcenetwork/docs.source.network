@@ -9,7 +9,6 @@ sidebar_position: 90
 Lens is DefraDB's bi-directional schema migration engine that transforms data between schema versions without requiring upfront migration of all documents. Built on WebAssembly, it enables language-agnostic transformations executed safely in a sandbox.
 
 **Key features:**
-
 - **Lazy evaluation** – Migrations execute only when documents are read, queried, or updated (no upfront cost)
 - **Bi-directional** – Define both forward (`transform`) and reverse (`inverse`) migrations between schema versions
 - **Language-agnostic** – Write migrations in any language that compiles to WebAssembly
@@ -24,7 +23,6 @@ Lens is DefraDB's bi-directional schema migration engine that transforms data be
 :::
 
 ## Overview
-
 In a database system, an application’s requirements can change at any given time, to meet this change, Schema migrations are necessary. This is where Lens comes in, as a migration engine that produces effective schema migration.
 
 This guide will provide an understanding of schema migrations, focusing on the Lens migration engine. Let’s dive in!
@@ -68,6 +66,8 @@ Adopting lazy evaluation in the migration system also allows rapid toggling betw
 
 The Lens migration system addresses critical use cases related to schema migrations in peer-to-peer, eventually consistent databases. These use cases include:
 
+ 
+
 - **Safe Schema Progression**: Ensuring the seamless progression of database schemas is vital for accommodating changing application requirements. Lens facilitates the modification, upgrade, or reversion of schemas while upholding data integrity.
 
 - **Handling Peer-to-Peer Complexity**: In environments where different clients operate on varying application and database versions, Lens offers a solution to address the complexity of schema migrations. It ensures coherence and effectiveness across different networks.
@@ -78,7 +78,10 @@ The Lens migration system addresses critical use cases related to schema migrati
 
 - **On-Demand Schema Selection**: Lens supports on-demand schema selection during data queries. Users can specify the schema version they wish to work with, facilitating A/B testing and the seamless transition between different schema versions.
 
+
+
 These use cases highlight how Lens empowers users to manage schema migrations effectively, ensuring data consistency and adaptability in evolving database systems.
+
 
 ## Example
 
