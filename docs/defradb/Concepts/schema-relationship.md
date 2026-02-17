@@ -189,12 +189,12 @@ This creates a causality constraint: you must create the referenced document bef
 **For one-to-one:**
 
 1. Create the secondary side
-2. Create the primary side with the secondary's ID
+2. Create the primary side referencing the secondary document via the relationship field
 
 **For one-to-many:**
 
 1. Create the "one" side
-2. Create each "many" side document with the "one" side's ID
+2. Create each "many" side document referencing the "one" side via the relationship field
 
 ### Self-describing documents
 
