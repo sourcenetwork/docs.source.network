@@ -143,7 +143,7 @@ This is slower because the database must scan the User collection to find which 
 ### Optimization strategies
 
 - Use the `@primary` directive on the side you'll query from most frequently
-- Consider adding [secondary indexes](/defradb/next/How-to%20Guides/secondary-index) to improve reverse-direction queries
+- Consider adding [secondary indexes](/defradb/next/How-to Guides/secondary-index) to improve reverse-direction queries
 - Structure your schema based on your application's query patterns
 
 ## Filtering semantics

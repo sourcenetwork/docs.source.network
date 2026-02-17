@@ -32,7 +32,7 @@ Before following this guide, ensure you have:
 
 - DefraDB installed and running
 - Basic understanding of GraphQL schema definitions
-- Familiarity with [schema relationship concepts](/defradb/concepts/schema-relationship)
+- Familiarity with [schema relationship concepts](/defradb/Concepts/schema-relationship)
 
 ## One-to-one relationships
 
@@ -151,7 +151,7 @@ query {
 }
 ```
 
-Querying from the secondary side requires a table scan and is less efficient. See the [Secondary Indexes guide](/defradb/next/How-to%20Guides/secondary-index) to optimize these queries.
+Querying from the secondary side requires a table scan and is less efficient. See the [Secondary Indexes guide](/defradb/next/How-to Guides/secondary-index) to optimize these queries.
 
 ### Filter on related fields
 
@@ -513,4 +513,4 @@ query {
 
 **Issue**: Queries are slow when traversing relationships.
 
-**Solution**: Query from the primary side to the secondary side whenever possible. For one-to-one relationships, use `@primary` on the side you'll query from most. See the [Secondary Indexes guide](/defradb/next/How-to%20Guides/secondary-index) for optimization strategies.
+**Solution**: Query from the primary side to the secondary side whenever possible. For one-to-one relationships, use `@primary` on the side you'll query from most. See the [Secondary Indexes guide](/defradb/next/How-to Guides/secondary-index) for optimization strategies.
