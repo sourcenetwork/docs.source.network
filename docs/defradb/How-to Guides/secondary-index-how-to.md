@@ -12,7 +12,7 @@ This guide provides step-by-step instructions for creating and using secondary i
 
 DefraDB's secondary indexing system enables efficient document lookups using the `@index` directive on GraphQL schema fields. Indexes trade write overhead for significantly faster read performance on filtered queries.
 
-**Best practices:** Index frequently filtered fields, avoid indexing rarely queried fields, and use unique indexes sparingly (they add validation overhead). Plan indexes based on query patterns to balance read/write performance.
+**Best practices:** Index frequently filtered fields, avoid indexing rarely queried fields, and use unique indexes sparingly (they add an additional read operation on every write). Plan indexes based on query patterns to balance read/write performance.
 
 :::
 
@@ -50,11 +50,37 @@ type User {
 
 Use `direction: DESC` for descending order or `direction: ASC` (default) for ascending order.
 
+:::note
+Direction plays a significant role only for composite indexes. For single-field indexes, the fetcher can traverse entries in either direction equally efficiently.
+:::
+
 ### Add the schema
 
 ```bash
 defradb client schema add -f schema.graphql
 ```
+
+## Manage indexes with the CLI
+
+Indexes can be added or deleted at any time using CLI commands — you do not need to redefine the schema from scratch.
+
+```bash
+# Create an index on an existing collection
+defradb client index create --collection User --fields name
+
+# Create a unique index
+defradb client index create --collection User --fields email --unique
+
+# Drop an index
+defradb client index drop --collection User --name <index_name>
+
+# List indexes on a collection
+defradb client index list --collection User
+```
+
+:::note
+GraphQL-based index management is not yet available. Use the CLI or embedded client.
+:::
 
 ## Create a unique index
 
@@ -95,6 +121,10 @@ type User @index(includes: [
 }
 ```
 
+:::note
+A composite index is only used when the query filters on the leading field(s) of the index. Filtering on only a non-leading field (e.g. `age` alone in the example above) will not use this index at all.
+:::
+
 ## Index relationships
 
 Index relationship fields to improve query performance across related documents.
@@ -116,6 +146,7 @@ type Address {
 ```
 
 This indexes both:
+
 - The relationship between User and Address
 - The city field in Address
 
@@ -132,6 +163,7 @@ query {
 ```
 
 With the indexes, DefraDB:
+
 1. Quickly finds Address documents with `city = "Montreal"`
 2. Retrieves the related User documents efficiently
 
@@ -153,11 +185,13 @@ type Address {
 }
 ```
 
-This ensures no two Users can reference the same Address document.
+This ensures no two Users can reference the same Address document. Note that 1-to-2-sided relations are automatically constrained by a unique index to enforce the 1-to-1 invariant.
 
 ## Index JSON fields
 
 DefraDB supports indexing JSON fields for efficient queries on nested data.
+
+> **Storage warning:** Indexing JSON fields can consume significant disk space with large datasets, as every leaf node at every path is indexed separately.
 
 ### Define a schema with JSON field
 
@@ -234,36 +268,24 @@ type Article @index(includes: [
 query {
   Article(filter: {
     status: {_eq: "published"}
-    publishedAt: {_gt: "2024-01-01"}
+    publishedAt: {_gt: "2017-07-23T03:46:56-05:00"}
   }) {
     title
   }
 }
 ```
 
-This composite index efficiently handles queries filtering on both fields.
+This composite index efficiently handles queries filtering on both `status` and `publishedAt` together. If you only filter on `publishedAt` alone, this index won't be used — add a separate single-field index on `publishedAt` if that query pattern is also common.
 
 ### Avoid over-indexing
 
-Don't index fields that are rarely queried:
+Every index adds write overhead, so only index fields that are actually queried. Fields like `middleName` or `internalNote` that are rarely used in filters don't need indexes.
 
-```graphql
-type User {
-  name: String @index  # Good - frequently queried
-  email: String @index  # Good - frequently queried
-  middleName: String  # No index - rarely queried
-  internalNote: String  # No index - rarely queried
-}
-```
+## Performance considerations
 
-Every index adds write overhead, so only index what you need.
+Analyze your application's queries and index the fields used in filters. Use the [explain systems](/defradb/next/How-to%20Guides/explain-systems-how-to) to verify that indexes are being used as expected.
 
-## Performance optimization tips
-
-- **Index your query patterns**: Analyze your application's queries and index the fields used in filters
-- **Use unique indexes sparingly**: They add validation overhead on writes
-- **Consider composite indexes**: More efficient than multiple single-field indexes for multi-field queries
-- **Test query performance**: Use the [explain systems](/defradb/next/How-to%20Guides/explain-systems-how-to) to analyze query execution
+Unique indexes should be used only when uniqueness is a hard requirement — they require an additional read on every insert and update. For JSON and array fields, be mindful that indexing large datasets can consume significant disk space.
 
 ## Troubleshooting
 
@@ -272,10 +294,11 @@ Every index adds write overhead, so only index what you need.
 **Issue**: Query performance hasn't improved after adding indexes.
 
 **Solutions**:
-- Verify the index was created successfully
+
+- Verify the index was created successfully using `defradb client index list`
 - Ensure your query filter uses the indexed field
+- For composite indexes, confirm you are filtering on the leading field
 - Check if you're querying in the reverse direction of a relationship (may need to index the other side)
-- Use composite indexes if filtering on multiple fields
 
 ### Unique constraint violations
 
@@ -287,4 +310,4 @@ Every index adds write overhead, so only index what you need.
 
 **Issue**: Document creation/updates are slower after adding indexes.
 
-**Solution**: This is expected behavior. Indexes trade write performance for read performance. Review your indexes and remove any that aren't essential for your query patterns.
+**Solution**: This is expected — indexes trade write performance for read performance. Review your indexes and remove any that aren't serving active query patterns.
