@@ -12,7 +12,7 @@ This guide provides step-by-step instructions for creating and using secondary i
 
 DefraDB's secondary indexing system enables efficient document lookups using the `@index` directive on GraphQL schema fields. Indexes trade write overhead for significantly faster read performance on filtered queries.
 
-**Best practices:** Index frequently filtered fields, avoid indexing rarely queried fields, and use unique indexes sparingly (they add an additional read operation on every write). Plan indexes based on query patterns to balance read/write performance.
+**Best practices:** Index frequently filtered fields, avoid indexing rarely queried fields, and use unique indexes sparingly (they add a read operation on every write). Plan indexes based on query patterns to balance read/write performance.
 
 :::
 
