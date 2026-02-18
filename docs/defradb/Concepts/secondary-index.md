@@ -34,7 +34,7 @@ An index is a data structure that maps field values to document identifiers. Ins
 
 **Without an index:**
 
-```bash
+```
 Query: Find users with age = 30
 Process: Scan all user documents → Check each age field → Return matches
 Cost: O(n) where n = total documents
@@ -42,7 +42,7 @@ Cost: O(n) where n = total documents
 
 **With an index on age:**
 
-```bash
+```
 Query: Find users with age = 30
 Process: Look up "30" in age index → Return matching document IDs
 Cost: O(1) for lookup + O(m) for retrieval where m = matching documents
@@ -52,19 +52,19 @@ Cost: O(1) for lookup + O(m) for retrieval where m = matching documents
 
 For regular indexes, DefraDB stores index entries as key-value pairs where the document ID is part of the key and the value is empty:
 
-```bash
+```
 /col_id/ind_id/field_values/_docID → {}
 ```
 
 For unique indexes, the document ID is stored as the value instead:
 
-```bash
+```
 /col_id/ind_id/field_values → _docID
 ```
 
 For a User collection with an indexed `name` field, the entries look like:
 
-```bash
+```
 Index entries:
 "Alice/doc_id_1" → {}
 "Bob/doc_id_2" → {}
@@ -105,7 +105,7 @@ type Article @index(includes: [
 
 **Index structure:**
 
-```bash
+```
 published/2024-01-15/doc_id_1 → {}
 published/2024-01-16/doc_id_2 → {}
 published/2024-01-16/doc_id_3 → {}
@@ -225,7 +225,7 @@ Unlike scalar fields (String, Int, Bool), JSON fields contain nested structures.
 
 **Index entries created** (using `/col_id/ind_id/` prefix, JSON path parts separated by `.`):
 
-```bash
+```
 /1/1/user.device.model/iPhone/doc_id_1 → {}
 /1/1/user.device.version/15/doc_id_1 → {}
 /1/1/user.location.city/Montreal/doc_id_1 → {}
@@ -239,13 +239,13 @@ DefraDB uses **inverted indexes** for JSON fields. The whole idea is to tokenize
 
 For context, a primary (non-inverted) index might look like:
 
-```bash
+```
 /1/1/iPhone → {"user": {"device": {"model": "iPhone"}}}
 ```
 
 The inverted secondary index instead maps paths and values to document IDs:
 
-```bash
+```
 /1/1/user.device.model/iPhone/doc_id_1 → {}
 /1/1/user.device.model/Android/doc_id_2 → {}
 ```
@@ -288,15 +288,15 @@ The indexed approach avoids JSON parsing and navigation during query execution.
 
 DefraDB uses a hierarchical key format for JSON index entries:
 
-```bash
+```
 <collection_id>/<index_id>/<json_path>/<json_value>/<doc_id>
 ```
 
-Example:
+Example (using numeric collection ID `1` and index ID `1`):
 
-```bash
-users_col/idx_123/user.device.model/iPhone/doc_456
-users_col/idx_123/user.location.city/Montreal/doc_789
+```
+/1/1/user.device.model/iPhone/doc_id_1
+/1/1/user.location.city/Montreal/doc_id_1
 ```
 
 This format allows efficient prefix scanning for partial path matches and supports complex queries on nested JSON structures.
@@ -350,6 +350,10 @@ Refer to the CLI reference for commands to create and drop indexes on existing c
 
 Indexes only help queries that use the indexed fields. If your query patterns change, you may need to adjust your indexing strategy.
 
-### Write amplification and Storage overhead
+### Write amplification
 
-Heavy indexing can significantly slow down write operations. Monitor write performance and adjust your indexing strategy if writes become a bottleneck. Large collections with many indexes — especially on JSON or array fields — can consume significant disk space. Plan storage capacity accordingly.
+Heavy indexing can significantly slow down write operations. Monitor write performance and adjust your indexing strategy if writes become a bottleneck.
+
+### Storage overhead
+
+Large collections with many indexes — especially on JSON or array fields — can consume significant disk space. Plan storage capacity accordingly.
