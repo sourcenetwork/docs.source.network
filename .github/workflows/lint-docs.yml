@@ -1,0 +1,28 @@
+name: Lint Documentation
+
+on:
+  pull_request:
+    paths:
+      - 'docs/**'
+      - '*_versioned_docs/**'
+      - 'README.md'
+      - '.vale.ini'
+      - 'styles/**'
+
+jobs:
+  vale:
+    name: Vale
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Vale Linter
+        uses: errata-ai/vale-action@reviewdog
+        with:
+          files: docs
+          fail_on_error: true
+          filter_mode: added
+          reporter: github-pr-review
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

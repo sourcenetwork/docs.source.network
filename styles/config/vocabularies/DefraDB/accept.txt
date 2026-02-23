@@ -1,0 +1,242 @@
+# DefraDB Vocabulary - Accepted Terms
+# These terms are considered correct and will not be flagged by Vale.Terms
+# Lines starting with # are comments.
+# Regex patterns are supported for case variations.
+
+# Product Names
+DefraDB
+defra
+Defra
+SourceHub
+Orbis
+LensVM
+Sourcerers
+
+# External Products & Services
+Cloudflare
+GitHub
+github
+Akash
+DGraph
+vite
+Vite
+
+# Technical Terms - Database Technologies
+MongoDB
+PostgreSQL
+GraphQL
+graphQL
+ArangoDB
+CouchDB
+Redis
+config
+Config
+param
+Param
+params
+Params
+
+# Technical Terms - Edge Computing
+edge-first
+Edge-first
+local-first
+Local-first
+Edge AI
+edge AI
+edge compute
+Edge compute
+edge computing
+Edge computing
+edge environments
+Edge environments
+edge devices
+Edge devices
+
+# Technical Terms - Distributed Systems
+distributed environments
+Distributed environments
+peer-to-peer
+Peer-to-Peer
+P2P
+p2p
+CRDT
+CRDTs
+crdt
+Merkle
+merkle
+Merkle-CRDT
+Merkle CRDT
+DAG
+dag
+IPFS
+ipfs
+IPLD
+libp2p
+LibP2P
+deduplicated
+deduplication
+Deduplicated
+Deduplication
+whitepaper
+Whitepaper
+pubsub
+Pubsub
+PubSub
+subnet
+subnets
+Subnet
+Subnets
+
+# Technical Terms - Web3 & Decentralization
+Web3
+Dweb
+blockchain
+Blockchain
+decentralized
+Decentralized
+trustless
+Trustless
+permissionless
+Permissionless
+smart contract
+smart contracts
+Smart contract
+Smart contracts
+Ethereum
+Bitcoin
+Filecoin
+Polkadot
+Cosmos
+testnet
+Testnet
+mainnet
+Mainnet
+
+# Technical Terms - Access Control
+userset
+Userset
+usersets
+Usersets
+reachability
+Reachability
+
+# Technical Terms - Cryptography & Identity
+keypair
+Keypair
+keypairs
+Keypairs
+
+# Technical Terms - General Programming
+WebAssembly
+wasm
+Wasm
+WASM
+TypeScript
+JavaScript
+DQL
+gql
+Gql
+GQL
+stdin
+Stdin
+stdout
+Stdout
+tx
+txn
+Tx
+Txn
+repo
+Repo
+repos
+Repos
+func
+funcs
+Func
+Funcs
+groupBy
+GroupBy
+getall
+Getall
+fieldId
+FieldId
+dockey
+Dockey
+docID
+docIDs
+DocID
+DocIDs
+lookup
+lookups
+Lookup
+Lookups
+readme
+Readme
+README
+inorder
+Inorder
+
+# Acronyms & Abbreviations (both cases for code contexts)
+API
+APIs
+api
+CLI
+cli
+SDK
+sdk
+HTTP
+http
+HTTPS
+https
+JSON
+json
+REST
+rest
+CRUD
+TLS
+CORS
+SQL
+sql
+IoT
+DHT
+DHTs
+dht
+RPC
+rpc
+NAT
+AMI
+DSL
+ACP
+acp
+CID
+CIDs
+cid
+
+# License acronyms (Creative Commons)
+CC
+BY
+SA
+
+# File extensions and formats
+mdx
+Mdx
+MDX
+
+# Industry Terms
+Big Tech
+Internet of Things
+open source
+open web
+
+# Brand-Specific Terms
+cloud-last
+trust protocol
+trust layer
+data sovereignty
+
+# Docusaurus-specific
+Docusaurus
+
+# Author names (from docs examples)
+Grisham
+Zanzi
+[Cc]onnor
