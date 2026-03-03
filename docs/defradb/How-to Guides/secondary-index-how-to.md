@@ -283,7 +283,7 @@ Every index adds write overhead, so only index fields that are actually queried.
 
 ## Performance considerations
 
-Analyze your application's queries and index the fields used in filters. Use the [explain systems](/defradb/next/How-to%20Guides/explain-systems-how-to) to verify that indexes are being used as expected.
+Analyze your application's queries and index the fields used in filters. Use the [explain systems](explain-systems-how-to.md) to verify that indexes are being used as expected.
 
 Unique indexes should be used only when uniqueness is a hard requirement — they require an additional read on every insert and update. For JSON and array fields, be mindful that indexing large datasets can consume significant disk space.
 
