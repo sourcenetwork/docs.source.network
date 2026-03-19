@@ -91,7 +91,7 @@ The GraphQL endpoint can be used with a GraphQL client (e.g., Altair) to conveni
 Define and add a schema type.
 
 ```bash
-defradb client schema add '
+defradb client collection add '
   type User {
     name: String 
     age: Int 
@@ -101,7 +101,7 @@ defradb client schema add '
 '
 ```
 
-For more examples of schema type definitions, see the [examples/schema/](examples/schema/) folder.
+For more examples of schema type definitions, see the [defradb repo -> examples/schema/](https://github.com/sourcenetwork/defradb/tree/develop/examples/collection) folder.
 
 ## Create documents
 
@@ -110,13 +110,13 @@ Submit a `mutation` request to create documents of the `User` type:
 ```bash
 defradb client query '
   mutation {
-      user1: create_User(input: {age: 31, verified: true, points: 90, name: "Bob"}) {
+      user1: add_User(input: {age: 31, verified: true, points: 90, name: "Bob"}) {
           _docID
       }
-      user2: create_User(input: {age: 28, verified: false, points: 15, name: "Alice"}) {
+      user2: add_User(input: {age: 28, verified: false, points: 15, name: "Alice"}) {
           _docID
       }
-      user3: create_User(input: {age: 35, verified: true, points: 100, name: "Charlie"}) {
+      user3: add_User(input: {age: 35, verified: true, points: 100, name: "Charlie"}) {
           _docID
       }
   }
@@ -190,7 +190,7 @@ This returns only user documents which have a value for the `points` field *Grea
 DefraDB's data model is based on [MerkleCRDTs](https://arxiv.org/pdf/2004.00107.pdf). Each document has a graph of all of its updates, similar to Git. The updates are called `commit`s and are identified by `cid`, a content identifier. Each references its parents by their `cid`s. First let's store the docID of the first User in a shell variable:
 
 ```bash
-FIRST_DOC_ID=$(defradb client query '
+FIRST_DOC_ID=$(./defradb client query '
   query {
     User(filter: {points: {_geq: 50}}) {
       _docID
@@ -209,13 +209,13 @@ Then to get the most recent commit in the MerkleDAG for this document:
 ```bash
 defradb client query "
   query {
-    _latestCommits(docID: \"$FIRST_DOC_ID\") {
+    _commits(docID: \"$FIRST_DOC_ID\") {
       cid
       delta
       height
       links {
         cid
-        name
+        fieldName
       }
     }
   }
@@ -227,7 +227,7 @@ It returns a structure similar to the following, which contains the update paylo
 ```json
 {
   "data": {
-    "latestCommits": [
+    "_commits": [
       {
         "cid": "bafybeifhtfs6vgu7cwbhkojneh7gghwwinh5xzmf7nqkqqdebw5rqino7u",
         "delta": "pGNhZ2UYH2RuYW1lY0JvYmZwb2ludHMYWmh2ZXJpZmllZPU=",
@@ -235,19 +235,19 @@ It returns a structure similar to the following, which contains the update paylo
         "links": [
           {
             "cid": "bafybeiet6foxcipesjurdqi4zpsgsiok5znqgw4oa5poef6qtiby5hlpzy",
-            "name": "age"
+            "fieldName": "age"
           },
           {
             "cid": "bafybeielahxy3r3ulykwoi5qalvkluojta4jlg6eyxvt7lbon3yd6ignby",
-            "name": "name"
+            "fieldName": "name"
           },
           {
             "cid": "bafybeia3tkpz52s3nx4uqadbm7t5tir6gagkvjkgipmxs2xcyzlkf4y4dm",
-            "name": "points"
+            "fieldName": "points"
           },
           {
             "cid": "bafybeia4off4javopmxcdyvr6fgb5clo7m5bblxic5sqr2vd52s6khyksm",
-            "name": "verified"
+            "fieldName": "verified"
           }
         ]
       }
@@ -261,17 +261,17 @@ Now let's obtain a specific commit by its content identifier (`cid`). First let'
 ```bash
 FIRST_CID=$(defradb client query "
   query {
-    _latestCommits(docID: \"$FIRST_DOC_ID\") {
+    _commits(docID: \"$FIRST_DOC_ID\") {
       cid
       delta
       height
       links {
         cid
-        name
+        fieldName
       }
     }
   }
-" | jq -r '.data._latestCommits[0].cid')
+" | jq -r '.data._commits[0].cid')
 
 echo "The first CID is: $FIRST_CID"
 ```
@@ -286,7 +286,7 @@ defradb client query "
       height
       links {
         cid
-        name
+        fieldName
       }
     }
   }
