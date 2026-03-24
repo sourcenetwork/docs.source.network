@@ -34,7 +34,7 @@ For prototyping, you can also run DefraDB in a Docker container:
 docker run -e DEFRA_KEYRING_SECRET=secret -p 9181:9181 ghcr.io/sourcenetwork/defradb:1.0.0-rc1 start --url 0.0.0.0:9181
 ```
 
-We recommend experimenting with queries using a native GraphQL client. [Altair](https://altairgraphql.dev/#download) is a popular option.
+To experiment with queries, you can use either the playground at `http://localhost:9181`, or a native GraphQL client ([Altair](https://altairgraphql.dev/#download) is a popular option).
 
 ## Key Management - Initial Setup
 
