@@ -1,6 +1,6 @@
 // @ts-check
 
-const isProd = process.env.NODE_ENV === "production";
+const isProd = process.env.PLAUSIBLE_ENABLED === "true";
 
 /**
  * Builds the script filename from a base name and sorted modifiers.
