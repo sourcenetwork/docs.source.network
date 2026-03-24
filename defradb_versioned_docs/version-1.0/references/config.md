@@ -131,36 +131,35 @@ The LensVM wasm runtime to run lens modules in.
 
 Possible values:
 - `wasm-time` (default): https://github.com/bytecodealliance/wasmtime-go
-- `wasmer` (windows not supported): https://github.com/wasmerio/wasmer-go
 - `wazero`: https://github.com/tetratelabs/wazero
 
-## `acp.type`
+## `acp.document.type`
 
-The type of ACP module to use.
+The type of Document ACP to use.
 
 Possible values:
-- `none` (default): No ACP
-- `local` local-only ACP
-- `source-hub` source hub ACP: https://github.com/sourcenetwork/sourcehub
+- `none` (default): No Document ACP
+- `local` local-only Document ACP
+- `source-hub` source hub Document ACP: https://github.com/sourcenetwork/sourcehub
 
-## `acp.sourceHub.ChainID`
+## `acp.document.sourceHub.ChainID`
 
-The ID of the SourceHub chain to store ACP data in. Required when using `acp.type`:`source-hub`.
+The ID of the SourceHub chain to store ACP data in. Required when using `acp.document.type`:`source-hub`.
 
-## `acp.sourceHub.GRPCAddress`
+## `acp.document.sourceHub.GRPCAddress`
 
-The address of the SourceHub GRPC server. Required when using `acp.type`:`source-hub`.
+The address of the SourceHub GRPC server. Required when using `acp.document.type`:`source-hub`.
 
-## `acp.sourceHub.CometRPCAddress`
+## `acp.document.sourceHub.CometRPCAddress`
 
-The address of the SourceHub Comet RPC server. Required when using `acp.type`:`source-hub`.
+The address of the SourceHub Comet RPC server. Required when using `acp.document.type`:`source-hub`.
 
-## `acp.sourceHub.KeyName`
+## `acp.document.sourceHub.KeyName`
 
 The name of the key in the keyring where the SourceHub credentials used to sign (and pay for) SourceHub
-transactions created by the node is stored. Required when using `acp.type`:`source-hub`.
+transactions created by the node is stored. Required when using `acp.document.type`:`source-hub`.
 
-## `acp.sourceHub.address`
+## `acp.document.sourceHub.address`
 
 The SourceHub address of the actor that client-side actions should permit to make SourceHub actions on
 their behalf.  This is a client-side only config param.  It is required if the client wishes to make
@@ -169,3 +168,7 @@ SourceHub ACP requests in order to create protected data.
 ## `secretfile`
 
 Path to the file containing secrets. Defaults to `.env`.
+
+## `telemetry.disabled`
+
+Disables telemetry reporting. Telemetry is only enabled in builds that use the `telemetry` flag. Defaults to `false`.
