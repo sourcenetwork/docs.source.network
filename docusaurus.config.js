@@ -198,7 +198,10 @@ const config = {
           },
         },
         // Reorder changelog sidebar
-        async sidebarItemsGenerator({ defaultSidebarItemsGenerator, ...args }) {
+        async sidebarItemsGenerator({
+          defaultSidebarItemsGenerator,
+          ...args
+        }) {
           const sidebarItems = await defaultSidebarItemsGenerator(args);
           return reverseSidebarChangelog(sidebarItems);
         },
@@ -226,7 +229,10 @@ const config = {
           },
         },
         // Reorder changelog sidebar
-        async sidebarItemsGenerator({ defaultSidebarItemsGenerator, ...args }) {
+        async sidebarItemsGenerator({
+          defaultSidebarItemsGenerator,
+          ...args
+        }) {
           const sidebarItems = await defaultSidebarItemsGenerator(args);
           return reverseSidebarChangelog(sidebarItems);
         },
@@ -254,7 +260,10 @@ const config = {
           },
         },
         // Reorder changelog sidebar
-        async sidebarItemsGenerator({ defaultSidebarItemsGenerator, ...args }) {
+        async sidebarItemsGenerator({
+          defaultSidebarItemsGenerator,
+          ...args
+        }) {
           const sidebarItems = await defaultSidebarItemsGenerator(args);
           return reverseSidebarChangelog(sidebarItems);
         },
@@ -282,7 +291,10 @@ const config = {
           },
         },
         // Reorder changelog sidebar
-        async sidebarItemsGenerator({ defaultSidebarItemsGenerator, ...args }) {
+        async sidebarItemsGenerator({
+          defaultSidebarItemsGenerator,
+          ...args
+        }) {
           const sidebarItems = await defaultSidebarItemsGenerator(args);
           return reverseSidebarChangelog(sidebarItems);
         },
