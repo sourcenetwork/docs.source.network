@@ -157,10 +157,17 @@ const config = {
         indexName: "source-docs",
       },
     }),
-  clientModules: [
-    require.resolve('./src/components/posthog.js'),
-  ],
+  clientModules: [],
   plugins: [
+    [
+      require.resolve("./src/plugins/plausible"),
+      {
+        domain: "docs.source.network",
+        plausibleDomain: "plausible.source.network",
+        scriptName: "script",
+        trackOutboundLinks: true,
+      },
+    ],
     [
       "docusaurus-plugin-sass",
       {
@@ -191,10 +198,7 @@ const config = {
           },
         },
         // Reorder changelog sidebar
-        async sidebarItemsGenerator({
-          defaultSidebarItemsGenerator,
-          ...args
-        }) {
+        async sidebarItemsGenerator({ defaultSidebarItemsGenerator, ...args }) {
           const sidebarItems = await defaultSidebarItemsGenerator(args);
           return reverseSidebarChangelog(sidebarItems);
         },
@@ -222,10 +226,7 @@ const config = {
           },
         },
         // Reorder changelog sidebar
-        async sidebarItemsGenerator({
-          defaultSidebarItemsGenerator,
-          ...args
-        }) {
+        async sidebarItemsGenerator({ defaultSidebarItemsGenerator, ...args }) {
           const sidebarItems = await defaultSidebarItemsGenerator(args);
           return reverseSidebarChangelog(sidebarItems);
         },
@@ -253,10 +254,7 @@ const config = {
           },
         },
         // Reorder changelog sidebar
-        async sidebarItemsGenerator({
-          defaultSidebarItemsGenerator,
-          ...args
-        }) {
+        async sidebarItemsGenerator({ defaultSidebarItemsGenerator, ...args }) {
           const sidebarItems = await defaultSidebarItemsGenerator(args);
           return reverseSidebarChangelog(sidebarItems);
         },
@@ -284,10 +282,7 @@ const config = {
           },
         },
         // Reorder changelog sidebar
-        async sidebarItemsGenerator({
-          defaultSidebarItemsGenerator,
-          ...args
-        }) {
+        async sidebarItemsGenerator({ defaultSidebarItemsGenerator, ...args }) {
           const sidebarItems = await defaultSidebarItemsGenerator(args);
           return reverseSidebarChangelog(sidebarItems);
         },
