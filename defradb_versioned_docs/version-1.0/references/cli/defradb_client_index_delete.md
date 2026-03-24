@@ -1,35 +1,28 @@
-## defradb client schema describe
+## defradb client index delete
 
-View schema descriptions.
+Delete a collection's secondary index
 
 ### Synopsis
 
-Introspect schema types.
-
-Example: view all schemas
-  defradb client schema describe
-		
-Example: view schemas by name
-  defradb client schema describe --name User
-		
-Example: view schemas by root
-  defradb client schema describe --root bae123
-		
-Example: view a single schema by version id
-  defradb client schema describe --version bae123
-		
+Delete a collection's secondary index.
 
 ```
-defradb client schema describe [flags]
+defradb client index delete -c --collection <collection> -n --name <name> [flags]
+```
+
+### Examples
+
+```
+delete the index 'UsersByName' for 'Users' collection:  
+  defradb client index delete --collection Users --name UsersByName
 ```
 
 ### Options
 
 ```
-  -h, --help             help for describe
-      --name string      Schema name
-      --root string      Schema root
-      --version string   Schema Version ID
+  -c, --collection string   Collection name
+  -h, --help                help for delete
+  -n, --name string         Index name
 ```
 
 ### Options inherited from parent commands
@@ -56,5 +49,5 @@ defradb client schema describe [flags]
 
 ### SEE ALSO
 
-* [defradb client schema](defradb_client_schema.md)	 - Interact with the schema system of a DefraDB node
+* [defradb client index](defradb_client_index.md)	 - Manage collections' indexes of a running DefraDB instance
 

@@ -1,24 +1,43 @@
-## defradb client schema migration reload
+## defradb client document delete
 
-Reload the schema migrations within DefraDB
+Delete documents by docID or filter.
 
 ### Synopsis
 
-Reload the schema migrations within DefraDB
+Delete documents by docID or filter and lists the number of documents deleted.
 
 ```
-defradb client schema migration reload [flags]
+defradb client document delete [-i --identity] [--filter <filter> --docID <docID>] [flags]
+```
+
+### Examples
+
+```
+delete by docID:  
+  defradb client document delete --collection-name User --docID bae-123
+
+delete by docID with identity:  
+  defradb client document delete --collection-name User --docID bae-123 \
+  	-i 028d53f37a19afb9a0dbc5b4be30c65731479ee8cfa0c9bc8f8bf198cc3c075f
+
+delete by filter:  
+  defradb client document delete --collection-name User --filter '{ "_gte": { "points": 100 } }'
 ```
 
 ### Options
 
 ```
-  -h, --help   help for reload
+      --docID string    Document ID
+      --filter string   Document filter
+  -h, --help            help for delete
 ```
 
 ### Options inherited from parent commands
 
 ```
+      --collection-id string        Collection ID
+      --collection-name string      Collection name
+      --get-inactive                Get inactive collections as well as active
   -i, --identity string             Hex formatted private key used to authenticate with ACP
       --keyring-backend string      Keyring backend to use. Options are file or system (default "file")
       --keyring-namespace string    Service name to use when using the system backend (default "defradb")
@@ -36,9 +55,10 @@ defradb client schema migration reload [flags]
       --source-hub-address string   The SourceHub address authorized by the client to make SourceHub transactions on behalf of the actor
       --tx uint                     Transaction ID
       --url string                  URL of HTTP endpoint to listen on or connect to (default "127.0.0.1:9181")
+      --version-id string           Collection version ID
 ```
 
 ### SEE ALSO
 
-* [defradb client schema migration](defradb_client_schema_migration.md)	 - Interact with the schema migration system of a running DefraDB instance
+* [defradb client document](defradb_client_document.md)	 - Interact with documents.
 

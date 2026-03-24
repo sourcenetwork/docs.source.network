@@ -1,37 +1,65 @@
-## defradb client collection get
+## defradb client document add
 
-View document fields.
+Add a new document.
 
 ### Synopsis
 
-View document fields.
+Add a new document.
+
+Options:
+	-i, --identity
+		Marks the document as private and set the identity as the owner. The access to the document
+		and permissions are controlled by ACP (Access Control Policy).
+
+	-e, --encrypt
+		Encrypt flag specified if the document needs to be encrypted. If set, DefraDB will generate a
+		symmetric key for encryption using AES-GCM.
+
+	--encrypt-fields
+		Comma-separated list of fields to encrypt. If set, DefraDB will encrypt only the specified fields
+		and for every field in the list it will generate a symmetric key for encryption using AES-GCM.
+		If combined with '--encrypt' flag, all the fields in the document not listed in '--encrypt-fields'
+		will be encrypted with the same key.
+		
 
 ```
-defradb client collection get [-i --identity] [--show-deleted] <docID>  [flags]
+defradb client document add [-i --identity] [-e --encrypt] [--encrypt-fields] <document> [flags]
 ```
 
 ### Examples
 
 ```
-Get document by ID:  
-  defradb client collection get --name User bae-123
+Add from string1:  
+  defradb client document add --collection-name User '{ "name": "Bob" }'
 
-Get a private document using an identity:  
-  defradb client collection get --name User bae-123 \
-	-i 028d53f37a19afb9a0dbc5b4be30c65731479ee8cfa0c9bc8f8bf198cc3c075f 
+Add from string, with identity:  
+  defradb client document add --collection-name User '{ "name": "Bob" }' \
+  	-i 028d53f37a19afb9a0dbc5b4be30c65731479ee8cfa0c9bc8f8bf198cc3c075f
+
+Add multiple from string:  
+  defradb client document add --collection-name User '[{ "name": "Alice" }, { "name": "Bob" }]'
+
+Add from file:  
+  defradb client document add --collection-name User -f document.json
+
+Add from stdin:  
+  cat document.json | defradb client document add --collection-name User -
 ```
 
 ### Options
 
 ```
-  -h, --help           help for get
-      --show-deleted   Show deleted documents
+  -e, --encrypt                  Flag to enable encryption of the document
+      --encrypt-fields strings   Comma-separated list of fields to encrypt
+  -f, --file string              File containing document(s)
+  -h, --help                     help for add
 ```
 
 ### Options inherited from parent commands
 
 ```
       --collection-id string        Collection ID
+      --collection-name string      Collection name
       --get-inactive                Get inactive collections as well as active
   -i, --identity string             Hex formatted private key used to authenticate with ACP
       --keyring-backend string      Keyring backend to use. Options are file or system (default "file")
@@ -43,7 +71,6 @@ Get a private document using an identity:
       --log-overrides string        Logger config overrides. Format <name>,<key>=<val>,...;<name>,...
       --log-source                  Include source location in logs
       --log-stacktrace              Include stacktrace in error and fatal logs
-      --name string                 Collection name
       --no-keyring                  Disable the keyring and generate ephemeral keys
       --no-log-color                Disable colored log output
       --rootdir string              Directory for persistent data (default: $HOME/.defradb)
@@ -56,5 +83,5 @@ Get a private document using an identity:
 
 ### SEE ALSO
 
-* [defradb client collection](defradb_client_collection.md)	 - Interact with a collection.
+* [defradb client document](defradb_client_document.md)	 - Interact with documents.
 

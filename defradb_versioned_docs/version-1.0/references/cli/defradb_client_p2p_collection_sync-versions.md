@@ -1,15 +1,34 @@
-## defradb client schema migration
+## defradb client p2p collection sync-versions
 
-Interact with the schema migration system of a running DefraDB instance
+Synchronize specific collection versions from the network
 
 ### Synopsis
 
-Make set or look for existing schema migrations on a DefraDB node.
+Synchronize specific collection versions from the network.
+
+This command allows you to synchronize collection versions across the network.
+Older versions of a requested collection will also be synchronized.
+
+
+```
+defradb client p2p collection sync-versions [versionID...] [flags]
+```
+
+### Examples
+
+```
+synchronize single collection versions:  
+  defradb client p2p collection sync-versions bafy123
+
+synchronize multiple collection versions:  
+  defradb client p2p collection sync-versions bafy123 bafy456
+```
 
 ### Options
 
 ```
-  -h, --help   help for migration
+  -h, --help               help for sync-versions
+      --timeout duration   Timeout for sync operations
 ```
 
 ### Options inherited from parent commands
@@ -36,10 +55,5 @@ Make set or look for existing schema migrations on a DefraDB node.
 
 ### SEE ALSO
 
-* [defradb client schema](defradb_client_schema.md)	 - Interact with the schema system of a DefraDB node
-* [defradb client schema migration down](defradb_client_schema_migration_down.md)	 - Reverses the migration to the specified collection version.
-* [defradb client schema migration reload](defradb_client_schema_migration_reload.md)	 - Reload the schema migrations within DefraDB
-* [defradb client schema migration set](defradb_client_schema_migration_set.md)	 - Set a schema migration within DefraDB
-* [defradb client schema migration set-registry](defradb_client_schema_migration_set-registry.md)	 - Set a schema migration within the DefraDB LensRegistry
-* [defradb client schema migration up](defradb_client_schema_migration_up.md)	 - Applies the migration to the specified collection version.
+* [defradb client p2p collection](defradb_client_p2p_collection.md)	 - Configure the P2P collection system
 

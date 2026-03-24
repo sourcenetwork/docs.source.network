@@ -1,64 +1,46 @@
-## defradb client collection create
+## defradb client document update
 
-Create a new document.
+Update documents by docID or filter.
 
 ### Synopsis
 
-Create a new document.
-		
-Options:
-	-i, --identity 
-		Marks the document as private and set the identity as the owner. The access to the document
-		and permissions are controlled by ACP (Access Control Policy).
-
-	-e, --encrypt
-		Encrypt flag specified if the document needs to be encrypted. If set, DefraDB will generate a
-		symmetric key for encryption using AES-GCM.
-	
-	--encrypt-fields
-		Comma-separated list of fields to encrypt. If set, DefraDB will encrypt only the specified fields
-		and for every field in the list it will generate a symmetric key for encryption using AES-GCM.
-		If combined with '--encrypt' flag, all the fields in the document not listed in '--encrypt-fields' 
-		will be encrypted with the same key.
-		
+Update documents by docID or filter.
 
 ```
-defradb client collection create [-i --identity] [-e --encrypt] [--encrypt-fields] <document> [flags]
+defradb client document update [-i --identity] [--filter <filter> --docID <docID>] --updater <updater> [flags]
 ```
 
 ### Examples
 
 ```
-Create from string1:  
-  defradb client collection create --name User '{ "name": "Bob" }'
+update by filter:  
+  defradb client document update --collection-name User \
+  --filter '{ "points": { "_gte": 100 } }' --updater '{ "verified": true }'
 
-Create from string, with identity:  
-  defradb client collection create --name User '{ "name": "Bob" }' \
-  	-i 028d53f37a19afb9a0dbc5b4be30c65731479ee8cfa0c9bc8f8bf198cc3c075f
+update by docID:  
+  defradb client document update --collection-name User \
+  --docID bae-123 --updater '{ "verified": true }'
 
-Create multiple from string:  
-  defradb client collection create --name User '[{ "name": "Alice" }, { "name": "Bob" }]'
-
-Create from file:  
-  defradb client collection create --name User -f document.json
-
-Create from stdin:  
-  cat document.json | defradb client collection create --name User -
+update private docID, with identity:  
+  defradb client document update --collection-name User \
+  -i 028d53f37a19afb9a0dbc5b4be30c65731479ee8cfa0c9bc8f8bf198cc3c075f \
+  --docID bae-123 --updater '{ "verified": true }'
 ```
 
 ### Options
 
 ```
-  -e, --encrypt                  Flag to enable encryption of the document
-      --encrypt-fields strings   Comma-separated list of fields to encrypt
-  -f, --file string              File containing document(s)
-  -h, --help                     help for create
+      --docID string     Document ID
+      --filter string    Document filter
+  -h, --help             help for update
+      --updater string   Document updater
 ```
 
 ### Options inherited from parent commands
 
 ```
       --collection-id string        Collection ID
+      --collection-name string      Collection name
       --get-inactive                Get inactive collections as well as active
   -i, --identity string             Hex formatted private key used to authenticate with ACP
       --keyring-backend string      Keyring backend to use. Options are file or system (default "file")
@@ -70,7 +52,6 @@ Create from stdin:
       --log-overrides string        Logger config overrides. Format <name>,<key>=<val>,...;<name>,...
       --log-source                  Include source location in logs
       --log-stacktrace              Include stacktrace in error and fatal logs
-      --name string                 Collection name
       --no-keyring                  Disable the keyring and generate ephemeral keys
       --no-log-color                Disable colored log output
       --rootdir string              Directory for persistent data (default: $HOME/.defradb)
@@ -83,5 +64,5 @@ Create from stdin:
 
 ### SEE ALSO
 
-* [defradb client collection](defradb_client_collection.md)	 - Interact with a collection.
+* [defradb client document](defradb_client_document.md)	 - Interact with documents.
 

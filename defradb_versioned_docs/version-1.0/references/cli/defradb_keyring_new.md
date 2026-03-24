@@ -1,36 +1,51 @@
-## defradb client p2p document remove
+## defradb keyring new
 
-Remove P2P documents
+Create new private keys
 
 ### Synopsis
 
-Remove P2P documents from the followed pubsub topics.
-The removed documents will no longer be synchronized between nodes.
+Create new private keys.
+Randomly generate and store private keys in the keyring.
+By default peer and encryption keys will be generated.
+
+The DEFRA_KEYRING_SECRET environment variable must be set to unlock the keyring.
+This can also be done with a .env file in the working directory or at a path
+defined with the --secret-file flag.
+
+WARNING: This will overwrite existing keys in the keyring.
 
 ```
-defradb client p2p document remove [docIDs] [flags]
+defradb keyring new [flags]
 ```
 
 ### Examples
 
 ```
-remove single document:  
-  defradb client p2p document remove bae123
+Create new keys:  
+  defradb keyring new
 
-remove multiple documents:  
-  defradb client p2p document remove bae123,bae456
+with no encryption key:  
+  defradb keyring new --no-encryption
+
+with no peer key:  
+  defradb keyring new --no-peer-key
+
+with system keyring:  
+  defradb keyring new --keyring-backend system
 ```
 
 ### Options
 
 ```
-  -h, --help   help for remove
+      --force           Overwrite existing keys without confirmation
+  -h, --help            help for new
+      --no-encryption   Skip generating an encryption key. Encryption at rest will be disabled
+      --no-peer-key     Skip generating a peer key.
 ```
 
 ### Options inherited from parent commands
 
 ```
-  -i, --identity string             Hex formatted private key used to authenticate with ACP
       --keyring-backend string      Keyring backend to use. Options are file or system (default "file")
       --keyring-namespace string    Service name to use when using the system backend (default "defradb")
       --keyring-path string         Path to store encrypted keys when using the file backend (default "keys")
@@ -45,11 +60,10 @@ remove multiple documents:
       --rootdir string              Directory for persistent data (default: $HOME/.defradb)
       --secret-file string          Path to the file containing secrets (default ".env")
       --source-hub-address string   The SourceHub address authorized by the client to make SourceHub transactions on behalf of the actor
-      --tx uint                     Transaction ID
       --url string                  URL of HTTP endpoint to listen on or connect to (default "127.0.0.1:9181")
 ```
 
 ### SEE ALSO
 
-* [defradb client p2p document](defradb_client_p2p_document.md)	 - Configure the P2P document system
+* [defradb keyring](defradb_keyring.md)	 - Manage DefraDB private keys
 

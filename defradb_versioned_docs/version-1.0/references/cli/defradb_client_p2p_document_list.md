@@ -1,66 +1,20 @@
-## defradb client acp policy add
+## defradb client p2p document list
 
-Add new policy
+List P2P documents
 
 ### Synopsis
 
-Add new policy
-
-Notes:
-  - Can not add a policy without specifying an identity.
-  - ACP must be available (i.e. ACP can not be disabled).
-  - A non-DPI policy will be accepted (will be registered with acp system).
-  - But only a valid DPI policyID & resource can be specified on a schema.
-  - DPI validation happens when attempting to add a schema with '@policy'.
-  - Learn more about [ACP & DPI Rules](/acp/README.md)
-
-Example: add from an argument string:
-  defradb client acp policy add -i 028d53f37a19afb9a0dbc5b4be30c65731479ee8cfa0c9bc8f8bf198cc3c075f \
-'
-description: A Valid DefraDB Policy Interface
-
-actor:
-  name: actor
-
-resources:
-  users:
-    permissions:
-      read:
-        expr: owner + reader
-      write:
-        expr: owner
-
-    relations:
-      owner:
-        types:
-          - actor
-      reader:
-        types:
-          - actor
-'
-
-Example: add from file:
-  defradb client acp policy add -f policy.yml \
-  	-i 028d53f37a19afb9a0dbc5b4be30c65731479ee8cfa0c9bc8f8bf198cc3c075f
-
-Example: add from file, verbose flags:
-  defradb client acp policy add --file policy.yml \
-  	--identity 028d53f37a19afb9a0dbc5b4be30c65731479ee8cfa0c9bc8f8bf198cc3c075f
-
-Example: add from stdin:
-  cat policy.yml | defradb client acp policy add -
-
-
+List all P2P documents in the pubsub topics.
+This is the list of documents of the node that are synchronized on the pubsub network.
 
 ```
-defradb client acp policy add [-i --identity] [policy] [flags]
+defradb client p2p document list [flags]
 ```
 
 ### Options
 
 ```
-  -f, --file string   File to load a policy from
-  -h, --help          help for add
+  -h, --help   help for list
 ```
 
 ### Options inherited from parent commands
@@ -87,5 +41,5 @@ defradb client acp policy add [-i --identity] [policy] [flags]
 
 ### SEE ALSO
 
-* [defradb client acp policy](defradb_client_acp_policy.md)	 - Interact with the acp policy features of DefraDB instance
+* [defradb client p2p document](defradb_client_p2p_document.md)	 - Configure the P2P document system
 

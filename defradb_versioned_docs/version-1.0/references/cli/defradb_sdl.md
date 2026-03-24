@@ -1,21 +1,20 @@
-## defradb client acp policy
+## defradb sdl
 
-Interact with the acp policy features of DefraDB instance
+Utilities to interact with the DefraDB SDL
 
 ### Synopsis
 
-Interact with the acp policy features of DefraDB instance
+Utilities to interact with the DefraDB Schema Definition Language.
 
 ### Options
 
 ```
-  -h, --help   help for policy
+  -h, --help   help for sdl
 ```
 
 ### Options inherited from parent commands
 
 ```
-  -i, --identity string             Hex formatted private key used to authenticate with ACP
       --keyring-backend string      Keyring backend to use. Options are file or system (default "file")
       --keyring-namespace string    Service name to use when using the system backend (default "defradb")
       --keyring-path string         Path to store encrypted keys when using the file backend (default "keys")
@@ -30,12 +29,11 @@ Interact with the acp policy features of DefraDB instance
       --rootdir string              Directory for persistent data (default: $HOME/.defradb)
       --secret-file string          Path to the file containing secrets (default ".env")
       --source-hub-address string   The SourceHub address authorized by the client to make SourceHub transactions on behalf of the actor
-      --tx uint                     Transaction ID
       --url string                  URL of HTTP endpoint to listen on or connect to (default "127.0.0.1:9181")
 ```
 
 ### SEE ALSO
 
-* [defradb client acp](defradb_client_acp.md)	 - Interact with the access control system of a DefraDB node
-* [defradb client acp policy add](defradb_client_acp_policy_add.md)	 - Add new policy
+* [defradb](defradb.md)	 - DefraDB Edge Database
+* [defradb sdl generate](defradb_sdl_generate.md)	 - Generate full GraphQL formatted schema.
 

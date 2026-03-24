@@ -1,33 +1,27 @@
-## defradb client index drop
+## defradb client collection truncate
 
-Drop a collection's secondary index
+Truncate the given collection
 
 ### Synopsis
 
-Drop a collection's secondary index.
+Truncate the given collection, removing all document data within it from the local node.
+ Does not propagate the deletion to other Defra nodes in the peer network.
 
 ```
-defradb client index drop -c --collection <collection> -n --name <name> [flags]
-```
-
-### Examples
-
-```
-drop the index 'UsersByName' for 'Users' collection:  
-  defradb client index drop --collection Users --name UsersByName
+defradb client collection truncate [flags]
 ```
 
 ### Options
 
 ```
-  -c, --collection string   Collection name
-  -h, --help                help for drop
-  -n, --name string         Index name
+  -h, --help   help for truncate
 ```
 
 ### Options inherited from parent commands
 
 ```
+      --collection-id string        Collection ID
+      --get-inactive                Get inactive collections as well as active
   -i, --identity string             Hex formatted private key used to authenticate with ACP
       --keyring-backend string      Keyring backend to use. Options are file or system (default "file")
       --keyring-namespace string    Service name to use when using the system backend (default "defradb")
@@ -38,6 +32,7 @@ drop the index 'UsersByName' for 'Users' collection:
       --log-overrides string        Logger config overrides. Format <name>,<key>=<val>,...;<name>,...
       --log-source                  Include source location in logs
       --log-stacktrace              Include stacktrace in error and fatal logs
+      --name string                 Collection name
       --no-keyring                  Disable the keyring and generate ephemeral keys
       --no-log-color                Disable colored log output
       --rootdir string              Directory for persistent data (default: $HOME/.defradb)
@@ -45,9 +40,10 @@ drop the index 'UsersByName' for 'Users' collection:
       --source-hub-address string   The SourceHub address authorized by the client to make SourceHub transactions on behalf of the actor
       --tx uint                     Transaction ID
       --url string                  URL of HTTP endpoint to listen on or connect to (default "127.0.0.1:9181")
+      --version-id string           Collection version ID
 ```
 
 ### SEE ALSO
 
-* [defradb client index](defradb_client_index.md)	 - Manage collections' indexes of a running DefraDB instance
+* [defradb client collection](defradb_client_collection.md)	 - Interact with a collection.
 

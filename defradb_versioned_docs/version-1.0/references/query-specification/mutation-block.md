@@ -18,11 +18,11 @@ Insert is used to create new documents from scratch. This involves many necessar
 type Book { ... }
 
 mutation {
-    create_Book(input: createBookInput) [Book]
+    add_Book(input: createBookInput) [Book]
 }
 ```
 
-The above example displays the general structure of an insert mutation. You call the `create_TYPE` mutation, with the given input.
+The above example displays the general structure of an insert mutation. You call the `add_TYPE` mutation, with the given input.
 
 ### Input Object Type
 
@@ -38,7 +38,7 @@ type Book {
 }
 
 mutation {
-    create_Book(input: {
+    add_Book(input: {
         title: "Painted House",
         description: "The story begins as Luke Chandler ...",
         rating: 4.9
@@ -65,13 +65,13 @@ Update filters use the same format and types from the Query system. Hence, it ea
 The structure of the generated update mutation for a `Book` type is given below:
 ```graphql
 mutation {
-    update_Book(docID: ID, filter: BookFilterArg, input: updateBookInput) [Book]
+    update_Book(dockey: ID, filter: BookFilterArg, input: updateBookInput) [Book]
 }
 ```
 
 See the structure and syntax of the filter query above. You can also see an additional field `id`, thawhich will supersede the `filter`; this makes it easy to update a single document by a given ID.
 
-The input object type is the same for both `update_TYPE` and `create_TYPE` mutations.
+The input object type is the same for both `update_TYPE` and `add_TYPE` mutations.
 
 Here's an example.
 ```json
@@ -88,29 +88,29 @@ Once we create our update, and select which document(s) to update, we can query 
 A basic example is provided below:
 ```graphql
 mutation {
-    update_Book(docID: '123', input: {name: "John"}) {
-        _key
+    update_Book(dockey: '123', input: {name: "John"}) {
+        _docID
         name
     }
 }
 
 ```
 
-Here, we can see that after applying the mutation, we return the `_key` and `name` fields. We can return any field from the document (not just the updated ones). We can even return and filter on related types.
+Here, we can see that after applying the mutation, we return the `_docID` and `name` fields. We can return any field from the document (not just the updated ones). We can even return and filter on related types.
 
 Beyond updating by an ID or IDs, we can use a query filter to select which fields to apply our update to. This filter works the same as the queries.
 
 ```graphql
 mutation {
-    update_Book(filter: {rating: {_leq: 1.0}}, input: {rating: 1.5}) {
-        _key
+    update_Book(filter: {rating: {_le: 1.0}}, input: {rating: 1.5}) {
+        _docID
         rating
         name
     }
 }
 ```
 
-Here, we select all documents with a rating less than or equal to 1.0, update the rating value to 1.5, and return all the affected documents `_key`, `rating`, and `name` fields.
+Here, we select all documents with a rating less than or equal to 1.0, update the rating value to 1.5, and return all the affected documents `_docID`, `rating`, and `name` fields.
 
 For additional filter details, see the above `Query Block` section.
 
@@ -124,21 +124,21 @@ The document selection interface is identical to the `Update` system. Much like 
 The structure of the generated delete mutation for a `Book` type is given below:
 ```graphql
 mutation {
-    delete_Book(docID: ID, ids: [ID], filter: BookFilterArg) [Book]
+    delete_Book(dockey: ID, ids: [ID], filter: BookFilterArg) [Book]
 }
 ```
 
 Here, we can delete a document with ID '123':
 ```graphql
 mutation {
-    delete_User(docID: '123') {
-        _key
+    delete_User(dockey: '123') {
+        _docID
         name
     }
 }
 ```
 
-This will delete the specific document, and return the `_key` and `name` for the deleted document.
+This will delete the specific document, and return the `_docID` and `name` for the deleted document.
 
 DefraDB currently uses a Hard Delete system, which means that when a document is deleted, it is completely removed from the database.
 
@@ -147,7 +147,7 @@ Similar to the Update system, you can use a filter to select which documents to 
 ```graphql
 mutation {
     delete_User(filter: {rating: {_gt: 3}}) {
-        _key
+        _docID
         name
     }
 }

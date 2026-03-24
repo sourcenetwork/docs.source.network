@@ -1,40 +1,53 @@
-## defradb client schema patch
+## defradb client collection add
 
-Patch an existing schema type
+Add new collection
 
 ### Synopsis
 
-Patch an existing schema.
+Add new collection.
 
-Uses JSON Patch to modify schema types.
+Collection type with a '@policy(id:".." resource: "..")' linked will only be accepted if:
+  - ACP is available (i.e. ACP is not disabled).
+  - The specified resource adheres to the document resource interface (DRI).
+  - Learn more about the DefraDB [ACP System](https://docs.source.network/defradb/references/acp)
 
-Example: patch from an argument string:
-  defradb client schema patch '[\{ "op": "add", "path": "...", "value": \{...\} \}]' '\{"lenses": [...'
-
-Example: patch from file:
-  defradb client schema patch -p patch.json
-
-Example: patch from stdin:
-  cat patch.json | defradb client schema patch -
-
-To learn more about the DefraDB GraphQL Schema Language, refer to https://docs.source.network.
+Learn more about the DefraDB GraphQL Schema Language on https://docs.source.network.
 
 ```
-defradb client schema patch [schema] [migration] [flags]
+defradb client collection add [sdl] [flags]
+```
+
+### Examples
+
+```
+add from an argument string:  
+  defradb client collection add 'type Foo { ... }'
+
+add from file:  
+  defradb client collection add -f schema.graphql
+
+add from multiple files:  
+  defradb client collection add -f schema1.graphql -f schema2.graphql
+
+add from multiple files (comma-separated):  
+  defradb client collection add -f schema1.graphql,schema2.graphql
+
+add from stdin:  
+  cat schema.graphql | defradb client collection add -
 ```
 
 ### Options
 
 ```
-  -h, --help                help for patch
-  -t, --lens-file string    File to load a lens config from
-  -p, --patch-file string   File to load a patch from
-      --set-active          Set the active schema version for all collections using the root schem
+  -f, --file strings   File to load a collection definition from
+  -h, --help           help for add
 ```
 
 ### Options inherited from parent commands
 
 ```
+      --collection-id string        Collection ID
+      --get-inactive                Get inactive collections as well as active
   -i, --identity string             Hex formatted private key used to authenticate with ACP
       --keyring-backend string      Keyring backend to use. Options are file or system (default "file")
       --keyring-namespace string    Service name to use when using the system backend (default "defradb")
@@ -45,6 +58,7 @@ defradb client schema patch [schema] [migration] [flags]
       --log-overrides string        Logger config overrides. Format <name>,<key>=<val>,...;<name>,...
       --log-source                  Include source location in logs
       --log-stacktrace              Include stacktrace in error and fatal logs
+      --name string                 Collection name
       --no-keyring                  Disable the keyring and generate ephemeral keys
       --no-log-color                Disable colored log output
       --rootdir string              Directory for persistent data (default: $HOME/.defradb)
@@ -52,9 +66,10 @@ defradb client schema patch [schema] [migration] [flags]
       --source-hub-address string   The SourceHub address authorized by the client to make SourceHub transactions on behalf of the actor
       --tx uint                     Transaction ID
       --url string                  URL of HTTP endpoint to listen on or connect to (default "127.0.0.1:9181")
+      --version-id string           Collection version ID
 ```
 
 ### SEE ALSO
 
-* [defradb client schema](defradb_client_schema.md)	 - Interact with the schema system of a DefraDB node
+* [defradb client collection](defradb_client_collection.md)	 - Interact with a collection.
 

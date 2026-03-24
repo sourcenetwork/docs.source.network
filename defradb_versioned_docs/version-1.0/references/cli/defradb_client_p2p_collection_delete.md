@@ -1,32 +1,30 @@
-## defradb client schema migration up
+## defradb client p2p collection delete
 
-Applies the migration to the specified collection version.
+Delete P2P collections
 
 ### Synopsis
 
-Applies the migration to the specified collection version.
-Documents is a list of documents to apply the migration to.		
-
-Example: migrate from string
-  defradb client schema migration up --collection 2 '[\{"name": "Bob"\}]'
-
-Example: migrate from file
-  defradb client schema migration up --collection 2 -f documents.json
-
-Example: migrate from stdin
-  cat documents.json | defradb client schema migration up --collection 2 -
-		
+Delete P2P collections from the followed pubsub topics.
+The removed collections will no longer be synchronized between nodes.
 
 ```
-defradb client schema migration up --collection <collectionID> <documents> [flags]
+defradb client p2p collection delete [collectionNames] [flags]
+```
+
+### Examples
+
+```
+delete single collection:  
+  defradb client p2p collection delete User
+
+delete multiple collections:  
+  defradb client p2p collection delete User,Address
 ```
 
 ### Options
 
 ```
-      --collection uint32   Collection id
-  -f, --file string         File containing document(s)
-  -h, --help                help for up
+  -h, --help   help for delete
 ```
 
 ### Options inherited from parent commands
@@ -53,5 +51,5 @@ defradb client schema migration up --collection <collectionID> <documents> [flag
 
 ### SEE ALSO
 
-* [defradb client schema migration](defradb_client_schema_migration.md)	 - Interact with the schema migration system of a running DefraDB instance
+* [defradb client p2p collection](defradb_client_p2p_collection.md)	 - Configure the P2P collection system
 

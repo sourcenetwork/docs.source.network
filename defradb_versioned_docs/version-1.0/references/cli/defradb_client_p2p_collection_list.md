@@ -1,34 +1,20 @@
-## defradb client p2p collection sync
+## defradb client p2p collection list
 
-Synchronize specific collection versions from the network
+List P2P collections
 
 ### Synopsis
 
-Synchronize specific collection versions from the network.
-
-This command allows you to sync collection versions across the network.
-Older versions of a requested collection will also be synced.
-
+List P2P collections in the pubsub topics.
+This is the list of collections of the node that are synchronized on the pubsub network.
 
 ```
-defradb client p2p collection sync [versionID...] [flags]
-```
-
-### Examples
-
-```
-sync single collection versions:  
-  defradb client p2p collection sync bafy123
-
-sync multiple collection versions:  
-  defradb client p2p collection sync bafy123 bafy456
+defradb client p2p collection list [flags]
 ```
 
 ### Options
 
 ```
-  -h, --help               help for sync
-      --timeout duration   Timeout for sync operations
+  -h, --help   help for list
 ```
 
 ### Options inherited from parent commands

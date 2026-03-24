@@ -8,7 +8,7 @@ So far, all the queries and mutations that have been discussed were specific to 
 
 ## MerkleCRDTs
 
-All objects in DefraDB are stored in [Merkle CRDTs](../../concepts/merkle-crdt.md). These MerkleCRDTs are represented as a series of small updates connected in a MerkleDAG. The MerkleDAG is a Merklized version of a DAG (Directed Acyclical Graph), which means that each node in the DAG references a parent node through some kind of Content Identifier (CID).
+All objects in DefraDB are stored in MerkleCRDTs (see [Merkle CRDT Guide](../../guides/merkle-crdt.md)). These MerkleCRDTs are represented as a series of small updates connected in a MerkleDAG. The MerkleDAG is a Merklized version of a DAG (Directed Acyclical Graph), which means that each node in the DAG references a parent node through some kind of Content Identifier (CID).
 
 The image below shows an example structure of a MerkleDAG.
 
@@ -42,36 +42,10 @@ type Delta {
 }
 ```
 
-To query the latest commit of an object (with id: '123'):
-```graphql
-query {
-    latestCommits(docID: "123") {
-        cid
-        height
-        delta {
-            payload
-        }
-    }
-}
-```
-
-To query all the commits of an object (with id: '123'):
-```graphql
-query {
-    allCommits(docID: "123") {
-        cid
-        height
-        delta {
-            payload
-        }
-    }
-}
-```
-
 To query a specific commit:
 ```graphql 
 query {
-    Commits(cid: 'Qm123') {
+    _commits(cid: 'Qm123') {
         cid
         height
         delta {
@@ -81,12 +55,12 @@ query {
 }
 ```
 
-In addition to using `Commits` specific queries, include commit version sub-fields in object queries.
+In addition to using `_commits` specific queries, include commit version sub-fields in object queries.
 
 ```graphql 
 query {
     User {
-        _key
+        _docID
         name
         age
         
@@ -98,15 +72,15 @@ query {
 }
 ```
 
-The above example shows how to query for the additional `_version` field that is generated automatically for each added schema type. The `_version` has the same execution as `latestCommits`.
+The above example shows how to query for the additional `_version` field that is generated automatically for each added collection type. The `_version` has the same execution as `_commits`.
 
-Both `_version` and `latestCommits` return an array of `Commits` types because the `HEAD` of the MerkleDAG can point to more than one DAG node. This is caused by two concurrent updates to the DAG at the same height. The DAG usually has a single head. However, it can also have multiple heads.
+`_version` returns an array of `Commits` types because the `HEAD` of the MerkleDAG can point to more than one DAG node. This is caused by two concurrent updates to the DAG at the same height. The DAG usually has a single head. However, it can also have multiple heads.
 
 Commits queries also work with aggregates, grouping, limit, offset, order, dockey, cid, and depth
 There is __typename introspection keyword that works on all queries that does not appear to be documented anywhere, for example:
 
 ```graphql 
-commits(dockey: "bae-52b9170d-b77a-5887-b877-cbdbb99b009f") {
+_commits(dockey: "bae-75cb8b0a-00d7-57c8-8906-29687cbbb15c") {
     cid
     __typename
 }

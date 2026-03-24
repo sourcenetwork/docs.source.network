@@ -1,20 +1,28 @@
-## defradb client schema set-active
+## defradb client lens list
 
-Set the active collection version
+List all stored lenses
 
 ### Synopsis
 
-Activates all collection versions with the given schema version, and deactivates all
-those without it (if they share the same schema root).
+List all lenses stored in the lens store.
+
+Returns a map of lens CIDs to their configurations.
 
 ```
-defradb client schema set-active [versionID] [flags]
+defradb client lens list [flags]
+```
+
+### Examples
+
+```
+list all lenses:  
+  defradb client lens list
 ```
 
 ### Options
 
 ```
-  -h, --help   help for set-active
+  -h, --help   help for list
 ```
 
 ### Options inherited from parent commands
@@ -41,5 +49,5 @@ defradb client schema set-active [versionID] [flags]
 
 ### SEE ALSO
 
-* [defradb client schema](defradb_client_schema.md)	 - Interact with the schema system of a DefraDB node
+* [defradb client lens](defradb_client_lens.md)	 - Interact with the collection migration system of a running DefraDB instance
 

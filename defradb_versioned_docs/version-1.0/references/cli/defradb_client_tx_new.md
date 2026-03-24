@@ -1,20 +1,21 @@
-## defradb client p2p document getall
+## defradb client tx new
 
-Get all P2P documents
+Create a new DefraDB transaction.
 
 ### Synopsis
 
-Get all P2P documents in the pubsub topics.
-This is the list of documents of the node that are synchronized on the pubsub network.
+Create a new DefraDB transaction.
 
 ```
-defradb client p2p document getall [flags]
+defradb client tx new [flags]
 ```
 
 ### Options
 
 ```
-  -h, --help   help for getall
+      --concurrent   Transaction is concurrent
+  -h, --help         help for new
+      --read-only    Transaction is read only
 ```
 
 ### Options inherited from parent commands
@@ -41,5 +42,5 @@ defradb client p2p document getall [flags]
 
 ### SEE ALSO
 
-* [defradb client p2p document](defradb_client_p2p_document.md)	 - Configure the P2P document system
+* [defradb client tx](defradb_client_tx.md)	 - Create, commit, and discard DefraDB transactions
 

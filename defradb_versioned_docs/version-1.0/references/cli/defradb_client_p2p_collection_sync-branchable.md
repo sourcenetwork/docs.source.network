@@ -1,15 +1,34 @@
-## defradb client schema
+## defradb client p2p collection sync-branchable
 
-Interact with the schema system of a DefraDB node
+Synchronize a branchable collection's DAG from the network
 
 ### Synopsis
 
-Make changes, updates, or look for existing schema types.
+Synchronize a branchable collection's DAG from the network.
+
+This command allows you to sync the collection-level history for branchable collections
+(collections marked with @branchable directive). It doesn't automatically subscribe
+to the collection for future updates.
+
+```
+defradb client p2p collection sync-branchable [collection-id] [flags]
+```
+
+### Examples
+
+```
+sync branchable collection:  
+  defradb client p2p collection sync-branchable bafkreig27seqzxvr7isblvj77wvqnmkzoyv3u4nwytyethkbcpxlrx3iqq
+
+sync branchable collection with timeout:  
+  defradb client p2p collection sync-branchable bafkreig27seqzxvr7isblvj77wvqnmkzoyv3u4nwytyethkbcpxlrx3iqq --timeout 10s
+```
 
 ### Options
 
 ```
-  -h, --help   help for schema
+  -h, --help               help for sync-branchable
+      --timeout duration   Timeout for sync operations (default: 5s if not specified)
 ```
 
 ### Options inherited from parent commands
@@ -36,6 +55,5 @@ Make changes, updates, or look for existing schema types.
 
 ### SEE ALSO
 
-* [defradb client](defradb_client.md)	 - Interact with a DefraDB node
-* [defradb client schema add](defradb_client_schema_add.md)	 - Add new schema
+* [defradb client p2p collection](defradb_client_p2p_collection.md)	 - Configure the P2P collection system
 

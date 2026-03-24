@@ -1,21 +1,36 @@
-## defradb client acp relationship
+## defradb keyring get
 
-Interact with the acp relationship features of DefraDB instance
+Get a private key
 
 ### Synopsis
 
-Interact with the acp relationship features of DefraDB instance
+Get a private key.
+Prints the hexadecimal representation of a private key.
+
+The DEFRA_KEYRING_SECRET environment variable must be set to unlock the keyring.
+This can also be done with a .env file in the working directory or at a path
+defined with the --secret-file flag.
+
+```
+defradb keyring get <name> [flags]
+```
+
+### Examples
+
+```
+Get encryption key:  
+  defradb keyring get encryption-key
+```
 
 ### Options
 
 ```
-  -h, --help   help for relationship
+  -h, --help   help for get
 ```
 
 ### Options inherited from parent commands
 
 ```
-  -i, --identity string             Hex formatted private key used to authenticate with ACP
       --keyring-backend string      Keyring backend to use. Options are file or system (default "file")
       --keyring-namespace string    Service name to use when using the system backend (default "defradb")
       --keyring-path string         Path to store encrypted keys when using the file backend (default "keys")
@@ -30,13 +45,10 @@ Interact with the acp relationship features of DefraDB instance
       --rootdir string              Directory for persistent data (default: $HOME/.defradb)
       --secret-file string          Path to the file containing secrets (default ".env")
       --source-hub-address string   The SourceHub address authorized by the client to make SourceHub transactions on behalf of the actor
-      --tx uint                     Transaction ID
       --url string                  URL of HTTP endpoint to listen on or connect to (default "127.0.0.1:9181")
 ```
 
 ### SEE ALSO
 
-* [defradb client acp](defradb_client_acp.md)	 - Interact with the access control system of a DefraDB node
-* [defradb client acp relationship add](defradb_client_acp_relationship_add.md)	 - Add new relationship
-* [defradb client acp relationship delete](defradb_client_acp_relationship_delete.md)	 - Delete relationship
+* [defradb keyring](defradb_keyring.md)	 - Manage DefraDB private keys
 

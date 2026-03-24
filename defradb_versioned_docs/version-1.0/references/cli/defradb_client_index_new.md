@@ -1,33 +1,40 @@
-## defradb client encrypted-index create
+## defradb client index new
 
-Creates an encrypted index on a collection's field
+Make a new secondary index on a collection's field(s)
 
 ### Synopsis
 
-Creates an encrypted index on a collection's field.
+Make a new secondary index on a collection's field(s).
 
-The --type flag is optional. If not provided, the default value will be "equality".
-
-Currently only "equality" type is supported.
+The --name flag is optional. If not provided, a name will be generated automatically.
+The --unique flag is optional. If provided, the index will be unique.
+If no order is specified for the field, the default value will be "ASC"
 
 ```
-defradb client encrypted-index create -c --collection <collection> --field <field> [--type <type>] [flags]
+defradb client index new -c --collection <collection> --fields <fields[:ASC|:DESC]> [-n --name <name>] [--unique] [flags]
 ```
 
 ### Examples
 
 ```
-create an index for 'Users' collection on 'name' field:  
-  defradb client encrypted-index create --collection Users --field name
+make a new index for 'Users' collection on 'name' field:  
+  defradb client index new --collection Users --fields name
+
+make a new named index for 'Users' collection on 'name' field:  
+  defradb client index new --collection Users --fields name --name UsersByName
+
+make a new unique index for 'Users' collection on 'name' and 'age':  
+  defradb client index new --collection Users --fields name:ASC,age:DESC --unique
 ```
 
 ### Options
 
 ```
   -c, --collection string   Collection name
-      --field string        Field to index
-  -h, --help                help for create
-      --type string         Type of index to create
+      --fields strings      Fields to index
+  -h, --help                help for new
+  -n, --name string         Index name
+  -u, --unique              Make the index unique
 ```
 
 ### Options inherited from parent commands
@@ -54,5 +61,5 @@ create an index for 'Users' collection on 'name' field:
 
 ### SEE ALSO
 
-* [defradb client encrypted-index](defradb_client_encrypted-index.md)	 - Manage collections' encrypted indexes on a running DefraDB node
+* [defradb client index](defradb_client_index.md)	 - Manage collections' indexes of a running DefraDB instance
 

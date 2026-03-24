@@ -1,50 +1,40 @@
-## defradb keyring generate
+## defradb client document get
 
-Generate private keys
+View document fields.
 
 ### Synopsis
 
-Generate private keys.
-Randomly generate and store private keys in the keyring.
-By default peer and encryption keys will be generated.
-
-The DEFRA_KEYRING_SECRET environment variable must be set to unlock the keyring.
-This can also be done with a .env file in the working directory or at a path
-defined with the --secret-file flag.
-
-WARNING: This will overwrite existing keys in the keyring.
+View document fields.
 
 ```
-defradb keyring generate [flags]
+defradb client document get [-i --identity] [--show-deleted] <docID>  [flags]
 ```
 
 ### Examples
 
 ```
-Generate keys:  
-  defradb keyring generate
+Get document by ID:  
+  defradb client document get --collection-name User bae-123
 
-with no encryption key:  
-  defradb keyring generate --no-encryption
-
-with no peer key:  
-  defradb keyring generate --no-peer-key
-
-with system keyring:  
-  defradb keyring generate --keyring-backend system
+Get a private document using an identity:  
+  defradb client document get --collection-name User bae-123 \
+	-i 028d53f37a19afb9a0dbc5b4be30c65731479ee8cfa0c9bc8f8bf198cc3c075f 
 ```
 
 ### Options
 
 ```
-  -h, --help            help for generate
-      --no-encryption   Skip generating an encryption key. Encryption at rest will be disabled
-      --no-peer-key     Skip generating a peer key.
+  -h, --help           help for get
+      --show-deleted   Show deleted documents
 ```
 
 ### Options inherited from parent commands
 
 ```
+      --collection-id string        Collection ID
+      --collection-name string      Collection name
+      --get-inactive                Get inactive collections as well as active
+  -i, --identity string             Hex formatted private key used to authenticate with ACP
       --keyring-backend string      Keyring backend to use. Options are file or system (default "file")
       --keyring-namespace string    Service name to use when using the system backend (default "defradb")
       --keyring-path string         Path to store encrypted keys when using the file backend (default "keys")
@@ -59,10 +49,12 @@ with system keyring:
       --rootdir string              Directory for persistent data (default: $HOME/.defradb)
       --secret-file string          Path to the file containing secrets (default ".env")
       --source-hub-address string   The SourceHub address authorized by the client to make SourceHub transactions on behalf of the actor
+      --tx uint                     Transaction ID
       --url string                  URL of HTTP endpoint to listen on or connect to (default "127.0.0.1:9181")
+      --version-id string           Collection version ID
 ```
 
 ### SEE ALSO
 
-* [defradb keyring](defradb_keyring.md)	 - Manage DefraDB private keys
+* [defradb client document](defradb_client_document.md)	 - Interact with documents.
 

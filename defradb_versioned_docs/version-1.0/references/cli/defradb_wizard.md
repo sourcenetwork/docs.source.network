@@ -1,38 +1,20 @@
-## defradb client schema migration down
+## defradb wizard
 
-Reverses the migration to the specified collection version.
-
-### Synopsis
-
-Reverses the migration to the specified collection version.
-Documents is a list of documents to reverse the migration from.
-
-Example: migrate from string
-  defradb client schema migration down --collection 2 '[\{"name": "Bob"\}]'
-
-Example: migrate from file
-  defradb client schema migration down --collection 2 -f documents.json
-
-Example: migrate from stdin
-  cat documents.json | defradb client schema migration down --collection 2 -
-		
+Runs the DefraDB setup wizard
 
 ```
-defradb client schema migration down --collection <collectionID> <documents> [flags]
+defradb wizard [flags]
 ```
 
 ### Options
 
 ```
-      --collection uint32   Collection id
-  -f, --file string         File containing document(s)
-  -h, --help                help for down
+  -h, --help   help for wizard
 ```
 
 ### Options inherited from parent commands
 
 ```
-  -i, --identity string             Hex formatted private key used to authenticate with ACP
       --keyring-backend string      Keyring backend to use. Options are file or system (default "file")
       --keyring-namespace string    Service name to use when using the system backend (default "defradb")
       --keyring-path string         Path to store encrypted keys when using the file backend (default "keys")
@@ -47,11 +29,10 @@ defradb client schema migration down --collection <collectionID> <documents> [fl
       --rootdir string              Directory for persistent data (default: $HOME/.defradb)
       --secret-file string          Path to the file containing secrets (default ".env")
       --source-hub-address string   The SourceHub address authorized by the client to make SourceHub transactions on behalf of the actor
-      --tx uint                     Transaction ID
       --url string                  URL of HTTP endpoint to listen on or connect to (default "127.0.0.1:9181")
 ```
 
 ### SEE ALSO
 
-* [defradb client schema migration](defradb_client_schema_migration.md)	 - Interact with the schema migration system of a running DefraDB instance
+* [defradb](defradb.md)	 - DefraDB Edge Database
 
