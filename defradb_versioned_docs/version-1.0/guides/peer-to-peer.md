@@ -1,22 +1,8 @@
 ---
-sidebar_label: Peer-to-Peer Networking
+sidebar_label: Peer-to-Peer Guide
 sidebar_position: 10
 ---
 # A Guide to Peer-to-Peer Networking in DefraDB
-
-:::tip[Key Points]
-
-DefraDB leverages P2P networking via libp2p to synchronize data directly between distributed nodes, enabling **offline-first applications without a central server**.
-
-**Key capabilities:**
-- **Passive replication** – Automatic broadcasting of updates via PubSub (similar to UDP)
-- **Active replication** – Direct, point-to-point synchronization between specific nodes (similar to TCP)
-- **NAT traversal** – Circuit relays and hole punching to connect nodes behind firewalls
-- **Resilient synchronization** – Updates queue offline and sync automatically when connectivity returns
-
-DefraDB stores documents as update graphs (similar to Git) using IPLD blocks distributed across nodes.
-
-:::
 
 ## Overview
 
@@ -34,9 +20,9 @@ Libp2p is modular, meaning it can be customized and integrated into different P2
 
 The high-level distinction between a document is as follows:
 
-* A document is a single record that contains multiple fields. These documents are bound by schema. For example, each row in an SQL table has multiple individual columns. These rows are analogous to documents with multiple individual fields.
+* A document is a single record that contains multiple fields. These documents are bound by a collection. For example, each row in an SQL table has multiple individual columns. These rows are analogous to documents with multiple individual fields.
 
-* A collection refers to a collection of documents under a single schema. For example, a table from an SQL database comprising of rows and columns is analogous to collections.
+* A collection refers to a grouping of documents that share the same type definition. For example, a table from an SQL database comprising of rows and columns is analogous to collections.
 
 ## Need for P2P Networking in DefraDB
 
@@ -52,7 +38,7 @@ There are two, concrete types of data replication within DefraDB, i.e., active, 
 
 ### Passive Replication
 
-In DefraDB, passive replication is a type of data replication in which updates are automatically broadcast to the network and its peers without explicit coordination. This occurs over a global publish-subscribe network (PubSub), which is a way to broadcast updates on a specific topic and receive updates on that topic. 
+In DefraDB, passive replication is a type of data replication in which updates are automatically broadcast to the network and its peers without explicit coordination. This occurs over a global publish-subscrib network (PubSub), which is a way to broadcast updates on a specific topic and receive updates on that topic.
 
 This is called passive replication because it is similar to a "fire and forget" scenario. Passive replication is enabled for all nodes by default and all nodes will always publish to the larger PubSub network. Passive replication can be compared to the connectionless protocol UDP, while active replication can be compared to the connection-oriented protocol TCP.
 
@@ -70,6 +56,9 @@ In passive replication, updates are broadcasted on a per-document level over the
 
 One major difference between active and passive networks is that an active network can focus on both collections and individual documents, while a passive network is only focused on individual documents. Active networks operate over a direct, point-to-point connection and allow you to select an entire collection to replicate to another node. For example, if you have a collection of books and specify a target node for active replication, the entire collection will be replicated to that node, including any updates to individual books. However, it is also possible to replicate granularly by selecting specific books within the collection for replication. Passive networks, on the other hand, are only concerned with replicating individual documents.
 
+```bash
+$ defradb client rpc addreplicator "Books" /ip4/0.0.0.0/tcp/9172/p2p/<peerID_of_node_to_replicate_to>
+```
 
 ## Concrete Features of P2P in DefraDB
 
@@ -80,11 +69,8 @@ The Defra Command Line Interface (CLI) allows you to modify the behavior of the 
 ```bash
 $ defradb start
 ...
-Jan  2 10:15:49.124 INF cli Starting DefraDB
-Jan  2 10:15:49.161 INF net Created LibP2P host PeerId=12D3KooWEFCQ1iGMobsmNTPXb758kJkFc7XieQyGKpsuMxeDktz4 Address=[/ip4/127.0.0.1/tcp/9171]
-Jan  2 10:15:49.162 INF net Starting internal broadcaster for pubsub network
-Jan  2 10:15:49.163 INF node Providing HTTP API at http://127.0.0.1:9181 PlaygroundEnabled=false
-Jan  2 10:15:49.163 INF node Providing GraphQL endpoint at http://127.0.0.1:9181/api/v0/graphql
+2023-03-20T07:18:17.276-0400, INFO, defra.cli, Starting P2P node, {"P2P address": "/ip4/0.0.0.0/tcp/9171"}
+2023-03-20T07:18:17.281-0400, INFO, defra.node, Created LibP2P host, {"PeerId": "12D3KooWEFCQ1iGMobsmNTPXb758kJkFc7XieQyGKpsuMxeDktz4", "Address": ["/ip4/0.0.0.0/tcp/9171"]}
 ```
 
 This host has a Peer ID, which is a function of a secret private key generated when the node is started for the first time. The Peer ID is important to know as it may be relevant for different parts of the peer-to-peer networking system. The libp2p networking stack can be enabled or disabled.
@@ -124,7 +110,7 @@ When a node is started, it specifies a list of peers that it wants to stay conne
 To use the active replication feature in DefraDB, you can submit an add replicator Remote Procedure Call (RPC) command through the client API. You will need to specify the multi-address and Peer ID of the peer that you want to include in the replicator set, as well as the name of the collection that you want to replicate to that peer. These steps handle the process of defining which peers you want to connect to, enabling or disabling the underlying subsystems, and sending additional RPC commands to add any necessary replicators.
 
 ```bash
-$ defradb client p2p replicator set -c Books <peerID_of_node_to_replicate_to>
+$ defradb client rpc addreplicator "Books" /ip4/0.0.0.0/tcp/9172/p2p/<peerID_of_node_to_replicate_to>
 ```
 
 ## Benefits of the P2P System

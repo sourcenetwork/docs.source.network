@@ -1,6 +1,6 @@
 ---
-sidebar_label: Deployment
-sidebar_position: 80
+sidebar_label: Deployment Guide
+sidebar_position: 70
 ---
 # A Guide to DefraDB Deployment
 DefraDB aspires to be a versatile database, supporting both single-node and clustered deployments. In a clustered setup, multiple nodes collaborate seamlessly. This guide walks you through deploying DefraDB, from single-node configurations to cloud and server environments. Let’s begin.
@@ -37,7 +37,9 @@ Refer to the Playground Basics Guide for detailed instructions.
 3. Set the environment variable using the [NodeJS language toolchain](https://nodejs.org/en/download/current) and npm to build locally on your machine. The JavaScript and Typescript code create an output bundle for the frontend code to work.
 4. Build a specific playground version of DefraDB. Use the go flags environment variable, instructing the compiler to include the playground directly embedded in all files. Execute the [go binary embed](https://pkg.go.dev/embed) command, producing a binary of approximately 4MB.
 
-### Docker Deployments
+
+
+- ### Docker Deployments
 
 Docker deployments are designed for containerized environments. The main prerequisite is that Docker should be installed on your machine.
 
@@ -61,6 +63,8 @@ Docker images streamline the deployment process, requiring fewer dependencies. T
 DefraDB is a single statically built binary with no third-party dependencies. Similar to bare metal, it can run on any cloud or machine. Execute the following command to start DefraDB:
 `defradb start --store badger`
 
+
+
 ### AWS Environment
 
 For deploying to an AWS environment, note the following:
@@ -75,6 +79,8 @@ For deploying to an AWS environment, note the following:
 - The default root directory on Unix machines is `$HOME/.defradb`. For Windows it is `%USERPROFILE%\.defradb`​.
 - Specifiy the DefraDB folder with this command: `defradb --rootdir <path> start`.
 - The default directory for where data is specified is `<rootdir>/data`.
+
+ 
 
 ## Storage Engine
 

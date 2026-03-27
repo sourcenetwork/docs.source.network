@@ -1,26 +1,8 @@
 ---
-sidebar_label: Explain Queries
+sidebar_label: Explain Systems Guide
 sidebar_position: 20
 ---
 # A Guide to Explain Systems in DefraDB
-
-:::tip[Key Points]
-
-The DefraDB Explain System lets developers introspect query execution by adding a single `@explain` directive to requests. It reveals the Plan Graph – a directed graph showing the operations DefraDB performs to resolve queries.
-
-**Two explanation modes:**
-- **Simple Explain** (`@explain`) – Returns Plan Graph structure without execution (fast, no overhead)
-- **Execute Explain** (`@explain(type: execute)`) – Executes the plan and returns runtime metrics (similar to PostgreSQL's EXPLAIN ANALYZE)
-
-**Why use it:**
-- Identify inefficient full table scans vs. index usage
-- Optimize query performance before executing
-- Understand multi-step operation flows and bottlenecks
-- Make informed decisions about adding secondary indexes
-
-The Explain System transforms DefraDB from a black box into a transparent, optimizable database by showing exactly how queries are resolved.
-
-:::
 
 ## Overview
 
@@ -152,26 +134,24 @@ query @explain(type: execute) {
 
 ```json
 // Response
-[
-	{
-		"explain": {
-			"executionSuccess": true,
-			"sizeOfResult":     1,
-			"planExecutions":   2,
-			"selectTopNode": {
-				"selectNode": {
-					"iterations":    2,
-					"filterMatches": 1,
-					"scanNode": {
-						"iterations":    2,
-						"docFetches":    2,
-						"filterMatches": 1
-					}
-				}
-			}
-		}
-	}
-]
+{
+    "explain": {
+        "executionSuccess": true,
+        "sizeOfResult":     1,
+        "planExecutions":   2,
+        "selectTopNode": {
+            "selectNode": {
+                "iterations":    2,
+                "filterMatches": 1,
+                "scanNode": {
+                    "iterations":    2,
+                    "docFetches":    2,
+                    "filterMatches": 1
+                }
+            }
+        }
+    }
+}
 ```
 
 Because Execute Explain actually executes the plan, it will of course take more time to complete and return results than the Simple Explain. It will actually take slightly longer to execute than the non-explain counterpart, as it has the overhead of measuring and collecting information.

@@ -1,7 +1,6 @@
 ---
 sidebar_label: Akash Deployment Guide
-sidebar_position: 70
-draft: true
+sidebar_position: 60
 ---
 # Deploy DefraDB on Akash
 
@@ -90,7 +89,7 @@ Run the commands below to create the shared schema.
 First on the local node:
 
 ```bash
-defradb client schema add '
+defradb client collection add '
     type User {
         name: String
         age:  Int
@@ -101,7 +100,7 @@ defradb client schema add '
 Then on the Akash node:
 
 ```bash
-defradb client schema add --url <api_address> '
+defradb client collection add --url <api_address> '
     type User {
         name: String
         age:  Int
