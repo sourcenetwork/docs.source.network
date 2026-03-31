@@ -1,0 +1,3 @@
+[submodule "defradb"]
+	path = defradb_src
+	url = https://github.com/sourcenetwork/defradb.git

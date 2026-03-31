@@ -186,10 +186,13 @@ const config = {
         sidebarPath: require.resolve("./sidebars.js"),
         editUrl:
           "https://github.com/sourcenetwork/docs.source.network/edit/master/",
-        lastVersion: "0.19.0",
+        lastVersion: "1.0",
         versions: {
           "0.19.0": {
-            banner: "none",
+            banner: "unmaintained",
+          },
+          "0.20.0": {
+            banner: "unmaintained",
           },
           current: {
             label: "Next",
@@ -300,6 +303,20 @@ const config = {
         },
       },
     ],
+    // webpack config is for symbolic links support
+    // https://github.com/facebook/docusaurus/issues/3272#issuecomment-876374383
+    function (context, options) {
+      return {
+        name: 'webpack-configuration-plugin',
+        configureWebpack(config, isServer, utils) {
+        return {
+          resolve: {
+          symlinks: false,
+          }
+        };
+        }
+      };
+		},
   ],
   customFields: {
     docsData: {},
