@@ -184,9 +184,7 @@ const config = {
         path: "docs/defradb",
         routeBasePath: "defradb",
         sidebarPath: require.resolve("./sidebars.js"),
-        editUrl:
-          "https://github.com/sourcenetwork/docs.source.network/edit/master/",
-        lastVersion: "1.0",
+        lastVersion: "current",
         versions: {
           "0.19.0": {
             banner: "unmaintained",
@@ -195,9 +193,8 @@ const config = {
             banner: "unmaintained",
           },
           current: {
-            label: "Next",
-            path: "next",
-            banner: "unreleased",
+            label: "1.0",
+            banner: "none",
           },
         },
         // Reorder changelog sidebar
