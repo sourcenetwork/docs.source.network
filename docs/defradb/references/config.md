@@ -38,6 +38,10 @@ The path to the database data file(s). Defaults to `data`.
 
 Maximum file size of the value log files.
 
+## `datastore.defaultkeytype`
+
+The key type for `node-identity-key`: either `secp256k1` or `ed25519`. Default to `secp256k1`.
+
 ## `api.address`
 
 Address of the HTTP API to listen on or connect to. Defaults to `127.0.0.1:9181`.

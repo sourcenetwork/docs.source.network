@@ -179,15 +179,16 @@ const config = {
         sidebarPath: require.resolve("./sidebars.js"),
         editUrl:
           "https://github.com/sourcenetwork/docs.source.network/edit/master/",
-        lastVersion: "0.19.0",
+        lastVersion: "current",
         versions: {
           "0.19.0": {
-            banner: "none",
+            banner: "unmaintained",
+          },
+          "0.20.0": {
+            banner: "unmaintained",
           },
           current: {
-            label: "Next",
-            path: "next",
-            banner: "unreleased",
+            label: "1.0 (Latest)"
           },
         },
         // Reorder changelog sidebar

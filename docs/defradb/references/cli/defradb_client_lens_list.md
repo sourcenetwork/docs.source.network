@@ -1,16 +1,28 @@
-## defradb client p2p replicator
+## defradb client lens list
 
-Configure the replicator system
+List all stored lenses
 
 ### Synopsis
 
-Configure the replicator system. Add, delete, or get the list of persisted replicators.
-A replicator replicates one or all collection(s) from one node to another.
+List all lenses stored in the lens store.
+
+Returns a map of lens CIDs to their configurations.
+
+```
+defradb client lens list [flags]
+```
+
+### Examples
+
+```
+list all lenses:  
+  defradb client lens list
+```
 
 ### Options
 
 ```
-  -h, --help   help for replicator
+  -h, --help   help for list
 ```
 
 ### Options inherited from parent commands
@@ -37,8 +49,5 @@ A replicator replicates one or all collection(s) from one node to another.
 
 ### SEE ALSO
 
-* [defradb client p2p](defradb_client_p2p.md)	 - Interact with the DefraDB P2P system
-* [defradb client p2p replicator add](defradb_client_p2p_replicator_add.md)	 - Add replicator(s) and start synchronization
-* [defradb client p2p replicator delete](defradb_client_p2p_replicator_delete.md)	 - Delete replicator(s) and stop synchronization
-* [defradb client p2p replicator list](defradb_client_p2p_replicator_list.md)	 - List all replicators
+* [defradb client lens](defradb_client_lens.md)	 - Interact with the collection migration system of a running DefraDB instance
 

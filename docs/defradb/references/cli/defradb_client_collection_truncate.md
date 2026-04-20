@@ -1,21 +1,27 @@
-## defradb client p2p replicator
+## defradb client collection truncate
 
-Configure the replicator system
+Truncate the given collection
 
 ### Synopsis
 
-Configure the replicator system. Add, delete, or get the list of persisted replicators.
-A replicator replicates one or all collection(s) from one node to another.
+Truncate the given collection, removing all document data within it from the local node.
+ Does not propagate the deletion to other Defra nodes in the peer network.
+
+```
+defradb client collection truncate [flags]
+```
 
 ### Options
 
 ```
-  -h, --help   help for replicator
+  -h, --help   help for truncate
 ```
 
 ### Options inherited from parent commands
 
 ```
+      --collection-id string        Collection ID
+      --get-inactive                Get inactive collections as well as active
   -i, --identity string             Hex formatted private key used to authenticate with ACP
       --keyring-backend string      Keyring backend to use. Options are file or system (default "file")
       --keyring-namespace string    Service name to use when using the system backend (default "defradb")
@@ -26,6 +32,7 @@ A replicator replicates one or all collection(s) from one node to another.
       --log-overrides string        Logger config overrides. Format <name>,<key>=<val>,...;<name>,...
       --log-source                  Include source location in logs
       --log-stacktrace              Include stacktrace in error and fatal logs
+      --name string                 Collection name
       --no-keyring                  Disable the keyring and generate ephemeral keys
       --no-log-color                Disable colored log output
       --rootdir string              Directory for persistent data (default: $HOME/.defradb)
@@ -33,12 +40,10 @@ A replicator replicates one or all collection(s) from one node to another.
       --source-hub-address string   The SourceHub address authorized by the client to make SourceHub transactions on behalf of the actor
       --tx uint                     Transaction ID
       --url string                  URL of HTTP endpoint to listen on or connect to (default "127.0.0.1:9181")
+      --version-id string           Collection version ID
 ```
 
 ### SEE ALSO
 
-* [defradb client p2p](defradb_client_p2p.md)	 - Interact with the DefraDB P2P system
-* [defradb client p2p replicator add](defradb_client_p2p_replicator_add.md)	 - Add replicator(s) and start synchronization
-* [defradb client p2p replicator delete](defradb_client_p2p_replicator_delete.md)	 - Delete replicator(s) and stop synchronization
-* [defradb client p2p replicator list](defradb_client_p2p_replicator_list.md)	 - List all replicators
+* [defradb client collection](defradb_client_collection.md)	 - Interact with a collection.
 

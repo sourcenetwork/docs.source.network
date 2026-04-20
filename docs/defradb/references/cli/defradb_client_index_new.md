@@ -1,16 +1,40 @@
-## defradb client p2p replicator
+## defradb client index new
 
-Configure the replicator system
+Make a new secondary index on a collection's field(s)
 
 ### Synopsis
 
-Configure the replicator system. Add, delete, or get the list of persisted replicators.
-A replicator replicates one or all collection(s) from one node to another.
+Make a new secondary index on a collection's field(s).
+
+The --name flag is optional. If not provided, a name will be generated automatically.
+The --unique flag is optional. If provided, the index will be unique.
+If no order is specified for the field, the default value will be "ASC"
+
+```
+defradb client index new -c --collection <collection> --fields <fields[:ASC|:DESC]> [-n --name <name>] [--unique] [flags]
+```
+
+### Examples
+
+```
+make a new index for 'Users' collection on 'name' field:  
+  defradb client index new --collection Users --fields name
+
+make a new named index for 'Users' collection on 'name' field:  
+  defradb client index new --collection Users --fields name --name UsersByName
+
+make a new unique index for 'Users' collection on 'name' and 'age':  
+  defradb client index new --collection Users --fields name:ASC,age:DESC --unique
+```
 
 ### Options
 
 ```
-  -h, --help   help for replicator
+  -c, --collection string   Collection name
+      --fields strings      Fields to index
+  -h, --help                help for new
+  -n, --name string         Index name
+  -u, --unique              Make the index unique
 ```
 
 ### Options inherited from parent commands
@@ -37,8 +61,5 @@ A replicator replicates one or all collection(s) from one node to another.
 
 ### SEE ALSO
 
-* [defradb client p2p](defradb_client_p2p.md)	 - Interact with the DefraDB P2P system
-* [defradb client p2p replicator add](defradb_client_p2p_replicator_add.md)	 - Add replicator(s) and start synchronization
-* [defradb client p2p replicator delete](defradb_client_p2p_replicator_delete.md)	 - Delete replicator(s) and stop synchronization
-* [defradb client p2p replicator list](defradb_client_p2p_replicator_list.md)	 - List all replicators
+* [defradb client index](defradb_client_index.md)	 - Manage collections' indexes of a running DefraDB instance
 

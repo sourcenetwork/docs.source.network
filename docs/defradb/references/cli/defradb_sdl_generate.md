@@ -1,22 +1,46 @@
-## defradb client p2p replicator
+## defradb sdl generate
 
-Configure the replicator system
+Generate full GraphQL formatted schema.
 
 ### Synopsis
 
-Configure the replicator system. Add, delete, or get the list of persisted replicators.
-A replicator replicates one or all collection(s) from one node to another.
+Generates the fully formatted GraphQL schema from a given user type definition(s).
+
+		Accepts multiple input files as well as "-" to use stdin.
+		
+
+```
+defradb sdl generate --output schema.graphql <input schema files...> [flags]
+```
+
+### Examples
+
+```
+Generate SDL:  
+  defradb sdl generate foo.graphql
+
+Generate Multiple SDLs:  
+  defradb sdl generate foo.graphql bar.graphql
+
+Generate SDL and overwrite output:  
+  defradb sdl generate foo.graphql bar.graphql --output schema.graphql -y
+
+Generate SDL with Searchable Encryption type definitions:  
+  defradb sdl generate foo.graphql -s
+```
 
 ### Options
 
 ```
-  -h, --help   help for replicator
+  -h, --help                            help for generate
+  -s, --include-searchable-encryption   Include the schema type definitions to support Searchable Encryption
+  -o, --output string                   The output file to write the generated schema. Accepts '-' to write to stdout (default "schema.gen.graphql")
+  -y, --overwrite                       Overwrite any existing matching output file paths
 ```
 
 ### Options inherited from parent commands
 
 ```
-  -i, --identity string             Hex formatted private key used to authenticate with ACP
       --keyring-backend string      Keyring backend to use. Options are file or system (default "file")
       --keyring-namespace string    Service name to use when using the system backend (default "defradb")
       --keyring-path string         Path to store encrypted keys when using the file backend (default "keys")
@@ -31,14 +55,10 @@ A replicator replicates one or all collection(s) from one node to another.
       --rootdir string              Directory for persistent data (default: $HOME/.defradb)
       --secret-file string          Path to the file containing secrets (default ".env")
       --source-hub-address string   The SourceHub address authorized by the client to make SourceHub transactions on behalf of the actor
-      --tx uint                     Transaction ID
       --url string                  URL of HTTP endpoint to listen on or connect to (default "127.0.0.1:9181")
 ```
 
 ### SEE ALSO
 
-* [defradb client p2p](defradb_client_p2p.md)	 - Interact with the DefraDB P2P system
-* [defradb client p2p replicator add](defradb_client_p2p_replicator_add.md)	 - Add replicator(s) and start synchronization
-* [defradb client p2p replicator delete](defradb_client_p2p_replicator_delete.md)	 - Delete replicator(s) and stop synchronization
-* [defradb client p2p replicator list](defradb_client_p2p_replicator_list.md)	 - List all replicators
+* [defradb sdl](defradb_sdl.md)	 - Utilities to interact with the DefraDB SDL
 

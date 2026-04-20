@@ -1,21 +1,47 @@
-## defradb client p2p replicator
+## defradb client document update
 
-Configure the replicator system
+Update documents by docID or filter.
 
 ### Synopsis
 
-Configure the replicator system. Add, delete, or get the list of persisted replicators.
-A replicator replicates one or all collection(s) from one node to another.
+Update documents by docID or filter.
+
+```
+defradb client document update [-i --identity] [--filter <filter> --docID <docID>] --updater <updater> [flags]
+```
+
+### Examples
+
+```
+update by filter:  
+  defradb client document update --collection-name User \
+  --filter '{ "points": { "_gte": 100 } }' --updater '{ "verified": true }'
+
+update by docID:  
+  defradb client document update --collection-name User \
+  --docID bae-123 --updater '{ "verified": true }'
+
+update private docID, with identity:  
+  defradb client document update --collection-name User \
+  -i 028d53f37a19afb9a0dbc5b4be30c65731479ee8cfa0c9bc8f8bf198cc3c075f \
+  --docID bae-123 --updater '{ "verified": true }'
+```
 
 ### Options
 
 ```
-  -h, --help   help for replicator
+      --docID string     Document ID
+      --filter string    Document filter
+  -h, --help             help for update
+      --updater string   Document updater
 ```
 
 ### Options inherited from parent commands
 
 ```
+      --collection-id string        Collection ID
+      --collection-name string      Collection name
+      --get-inactive                Get inactive collections as well as active
   -i, --identity string             Hex formatted private key used to authenticate with ACP
       --keyring-backend string      Keyring backend to use. Options are file or system (default "file")
       --keyring-namespace string    Service name to use when using the system backend (default "defradb")
@@ -33,12 +59,10 @@ A replicator replicates one or all collection(s) from one node to another.
       --source-hub-address string   The SourceHub address authorized by the client to make SourceHub transactions on behalf of the actor
       --tx uint                     Transaction ID
       --url string                  URL of HTTP endpoint to listen on or connect to (default "127.0.0.1:9181")
+      --version-id string           Collection version ID
 ```
 
 ### SEE ALSO
 
-* [defradb client p2p](defradb_client_p2p.md)	 - Interact with the DefraDB P2P system
-* [defradb client p2p replicator add](defradb_client_p2p_replicator_add.md)	 - Add replicator(s) and start synchronization
-* [defradb client p2p replicator delete](defradb_client_p2p_replicator_delete.md)	 - Delete replicator(s) and stop synchronization
-* [defradb client p2p replicator list](defradb_client_p2p_replicator_list.md)	 - List all replicators
+* [defradb client document](defradb_client_document.md)	 - Interact with documents.
 

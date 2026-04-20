@@ -1,16 +1,33 @@
-## defradb client p2p replicator
+## defradb client encrypted-index new
 
-Configure the replicator system
+Make a new encrypted index on a collection's field
 
 ### Synopsis
 
-Configure the replicator system. Add, delete, or get the list of persisted replicators.
-A replicator replicates one or all collection(s) from one node to another.
+Make a new encrypted index on a collection's field.
+
+The --type flag is optional. If not provided, the default value will be "equality".
+
+Currently only "equality" type is supported.
+
+```
+defradb client encrypted-index new -c --collection <collection> --field <field> [--type <type>] [flags]
+```
+
+### Examples
+
+```
+make a new index for 'Users' collection on 'name' field:  
+  defradb client encrypted-index new --collection Users --field name
+```
 
 ### Options
 
 ```
-  -h, --help   help for replicator
+  -c, --collection string   Collection name
+      --field string        Field to index
+  -h, --help                help for new
+      --type string         Type of new index to make
 ```
 
 ### Options inherited from parent commands
@@ -37,8 +54,5 @@ A replicator replicates one or all collection(s) from one node to another.
 
 ### SEE ALSO
 
-* [defradb client p2p](defradb_client_p2p.md)	 - Interact with the DefraDB P2P system
-* [defradb client p2p replicator add](defradb_client_p2p_replicator_add.md)	 - Add replicator(s) and start synchronization
-* [defradb client p2p replicator delete](defradb_client_p2p_replicator_delete.md)	 - Delete replicator(s) and stop synchronization
-* [defradb client p2p replicator list](defradb_client_p2p_replicator_list.md)	 - List all replicators
+* [defradb client encrypted-index](defradb_client_encrypted-index.md)	 - Manage collections' encrypted indexes on a running DefraDB node
 
