@@ -188,7 +188,7 @@ const config = {
             banner: "unmaintained",
           },
           current: {
-            label: "1.0 (Latest)"
+            label: "1.0 RC1 (Latest)"
           },
         },
         // Reorder changelog sidebar
