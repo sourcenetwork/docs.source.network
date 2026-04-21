@@ -43,7 +43,7 @@ If a `.env` file is available in the working directory, the secret can be stored
 Keys will be randomly generated on the initial start of the node if they are not found. To generate keys:
 
 ```bash
-DEFRA_KEYRING_SECRET=<make_a_password>
+export DEFRA_KEYRING_SECRET=<make_a_password>
 defradb keyring generate
 ```
 
@@ -329,7 +329,7 @@ Let's go through an example of two nodes (*nodeA* and *nodeB*) connecting with e
 In the first terminal, start *nodeA* with a default configuration:
 
 ```bash
-DEFRA_KEYRING_SECRET=<make_a_password>
+export DEFRA_KEYRING_SECRET=<make_a_password>
 defradb start
 ```
 
@@ -343,7 +343,7 @@ echo $PEER_ID
 In this second terminal, start *nodeB*, configured to connect with *nodeA*:
 
 ```bash
-DEFRA_KEYRING_SECRET=<make_a_password_for_node_B>
+export DEFRA_KEYRING_SECRET=<make_a_password_for_node_B>
 defradb start --rootdir ~/.defradb-nodeB --url localhost:9182 --p2paddr /ip4/127.0.0.1/tcp/9172 --peers /ip4/127.0.0.1/tcp/9171/p2p/$PEER_ID
 ```
 
