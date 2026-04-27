@@ -111,7 +111,7 @@ const config = {
       },
       footer: {
         logo: {
-          alt: "Facebook Open Source Logo",
+          alt: "Source Logo",
           src: "img/source-logo_v2.svg",
           srcDark: "img/source-logo-w_v2.svg",
           href: "https://source.network",
@@ -121,7 +121,7 @@ const config = {
             title: "Developers",
             items: [
               {
-                label: "Getting Started",
+                label: "Documentation",
                 to: "/",
               },
               {
