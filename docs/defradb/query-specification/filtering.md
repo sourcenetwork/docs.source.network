@@ -128,11 +128,11 @@ Filters applied solely to sub-objects, which are only applicable for array types
 }
 ```
 
-The above query returns all authors with the name “John Grisham”, then filters and returns all the returned authors' books with the genre “Thriller”. This is similar to the previous query, but an important distinction is that it will return all the matching author objects regardless of the book's sub-object filter. 
+The above query returns all authors with the name “John Grisham”, then filters and returns all the returned authors' books with the genre “Thriller”. This is similar to the previous query, but an important distinction is that it will return all the matching author objects regardless of the book's sub-object filter.
 
 The first query, will only return an output if there are any Thriller books written by the author “John Grisham” (using AND condition i.e., both conditions have to be fulfilled). The second query always returns all authors named “John Grisham”, and their Thriller genre books.
 
-So far, we have only seen examples of EXACT string matches, but we can also filter using scalar value type or object fields. For e.g., booleans, integers, floating points, etc. Also, comparison operators like: Greater Than, Less Than, Equal To or Greater than, Less Than or Equal To, EQUAL can be used. 
+So far, we have only seen examples of EXACT string matches, but we can also filter using scalar value type or object fields. For e.g., booleans, integers, floating points, etc. Also, comparison operators like: Greater Than, Less Than, Equal To or Greater than, Less Than or Equal To, EQUAL can be used.
 
 Let's query for all books with a rating greater than or equal to 4.
 
@@ -182,9 +182,9 @@ The code snippet below queries all books that are a part of the Thriller genre, 
 ```graphql
 {
     Books(
-        filter: { 
-            _or: [ 
-                {genre: {_eq: "Thriller"}}, 
+        filter: {
+            _or: [
+                {genre: {_eq: "Thriller"}},
                 { _and: [
                     {rating: { _gte: 4 }},
                     {rating: { _lte: 5 }},
