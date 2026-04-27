@@ -176,7 +176,7 @@ const config = {
         id: "defradb",
         path: "docs/defradb",
         routeBasePath: "defradb",
-        sidebarPath: require.resolve("./sidebars.js"),
+        sidebarPath: require.resolve("./docs/sidebars/defra.js"),
         editUrl:
           "https://github.com/sourcenetwork/docs.source.network/edit/master/",
         lastVersion: "current",
