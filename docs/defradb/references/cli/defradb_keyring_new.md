@@ -1,22 +1,51 @@
-## defradb client p2p replicator
+## defradb keyring new
 
-Configure the replicator system
+Create new private keys
 
 ### Synopsis
 
-Configure the replicator system. Add, delete, or get the list of persisted replicators.
-A replicator replicates one or all collection(s) from one node to another.
+Create new private keys.
+Randomly generate and store private keys in the keyring.
+By default peer and encryption keys will be generated.
+
+The DEFRA_KEYRING_SECRET environment variable must be set to unlock the keyring.
+This can also be done with a .env file in the working directory or at a path
+defined with the --secret-file flag.
+
+WARNING: This will overwrite existing keys in the keyring.
+
+```
+defradb keyring new [flags]
+```
+
+### Examples
+
+```
+Create new keys:  
+  defradb keyring new
+
+with no encryption key:  
+  defradb keyring new --no-encryption
+
+with no peer key:  
+  defradb keyring new --no-peer-key
+
+with system keyring:  
+  defradb keyring new --keyring-backend system
+```
 
 ### Options
 
 ```
-  -h, --help   help for replicator
+      --force           Overwrite existing keys without confirmation
+  -h, --help            help for new
+      --no-encryption   Skip generating an encryption key. Encryption at rest will be disabled
+      --no-peer-key     Skip generating a peer key.
 ```
 
 ### Options inherited from parent commands
 
 ```
-  -i, --identity string             Hex formatted private key used to authenticate with ACP
       --keyring-backend string      Keyring backend to use. Options are file or system (default "file")
       --keyring-namespace string    Service name to use when using the system backend (default "defradb")
       --keyring-path string         Path to store encrypted keys when using the file backend (default "keys")
@@ -31,14 +60,10 @@ A replicator replicates one or all collection(s) from one node to another.
       --rootdir string              Directory for persistent data (default: $HOME/.defradb)
       --secret-file string          Path to the file containing secrets (default ".env")
       --source-hub-address string   The SourceHub address authorized by the client to make SourceHub transactions on behalf of the actor
-      --tx uint                     Transaction ID
       --url string                  URL of HTTP endpoint to listen on or connect to (default "127.0.0.1:9181")
 ```
 
 ### SEE ALSO
 
-* [defradb client p2p](defradb_client_p2p.md)	 - Interact with the DefraDB P2P system
-* [defradb client p2p replicator add](defradb_client_p2p_replicator_add.md)	 - Add replicator(s) and start synchronization
-* [defradb client p2p replicator delete](defradb_client_p2p_replicator_delete.md)	 - Delete replicator(s) and stop synchronization
-* [defradb client p2p replicator list](defradb_client_p2p_replicator_list.md)	 - List all replicators
+* [defradb keyring](defradb_keyring.md)	 - Manage DefraDB private keys
 

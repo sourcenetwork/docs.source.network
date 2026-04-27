@@ -29,6 +29,17 @@ const config = {
         theme: {
           customCss: require.resolve("./src/css/custom.scss"),
         },
+      },
+      {
+        api: {
+          path: "docs/defradb/references/http/openapi.json",
+          routeBasePath: "/defradb/references/http/api",
+        },
+        docs: false, // Disable the default docs plugin
+        proxy: false, // Disable the proxy plugin to avoid webpack-dev-server config errors
+        theme: {
+          customCss: require.resolve("./src/css/custom.scss"),
+        },
       }),
     ],
   ],
@@ -101,7 +112,7 @@ const config = {
       },
       footer: {
         logo: {
-          alt: "Facebook Open Source Logo",
+          alt: "Source Logo",
           src: "img/source-logo_v2.svg",
           srcDark: "img/source-logo-w_v2.svg",
           href: "https://source.network",
@@ -111,7 +122,7 @@ const config = {
             title: "Developers",
             items: [
               {
-                label: "Getting Started",
+                label: "Documentation",
                 to: "/",
               },
               {
@@ -184,18 +195,19 @@ const config = {
         id: "defradb",
         path: "docs/defradb",
         routeBasePath: "defradb",
-        sidebarPath: require.resolve("./sidebars.js"),
+        sidebarPath: require.resolve("./docs/sidebars/defra.js"),
         editUrl:
           "https://github.com/sourcenetwork/docs.source.network/edit/master/",
-        lastVersion: "0.19.0",
+        lastVersion: "current",
         versions: {
           "0.19.0": {
-            banner: "none",
+            banner: "unmaintained",
+          },
+          "0.20.0": {
+            banner: "unmaintained",
           },
           current: {
-            label: "Next",
-            path: "next",
-            banner: "unreleased",
+            label: "1.0 RC1 (Latest)"
           },
         },
         // Reorder changelog sidebar

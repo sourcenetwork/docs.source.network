@@ -49,5 +49,8 @@
     "simple-git": "^3.17.0",
     "tmp": "^0.2.1",
     "typescript": "^5.0.2"
+  },
+  "overrides": {
+    "webpackbar": "^7.0.0"
   }
 }

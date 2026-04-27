@@ -1,16 +1,28 @@
-## defradb client p2p replicator
+## defradb client index delete
 
-Configure the replicator system
+Delete a collection's secondary index
 
 ### Synopsis
 
-Configure the replicator system. Add, delete, or get the list of persisted replicators.
-A replicator replicates one or all collection(s) from one node to another.
+Delete a collection's secondary index.
+
+```
+defradb client index delete -c --collection <collection> -n --name <name> [flags]
+```
+
+### Examples
+
+```
+delete the index 'UsersByName' for 'Users' collection:  
+  defradb client index delete --collection Users --name UsersByName
+```
 
 ### Options
 
 ```
-  -h, --help   help for replicator
+  -c, --collection string   Collection name
+  -h, --help                help for delete
+  -n, --name string         Index name
 ```
 
 ### Options inherited from parent commands
@@ -37,8 +49,5 @@ A replicator replicates one or all collection(s) from one node to another.
 
 ### SEE ALSO
 
-* [defradb client p2p](defradb_client_p2p.md)	 - Interact with the DefraDB P2P system
-* [defradb client p2p replicator add](defradb_client_p2p_replicator_add.md)	 - Add replicator(s) and start synchronization
-* [defradb client p2p replicator delete](defradb_client_p2p_replicator_delete.md)	 - Delete replicator(s) and stop synchronization
-* [defradb client p2p replicator list](defradb_client_p2p_replicator_list.md)	 - List all replicators
+* [defradb client index](defradb_client_index.md)	 - Manage collections' indexes of a running DefraDB instance
 
