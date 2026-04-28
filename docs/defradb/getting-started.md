@@ -4,9 +4,10 @@ title: Quickstart
 slug: /
 ---
 
-# DefraDB Quickstart
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
 
-![DefraDB Overview](/img/defradb-cover.png)
+# DefraDB Quickstart
 
 DefraDB is a database that prioritizes data ownership, personal privacy, and local-first software. It feaures a multi-write-master architecture, a GraphQL-based query language ([DQL](/query-specification/query-language-overview.md)), and P2P syncronization across nodes.
 
@@ -26,7 +27,7 @@ Start the local node:
 DEFRA_KEYRING_SECRET=<secret> defradb start
 ```
 
-To verify that the local connection to the node works, view collections from another terminal:
+To verify the local connection to the node, view collections from another terminal:
 
 ```shell
 defradb client collection describe
@@ -36,9 +37,9 @@ defradb client collection describe
 
 To experiment with queries, there are a few options:
 
-- The playground at `http://localhost:9181`,
+- The playground at `http://localhost:9181`.
 - GraphQL clients ([Altair](https://altairgraphql.dev/#download) is a popular option). DefraDB's GraphQL endpoint is at `http://localhost:9181/api/v1/graphql` (the versionless endpoint `http://localhost:9181/api/graphql` always points to the latest version).
-- The [`client` CLI commands](/references/cli/defradb_client.md), which interact with the locally running node.
+- The [`client` CLI commands](/references/cli/defradb_client.md).
 - Any language that supports C bindings.
 
 
@@ -46,18 +47,52 @@ To experiment with queries, there are a few options:
 
 Collections are the _types_ into which documents fit.
 
+The must be created with anything BUT the graphql endpoint.
+
 To begin, add a collection:
 
-```shell
-defradb client collection add '
-  type User {
-    name: String
-    age: Int
-    verified: Boolean
-    points: Float
-  }
-'
-```
+<Tabs>
+  <TabItem value="cli" label="CLI" default>
+    ```shell
+    defradb client collection add '
+      type User {
+        name: String
+        age: Int
+        verified: Boolean
+        points: Float
+      }
+    '
+    ```
+  </TabItem>
+  <TabItem value="http" label="HTTP API">
+    ```request title="Request"
+    POST http://localhost:9181/api/v1/collections
+
+    type User {
+      name: String
+      age: Int
+      verified: Boolean
+      points: Float
+    }
+    ```
+  </TabItem>
+  <TabItem value="embedded" label="Embedded">
+    ```go
+    _, err = db.DB.AddSchema(ctx, `type User {
+        name: String
+        age: Int
+        verified: Boolean
+        points: Float
+    }`)
+    if err != nil {
+        // This might fail if the schema is already added. In a real app, you'd
+        // check for this. For this example, we assume a clean start.
+        log.Fatalf("Failed to add schema: %v", err)
+    }
+  ```
+  </TabItem>
+</Tabs>
+
 
 For more examples of collection definitions, see the [defradb -> examples/schema/](https://github.com/sourcenetwork/defradb/tree/develop/examples/collection) folder.
 
