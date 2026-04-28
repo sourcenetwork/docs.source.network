@@ -12,6 +12,7 @@ const config = {
   onBrokenLinks: "warn",
   onBrokenMarkdownLinks: "warn",
   favicon: "img/favicon.ico",
+  trailingSlash: true,
   organizationName: "source-developer", // Usually your GitHub org/user name.
   projectName: "source-developer", // Usually your repo name.
   presets: [
