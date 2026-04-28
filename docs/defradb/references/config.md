@@ -163,7 +163,7 @@ Path to store encrypted key files in. Default: `keys`.
 
 ## `replicator.retryintervals`
 
-?
+List of durations (in seconds) to wait before retrying a failed replication attempt. Default: `[30, 60, 120, 240, 480, 960, 1920]`.
 
 ## `secretfile`
 
@@ -182,35 +182,32 @@ Possible values:
 - `wasmer` (windows not supported): https://github.com/wasmerio/wasmer-go
 - `wazero`: https://github.com/tetratelabs/wazero
 
-## `acp.type`
+## `acp.document.type`
 
 Type of Access Control Policy module to use. Options are:
 
-- `none`: No ACP
+- `none`: Disabled
 - `local`: Local-only ACP
 - `source-hub`: [SourceHub ACP](https://github.com/sourcenetwork/sourcehub)
 
 Default: `none`.
 
-## `acp.sourceHub.ChainID`
+## `acp.document.sourceHub.ChainID`
 
-The ID of the SourceHub chain to store ACP data in. Required when using `acp.type`:`source-hub`.
+The ID of the SourceHub chain to store ACP data in. Required when using `acp.document.type`:`source-hub`.
 
-## `acp.sourceHub.GRPCAddress`
+## `acp.document.sourceHub.GRPCAddress`
 
-The address of the SourceHub GRPC server. Required when using `acp.type`:`source-hub`.
+The address of the SourceHub GRPC server. Required when using `acp.document.type`:`source-hub`.
 
-## `acp.sourceHub.CometRPCAddress`
+## `acp.document.sourceHub.CometRPCAddress`
 
-The address of the SourceHub Comet RPC server. Required when using `acp.type`:`source-hub`.
+The address of the SourceHub Comet RPC server. Required when using `acp.document.type`:`source-hub`.
 
-## `acp.sourceHub.KeyName`
+## `acp.docyment.sourceHub.KeyName`
 
-The name of the key in the keyring where the SourceHub credentials used to sign (and pay for) SourceHub
-transactions created by the node is stored. Required when using `acp.type`:`source-hub`.
+The name of the key in the keyring containing the SourceHub credentials used to sign (and pay for) SourceHub transactions created by the node. Required when using `acp.document.type`:`source-hub`.
 
-## `acp.sourceHub.address`
+## `acp.document.sourceHub.address`
 
-The SourceHub address of the actor that client-side actions should permit to make SourceHub actions on
-their behalf.  This is a client-side only config param.  It is required if the client wishes to make
-SourceHub ACP requests in order to create protected data.
+The SourceHub address of the actor that client-side actions should permit to make SourceHub actions on their behalf. This is a client-side only config param. It is required if the client wishes to make SourceHub ACP requests in order to create protected data.
