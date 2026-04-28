@@ -548,3 +548,10 @@ body .DocSearch {
     var(--ifm-color-emphasis-100) 100%
   );
 }
+
+
+[data-theme="dark"] .navbar__item.dropdown {
+  .navbar__link {
+    color: var(--ifm-link-color)
+  }
+}
