@@ -1,6 +1,10 @@
 export default {
   defraSidebar: [
-    'getting-started',
+    {
+      type: 'doc',
+      id: 'getting-started',
+      className: 'menu__list-item__bottom-hr'
+    },
     'install',
     'keys',
     'p2p-setup',

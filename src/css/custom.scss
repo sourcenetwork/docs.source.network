@@ -250,6 +250,14 @@ html[data-theme="dark"] {
     ul {
       font-weight: 400;
     }
+
+    .menu__list-item__bottom-hr {
+      .menu__link {
+        border-bottom: 1px solid;
+        padding-bottom: calc(var(--ifm-menu-link-padding-vertical) + 0.25rem);
+        margin-bottom: calc(var(--ifm-menu-link-padding-vertical) + 0.25rem);
+      }
+    }
   }
 }
 
