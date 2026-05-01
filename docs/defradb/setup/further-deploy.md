@@ -21,12 +21,10 @@ defradb start --pubkeypath ~/.defradb/certs/pubkey.crt --privkeypath ~/.defradb/
 ```
 
 :::tip generate a *self-signed* certificate
-
 ```shell 
 openssl ecparam -genkey -name secp384r1 -out ~/.defradb/certs/privkey.key
 openssl req -new -x509 -sha256 -key ~/.defradb/certs/privkey.key -out ~/.defradb/certs/pubkey.crt -days 365
 ```
-
 :::
 
 
@@ -55,3 +53,8 @@ By default, the HTTP API and P2P network use localhost. If you want to expose th
 ```shell
 defradb start --p2paddr /ip4/0.0.0.0/tcp/9171 --url 0.0.0.0:9181
 ```
+
+## Telemetry
+
+DefraDB has no telemetry reporting by default. To enable OpenTelemetry in DefraDB you must [build](/setup/install/#build) with the `telemetry` tag set. To configure the HTTP exporters use the environment variables described in the
+[metric exporter documentation](https://pkg.go.dev/go.opentelemetry.io/otel/exporters/otlp/otlpmetric/otlpmetrichttp) and [trace exporter documentation](https://pkg.go.dev/go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracehttp).
