@@ -16,8 +16,8 @@
     "import-defradb-cli-docs": "node scripts/import-defradb-cli-docs.js"
   },
   "dependencies": {
-    "@docusaurus/core": "3.9.0",
-    "@docusaurus/preset-classic": "3.9.0",
+    "@docusaurus/core": "^3.10.1",
+    "@docusaurus/preset-classic": "^3.10.1",
     "@mdx-js/react": "^3.0.0",
     "@svgr/webpack": "^7.0.0",
     "clsx": "^1.2.1",
@@ -43,8 +43,8 @@
     ]
   },
   "devDependencies": {
-    "@docusaurus/module-type-aliases": "^3.9.0",
-    "@docusaurus/tsconfig": "^3.9.0",
+    "@docusaurus/module-type-aliases": "^3.10.1",
+    "@docusaurus/tsconfig": "^3.10.1",
     "glob": "^10.2.2",
     "simple-git": "^3.17.0",
     "tmp": "^0.2.1",
