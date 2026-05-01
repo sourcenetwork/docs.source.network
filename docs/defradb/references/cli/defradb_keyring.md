@@ -9,7 +9,7 @@ Generate, add, get, and list private keys.
 
 The following keys are loaded from the keyring on start:
 
-- peer-key: Ed25519 private key (required)
+- peer-key: Ed25519 key (required)
 - encryption-key: AES-128, AES-192, or AES-256 key (optional)
 
 

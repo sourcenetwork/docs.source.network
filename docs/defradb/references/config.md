@@ -86,7 +86,12 @@ Default: `badger`.
 
 ## `development`
 
-Enables a set of features that facilitates development. Should not be enabled in production. Default: `false`.
+Enables a set of features that facilitates development but should not be enabled in production:
+
+- allows purging of all persisted data
+- generates temporary node identity if one doesn't exist in the keyring
+
+Default: `false`.
 
 ## `log.colordisabled`
 
@@ -116,9 +121,13 @@ Logger config overrides. Format
 
 Include a partial stacktrace in logs. Default: `true`.
 
+## `log.stacktrace`
+
+Whether to include the stacktrace in error and fatal log entries. Default: `false`.
+
 ## `net.p2paddresses`
 
-List of addresses for the P2P network to listen on. Default: `/ip4/127.0.0.1/tcp/9171`.
+List of addresses for the P2P network to listen on. Default: `[/ip4/127.0.0.1/tcp/9171]`.
 
 ## `net.p2pdisabled`
 
@@ -126,7 +135,7 @@ Whether P2P networking is disabled. Default: `false`.
 
 ## `net.peers`
 
-List of peers to boostrap with, specified as [multiaddresses](https://docs.libp2p.io/concepts/addressing/).
+List of peers to bootstrap with, specified as [multiaddresses](https://docs.libp2p.io/concepts/addressing/).
 
 ## `net.pubsubenabled`
 
@@ -135,10 +144,6 @@ Whether PubSub is enabled. Default: `true`.
 ## `net.relay`
 
 Whether libp2p's [Circuit relay transport protocol](https://docs.libp2p.io/concepts/circuit-relay/) is enabled. Default: `false`.
-
-## `log.stacktrace`
-
-Whether to include the stacktrace in error and fatal log entries. Default: `false`.
 
 ## `keyring.backend`
 

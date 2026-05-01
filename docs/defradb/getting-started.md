@@ -11,27 +11,27 @@ import TabItem from '@theme/TabItem';
 
 DefraDB is a database that prioritizes data ownership, personal privacy, and local-first software. It feaures a multi-write-master architecture, a GraphQL-based query language ([DQL](/query-specification/query-language-overview.md)), and P2P syncronization across nodes.
 
+For more background on the local-first paradigm, see [The Edge-First Awakening: Redefining the Foundations of Modern Computing](https://source.network/blog/the-edge-first-awakening-redefining-the-foundations-of-modern-computing).
+
 ## Install
 
 Install `defradb` by [downloading the executable](https://github.com/sourcenetwork/defradb/releases) appropriate to your system.
 
-Define a `secret` and create a keyring for DefraDB's keys:
-
-```shell
-DEFRA_KEYRING_SECRET=<secret> defradb keyring new
-```
-
-Start the local node:
+Define a `secret` for DefraDB's keyring and start the local node:
 
 ```shell
 DEFRA_KEYRING_SECRET=<secret> defradb start
 ```
 
-To verify the local connection to the node, view collections from another terminal:
+To verify the local connection to the node, ping the `/health-check` HTTP endpoint:
 
 ```shell
-defradb client collection describe
+wget -qO- http://localhost:9181/health-check
 ```
+
+An online node responds with `"Healthy"`.
+
+[-> More information on Installation](./install.md)
 
 ## Interact with the database
 
@@ -85,8 +85,7 @@ To begin, add a collection:
         points: Float
     }`)
     if err != nil {
-        // This might fail if the schema is already added. In a real app, you'd
-        // check for this. For this example, we assume a clean start.
+        // Might fail for example if the schema is already added
         log.Fatalf("Failed to add schema: %v", err)
     }
   ```
@@ -177,3 +176,5 @@ defradb client query '
 ```
 
 This returns only user documents which have a value for the `points` field *Greater Than or Equal to* (`_geq`) 50.
+
+## Set up data synchronization across nodes
