@@ -258,6 +258,11 @@ html[data-theme="dark"] {
         margin-bottom: calc(var(--ifm-menu-link-padding-vertical) + 0.25rem);
       }
     }
+
+    /* categories with a linked label produce a double collapsible arrow; this removes the bulkier one */
+    .menu__caret {
+      display: none;
+    }
   }
 }
 

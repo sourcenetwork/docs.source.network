@@ -8,7 +8,7 @@ DefraDB supports a number of common relational models that an application may ne
 
 Relationships are defined through the Document Schemas, using a series of GraphQL directives, and inferencing. They are always defined on both sides of the relation, meaning both objects involved in the relationship.
 
-## One-to-One
+## One-to-One {/* #one-to-one */}
 
 The simplest relationship is a "one-to-one" which directly maps one document to another. The code below defines a one-to-one relationship between the `Author` and their `Address`:
 
@@ -36,7 +36,7 @@ The notable distinction of "one-to-one" relationships is that only the DocKey of
 
 On the other hand, if you simply embed the Address within the Author type without the internal relational system, you can include the `@embed` directive, which will embed it within. Objects embedded inside another using the `@embed` directive do not expose a query endpoint, so they can *only* be accessed through their parent object. Additionally they are not assigned a DocKey.
 
-## One-to-Many
+## One-to-Many {/* #one-to-many */}
 
 A "one-to-many" relationship allows us to relate several objects of one type, to a single instance of another. 
 
@@ -58,7 +58,7 @@ type Book {
 
 In this case, the books object is defined within the Author object to be an array of books, indicating that *one* Author type has a relationship to *many* Book types. Internally, much like the one-to-one model, only the DocKeys are stored. However, the DocKey is only stored on one side of the relationship (the child type). In this example, only the Book type keeps a reference to its associated Author DocKey.
 
-## Many-to-Many
+## Many-to-Many {/* #many-to-many */}
 
 A "many-to-many" relationship allows multiple instances of one type to be related to multiple instances of another type. In DefraDB, many-to-many relationships are implemented using an explicit join type that connects the two related types. Unlike one-to-one or one-to-many relationships that are automatically managed, many-to-many relationships require an intermediary join type to be explicitly defined.
 
@@ -155,7 +155,7 @@ type Enrollment {
 
 This pattern allows you to maintain rich, contextual information about the relationship itself, not just the connection between the two types.
 
-## Multiple Relationships
+## Multiple Relationships {/* #multiple-relationships */}
 
 It is possible to define a collection of different relationship models. Additionally, we can define multiple relationships within a single type. Relationships containing unique types can simply be added to the types without issue. Like the following:
 

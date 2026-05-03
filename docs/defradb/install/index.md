@@ -2,17 +2,17 @@
 title: Install DefraDB
 ---
 
-## Get DefraDB
+## Get DefraDB {/* #get-defradb */}
 
 There's a few different options to obtain an executable of DefraDB.
 
-### Download a pre-compiled binary
+### Download a pre-compiled binary {/* #download-a-pre-compiled-binary */}
 
 [Download the executable](https://github.com/sourcenetwork/defradb/releases) appropriate to your system.
 
 To be able to run `defradb` commands, ensure the binary is located in a directory included in your `PATH`. On UNIX systems, a common choice is to place `defradb` in `/usr/local/bin`.
 
-### Build locally
+### Build locally {/* #build-locally */}
 
 Building DefraDB locally requires [Go](https://golang.org/) >= 1.24 and Git.
 
@@ -57,7 +57,7 @@ The Go compiler requires substantial memory during compilation. Builds with less
 
 :::
 
-### Docker container
+### Docker container {/* #docker-container */}
 
 You can also run DefraDB in a Docker container:
 
@@ -74,7 +74,7 @@ docker run \
 The environment variable `DEFRA_KEYRING_SECRET` is used to initialize DefraDB's keyring, so set it to a value that you will later have access to.
 
 
-## Start DefraDB
+## Start DefraDB {/* #start-defradb */}
 
 The database provisions keys as necessary when starting it for the first time, storing them securely in the `defradb` keyring.
 The secret to unlock the keyring is provided via the `DEFRA_KEYRING_SECRET` environment variable. The variable can also be defined in a `.env` file located in the working directory, or at a filepath defined by the `--secret-file` flag.

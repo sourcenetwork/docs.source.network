@@ -1,14 +1,37 @@
 ---
-title: Advanced deployment information
+title: Deployment & Configuration
 ---
+
+:::tip
+For the full list of configuration settings, see [References -> Configuration](/references/config.md).
+:::
 
 ## Configuration
 
-DefraDB's root directory is located at `~/.defradb/`. Among other things, it contains the data, keys, and the [configuration file](/references/config.md).
+DefraDB's root directory is located at `~/.defradb/` on UNIX, and at `%USERPROFILE%\.defradb`​ on Windows. Among other things, it contains the data, keys, and the [configuration file](/references/config.md). To specify a different path for the root directory, use the CLI option `--rootdir` when starting the instance.
 
 ## Set up Access Control Policies (ACP)
 
-To restrict what different players are allowed to do, set up suitable [access control policies](/references/acp.md).
+To restrict what different users are allowed to do, set up suitable [access control policies](/references/acp.md).
+
+## Ports
+
+DefraDB uses two ports:
+
+1. **API Port** (default `9181`): HTTP API. Customizable via the CLI option `--url` when starting the instance.
+2. **P2P Port** (default `9171`): P2P features. Customizable via the CLI option `--p2paddr` when starting the instance.
+
+```shell title="Start DefraDB listening on ports 9172 and 9182"
+defradb start --url localhost:9182 --p2paddr /ip4/127.0.0.1/tcp/9172
+```
+
+### External port binding
+
+By default, the HTTP API and P2P network use localhost. If you want to expose the ports externally, you need to specify the addresses in the config or command line parameters:
+
+```shell
+defradb start --p2paddr /ip4/0.0.0.0/tcp/9171 --url 0.0.0.0:9181
+```
 
 ## Secure the HTTP API with TLS
 
@@ -20,13 +43,20 @@ Although keys can be located in any directory, the default location is `~/.defra
 defradb start --pubkeypath ~/.defradb/certs/pubkey.crt --privkeypath ~/.defradb/certs/privkey.key
 ```
 
-:::tip generate a *self-signed* certificate
+:::tip generate a self-signed certificate
 ```shell 
 openssl ecparam -genkey -name secp384r1 -out ~/.defradb/certs/privkey.key
 openssl req -new -x509 -sha256 -key ~/.defradb/certs/privkey.key -out ~/.defradb/certs/pubkey.crt -days 365
 ```
 :::
 
+## Set up peer-to-peer synchronization
+
+By default, DefraDB starts with its P2P features active (see [Synchronize documents across multiple nodes](./p2p/)). To disable P2P on an instance, start it with the `--no-p2p` flag.
+
+```bash
+defradb start --no-p2p
+```
 
 ## Support Cross-Origin Resource Sharing (CORS)
 
@@ -45,14 +75,6 @@ defradb start --allowed-origins=http://localhost:3000
 :::tip
 The catch-all `*` is also a valid origin.
 :::
-
-## External port binding
-
-By default, the HTTP API and P2P network use localhost. If you want to expose the ports externally, you need to specify the addresses in the config or command line parameters:
-
-```shell
-defradb start --p2paddr /ip4/0.0.0.0/tcp/9171 --url 0.0.0.0:9181
-```
 
 ## Telemetry
 

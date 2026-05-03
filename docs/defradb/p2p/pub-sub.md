@@ -15,7 +15,7 @@ Any node in the community is at all times a *publisher* to other peers, and can 
 This page assumes you have (at least) two running instances of DefraDB (see [Setup](/p2p/index#setup)).
 :::
 
-## DefraDB Pub-Sub P2P setup
+## DefraDB Pub-Sub P2P setup {/* #defradb-pub-sub-p2p-setup */}
 
 To connect one node to other peers with the publisher-subscriber model, you only need the peers' [multiaddresses](https://docs.libp2p.io/concepts/addressing/). For example, a node at IP `127.0.0.1` listening on port `9171` with PeerID `12D3KooWDy7z9Y6qANCUXADpwYn7cnHoHBAL4MrAuYeWpwA9UePt` has multiaddress `/ip4/127.0.0.1/tcp/9171/p2p/12D3KooWDy7z9Y6qANCUXADpwYn7cnHoHBAL4MrAuYeWpwA9UePt`.
 
@@ -26,7 +26,7 @@ The requirements are two-fold:
     1. Connect with them
     1. Subscribe to updates on the collection
 
-### Create a common collection
+### Create a common collection {/* #create-a-common-collection */}
 
 Because publishers broadcasts updates to documents in a collection, all peers must know about the collection before they can subscribe to it. The collection must have the same fields across all peers.
 
@@ -52,7 +52,7 @@ defradb client collection add '
 ' --url localhost:9182
 ```
 
-### Connect peers
+### Connect peers {/* #connect-peers */}
 
 Before being able to subscribe to collection updates, nodes must connect to each other (and become peers).
 
@@ -82,7 +82,7 @@ defradb start --rootdir ~/.defradb-node2 --p2paddr /ip4/127.0.0.1/tcp/9172 --url
 More peers can always be added on a running instance with [`defradb client p2p connect`](/references/cli/defradb_client_p2p_connect.md).
 :::
 
-To see which peers a node is connected to, use [`defradb client p2p active-peers`](/references/cli/defradb_client_p2p_active-peers.md), 
+To see which peers a node is connected to, use [`defradb client p2p active-peers`](/references/cli/defradb_client_p2p_active-peers.md):
 
 ```shell
 defradb client p2p active-peers --url localhost:9182
@@ -98,7 +98,7 @@ defradb client p2p active-peers --url localhost:9182
 Shutdown of an instance clears its list of peers. You will need to reconnect them when restarting it.
 :::
 
-### Subscribe to updates on a collection
+### Subscribe to updates on a collection {/* #subscribe-to-updates-on-a-collection */}
 
 To subscribe to collection updates, use [defradb client p2p collection add](/references/cli/defradb_client_p2p_collection_add.md):
 

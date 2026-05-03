@@ -25,7 +25,7 @@ In the above example, we can see how the `groupBy` argument is provided and that
 
 It's important to note that in the above example, the only available field from the root `Book` type is the `groupBy` field `genre`, along with the special group and aggregate proxy fields.
 
-#### Grouping on Multiple Fields
+#### Grouping on Multiple Fields {/* #grouping-on-multiple-fields */}
 As mentioned, we can include any number of fields in the `groupBy` argument to segment the data further. Which can then also be accessed in the return object, as demonstrated in the example below:
 ```graphql
 {
@@ -40,7 +40,7 @@ As mentioned, we can include any number of fields in the `groupBy` argument to s
 }
 ```
 
-#### Grouping on Related Objects
+#### Grouping on Related Objects {/* #grouping-on-related-objects */}
 Objects often have related objects within their type definition indicated by the `@relation` directive on the respective object. We can use the grouping system to split results over the related object and the root type fields.
 
 Like any other group query, we are limited in which fields we can access indicated by the `groupBy` argument's fields. If we include a subtype that has a `@relation` directive in the `groupBy` list, we can access the entire relations fields.

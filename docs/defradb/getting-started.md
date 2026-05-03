@@ -1,21 +1,18 @@
 ---
-sidebar_position: 1
-title: Quickstart
+title: DefraDB Quickstart
 slug: /
 ---
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# DefraDB Quickstart
-
 DefraDB is a database that prioritizes data ownership, personal privacy, and local-first software. It feaures a multi-write-master architecture, a GraphQL-based query language ([DQL](/query-specification/query-language-overview.md)), and P2P syncronization across nodes.
 
 For more background on the local-first paradigm, see [The Edge-First Awakening: Redefining the Foundations of Modern Computing](https://source.network/blog/the-edge-first-awakening-redefining-the-foundations-of-modern-computing).
 
-## Install
+## Install {/* #install */}
 
-Install `defradb` by [downloading the executable](https://github.com/sourcenetwork/defradb/releases) appropriate to your system.
+Get `defradb` by [downloading the executable](https://github.com/sourcenetwork/defradb/releases) appropriate to your system.
 
 Define a `secret` for DefraDB's keyring and start the local node:
 
@@ -31,35 +28,30 @@ wget -qO- http://localhost:9181/health-check
 
 An online node responds with `"Healthy"`.
 
-[-> More information on Installation](./install.md)
+[-> More information on installation and setup](/install/index.md)
 
-## Interact with the database
+## Interact with the database {/* #interact-with-the-database */}
 
 To experiment with queries, there are a few options:
 
 - The playground at `http://localhost:9181`.
 - GraphQL clients ([Altair](https://altairgraphql.dev/#download) is a popular option). DefraDB's GraphQL endpoint is at `http://localhost:9181/api/v1/graphql` (the versionless endpoint `http://localhost:9181/api/graphql` always points to the latest version).
-- The [`client` CLI commands](/references/cli/defradb_client.md).
+- The [`client` CLI commands](./references/cli/defradb_client.md).
 - Any language that supports C bindings.
 
 
-## Add a collection
+## Add a collection {/* #add-collection */}
 
-Collections are the _types_ into which documents fit.
-
-The must be created with anything BUT the graphql endpoint.
-
-To begin, add a collection:
+Collections are the _types_ into which documents fit. Because every document belongs to a collection, you need to create collections before you can insert any data in the database.
 
 <Tabs>
   <TabItem value="cli" label="CLI" default>
     ```shell
     defradb client collection add '
-      type User {
-        name: String
-        age: Int
-        verified: Boolean
-        points: Float
+      type Book {
+        title: String
+        plot: String
+        rating: Float
       }
     '
     ```
@@ -68,34 +60,33 @@ To begin, add a collection:
     ```request title="Request"
     POST http://localhost:9181/api/v1/collections
 
-    type User {
-      name: String
-      age: Int
-      verified: Boolean
-      points: Float
+    type Book {
+      title: String
+      plot: String
+      rating: Float
     }
     ```
   </TabItem>
   <TabItem value="embedded" label="Embedded">
     ```go
-    _, err = db.DB.AddSchema(ctx, `type User {
-        name: String
-        age: Int
-        verified: Boolean
-        points: Float
+    // import "github.com/sourcenetwork/defradb/cbindings"
+
+    _, err = db.DB.AddCollection(ctx, `type Book {
+        title: String
+        plot: String
+        rating: Float}
     }`)
     if err != nil {
-        // Might fail for example if the schema is already added
-        log.Fatalf("Failed to add schema: %v", err)
+        // Fails for example if the collection is already added
+        log.Fatalf("Failed to add collection: %v", err)
     }
   ```
   </TabItem>
 </Tabs>
 
+[-> More information on collections](/collections/create.md)
 
-For more examples of collection definitions, see the [defradb -> examples/schema/](https://github.com/sourcenetwork/defradb/tree/develop/examples/collection) folder.
-
-## Create documents
+## Create documents {/* #create-documents */}
 
 Submit a `mutation` request to create documents of the `User` type:
 
@@ -141,7 +132,7 @@ Expected response:
 
 `_docID` is the document's unique identifier determined by the collection it belongs to and the data it is initialized with.
 
-## Query documents
+## Query documents {/* #query-documents */}
 
 Once you have populated your node with data, you can query it:
 
@@ -177,4 +168,4 @@ defradb client query '
 
 This returns only user documents which have a value for the `points` field *Greater Than or Equal to* (`_geq`) 50.
 
-## Set up data synchronization across nodes
+## Set up data synchronization across nodes {/* #set-up-p2p */}

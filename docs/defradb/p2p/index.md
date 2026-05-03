@@ -14,7 +14,7 @@ There's two types of peer-to-peer relationships:
 - Replicator -- *Actively* pushes changes from a specific collection to a target peer.
 
 
-## Setup
+## Setup {/* #setup */}
 
 The following P2P pages assume that you have two instances of DefraDB running on the same network. One way to start multiple DefraDB nodes, each with its root directory and port bindings, is by tweaking the `start` CLI options.
 

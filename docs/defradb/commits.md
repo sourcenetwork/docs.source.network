@@ -2,7 +2,7 @@
 title: Explore the graph of commits
 ---
 
-## Obtain document commits
+## Obtain document commits {/* #obtain-document-commits */}
 
 DefraDB's data model is based on [MerkleCRDTs](https://arxiv.org/pdf/2004.00107.pdf). Each document has a graph of all of its updates, similar to Git. The updates are called `commit`s and are identified by `cid`s (content identifiers). Each commit references its parents by their `cid`s.
 

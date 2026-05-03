@@ -7,7 +7,7 @@ sidebar_position: 0
 
 In the realm of information technology (IT) and cybersecurity, **access control** plays a pivotal role in ensuring the confidentiality, integrity, and availability of sensitive resources. Let's delve into why access control policies are crucial for protecting your valuable data.
 
-## What Is Access Control?
+## What Is Access Control? {/* #what-is-access-control */}
 
 **Access control** is a mechanism that regulates who or what can view, use, or access a specific resource within a computing environment. Its primary goal is to minimize security risks by ensuring that only **authorized users**, systems, or services have access to the resources they need. But it's more than just granting or denying access, it involves several key components:
 
@@ -17,7 +17,7 @@ In the realm of information technology (IT) and cybersecurity, **access control*
 4. **Management**: Administering access rights and permissions.
 5. **Audit**: Tracking and monitoring access patterns for accountability.
 
-## Why Is Access Control Important?
+## Why Is Access Control Important? {/* #why-is-access-control-important */}
 
 1. **Mitigating Security Risks**: Cybercriminals are becoming increasingly sophisticated, employing advanced techniques to breach security systems. By controlling who has access to your database, you significantly reduce the risk of unauthorized access, both from external attackers and insider threats.
 
@@ -27,7 +27,7 @@ In the realm of information technology (IT) and cybersecurity, **access control*
 
 4. **Managing Complexity**: Modern IT infrastructure, including cloud computing and mobile devices, has exponentially increased the number of access points. Technologies like **identity and access management (IAM)** and approaches like **zero trust** help manage this complexity effectively.
 
-## Types of Security Access Controls
+## Types of Security Access Controls {/* #types-of-security-access-controls */}
 
 Several access control models exist, including:
 
@@ -40,7 +40,7 @@ Several access control models exist, including:
 
 - Note: **DefraDB** access control rules strongly resembles **Discretionary Access Control (DAC)**, which is implemented through a **Relation-Based Access Control System (ReBac) Engine**
 
-## Challenges of Access Control in Cybersecurity
+## Challenges of Access Control in Cybersecurity {/* #challenges-of-access-control-in-cybersecurity */}
 
 - **Distributed IT Environments**: Cloud computing and remote work create new challenges.
 - **Rise of Mobility**: Mobile devices in the workplace add complexity.
@@ -48,22 +48,22 @@ Several access control models exist, including:
 - **Data Governance**: Ensuring visibility and control.
 - **Multi-Tenancy**: Managing complex permissions in SaaS applications.
 
-## Key takeaway
+## Key takeaway {/* #key-takeaway */}
 A robust access control policy system is your first line of defense against unauthorized access and data breaches.
 
 
 # DefraDB's Access Control System
 
-## ReBac Authorization Model
+## ReBac Authorization Model {/* #rebac-authorization-model */}
 
-### Zanzibar
+### Zanzibar {/* #zanzibar */}
 In 2019, Google published their [Zanzibar](https://research.google/pubs/zanzibar-googles-consistent-global-authorization-system/) paper, a paper explaining how they handle authorization across their many services. It uses access control lists but with relationship-based access control rather than role-based access control. Relationship-Based Access Control (ReBAC) establishes an authorization model where a subject's permission to access an object is defined by the presence of relationships between those subjects and objects.
 The way Zanzibar works is it exposes an API with (mainly) operations to manage `Relationships` (`tuples`) and Verify Access Requests (can Bob do X) through the `Check` call. A `tuple` includes subject, relation, and object. The Check call performs Graph Search over the `tuples` to find a path between the user and the object, if such a path exist then according to `RelBAC` the user has the queried permission. It operates as a Consistent and Partition-Tolerant System.
 
-### Zanzi
+### Zanzi {/* #zanzi */}
 However the Zanzibar API is centralized, so we (Source Network) created a decentralized implementation of Zanzibar called **Zanzi**. Which is powered by our SourceHub trust protocol. Zanzi is a general purpose Zanzibar implementation which operates over a KV persistence layer.
 
-### SourceHub ACP Module
+### SourceHub ACP Module {/* #sourcehub-acp-module */}
 DefraDB wraps the `local` and `remote` SourceHub ACP Modules to bring all that magic to DefraDB.
 
 In order to setup the relation based access control, SourceHub requires an agreed upon contract which models the `relations`, `permissions`, and `actors`. That contract is refered to as a `SourceHub Policy`. The policy model's all the `relations` and `permissions` under a `resource`.
@@ -72,28 +72,28 @@ Once the `Policy` is uploaded to the `SourceHub Module` then an `Actor` can begi
 After the `Object` is registered successfully, the `Actor` will then get a special built-in relation with that `Object` called the `"owner"` relation. This relation is given to the `Registerer` of an `Object`.
 Then an `Actor` can issue `Check` calls to see if they have access to an `Object`.
 
-## Document Access Control (DAC)
+## Document Access Control (DAC) {/* #document-access-control-dac */}
 In DefraDB's case we wanted to gate access control around the `Documents` that belonged to a specific `Collection`. Here, the `Collection` (i.e. the type/shape of the `Object`) can be thought of as the `Resource`, and the `Documents` are the `Objects`.
 
 
-## Field Access Control (FAC) (coming soon)
+## Field Access Control (FAC) (coming soon) {/* #field-access-control-fac-coming-soon */}
 We also want the ability to do a more granular access control than just DAC. Therefore we have `Field` level access control for situations where some fields of a `Document` need to be private, while others do not. In this case the `Document` becomes the `Resource` and the `Fields` are the `Objects` being gated.
 
 
-## Admin Access Control (AAC) (coming soon)
+## Admin Access Control (AAC) (coming soon) {/* #admin-access-control-aac-coming-soon */}
 We also want to model access control around the `Admin Level Operations` that exist in `DefraDB`. In this case the entire `Database` would be the `Resource` and the `Admin Level Operations` are the `Objects` being gated.
 
 A non-exhastive list of some operations only admins should have access for:
 - Ability to turnoff ACP
 - Ability to interact with the P2P system
 
-## SourceHub Policies Are Too Flexible
+## SourceHub Policies Are Too Flexible {/* #sourcehub-policies-are-too-flexible */}
 SourceHub Policies are too flexible (atleast until the ability to define `Meta Policies` is implemented). This is because SourceHub leaves it up to the user to specify any type of `Permissions` and `Relations`. However for DefraDB, there are certain guarantees that **MUST** be maintained in order for the `Policy` to be effective. For example the user can input any name for a `Permission`, or `Relation` that DefraDB has no knowledge of. Another example is when a user might make a `Policy` that does not give any `Permission` to the `owner`. Which means in the case of DAC no one will have any access to the `Document` they created.
 Therefore There was a very clear need to define some rules while writing a `Resource` in a `Policy` which will be used with DefraDB's DAC, FAC, or AAC. These rules will guarantee that certain `Required Permissions` will always be there on a `Resource` and that `Owner` has the correct `Permissions`.
 
 We call these rules DPI A.K.A DefraDB Policy Interface.
 
-## Terminologies
+## Terminologies {/* #terminologies */}
 - 'SourceHub Address' is a `Bech32` Address with a specific SourceHub prefix.
 - 'Identity' is a combination of SourceHub Address and a Key-Pair Signature.
 - 'DPI' means 'DefraDB Policy Interface'.
@@ -102,7 +102,7 @@ We call these rules DPI A.K.A DefraDB Policy Interface.
 - 'Permissioned Request' means to have a request with a SourceHub Identity.
 
 
-## DAC DPI Rules
+## DAC DPI Rules {/* #dac-dpi-rules */}
 
 To qualify as a DPI-compliant `resource`, the following rules **MUST** be satisfied:
 - The resource **must include** the mandatory `registerer` (`owner`) relation within the `relations` attribute.
@@ -114,7 +114,7 @@ To qualify as a DPI-compliant `resource`, the following rules **MUST** be satisf
 For a `Policy` to be `DPI` compliant for DAC, all of its `resources` must be DPI compliant.
 To be `Partially-DPI` at least one of its `resource` must be DPI compliant.
 
-### More Into The Weeds:
+### More Into The Weeds: {/* #more-into-the-weeds */}
 
 All mandatory permissions are:
 - Specified in the `dpi.go` file within the variable `dpiRequiredPermissions`.
@@ -122,14 +122,14 @@ All mandatory permissions are:
 The name of the required 'registerer' relation is:
 - Specified in the `dpi.go` file within the variable `requiredRegistererRelationName`.
 
-### DPI Resource Examples:
+### DPI Resource Examples: {/* #dpi-resource-examples */}
 - Check out tests here: [tests/integration/acp/schema/add_dpi](/tests/integration/acp/schema/add_dpi)
 - The tests linked are broken into `accept_*_test.go` and `reject_*_test.go` files.
 - Accepted tests document the valid DPIs (as the schema is accepted).
 - Rejected tests document invalid DPIs (as the schema is rejected).
 - There are also some Partially-DPI tests that are both accepted and rejected depending on the resource.
 
-### Required Permission's Expression:
+### Required Permission's Expression: {/* #required-permissions-expression */}
 Even though the following expressions are valid generic policy expressions, they will make a
 DPI compliant resource lose its DPI status as these expressions are not in accordance to
 our DPI [rules](#dac-dpi-rules). Assuming these `expr` are under a required permission label:
@@ -150,9 +150,9 @@ Here are some valid expression examples. Assuming these `expr` are under a requi
 - `expr: owner +reader`
 - `expr: owner+reader`
 
-## DAC Usage CLI:
+## DAC Usage CLI: {/* #dac-usage-cli */}
 
-### Authentication
+### Authentication {/* #authentication */}
 
 To perform authenticated operations you will need to generate a `secp256k1` key pair.
 
@@ -175,7 +175,7 @@ Use the private key to generate authentication tokens for each request.
 defradb client ... --identity e3b722906ee4e56368f581cd8b18ab0f48af1ea53e635e3f7b8acd076676f6ac
 ```
 
-### Adding a Policy:
+### Adding a Policy: {/* #adding-a-policy */}
 
 We have in `examples/dpi_policy/user_dpi_policy.yml`:
 ```yaml
@@ -213,7 +213,7 @@ Result:
 }
 ```
 
-### Add schema, linking to a resource within the policy we added:
+### Add schema, linking to a resource within the policy we added: {/* #add-schema-linking-to-a-resource-within-the-policy-we-added */}
 
 We have in `examples/schema/permissioned/users.graphql`:
 ```graphql
@@ -264,21 +264,21 @@ Result:
 
 ```
 
-### Create private documents (with identity)
+### Create private documents (with identity) {/* #create-private-documents-with-identity */}
 
 CLI Command:
 ```sh
 defradb client collection create --name Users '[{ "name": "SecretShahzad" }, { "name": "SecretLone" }]' --identity e3b722906ee4e56368f581cd8b18ab0f48af1ea53e635e3f7b8acd076676f6ac
 ```
 
-### Create public documents (without identity)
+### Create public documents (without identity) {/* #create-public-documents-without-identity */}
 
 CLI Command:
 ```sh
 defradb client collection create  --name Users '[{ "name": "PublicShahzad" }, { "name": "PublicLone" }]'
 ```
 
-### Get all docIDs without an identity (shows only public):
+### Get all docIDs without an identity (shows only public): {/* #get-all-docids-without-an-identity-shows-only-public */}
 CLI Command:
 ```sh
 defradb client collection docIDs --identity e3b722906ee4e56368f581cd8b18ab0f48af1ea53e635e3f7b8acd076676f6ac
@@ -297,7 +297,7 @@ Result:
 ```
 
 
-### Get all docIDs with an identity (shows public and owned documents):
+### Get all docIDs with an identity (shows public and owned documents): {/* #get-all-docids-with-an-identity-shows-public-and-owned-documents */}
 ```sh
 defradb client collection docIDs --identity e3b722906ee4e56368f581cd8b18ab0f48af1ea53e635e3f7b8acd076676f6ac
 ```
@@ -323,7 +323,7 @@ Result:
 ```
 
 
-### Access the private document (including field names):
+### Access the private document (including field names): {/* #access-the-private-document-including-field-names */}
 CLI Command:
 ```sh
 defradb client collection get --name Users "bae-a5830219-b8e7-5791-9836-2e494816fc0a" --identity e3b722906ee4e56368f581cd8b18ab0f48af1ea53e635e3f7b8acd076676f6ac
@@ -337,7 +337,7 @@ Result:
 }
 ```
 
-### Accessing the private document without an identity:
+### Accessing the private document without an identity: {/* #accessing-the-private-document-without-an-identity */}
 CLI Command:
 ```sh
 defradb client collection get --name Users "bae-a5830219-b8e7-5791-9836-2e494816fc0a"
@@ -348,7 +348,7 @@ Error:
     Error: document not found or not authorized to access
 ```
 
-### Accessing the private document with wrong identity:
+### Accessing the private document with wrong identity: {/* #accessing-the-private-document-with-wrong-identity */}
 CLI Command:
 ```sh
 defradb client collection get --name Users "bae-a5830219-b8e7-5791-9836-2e494816fc0a" --identity 4d092126012ebaf56161716018a71630d99443d9d5217e9d8502bb5c5456f2c5
@@ -359,7 +359,7 @@ Error:
     Error: document not found or not authorized to access
 ```
 
-### Update private document:
+### Update private document: {/* #update-private-document */}
 CLI Command:
 ```sh
 defradb client collection update --name Users --docID "bae-a5830219-b8e7-5791-9836-2e494816fc0a" --updater '{ "name": "SecretUpdatedShahzad" }' --identity e3b722906ee4e56368f581cd8b18ab0f48af1ea53e635e3f7b8acd076676f6ac
@@ -375,7 +375,7 @@ Result:
 }
 ```
 
-#### Check if it actually got updated:
+#### Check if it actually got updated: {/* #check-if-it-actually-got-updated */}
 CLI Command:
 ```sh
 defradb client collection get --name Users "bae-a5830219-b8e7-5791-9836-2e494816fc0a" --identity e3b722906ee4e56368f581cd8b18ab0f48af1ea53e635e3f7b8acd076676f6ac
@@ -389,9 +389,9 @@ Result:
 }
 ```
 
-### Update With Filter example (coming soon)
+### Update With Filter example (coming soon) {/* #update-with-filter-example-coming-soon */}
 
-### Delete private document:
+### Delete private document: {/* #delete-private-document */}
 CLI Command:
 ```sh
 defradb client collection delete --name Users --docID "bae-a5830219-b8e7-5791-9836-2e494816fc0a" --identity e3b722906ee4e56368f581cd8b18ab0f48af1ea53e635e3f7b8acd076676f6ac
@@ -407,7 +407,7 @@ Result:
 }
 ```
 
-#### Check if it actually got deleted:
+#### Check if it actually got deleted: {/* #check-if-it-actually-got-deleted */}
 CLI Command:
 ```sh
 defradb client collection get --name Users "bae-a5830219-b8e7-5791-9836-2e494816fc0a" --identity e3b722906ee4e56368f581cd8b18ab0f48af1ea53e635e3f7b8acd076676f6ac
@@ -418,21 +418,21 @@ Error:
     Error: document not found or not authorized to access
 ```
 
-### Delete With Filter example (coming soon)
+### Delete With Filter example (coming soon) {/* #delete-with-filter-example-coming-soon */}
 
-### Typejoin example (coming soon)
+### Typejoin example (coming soon) {/* #typejoin-example-coming-soon */}
 
-### View example (coming soon)
+### View example (coming soon) {/* #view-example-coming-soon */}
 
-### P2P example (coming soon)
+### P2P example (coming soon) {/* #p2p-example-coming-soon */}
 
-### Backup / Import example (coming soon)
+### Backup / Import example (coming soon) {/* #backup--import-example-coming-soon */}
 
-### Secondary Indexes example (coming soon)
+### Secondary Indexes example (coming soon) {/* #secondary-indexes-example-coming-soon */}
 
-### Execute Explain example (coming soon)
+### Execute Explain example (coming soon) {/* #execute-explain-example-coming-soon */}
 
-### Sharing Private Documents With Others
+### Sharing Private Documents With Others {/* #sharing-private-documents-with-others */}
 
 To share a document (or grant a more restricted access) with another actor, we must add a relationship between the
 actor and the document. Inorder to make the relationship we require all of the following:
@@ -657,7 +657,7 @@ Result:
 
 **Note: specifying `*` does not overwrite any previous formed relationships, they will remain as is **
 
-### Revoking Access To Private Documents
+### Revoking Access To Private Documents {/* #revoking-access-to-private-documents */}
 
 To revoke access to a document for an actor, we must delete the relationship between the
 actor and the document. Inorder to delete the relationship we require all of the following:
@@ -741,9 +741,9 @@ Result:
 
 **Note: Deleting with`*` does not remove any explicitly formed relationships, they will remain as they were **
 
-## DAC Usage HTTP:
+## DAC Usage HTTP: {/* #dac-usage-http */}
 
-### Authentication
+### Authentication {/* #authentication-1 */}
 
 To perform authenticated operations you will need to build and sign a JWT token with the following required fields:
 
@@ -764,13 +764,13 @@ The signed token must be set on the `Authorization` header of the HTTP request w
 
 If authentication fails for any reason a `403` forbidden response will be returned.
 
-## _AAC DPI Rules (coming soon)_
-## _AAC Usage: (coming soon)_
+## _AAC DPI Rules (coming soon)_ {/* #_aac-dpi-rules-coming-soon_ */}
+## _AAC Usage: (coming soon)_ {/* #_aac-usage-coming-soon_ */}
 
-## _FAC DPI Rules (coming soon)_
-## _FAC Usage: (coming soon)_
+## _FAC DPI Rules (coming soon)_ {/* #_fac-dpi-rules-coming-soon_ */}
+## _FAC Usage: (coming soon)_ {/* #_fac-usage-coming-soon_ */}
 
-## Warning / Caveats
+## Warning / Caveats {/* #warning--caveats */}
 - If using Local ACP, P2P will only work with collections that do not have a policy assigned.  If you wish to use ACP
 on collections connected to a multi-node network, please use SourceHub ACP.
 

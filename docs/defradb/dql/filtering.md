@@ -161,7 +161,7 @@ Let's query for all books with a rating greater than or equal to 4.
 | `_nin`   | Not in the List        |
 | `_like`  | Like Sub-String         |
 |`_nlike`  | Unlike Sub-String       |
-###### Table 1. Supported operators.
+###### Table 1. Supported operators. {/* #table-1-supported-operators */}
 
 The table below displays the operators that can be used for every value type:
 
@@ -173,7 +173,7 @@ The table below displays the operators that can be used for every value type:
 | Floating Point     | `_eq, _neq, _gt, _gte, _lt, _lte, _in, _nin`     |
 | Boolean     | `_eq, _neq, _in, _nin`     |
 | DateTime     | `_eq, _neq, _gt, _gte, _lt, _lte, _in, _nin`     |
-###### Table 2. Operators supported by Scalar types.
+###### Table 2. Operators supported by Scalar types. {/* #table-2-operators-supported-by-scalar-types */}
 
 There are 3 types of conditional keywords, i.e, `_and`, `_or`, and `_not`. Conditional keywords like `_and` and `_or` are used when we need to apply filters on multiple fields simultaneously.  The `_not` conditional keyword only accepts an object.
 

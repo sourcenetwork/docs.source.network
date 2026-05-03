@@ -6,7 +6,7 @@ sidebar_position: 160
 
 So far, all the queries and mutations that have been discussed were specific to the stored and managed developer or user-created objects. However, that is only one aspect of DefraDB's GraphQL API. The other part of DefraDB GraphQL API is the auxiliary APIs, which include MerkleCRDT Traversal, Schema Management, and more.
 
-## MerkleCRDTs
+## MerkleCRDTs {/* #merklecrdts */}
 
 All objects in DefraDB are stored in [Merkle CRDTs](../../concepts/merkle-crdt.md). These MerkleCRDTs are represented as a series of small updates connected in a MerkleDAG. The MerkleDAG is a Merklized version of a DAG (Directed Acyclical Graph), which means that each node in the DAG references a parent node through some kind of Content Identifier (CID).
 

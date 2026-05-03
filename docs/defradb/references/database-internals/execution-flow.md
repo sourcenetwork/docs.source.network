@@ -9,15 +9,15 @@ Understanding the execution flow of a query can help understand its structure, a
 - Planning
 - Executing
 
-## Parsing Phase
+## Parsing Phase {/* #parsing-phase */}
 
 The parsing phase parses the query as a string and returns a structured Abstract Syntax Tree (AST) representation. It also does a semantic validation of the structure against the schema.
 
-## Planning Phase
+## Planning Phase {/* #planning-phase */}
 
 The planning phase analyzes the query, the storage structure, and any additional indexes to determine query execution. This phase is highly dependant on the deployment environment and underlying storage engine as it uses available features and structure to provide optimal performance. Specific schemas automatically create certain secondary indexes. The planning phase automatically uses available custom secondary indexes created by you.
 
-## Execution Phase
+## Execution Phase {/* #execution-phase */}
 
 The execution phase does data scanning, filtering, and formatting. This phase has a deterministic process towards the steps taken to produce results. This is due to the priority an argument and its parameters have over another.
 
