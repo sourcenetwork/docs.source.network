@@ -17,7 +17,7 @@ export default {
       items: [
         'install/index',
         'install/keys',
-        'install/further-deploy',
+        'install/deploy-config',
       ]
     },
     'collections/create',
