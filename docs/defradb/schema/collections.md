@@ -11,8 +11,8 @@ A collection has a name (ex. `Book`) and a number of fields (ex. `title`, `plot`
 
 ```graphql title="An example collection"
 type Book {
-  title: String!
-  plot: String!
+  title: String
+  plot: String
   rating: Float
 }
 ```
@@ -31,11 +31,13 @@ Fields can be of different types:
 - `Blob`: A hex string (ex. `00FF`).
 - List: An array of another type (ex. `[String]`). Lists can be nested (ex. `[[String]]`).
 
+{/*
 To specify that a field should be Non-Null, append an exclamation mark `!` after its type (ex. `Int!`). The Non-Null modifier can be used with lists with different behaviors:
 
 - `[Int!]`: A list of Non-Null `Int`.
 - `[Int]!`: A Non-Null list of (possibly Null) `Int`.
 - `[Int!]!`: A Non-Null list of Non-Null `Int`.
+*/}
 
 ## Create collections
 
@@ -46,8 +48,8 @@ To create a collection you can use either the CLI command [`defradb client colle
     ```shell
     defradb client collection add '
       type Book {
-        title: String!
-        plot: String!
+        title: String
+        plot: String
         rating: Float
       }
     '
@@ -58,8 +60,8 @@ To create a collection you can use either the CLI command [`defradb client colle
     POST http://localhost:9181/api/v1/collections
 
     type Book {
-      title: String!
-      plot: String!
+      title: String
+      plot: String
       rating: Float
     }
     ```
@@ -69,8 +71,8 @@ To create a collection you can use either the CLI command [`defradb client colle
     // import "github.com/sourcenetwork/defradb/cbindings"
 
     _, err = db.DB.AddSchema(ctx, `type Book {
-      title: String!
-      plot: String!
+      title: String
+      plot: String
       rating: Float
     }`)
     if err != nil {
@@ -91,8 +93,8 @@ type Person {
 }
 
 type Book {
-  title: String!
-  plot: String!
+  title: String
+  plot: String
   rating: Float
   author: Person
 }

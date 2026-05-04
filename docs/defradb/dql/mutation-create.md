@@ -5,7 +5,7 @@ title: Create new documents
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-Once you have [created collections](/collections/create.md), you can start inserting documents into them. This page assumes your database contains `Book` and `Person` collections:
+Once you have [created collections](/collections/create.md), you can start adding documents into them. This page assumes your database contains `Book` and `Person` collections:
 
 ```graphql title="Database schema"
 type Person {
@@ -20,7 +20,7 @@ type Book {
 }
 ```
 
-The mutation `create_<collection>` allows you to create a new document 
+The mutation `add_<collection>` allows you to create a new document 
 
 <Tabs>
   <TabItem value="cli" label="CLI" default>

@@ -32,12 +32,25 @@ An online node responds with `"Healthy"`.
 
 ## Interact with the database {/* #interact-with-the-database */}
 
-To experiment with queries, there are a few options:
+You can interact with DefraBD in a few different ways. Most actions can be run with all tools, but some are not available on all options.
 
-- The playground at `http://localhost:9181`.
-- GraphQL clients ([Altair](https://altairgraphql.dev/#download) is a popular option). DefraDB's GraphQL endpoint is at `http://localhost:9181/api/v1/graphql` (the versionless endpoint `http://localhost:9181/api/graphql` always points to the latest version).
-- The [`client` CLI commands](./references/cli/defradb_client.md).
-- Any language that supports C bindings.
+<Tabs>
+  <TabItem value="cli" label="CLI" default>
+    The [`client` CLI commands](/references/cli/defradb_client.md).
+  </TabItem>
+  <TabItem value="http" label="HTTP API">
+    Listens on `http://localhost:9181/api/v1`
+  </TabItem>
+  <TabItem value="graphql" label="GraphQL">
+    GraphQL clients ([Altair](https://altairgraphql.dev/#download) is a popular option). DefraDB's GraphQL endpoint is at `http://localhost:9181/api/v1/graphql` (the versionless endpoint `http://localhost:9181/api/graphql` always points to the latest version).
+    
+    The Playground at `http://localhost:9181` provides a basic GraphQL client.
+  </TabItem>
+  <TabItem value="embedded" label="Embedded">
+    https://pkg.go.dev/github.com/sourcenetwork/defradb
+    Any language that supports C bindings.
+  </TabItem>
+</Tabs>
 
 
 ## Add a collection {/* #add-collection */}
