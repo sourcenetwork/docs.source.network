@@ -170,6 +170,12 @@ const config = {
       },
     ],
     [
+      "docusaurus-markdown-source-plugin",
+      {
+        docsPath: '/',  // Show dropdown on all pages
+      }
+    ],
+    [
       "docusaurus-plugin-sass",
       {
         sassOptions: {
