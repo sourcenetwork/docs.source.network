@@ -563,7 +563,6 @@ body .DocSearch {
 article .markdown header {
   display: flex;
   align-items: center;
-  /*flex-wrap: wrap;*/
   gap: 1rem;
   overflow: visible;
 }
@@ -620,7 +619,6 @@ article .markdown header h1 {
   }
 
   .markdown-actions-container .button {
-    /*font-size: 0.875rem;*/
     padding: 0.375rem 0.75rem;
   }
 
