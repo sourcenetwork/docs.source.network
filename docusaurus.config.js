@@ -12,6 +12,7 @@ const config = {
   onBrokenLinks: "warn",
   onBrokenMarkdownLinks: "warn",
   favicon: "img/favicon.ico",
+  trailingSlash: true,
   organizationName: "source-developer", // Usually your GitHub org/user name.
   projectName: "source-developer", // Usually your repo name.
   presets: [
@@ -157,10 +158,17 @@ const config = {
         indexName: "source-docs",
       },
     }),
-  clientModules: [
-    require.resolve('./src/components/posthog.js'),
-  ],
+  clientModules: [],
   plugins: [
+    [
+      require.resolve("./src/plugins/plausible"),
+      {
+        domain: "docs.source.network",
+        plausibleDomain: "plausible.source.network",
+        scriptName: "script",
+        trackOutboundLinks: true,
+      },
+    ],
     [
       "docusaurus-plugin-sass",
       {
