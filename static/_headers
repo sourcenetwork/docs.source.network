@@ -1,7 +1,7 @@
 /*.md
   Content-Type: text/plain; charset=utf-8
   X-Content-Type-Options: nosniff
-  X-Robots-Tag: googlebot: noindex, nofollow, bingbot: noindex, nofollow
+  X-Robots-Tag: noindex, nofollow
   Cache-Control: public, max-age=3600, must-revalidate
 
 /docs/*/img/*
