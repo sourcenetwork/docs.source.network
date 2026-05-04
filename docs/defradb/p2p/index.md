@@ -10,8 +10,8 @@ Each node has a unique `PeerID` generated from its public key. This ID allows ot
 
 There's two types of peer-to-peer relationships:
 
-- Publisher-Subscriber -- *Passively* synchronizes data between nodes by broadcasting document commit updates to the topic of the collection name. Nodes need to set up a shared collection and to be listening on the pubsub channel to receive updates and keep their documents in sync.
-- Replicator -- *Actively* pushes changes from a specific collection to a target peer.
+- [Publisher-Subscriber](pub-sub.md) -- Passively synchronizes data between nodes by broadcasting document commit updates to the topic of the collection name. Nodes need to set up a shared collection and to be listening on the pubsub channel to receive updates and keep their documents in sync.
+- [Replicator](replicator.md) -- Actively pushes changes from a specific collection to a target peer.
 
 
 ## Setup {/* #setup */}

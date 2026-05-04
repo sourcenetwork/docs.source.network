@@ -1,5 +1,5 @@
 ---
-title: DefraDB Quickstart
+title: Quickstart
 slug: /
 ---
 
@@ -69,8 +69,6 @@ Collections are the _types_ into which documents fit. Because every document bel
   </TabItem>
   <TabItem value="embedded" label="Embedded">
     ```go
-    // import "github.com/sourcenetwork/defradb/cbindings"
-
     _, err = db.DB.AddCollection(ctx, `type Book {
         title: String
         plot: String

@@ -2,14 +2,14 @@ export default {
   defraSidebar: [
     {
       type: 'doc',
-      id: 'getting-started',
+      id: 'quickstart',
       className: 'menu__list-item__bottom-hr'
     },
     {
       type: 'category',
       collapsible: true,
       collapsed: true,
-      label: 'Install & Setup DefraDB',
+      label: 'Install & Deploy',
       link: {
         type: 'doc',
         id: 'install/index'
@@ -20,7 +20,21 @@ export default {
         'install/deploy-config',
       ]
     },
-    'collections/create',
+    {
+      type: 'category',
+      collapsible: true,
+      collapsed: true,
+      label: 'Set up database schema',
+      link: {
+        type: 'doc',
+        id: 'schema/collections'
+      },
+      items: [
+        'schema/collections',
+        'schema/indexes',
+        'schema/migrate',
+      ]
+    },
     {
       type: 'category',
       label: 'Query the database (DQL)',
@@ -32,12 +46,12 @@ export default {
         'dql/index',
         'dql/mutation-create',
         'dql/mutation-query',
-        'dql/mutation-update',
-        'dql/mutation-delete',
         'dql/filtering',
         'dql/sorting-and-ordering',
         'dql/limiting-and-pagination',
         'dql/relationships',
+        'dql/mutation-update',
+        'dql/mutation-delete',
         'dql/aliases',
         'dql/grouping',
         'dql/aggregate-functions',

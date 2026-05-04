@@ -1,5 +1,5 @@
 ---
-title: Install DefraDB
+title: Install
 ---
 
 ## Get DefraDB {/* #get-defradb */}

@@ -46,10 +46,10 @@ To create a collection you can use either the CLI command [`defradb client colle
     ```shell
     defradb client collection add '
       type Book {
-		title: String!
-		plot: String!
-		rating: Float
-	  }
+        title: String!
+        plot: String!
+        rating: Float
+      }
     '
     ```
   </TabItem>
@@ -99,14 +99,16 @@ type Book {
 ```
 
 ```graphql title="A Book type with field genre of type [Genre!]"
+defradb client collection add '
 type Genre {
-  name: String!
+  name: String
 }
 
 type Book {
-  title: String!
-  plot: String!
+  title: String
+  plot: String
   rating: Float
-  genre: [Genre!]
+  genre: Genre
 }
+'
 ```

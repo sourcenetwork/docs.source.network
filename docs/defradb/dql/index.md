@@ -1,5 +1,5 @@
 ---
-title: DefraDB Query Language (DQL) overview
+title: DQL Query Language overview
 ---
 
 
