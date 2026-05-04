@@ -110,11 +110,11 @@ html[data-theme="dark"] {
 
   &__brand {
     margin-right: rem(40px);
+    flex-shrink: 0;
   }
 
   &__logo {
     max-width: rem(230px);
-    width: 100%;
     margin-left: rem(30px);
     @media (max-width: 996px) {
       margin-left: rem(20px);
@@ -420,6 +420,14 @@ body .DocSearch {
     padding-right: 10rem;
     &:after {
       content: " ...";
+    }
+
+    // Between ~996px and 1200px, shrink the search bar so the logo
+    // (and other navbar items) keep their natural width. We start at
+    // 996px (rather than 997px) to avoid a sub-pixel gap where neither
+    // the mobile navbar rules nor this rule apply.
+    @media (min-width: 996px) and (max-width: 1200px) {
+      padding-right: 2rem;
     }
   }
 
