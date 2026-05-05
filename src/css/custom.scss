@@ -250,6 +250,19 @@ html[data-theme="dark"] {
     ul {
       font-weight: 400;
     }
+
+    .menu__list-item__bottom-hr {
+      .menu__link {
+        border-bottom: 1px solid;
+        padding-bottom: calc(var(--ifm-menu-link-padding-vertical) + 0.25rem);
+        margin-bottom: calc(var(--ifm-menu-link-padding-vertical) + 0.25rem);
+      }
+    }
+
+    /* categories with a linked label produce a double collapsible arrow; this removes the bulkier one */
+    .menu__caret {
+      display: none;
+    }
   }
 }
 
@@ -555,4 +568,18 @@ body .DocSearch {
     var(--ifm-color-emphasis-200) 0%,
     var(--ifm-color-emphasis-100) 100%
   );
+}
+
+
+.navbar__item.dropdown {
+  .navbar__link {
+    color: var(--ifm-color-primary)
+  }
+}
+
+.tabs-container {
+  .margin-top--md {
+    border-left: 3px var(--ifm-color-primary) solid;
+    padding-left: var(--ifm-tabs-padding-horizontal);
+  }
 }
