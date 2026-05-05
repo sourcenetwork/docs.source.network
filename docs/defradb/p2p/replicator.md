@@ -1,5 +1,5 @@
 ---
-title: Replicator P2P
+title: Replicator
 ---
 
 Replicator peering is _targeted_: it allows a node to actively send updates to another node. Let's go through an example of *nodeA* actively replicating to *nodeB*:

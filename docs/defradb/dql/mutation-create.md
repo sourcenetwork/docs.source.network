@@ -20,22 +20,28 @@ type Book {
 }
 ```
 
-The mutation `add_<collection>` allows you to create a new document 
+## Create one new document
 
 <Tabs>
   <TabItem value="cli" label="CLI" default>
+    You can create new documents into `<collection>` via the mutation `add_<collection>` and the CLI command [`defradb client query`](/references/cli/defradb_client_query.md).
+
     ```shell title="Create a new document of type Book"
-    defradb client collection add '
-      type Book {
-        title: String
-        plot: String
-        rating: Float
+    defradb client query '
+      mutation {
+        add_Book(input: {
+          title: "Infinite Jest",
+          plot: "A gargantuan, mind-altering tragi-comedy about the Pursuit of Happiness in America.",
+          rating: 4.25
+        })
       }
     '
     ```
   </TabItem>
   <TabItem value="http" label="HTTP API">
-    ```request title="Create a new document of type Book"
+    You can create new documents into `<collection>` via POST requests to the HTTP endpoint [`/api/v1/collections/<collection>`](/defradb/references/http/api/add-document/). The request body should contain the document information in JSON format.
+
+    ```json title="Create a new document of type Book"
     POST http://localhost:9181/api/v1/collections/Book
     
     {
@@ -46,6 +52,8 @@ The mutation `add_<collection>` allows you to create a new document
     ```
   </TabItem>
   <TabItem value="graphql" label="GraphQL API">
+    You can create new documents into `<collection>` via the mutation `add_<collection>`.
+
     ```graphql title="Create a new document of type Book"
     mutation {
       add_Book(input: {
@@ -84,6 +92,8 @@ The mutation `add_<collection>` allows you to create a new document
   </TabItem>
 </Tabs>
 
+## Create and return one document
+
 return fields after creating
 
 ```graphql title="Create a new document"
@@ -98,6 +108,8 @@ mutation {
   }
 }
 ```
+
+## Create multiple documents at once
 
 can create and return multiple books at once
 
@@ -136,6 +148,8 @@ mutation {
   }
 }
 ```
+
+## Create documents with relationships
 
 to add with relationships
 

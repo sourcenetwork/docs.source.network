@@ -10,7 +10,7 @@ There's a few different options to obtain an executable of DefraDB.
 
 [Download the executable](https://github.com/sourcenetwork/defradb/releases) appropriate to your system.
 
-To be able to run `defradb` commands, ensure the binary is located in a directory included in your `PATH`. On UNIX systems, a common choice is to place `defradb` in `/usr/local/bin`.
+To be able to run `defradb` commands, the binary must be located in a directory included in your `PATH`. On UNIX systems, a common choice is to place `defradb` in `/usr/local/bin`.
 
 ### Build locally {/* #build-locally */}
 
@@ -59,7 +59,7 @@ The Go compiler requires substantial memory during compilation. Builds with less
 
 ### Docker container {/* #docker-container */}
 
-You can also run DefraDB in a Docker container:
+You can also run DefraDB in a Docker container. Official images are hosted on [GitHub](ghcr.io/sourcenetwork/defradb).
 
 ```shell
 docker run \
@@ -71,27 +71,27 @@ docker run \
   start
 ```
 
-The environment variable `DEFRA_KEYRING_SECRET` is used to initialize DefraDB's keyring, so set it to a value that you will later have access to.
+The environment variable `DEFRA_KEYRING_SECRET` is used to initialize [DefraDB's keys](keys.md), so set it to a value that you will later have access to.
 
 
 ## Start DefraDB {/* #start-defradb */}
 
-The database provisions keys as necessary when starting it for the first time, storing them securely in the `defradb` keyring.
-The secret to unlock the keyring is provided via the `DEFRA_KEYRING_SECRET` environment variable. The variable can also be defined in a `.env` file located in the working directory, or at a filepath defined by the `--secret-file` flag.
+The database provisions necessary keys when starting it for the first time, storing them securely in the `defradb` keyring.
+The secret to generate keys and unlock the keyring is provided via the `DEFRA_KEYRING_SECRET` environment variable. The variable can also be defined in a `.env` file located in the working directory, or at a filepath defined by the `--secret-file` flag.
 
-```shell
+```shell title="Generate and store secret into .env file"
 echo "DEFRA_KEYRING_SECRET=$(openssl rand -base64 32)" > .env
+```
+
+```shell title="Start the node"
+defradb start
 ```
 
 :::tip
 The keyring secret unlocks the identity and encryption keys for the local node, so you will need to provide it every time you start the node. For more information on keys, and on how to provide your own keys, see [Keys setup](./keys.md).
 :::
 
-Start the local node:
-
-```shell
-defradb start
-```
+## Verify connection
 
 To verify the local connection to the node, ping the `/health-check` HTTP endpoint:
 

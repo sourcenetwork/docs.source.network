@@ -28,7 +28,7 @@ wget -qO- http://localhost:9181/health-check
 
 An online node responds with `"Healthy"`.
 
-[-> More information on installation and setup](/install/index.md)
+[-> More information and install options](/install/index.md)
 
 ## Interact with the database {/* #interact-with-the-database */}
 

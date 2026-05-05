@@ -7,7 +7,7 @@ import TabItem from '@theme/TabItem';
 
 Collections represent groups of documents with similar structures, like tables for SQL databases. They create structure in an otherwise chaotic world. Every document created in DefraDB belongs to a collection.
 
-A collection has a name (ex. `Book`) and a number of fields (ex. `title`, `plot`, `rating`).
+A collection has a name (ex. `Book`) and a number of typed fields (ex. `title: String`).
 
 ```graphql title="An example collection"
 type Book {
@@ -68,8 +68,6 @@ To create a collection you can use either the CLI command [`defradb client colle
   </TabItem>
   <TabItem value="embedded" label="Embedded">
     ```go
-    // import "github.com/sourcenetwork/defradb/cbindings"
-
     _, err = db.DB.AddSchema(ctx, `type Book {
       title: String
       plot: String
@@ -90,6 +88,7 @@ For more information, see [GraphQL -> Schemas and Types](https://graphql.org/lea
 ```graphql title="A Book type with field author of type Person"
 type Person {
   name: String
+  books: [Book]
 }
 
 type Book {
@@ -100,17 +99,3 @@ type Book {
 }
 ```
 
-```graphql title="A Book type with field genre of type [Genre!]"
-defradb client collection add '
-type Genre {
-  name: String
-}
-
-type Book {
-  title: String
-  plot: String
-  rating: Float
-  genre: Genre
-}
-'
-```
