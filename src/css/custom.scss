@@ -563,8 +563,15 @@ body .DocSearch {
 }
 
 
-[data-theme="dark"] .navbar__item.dropdown {
+.navbar__item.dropdown {
   .navbar__link {
-    color: var(--ifm-link-color)
+    color: var(--ifm-color-primary)
+  }
+}
+
+.tabs-container {
+  .margin-top--md {
+    border-left: 3px var(--ifm-color-primary) solid;
+    padding-left: var(--ifm-tabs-padding-horizontal);
   }
 }
