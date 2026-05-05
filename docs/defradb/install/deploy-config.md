@@ -3,23 +3,23 @@ title: Deployment & Configuration
 ---
 
 :::tip
-For the full list of configuration settings, see [Reference -> Configuration](/reference/config.md).
+For the full list of configuration settings, see [Reference -> Configuration](/references/config.md).
 :::
 
 ## Configuration
 
-DefraDB's root directory is located at `~/.defradb/` on UNIX, and at `%USERPROFILE%\.defradb`​ on Windows. Among other things, it contains the data, keys, and the [configuration file](/reference/config.md). To specify a different path for the root directory, use the CLI option `--rootdir` when starting the instance.
+DefraDB's root directory is located at `~/.defradb/` on UNIX, and at `%USERPROFILE%\.defradb`​ on Windows. Among other things, it contains the data, keys, and the [configuration file](/references/config.md). To specify a different path for the root directory, use the CLI option `--rootdir` when starting the instance.
 
 ## Set up Access Control Policies (ACP)
 
-To restrict what different users are allowed to do, set up suitable [access control policies](/reference/acp.md).
+To restrict what different users are allowed to do, set up suitable [access control policies](/references/acp.md).
 
 ## Ports
 
 DefraDB uses two ports:
 
-1. **HTTP API port** (default `9181`). Customizable via the CLI option `--url` or the config setting [`api.address`](/reference/config.md#apiaddress) when starting the instance.
-2. **P2P port** (default `9171`). Customizable via the CLI option `--p2paddr` or the config setting [`net.p2paddresses`](/reference/config.md#netp2paddresses) when starting the instance.
+1. **HTTP API port** (default `9181`). Customizable via the CLI option `--url` or the config setting [`api.address`](/references/config.md#apiaddress) when starting the instance.
+2. **P2P port** (default `9171`). Customizable via the CLI option `--p2paddr` or the config setting [`net.p2paddresses`](/references/config.md#netp2paddresses) when starting the instance.
 
 ```shell title="Start DefraDB listening on ports 9172 and 9182"
 defradb start --url localhost:9182 --p2paddr /ip4/127.0.0.1/tcp/9172
