@@ -2,64 +2,53 @@
 title: Replicator
 ---
 
-Replicator peering is _targeted_: it allows a node to actively send updates to another node. Let's go through an example of *nodeA* actively replicating to *nodeB*:
+With a [publisher-subscriber setup](pub-sub.md), a node subscribes to updates broadcasted by other nodes. It is the recipients who decide to be part of the community and keep in sync with the collection's shared state. With replicator peering, a node sends updates for a selected collection to another node. One node decides to impose its will onto another.
 
-Start *nodeA*:
+### Create a common collection {/* #create-a-common-collection */}
 
-```shell
-defradb start
-```
+Both peers must know about the collection they are going to send/receive updates about. The collection must have the same fields across both peers.
 
-Create a new collection `Article`:
-
-```shell
+```shell title="Create the User collection on Node1"
 defradb client collection add '
-  type Article {
-    content: String
-    published: Boolean
+  type User {
+    name: String
+    age: Int
+    verified: Boolean
+    points: Float
   }
-'
+' --url localhost:9181
 ```
 
-Start *nodeB*, which will be receiving updates:
-
-```shell
-defradb start --rootdir ~/.defradb-nodeB --url localhost:9182 --p2paddr /ip4/0.0.0.0/tcp/9172
-```
-
-:::note
-
-We *do not* specify `--peers` as we will manually define a replicator after startup via the `client p2p replicator` command.
-
-:::
-
-Add the same collection to *nodeB*:
-
-```shell
-defradb client collection add --url localhost:9182 '
-  type Article {
-    content: String
-    published: Boolean
+```shell title="Create the User collection on Node2"
+defradb client collection add '
+  type User {
+    name: String
+    age: Int
+    verified: Boolean
+    points: Float
   }
-'
+' --url localhost:9182
 ```
 
-Then copy the peer info from *nodeB*:
+## Set up replication
 
-```shell
+Start by retrieving the peer info for the target node.
+In this example, Node1 will send updates to Node2.
+
+```shell title="Get peer info for Node2"
 defradb client p2p info --url localhost:9182
 ```
 
-Set *nodeA* to actively replicate the Article collection to *nodeB*:
-
-```shell
-defradb client p2p replicator add -c Article /ip4/0.0.0.0/tcp/9172/p2p/<nodeB-peerID>
+```json title="Output"
+[
+  "/ip4/127.0.0.1/tcp/9172/p2p/12D3KooWHwpvkxhfFtX7kPZSj9XJ5wvgitqZ5mt2uWVpV5kkzQX4"
+]
 ```
 
-As you add or update documents in the `Article` collection on *nodeA*, they will be pushed to *nodeB*.
+To set Node1 to replicate the `User` collection to Node2, use the CLI command [`defradb client p2p replicator add`](/references/cli/defradb_client_p2p_replicator_add.md), providing the collection name and the peer address:
 
-:::info
+```shell
+defradb client p2p replicator add -c User /ip4/127.0.0.1/tcp/9172/p2p/12D3KooWHwpvkxhfFtX7kPZSj9XJ5wvgitqZ5mt2uWVpV5kkzQX4 --url localhost:9181
+```
 
-Changes to *nodeB* will still be passively published back to *nodeA* via pubsub.
-
-:::
+Updates submitted to Node1 will be propagated to Node2 as soon as Node2 is online. When the replication is set up for the first time, documents present on Node1 but not on Node2 will be propagated to Node2. Updates submitted to Node2 remain local to Node2 and are not shared to Node1 (unless Node2 is also set up as a [subscriber](pub-sub.md) to Node1).

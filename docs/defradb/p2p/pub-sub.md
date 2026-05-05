@@ -28,26 +28,26 @@ The requirements are two-fold:
 
 ### Create a common collection {/* #create-a-common-collection */}
 
-Because publishers broadcasts updates to documents in a collection, all peers must know about the collection before they can subscribe to it. The collection must have the same fields across all peers.
+All peers must know about the collection they are going to send/receive updates about. The collection must have the same fields across all peers.
 
-```shell title="Create the User collection on Node 1"
+```shell title="Create the User collection on Node1"
 defradb client collection add '
   type User {
-	name: String
-	age: Int
-	verified: Boolean
-	points: Float
+    name: String
+    age: Int
+    verified: Boolean
+    points: Float
   }
 ' --url localhost:9181
 ```
 
-```shell title="Create the User collection on Node 2"
+```shell title="Create the User collection on Node2"
 defradb client collection add '
   type User {
-	name: String
-	age: Int
-	verified: Boolean
-	points: Float
+    name: String
+    age: Int
+    verified: Boolean
+    points: Float
   }
 ' --url localhost:9182
 ```
@@ -56,7 +56,7 @@ defradb client collection add '
 
 Before being able to subscribe to collection updates, nodes must connect to each other (and become peers).
 
-```shell title="Get peer info for Node 1"
+```shell title="Get peer info for Node1"
 defradb client p2p info --url localhost:9181
 ```
 
@@ -94,10 +94,6 @@ defradb client p2p active-peers --url localhost:9182
 ]
 ```
 
-:::info
-Shutdown of an instance clears its list of peers. You will need to reconnect them when restarting it.
-:::
-
 ### Subscribe to updates on a collection {/* #subscribe-to-updates-on-a-collection */}
 
 To subscribe to collection updates, use [defradb client p2p collection add](/references/cli/defradb_client_p2p_collection_add.md):
@@ -106,12 +102,26 @@ To subscribe to collection updates, use [defradb client p2p collection add](/ref
 defradb client p2p collection add User --url localhost:9182
 ```
 
-Note how you don't specify *to what peer's* collection you subscribe to. Node2 will listen to updates from *any peer* and update its local state accordingly. The local collection is the result of the shared state of all peers.
+As confirmation, the logs for Node2 report that a new *pubsub topic* was added:
+
+```text title="Node2 - Log output"
+Apr 30 11:42:01.717 INF p2p Adding pubsub topic PeerID=12D3KooWDy7z9Y6qANCUXADpwYn7cnHoHBAL4MrAuYeWpwA9UePt Topic=bafyreigk7nwtnurbwzv3uemdqo5czgafh33q5s3cylol4ozgvja75i5mca
+```
+
+Note how you don't specify *to what peer's* collection you subscribe to: Node2 will listen to updates from *any peer* and update its local state accordingly. The local collection is the result of the shared state of all peers.
+
+When a document update is submitted to Node1, Node2 receives the update as a *pubsub message*:
+
+```text title="Node2 - Log output"
+Apr 30 11:45:11.788 INF p2p Received new pubsub message PeerID=12D3KooWHwpvkxhfFtX7kPZSj9XJ5wvgitqZ5mt2uWVpV5kkzQX4 SenderId=12D3KooWDy7z9Y6qANCUXADpwYn7cnHoHBAL4MrAuYeWpwA9UePt Topic=bafyreigk7nwtnurbwzv3uemdqo5czgafh33q5s3cylol4ozgvja75i5mca
+```
+
+:::info
+An instance's list of peers is cleared on shutdown. You will need to reconnect peers when restarting it. Pub-sub subscriptions are instead retained across restarts.
+:::
 
 :::tip
-You can add multiple collection names at once:
-
-```shell
+```shell title="Add multiple collection names at once"
 defradb client p2p collection add <name1>,<name2>,... --url localhost:9182
 ```
 :::
