@@ -2,84 +2,77 @@
 title: Indexes
 ---
 
-DefraDB provides a powerful and flexible secondary indexing system that enables efficient document lookups and queries.
+By default, every collection has an index on the `_docID` property.
+The `@index` directive allows you to set up further indexes on selected properties.
 
-## Usage
-
-The `@index` directive can be used on GraphQL schema objects and field definitions to configure indexes.
-
-```graphql
-@index(name: String, unique: Bool, direction: ORDERING, includes: [{ field: String, direction: ORDERING }])
+```graphql title="@index directive syntax"
+@index(
+  name: String,
+  unique: Bool,
+  direction: ORDERING,
+  includes: [{ field: String, direction: ORDERING }]
+)
 ```
+- `name` &ndash; Index name.  
+Default: concatenation of _collection name, field names, direction_.
+- `unique` &ndash; Enforce uniqueness constraint (i.e. no two documents can have the same value for the given fields).  
+Default: `false`.
+- `direction` &ndash; The index order. This affects the default sorting of results when querying documents.  
+Valid values: `ASC` or `DESC`.  
+Default: `ASC`.
+- `includes` &ndash; List of fields the index is created on. (Not required when the directive is used in a field definition).
 
-### `name` 
-Sets the index name. Defaults to concatenated field names with direction.
+## Index for individual fields
 
-### `unique` 
-Makes the index unique. Defaults to false.
+To create an index for a specific field in a collection, use the `@index` directive when defining the field.
 
-### `direction`
-Sets the default index direction for all fields. Can be one of ASC (ascending) or DESC (descending). Defaults to ASC.
-		
-If a field in the includes list does not specify a direction the default direction from this value will be used instead.
-
-### `includes` 
-Sets the fields the index is created on.
-
-When used on a field definition and the field is not in the includes list it will be implicitly added as the first entry.
-
-## Examples
-
-### Field level usage
-
-Creates an index on the User name field with DESC direction.
-
-```graphql
-type User {
-    name: String @index(direction: DESC)
+```graphql title="Index the title property using default values"
+type Book {
+  // highlight-next-line
+  title: String @index
 }
 ```
 
-### Schema level usage
+```graphql title="Index multiple properties, separately, overriding defaults for name"
+type Book {
+  // highlight-next-line
+  title: String @index(name: "book_title")
+  // highlight-next-line
+  plot: String @index(name: "book_plot")
+}
+```
 
-Creates an index on the User name field with default direction (ASC).
+```graphql title="Index a relationship property"
+type Book {
+    title: String
+    // highlight-next-line
+    author: Person @primary @index
+}
 
-```graphql
-type User @index(includes: {field: "name"}) {
+type Person {
     name: String
-    age: Int 
+    books: [Book]
 }
 ```
 
-### Unique index
+## Unique indexes
 
-Creates a unique index on the User name field with default direction (ASC).
+An indexed unique field ensures that no two documents have the same value for one field. Null values are still allowed though.
 
-```graphql
-type User {
-    name: String @index(unique: true)
+```graphql title="Index the title property and enforce value uniqueness"
+type Book {
+// highlight-next-line
+  title: String @index(unique: true)
 }
 ```
 
-### Composite index
+When applied to a relationship field, the `@index(unique: true)` makes it into a [one-to-one relationship](collections.md#one-to-one). In the example below, no two `User` can share the same `Address`.
 
-Creates a composite index on the User name and age fields with default direction (ASC).
-
-```graphql
-type User @index(includes: [{field: "name"}, {field: "age"}]) {
-    name: String
-    age: Int 
-}
-```
-
-### Relationship index
-
-Creates a unique index on the User relationship to Address. The unique index constraint ensures that no two Users can reference the same Address document.
-
-```graphql
+```graphql title="Define a one-to-one relationship between User and Address"
 type User {
     name: String 
     age: Int
+    // highlight-next-line
     address: Address @primary @index(unique: true)
 } 
 
@@ -90,154 +83,57 @@ type Address {
 }
 ```
 
-## Performance considerations
+## Index for multiple fields (composite)
 
-Indexes can greatly improve query performance, but they also impact system performance during writes. Each index adds write overhead since every document update must also update the relevant indexes. Despite this, the boost in read performance for indexed queries usually makes this trade-off worthwhile.
+To create an index on the combination of multiple fields (composite index), use the `@index` directive at the collection level.
 
-#### To optimize performance:
-
-- Choose indexes based on your query patterns. Focus on fields frequently used in query filters to maximize efficiency.
-- Avoid indexing rarely queried fields. Doing so adds unnecessary overhead.
-- Be cautious with unique indexes. These require extra validation, making their performance impact more significant.
-
-Plan your indexes carefully to balance read and write performance.
-
-### Indexing related objects
-
-DefraDB supports indexing relationships between documents, allowing for efficient queries across related data.
-
-#### Example schema: Users and addresses
-
-```graphql
-type User {
-    name: String 
-    age: Int
-    address: Address @primary @index
-} 
-
-type Address {
-    user: User
-    city: String @index
-    street: String 
+```graphql title="(Unique) Index for (name, plot)"
+// highlight-next-line
+type User @index(unique: true, includes: [{field: "title"}, {field: "plot"}]) {
+  title: String
+  plot: String
 }
 ```
 
-Key indexes in this schema:
+## JSON fields indexing
 
-- **City field in address:** Indexed to enable efficient queries by city.
-- **Relationship between user and address**: Indexed to support fast lookups based on relationships.
-
-#### Query example
-
-The following query retrieves all users living in Montreal:
-
-```graphql
-query {
-    User(filter: {
-        address: {city: {_eq: "Montreal"}}
-    }) {
-        name
-    }
-}
-```
-
-#### How indexing improves efficiency
-
-**Without indexes:**
-- Fetch all user documents.
-- For each user, retrieve the corresponding Address. This approach becomes slow with large datasets.
-
-**With indexes:**
-- Fetch address documents matching the city value directly.
-- Retrieve the corresponding User documents. This method is much faster because indexes enable direct lookups.
-
-### Enforcing unique relationships
-Indexes can also enforce one-to-one relationships. For instance, to ensure each User has exactly one unique Address:
-
-```graphql
-type User {
-    name: String 
-    age: Int
-    address: Address @primary @index(unique: true)
-} 
-
-type Address {
-    user: User
-    city: String @index
-    street: String 
-}
-```
-
-Here, the @index(unique: true) constraint ensures no two Users can share the same Address. Without it, the relationship defaults to one-to-many, allowing multiple Users to reference a single Address.
-
-By combining relationship indexing with cardinality constraints, you can create highly efficient and logically consistent data structures.
-
-## JSON field indexing
-
-DefraDB offers a specialized indexing system for JSON fields, designed to handle their hierarchical structure efficiently.
-
-### Overview
-
-JSON fields differ from other field types (e.g., Int, String, Bool) because they are semi-structured and encoded. DefraDB uses a path-aware system to manage these complexities, enabling traversal and indexing of all leaf nodes in a JSON document.
-
-### Example
+JSON fields are treated specially: their leaf nodes are indexed, so that their structure can be traversed in queries. Each JSON field generates multiple entries in the index: one for every leaf node, each with their value and path.
+For example, given a property of JSON format with the following value:
 
 ```json
 {
-    "user": {
-        "device": {
-            "model": "iPhone"
-        }
+  "user": {
+    "device": {
+      "os": "Linux"
     }
+  }
 }
 ```
-
-Here, the `iPhone` value is represented with its complete path: [`user`, `device`, `model`]. This path-aware representation ensures that the system knows not just the value, but where it resides within the document.
-
-Retrieve documents where the model is "iPhone":
+You can query documents of that type filtering on the `user.device.os` property:
 
 ```graphql
 query {
-    Collection(filter: {
-        jsonField: {
-            user: {
-                device: {
-                    model: {_eq: "iPhone"}
-                }
-            }
+  Collection(filter: {
+    jsonField: {
+      user: {
+        device: {
+          model: {_eq: "Linux"}
         }
-    })
+      }
+    }
+  })
 }
 ```
 
-With indexes, the system directly retrieves matching documents, avoiding the need to scan and parse the JSON during queries.
+:::note
+Scalar types (ex. integers) are normalized to standard types (ex. int64).
+:::
 
-### How it works
+## Performance considerations
 
-#### Inverted Indexes for JSON
-DefraDB uses inverted indexes for JSON fields. These indexes reverse the traditional "document-to-value" relationship by starting with a value and quickly locating all documents containing that value.
+More indexes is not better. The right indexes is better.
 
-- Regular fields map to a single index entry.
-- JSON fields generate multiple entries—one for each leaf node, incorporating both the path and the value.
+Although an index can improve read performance, it will decrease write performance, because every document update/create must also update the relevant indexes.
 
-During indexing, the system traverses the entire JSON structure, creating these detailed index entries.
-
-#### Value normalization in JSON
-DefraDB normalizes JSON leaf values to ensure consistency in ordering and comparisons. For example:
-
-- JSON values include their normalized value and path information.
-- Scalar types (e.g., integers) are normalized to a standard type, such as `int64`.
-
-This ensures that operations like filtering and sorting are reliable and efficient.
-
-#### How indexing works
-When indexing a document with JSON fields, the system:
-
-1. Traverses the JSON structure using the JSON interface.
-1. Generates index entries for every leaf node, combining path and normalized value.
-1. Stores entries efficiently, enabling direct querying.
-
-#### Benefits of JSON field indexing
-- **Efficient queries**: Leverages inverted indexes for fast lookups, even in deeply nested structures.
-- **Precise path tracking**: Maintains path information for accurate indexing and retrieval.
-- **Scalable structure**: Handles complex JSON documents with minimal performance overhead.
+- Create indexes based on your query patterns. If you are tempted to index every field, remember that there's no free lunch and that the overhead (in storage and write speed) is likely to outweigh the benefit.
+- Use unique indexes only when necessary. Because they require extra validation, their performance impact is more significant.
