@@ -10,10 +10,6 @@ export default {
       collapsible: true,
       collapsed: true,
       label: 'Install & Deploy',
-      link: {
-        type: 'doc',
-        id: 'install/index'
-      },
       items: [
         'install/index',
         'install/keys',
@@ -25,23 +21,14 @@ export default {
       collapsible: true,
       collapsed: true,
       label: 'Set up database schema',
-      link: {
-        type: 'doc',
-        id: 'schema/collections'
-      },
       items: [
         'schema/collections',
         'schema/indexes',
-        'schema/migrate',
       ]
     },
     {
       type: 'category',
       label: 'Query the database (DQL)',
-      link: {
-        type: 'doc',
-        id: 'dql/index'
-      },
       items: [
         'dql/index',
         'dql/mutation-create',
@@ -66,6 +53,8 @@ export default {
         'p2p/replicator',
       ]
     },
+    'schema/migrate',
+    'backup-restore',
     'commits',
     {
       type: 'category',
