@@ -13,7 +13,7 @@ Query blocks are read-only GraphQL operations designed only to request informati
 
 Queries support database query operations such as filtering, sorting, grouping, skipping/limiting, aggregation, etc. These query operations can be used on different GraphQL object levels, mostly on fields that have some relation or embedding to other objects.
 
-<Tabs>
+<Tabs groupId="defra">
   <TabItem value="cli" label="CLI" default>
     ```shell title="Retrieve all documents of type Book"
     defradb client query '

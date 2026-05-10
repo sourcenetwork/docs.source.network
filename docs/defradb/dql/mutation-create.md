@@ -64,84 +64,136 @@ type Book {
     }
     ```
   </TabItem>
-  <TabItem value="embedded" label="Embedded">
-    ```go title="Create a new document of type Book"
-    createResult := db.DB.ExecRequest(
-        ctx, `
-        mutation {
-          add_Book(input: {
-            title: $title,
-            plot: $plot,
-            rating: $rating
-          })
-        }
-        `,
-        client.WithVariables(map[string]any{
-            "title": "Infinite Jest",
-            "plot": "A gargantuan, mind-altering tragi-comedy about the Pursuit of Happiness in America.",
-            "rating": 4.25,
-        }),
-    )
-    if len(createResult.GQL.Errors) > 0 {
-        for _, gqlErr := range createResult.GQL.Errors {
-            log.Printf("GraphQL error on create: %v\n", gqlErr)
-        }
-        log.Fatalf("Failed to create document in DefraDB.")
-    }
-  ```
-  </TabItem>
 </Tabs>
 
 ## Create and return one document
 
-return fields after creating
+To output some of the inserted information, provide a list of fields to be returned.
 
-```graphql title="Create a new document"
-mutation {
-  add_Book(input: {
-    title: "Infinite Jest",
-    plot: "A gargantuan, mind-altering tragi-comedy about the Pursuit of Happiness in America.",
-    rating: 4.25
-  }) {
-    title
-    description
+<Tabs groupId="defra">
+  <TabItem value="cli" label="CLI" default>
+    ```shell title="Create a new document and return some fields"
+    defradb client query '
+      mutation {
+        add_Book(input: {
+          title: "Infinite Jest",
+          plot: "A gargantuan, mind-altering tragi-comedy about the Pursuit of Happiness in America.",
+          rating: 4.25
+        // highlight-start
+        }) {
+          _docID
+          title
+        }
+        // highlight-end
+      }
+    '
+    ```
+  </TabItem>
+  <TabItem value="graphql" label="GraphQL API">
+    ```graphql title="Create a new document and return some fields"
+    mutation {
+      add_Book(input: {
+        title: "Infinite Jest",
+        plot: "A gargantuan, mind-altering tragi-comedy about the Pursuit of Happiness in America.",
+        rating: 4.25
+      // highlight-start
+      }) {
+        _docID
+        title
+      }
+      // highlight-end
+    }
+    ```
+  </TabItem>
+</Tabs>
+
+```json title="Result"
+{
+  "data": {
+    "add_Book": [
+      {
+        "_docID": "bae-429075e7-f4b2-5fa6-aa03-380ecdad0703",
+        "title": "Infinite Jest"
+      }
+    ]
   }
 }
 ```
+
+:::tip
+`_docID` is the document's unique identifier, determined by the collection it belongs to and the data it is initialized with.
+:::
 
 ## Create multiple documents at once
 
-can create and return multiple books at once
+You can create (and return) multiple documents in the same request by concatenating several `add_<collection>` statements.
+To avoid clashes, you need to [alias](aliases.md) the results.
 
-```graphql title="Create a new document"
-mutation {
-  b1:add_Book(input: {
-    title: "1984",
-    plot: "A masterpiece of rebellion and imprisonment where war is peace, freedom is slavery, and Big Brother is watching.",
-    rating: 4.20
-  }) {
-    title
-  }
-  b2:add_Book(input: {
-    title: "Lord of the Flies",
-    plot: "At the dawn of the next world war, a plane crashes on an uncharted island, stranding a group of schoolboys.",
-    rating: 3.70
-  }) {
-    title
-  }
-}
-```
+<Tabs groupId="defra">
+  <TabItem value="cli" label="CLI" default>
+    ```shell title="Create two documents"
+    defradb client query '
+      mutation {
+      // highlight-next-line
+      b1:add_Book(input: {
+        title: "1984",
+        plot: "A masterpiece of rebellion and imprisonment where war is peace, freedom is slavery, and Big Brother is watching.",
+        rating: 4.20
+      }) {
+        _docID
+        title
+      }
+      // highlight-next-line
+      b2:add_Book(input: {
+        title: "Lord of the Flies",
+        plot: "At the dawn of the next world war, a plane crashes on an uncharted island, stranding a group of schoolboys.",
+        rating: 3.70
+      }) {
+        _docID
+        title
+      }
+    }
+    '
+    ```
+  </TabItem>
+  <TabItem value="graphql" label="GraphQL API">
+    ```graphql title="Create two documents"
+    mutation {
+      // highlight-next-line
+      b1:add_Book(input: {
+        title: "1984",
+        plot: "A masterpiece of rebellion and imprisonment where war is peace, freedom is slavery, and Big Brother is watching.",
+        rating: 4.20
+      }) {
+        _docID
+        title
+      }
+      // highlight-next-line
+      b2:add_Book(input: {
+        title: "Lord of the Flies",
+        plot: "At the dawn of the next world war, a plane crashes on an uncharted island, stranding a group of schoolboys.",
+        rating: 3.70
+      }) {
+        _docID
+        title
+      }
+    }
+    ```
+  </TabItem>
+</Tabs>
 
-```text
+```json title="Result"
 {
   "data": {
     "b1": [
       {
+        "_docID": "bae-546ae840-77c7-51a5-ab0a-b5a893bfa546",
         "title": "1984"
       }
     ],
     "b2": [
       {
+        "_docID": "bae-6c91c35c-e548-58f8-86a6-d60ab5174072",
         "title": "Lord of the Flies"
       }
     ]
