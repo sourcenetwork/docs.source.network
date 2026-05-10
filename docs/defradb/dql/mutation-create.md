@@ -13,8 +13,8 @@ type Person {
 }
 
 type Book {
-  title: String!
-  plot: String!
+  title: String
+  plot: String
   rating: Float
   author: Person
 }
@@ -22,7 +22,7 @@ type Book {
 
 ## Create one new document
 
-<Tabs>
+<Tabs groupId="defra">
   <TabItem value="cli" label="CLI" default>
     You can create new documents into `<collection>` via the mutation `add_<collection>` and the CLI command [`defradb client query`](/references/cli/defradb_client_query.md).
 

@@ -8,7 +8,7 @@ DefraDB uses peer-to-peer (P2P) networking for data exchange, synchronization, a
 There's two types of peer-to-peer relationships:
 
 - [Publisher-Subscriber](pub-sub.md) - Nodes broadcast received updates on a selected collection to listening peers. The state of the collection is shared across peers.
-- [Replicator](replicator.md) - Unilaterally push updates on a specific collection to a target peer.
+- [Replicator](replicator.md) - One node unilaterally pushes updates on a specific collection to a target peer.
 
 
 ## Setup {/* #setup */}

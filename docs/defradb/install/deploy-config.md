@@ -8,7 +8,7 @@ For the full list of configuration settings, see [Reference -> Configuration](/r
 
 ## Configuration
 
-DefraDB's root directory is located at `~/.defradb/` on UNIX, and at `%USERPROFILE%\.defradb`​ on Windows. Among other things, it contains the data, keys, and the [configuration file](/references/config.md). To specify a different path for the root directory, use the CLI option `--rootdir` when starting the instance.
+DefraDB's root directory is located at `~/.defradb/` on UNIX, and at `%USERPROFILE%\.defradb`​ on Windows. Among other things, it contains the data, [keys](/install/keys.md), and the [configuration file](/references/config.md). To specify a different path for the root directory, use the CLI option `--rootdir` when starting the instance.
 
 ## Set up Access Control Policies (ACP)
 

@@ -34,7 +34,7 @@ An online node responds with `"Healthy"`.
 
 You can interact with DefraBD in a few different ways. Most actions can be run with all tools, but some are not available on all options.
 
-<Tabs>
+<Tabs groupId="defra">
   <TabItem value="cli" label="CLI" default>
     The [`client` CLI commands](/references/cli/defradb_client.md).
   </TabItem>
@@ -57,7 +57,9 @@ You can interact with DefraBD in a few different ways. Most actions can be run w
 
 Collections are the _types_ into which documents fit. Because every document belongs to a collection, you need to create collections before you can insert any data in the database.
 
-<Tabs>
+You can create a collection with either the CLI command [`defradb client collection add`](/references/cli/defradb_client_collection_add.md), the HTTP API endpoint [`/collections`](/defradb/references/http/api/add-collection/), or the method `AddCollection`.
+
+<Tabs groupId="defra">
   <TabItem value="cli" label="CLI" default>
     ```shell
     defradb client collection add '
@@ -95,53 +97,133 @@ Collections are the _types_ into which documents fit. Because every document bel
   </TabItem>
 </Tabs>
 
-[-> More information on collections](/collections/create.md)
+[-> More information on collections](/schema/collections.md)
 
 ## Create documents {/* #create-documents */}
 
-Submit a `mutation` request to create documents of the `User` type:
+<Tabs groupId="defra">
+  <TabItem value="cli" label="CLI" default>
+    You can create new documents into `<collection>` via the mutation `add_<collection>` and the CLI command [`defradb client query`](/references/cli/defradb_client_query.md).
 
-```shell
-defradb client query '
-  mutation {
-      user1: add_User(input: {age: 31, verified: true, points: 90, name: "Bob"}) {
+    ```shell title="Create a new document of type Book"
+    defradb client query '
+      mutation {
+        b1:add_Book(input: {
+          title: "1984",
+          plot: "A masterpiece of rebellion and imprisonment where war is peace, freedom is slavery, and Big Brother is watching.",
+          rating: 4.20
+        }) {
           _docID
-      }
-      user2: add_User(input: {age: 28, verified: false, points: 15, name: "Alice"}) {
+          title
+        }
+        b2:add_Book(input: {
+          title: "Lord of the Flies",
+          plot: "At the dawn of the next world war, a plane crashes on an uncharted island, stranding a group of schoolboys.",
+          rating: 3.70
+        }) {
           _docID
+          title
+        }
       }
-      user3: add_User(input: {age: 35, verified: true, points: 100, name: "Charlie"}) {
-          _docID
-      }
-  }
-'
-```
+    '
+    ```
+  </TabItem>
+  <TabItem value="http" label="HTTP API">
+    You can create new documents into `<collection>` via POST requests to the HTTP endpoint [`/api/v1/collections/<collection>`](/defradb/references/http/api/add-document/). The request body should contain the document information in JSON format.
 
-Expected response:
+    ```json title="Create two new documents of type Book"
+    POST http://localhost:9181/api/v1/collections/Book
 
-```json
-{
-  "data": {
-    "user1": [
+    [
       {
-        "_docID": "bae-fb9f4d0d-ccad-52d3-bd2e-6b0e5e4612e7"
-      }
-    ],
-    "user2": [
+        "title": "1984",
+        "plot": "A masterpiece of rebellion and imprisonment where war is peace, freedom is slavery, and Big Brother is watching.",
+        "rating": 4.20
+      },
       {
-        "_docID": "bae-fdbdd3b5-31d4-51f9-afba-b9d5aacaf210"
-      }
-    ],
-    "user3": [
-      {
-        "_docID": "bae-bf8fde7c-3344-5c48-818a-2747f0f76c07"
+        "title": "Lord of the Flies",
+        "plot": "At the dawn of the next world war, a plane crashes on an uncharted island, stranding a group of schoolboys.",
+        "rating": 3.70
       }
     ]
-  }
-}
-```
+    ```
 
-`_docID` is the document's unique identifier determined by the collection it belongs to and the data it is initialized with.
+    ```text title="Response"
+    HTTP 200
+    ```
+  </TabItem>
+  <TabItem value="graphql" label="GraphQL API">
+    You can create new documents into `<collection>` via the mutation `add_<collection>`.
+
+    ```graphql title="Create two new documents of type Book, returning their title and ID"
+    mutation {
+      b1:add_Book(input: {
+        title: "1984",
+        plot: "A masterpiece of rebellion and imprisonment where war is peace, freedom is slavery, and Big Brother is watching.",
+        rating: 4.20
+      }) {
+        _docID
+        title
+      }
+      b2:add_Book(input: {
+        title: "Lord of the Flies",
+        plot: "At the dawn of the next world war, a plane crashes on an uncharted island, stranding a group of schoolboys.",
+        rating: 3.70
+      }) {
+        _docID
+        title
+      }
+    }
+    ```
+
+    ```text title="Result"
+    {
+      "data": {
+        "b1": [
+          {
+            "_docID": "bae-546ae840-77c7-51a5-ab0a-b5a893bfa546",
+            "title": "1984"
+          }
+        ],
+        "b2": [
+          {
+            "_docID": "bae-6c91c35c-e548-58f8-86a6-d60ab5174072",
+            "title": "Lord of the Flies"
+          }
+        ]
+      }
+    }
+    ```
+  </TabItem>
+  <TabItem value="embedded" label="Embedded">
+    ```go title="Create a new document of type Book"
+    createResult := db.DB.ExecRequest(
+        ctx, `
+        mutation {
+          add_Book(input: {
+            title: $title,
+            plot: $plot,
+            rating: $rating
+          })
+        }
+        `,
+        client.WithVariables(map[string]any{
+            "title": "Infinite Jest",
+            "plot": "A gargantuan, mind-altering tragi-comedy about the Pursuit of Happiness in America.",
+            "rating": 4.25,
+        }),
+    )
+    if len(createResult.GQL.Errors) > 0 {
+        for _, gqlErr := range createResult.GQL.Errors {
+            log.Printf("GraphQL error on create: %v\n", gqlErr)
+        }
+        log.Fatalf("Failed to create document in DefraDB.")
+    }
+  ```
+  </TabItem>
+</Tabs>
+
+`_docID` is the document's unique identifier, determined by the collection it belongs to and the data it is initialized with.
 
 ## Query documents {/* #query-documents */}
 
@@ -150,11 +232,11 @@ Once you have populated your node with data, you can query it:
 ```shell
 defradb client query '
   query {
-    User {
+    Book {
       _docID
-      age
-      name
-      points
+      title
+      plot
+      rating
     }
   }
 '
@@ -167,7 +249,7 @@ You can further filter results with the `filter` argument.
 ```shell
 defradb client query '
   query {
-    User(filter: {points: {_geq: 50}}) {
+    Book(filter: {rating: {_geq: 3.5}, title: {_like: "Flies"}) {
       _docID
       age
       name

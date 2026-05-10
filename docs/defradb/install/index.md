@@ -77,7 +77,7 @@ The environment variable `DEFRA_KEYRING_SECRET` is used to initialize [DefraDB's
 ## Start DefraDB {/* #start-defradb */}
 
 The database provisions necessary keys when starting it for the first time, storing them securely in the `defradb` keyring.
-The secret to generate keys and unlock the keyring is provided via the `DEFRA_KEYRING_SECRET` environment variable. The variable can also be defined in a `.env` file located in the working directory, or at a filepath defined by the `--secret-file` flag.
+The environment variable `DEFRA_KEYRING_SECRET` provides the secret to generate keys and unlock the keyring. The variable can also be defined in a `.env` file located in the working directory, or at a filepath defined by the `--secret-file` flag.
 
 ```shell title="Generate and store secret into .env file"
 echo "DEFRA_KEYRING_SECRET=$(openssl rand -base64 32)" > .env
