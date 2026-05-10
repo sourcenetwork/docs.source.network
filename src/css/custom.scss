@@ -575,3 +575,13 @@ body .DocSearch {
     padding-left: var(--ifm-tabs-padding-horizontal);
   }
 }
+
+.theme-code-block {
+  .theme-code-block-highlighted-line {
+    border-right: 3px var(--ifm-color-primary) solid;
+
+    [data-theme="dark"] & {
+      background-color: rgb(47 47 47);
+    }
+  }
+}
