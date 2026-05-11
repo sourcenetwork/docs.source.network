@@ -1,5 +1,5 @@
 ---
-title: P2P setup
+title: Peer-to-peer setup
 ---
 
 One database is great, but it quickly becomes useless if hamsters eat its disks or a tsunami floods its fans. Humanity has been adding redundancy to its setups ever since poligamy was a thing.

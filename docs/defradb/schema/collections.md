@@ -1,5 +1,5 @@
 ---
-title: Create database collections
+title: Database collections
 ---
 
 import Tabs from '@theme/Tabs';
@@ -81,8 +81,6 @@ You can create a collection with either the CLI command [`defradb client collect
   </TabItem>
 </Tabs>
 
-For more information, see [GraphQL -> Schemas and Types](https://graphql.org/learn/schema/).
-
 ## Relationships
 
 To create a relationship between two types, define a field having the other side of the relationship as type.
@@ -93,9 +91,13 @@ The way in which you define relationships depends on their kind:
 - [One-to-many](#one-to-many) &ndash; Each document of one type is linked to multiple documents of the other type.
 - [Many-to-many](#many-to-many) &ndash; Each document of one type is linked to multiple documents of the other type.
 
+See also: [Create documents with relationships](/dql/mutation-create.md#relationships) and [Query the database](/dql/mutation-query.md#relationships).
+
 ### One-to-one
 
-One-to-one relationships are such that each document of one type is linked to one and only one document of another type. They are defined by two types each having a field carrying the other type. For example, there's a one-to-one relationship between `Husband` and `Wife` (disregarding avant-garde polyamorous relationships).
+One-to-one relationships are such that each document of one type is linked to one and only one document of another type.
+
+In practice, type `A` defines a field of type `B`, and type `B` defines a field of type `A`. For example, there's a one-to-one relationship between `Husband` and `Wife` (disregarding avant-garde polyamorous relationships).
 
 ```graphql title="Type Husband with 1:1 relationship with Wife"
 type Husband {
@@ -112,9 +114,13 @@ type Wife {
 - `@primary` &ndash; This side stores a direct pointer to the other end of the relationship, resulting in faster queries. In the example above, `Wife` contains a (implicit) field `_husbandID`, so retrieving a _wife's husband_ is quick. On the other hand, documents of type `Husband` do not contain any pointer to the relative `Wife`, so a collection scan is needed to retrieve a _husband's wife_. Which side should be _primary_ depends on your query patterns.
 - `index(unique: true)` &ndash; Creates a [unique index](indexes.md#unique-indexes) on `_husbandID`, making the relationship one-to-one.
 
+:::warning
+There's currently no validation on the type when creating documents with relationships. It is the client's responsibility to validate that the `Wife.husbandID` is populated with the docID of a `Husband` document. It's up to you to marry humans.
+:::
+
 ### One-to-many
 
-One-to-many relationships link one document of one type with many documents of another type. One side defines a field of the other type, whereas the other type defines a field of _list_ of the first type. For example, each book is written by one author, whereas one author can write multiple books.
+One-to-many relationships link one document of one type with many documents of another type. Type `A` defines a field of type `B`, whereas type `B` defines a field of type `[A]` (_list_ of `A`). For example, each book is written by one author, whereas one author can write multiple books.
 
 ```graphql title="Type Book with 1:many relationship with Author"
 type Book {
@@ -127,6 +133,10 @@ type Author {
   authoredBooks: [Book]
 }
 ```
+
+:::warning
+There's currently no validation on the type when creating documents with relationships. It is the client's responsibility to validate that the `Book.authorID` is populated with the docID of a `Author` document.
+:::
 
 ### Many-to-many
 
@@ -166,3 +176,148 @@ type Wife {
   husband: Husband @primary @index(unique: true)
 }
 ```
+
+## Show collections
+
+To see all collections available on an instance, use the CLI command [`defradb client collection describe`](/references/cli/defradb_client_collection_describe.md) or the HTTP API endpoint [`/collections`](/defradb/references/http/api/describe-collection/).
+
+<Tabs>
+  <TabItem value="cli" label="CLI" default>
+    ```shell
+    defradb client collection describe
+    ```
+    :::tip
+    Use the `--name` parameter to request a specific collection by its name.
+    :::
+  </TabItem>
+  <TabItem value="http" label="HTTP API">
+    ```request title="Request"
+    GET http://localhost:9181/api/v1/collections
+    ```
+    :::tip
+    Use the `name` parameter to request a specific collection by its name.
+    :::
+  </TabItem>
+</Tabs>
+
+```json title="Result"
+[
+  {
+    "Name": "Book",
+    "VersionID": "bafyreihqndwux4ewnlvmtcfvptikfvzu76tri2i5x4nbpiqh3hskxmagcm",
+    "CollectionID": "bafyreihqndwux4ewnlvmtcfvptikfvzu76tri2i5x4nbpiqh3hskxmagcm",
+    "CollectionSet": null,
+    "Query": null,
+    "PreviousVersion": null,
+    "Fields": [
+      {
+        "FieldID": "bafyreihqzhiz3iwro4jozp6kphq4sosg6ccoqcbiaf7rg5dmvea7aux55a",
+        "Name": "_docID",
+        "Kind": 1,
+        "Typ": 0,
+        "RelationName": null,
+        "IsPrimary": false,
+        "DefaultValue": null,
+        "Size": 0
+      },
+      {
+        "FieldID": "bafyreiguuxtuepj5vji3oe5j6lyhwqi5izm4all3gav7ppvgj35hxklrte",
+        "Name": "_authorID",
+        "Kind": 1,
+        "Typ": 1,
+        "RelationName": "book_person",
+        "IsPrimary": true,
+        "DefaultValue": null,
+        "Size": 0
+      },
+      {
+        "FieldID": "bafyreibhohsw25uzzzbzs2awta43ql5oo6anry3rxdcuj2n3hlfbjmifse",
+        "Name": "author",
+        "Kind": {
+          "Array": false,
+          "CollectionID": "bafyreifilnntrughum4p63ntvocxvwqg2eveymltpziwk7lluvncjftula"
+        },
+        "Typ": 0,
+        "RelationName": "book_person",
+        "IsPrimary": true,
+        "DefaultValue": null,
+        "Size": 0
+      },
+      {
+        "FieldID": "bafyreibxx5wzp4iagt3jifid2r7hfzvbtzp2fuq26vku6t6ptk3ppwgxl4",
+        "Name": "plot",
+        "Kind": 11,
+        "Typ": 1,
+        "RelationName": null,
+        "IsPrimary": false,
+        "DefaultValue": null,
+        "Size": 0
+      },
+      {
+        "FieldID": "bafyreibbxpehr5radbbkkmsau5uuscoif4dxu6j3ef4by6f445fyx7pl3y",
+        "Name": "rating",
+        "Kind": 6,
+        "Typ": 1,
+        "RelationName": null,
+        "IsPrimary": false,
+        "DefaultValue": null,
+        "Size": 0
+      },
+      {
+        "FieldID": "bafyreihfb2izf5akjuua5jkijrgsgievsspboopupjq2its25owgle5pzm",
+        "Name": "title",
+        "Kind": 11,
+        "Typ": 1,
+        "RelationName": null,
+        "IsPrimary": false,
+        "DefaultValue": null,
+        "Size": 0
+      }
+    ],
+    "Indexes": [],
+    "EncryptedIndexes": [],
+    "Policy": null,
+    "IsActive": true,
+    "IsMaterialized": true,
+    "IsBranchable": false,
+    "IsEmbeddedOnly": false,
+    "IsPlaceholder": false,
+    "VectorEmbeddings": []
+  }
+]
+```
+
+## Delete collections
+
+To delete a collection, you need to truncate it (i.e. delete all its documents) and patch it for deletion. 
+
+<Tabs>
+  <TabItem value="cli" label="CLI" default>
+    Use the CLI commands [`defradb client collection truncate`](/references/cli/defradb_client_collection_truncate.md) and [`defradb client collection patch`](/references/cli/defradb_client_collection_patch.md).
+
+    For example, to delete the collection `Book`:
+    ```shell
+    defradb client collection truncate --collection-id bafyreihqndwux4ewnlvmtcfvptikfvzu76tri2i5x4nbpiqh3hskxmagcm
+    defradb client collection patch '[{"op": "remove", "path": "/Book"}]'
+    ```
+  </TabItem>
+  <TabItem value="http" label="HTTP API">
+    Send a `DELETE` request to the endpoint [`/collections/<name>`](/defradb/references/http/api/delete-collection-with-filter/) and a `PATCH` request to the endpoint [`/collections/`](/defradb/references/http/api/patch-collection/).
+
+    For example, to delete the collection `Book`:
+    ```http title="Request"
+    DELETE http://localhost:9181/api/v1/collections/Book HTTP/2
+    content-type: application/json
+    
+    {}
+    ```
+    ```http title="Request"
+    PATCH http://localhost:9181/api/v1/collections/ HTTP/2
+    content-type: application/json
+
+    {
+      "Patch": "[{\"op\": \"remove\", \"path\": \"/Book\"}]"
+    }
+    ```
+  </TabItem>
+</Tabs>

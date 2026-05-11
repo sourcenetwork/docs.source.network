@@ -36,19 +36,22 @@ You can interact with DefraBD in a few different ways. Most actions can be run w
 
 <Tabs groupId="defra">
   <TabItem value="cli" label="CLI" default>
-    The [`client` CLI commands](/references/cli/defradb_client.md).
+    The [`client` CLI commands](/references/cli/defradb_client.md) allow to interact with an instance from the command line.
   </TabItem>
   <TabItem value="http" label="HTTP API">
-    Listens on `http://localhost:9181/api/v1`
+    The HTTP API is available at `http://localhost:9181/api/v1/`.  
+    A versionless endpoint is also available at `http://localhost:9181/api/` and points always to the latest version.
   </TabItem>
   <TabItem value="graphql" label="GraphQL">
-    GraphQL clients ([Altair](https://altairgraphql.dev/#download) is a popular option). DefraDB's GraphQL endpoint is at `http://localhost:9181/api/v1/graphql` (the versionless endpoint `http://localhost:9181/api/graphql` always points to the latest version).
+    The GraphQL endpoint is available at `http://localhost:9181/api/v1/graphql`.  
+    A versionless endpoint is also available at  `http://localhost:9181/api/graphql` and points always to the latest version.
     
-    The Playground at `http://localhost:9181` provides a basic GraphQL client.
+    GraphQL clients (ex. [Altair](https://altairgraphql.dev/)) are a popular option to interact with the GraphQL API.  
+    The Playground at `http://localhost:9181` also provides a basic GraphQL client.
   </TabItem>
   <TabItem value="embedded" label="Embedded">
-    https://pkg.go.dev/github.com/sourcenetwork/defradb
-    Any language that supports C bindings.
+    You can import the [`defradb` Go package](https://pkg.go.dev/github.com/sourcenetwork/defradb) and interact with DefraDB directly via Go.  
+    Technically, any language supporting C bindings will work.
   </TabItem>
 </Tabs>
 
@@ -225,6 +228,8 @@ You can create a collection with either the CLI command [`defradb client collect
 
 `_docID` is the document's unique identifier, determined by the collection it belongs to and the data it is initialized with.
 
+[-> More information on creating documents](/dql/mutation-create.md)
+
 ## Query documents {/* #query-documents */}
 
 Once you have populated your node with data, you can query it:
@@ -244,21 +249,24 @@ defradb client query '
 
 This query obtains *all* users and returns their fields `_docID, age, name, points`. GraphQL queries only return the exact fields requested (there is no equivalent of the SQL `SELECT *` syntax).
 
-You can further filter results with the `filter` argument.
+You can query for specific documents via the `filter` argument.
+For example, to return only books with a `rating` *Greater Than or Equal to* (`_geq`) 3.5 and containing `Flies` in their title:
+
 
 ```shell
 defradb client query '
   query {
-    Book(filter: {rating: {_geq: 3.5}, title: {_like: "Flies"}) {
+    Book(filter: {rating: {_geq: 3.5}, title: {_like: "%Flies%"}) {
       _docID
-      age
-      name
-      points
+      title
     }
   }
 '
 ```
 
-This returns only user documents which have a value for the `points` field *Greater Than or Equal to* (`_geq`) 50.
+[-> More information on querying documents](/dql/mutation-query.md)
 
-## Set up data synchronization across nodes {/* #set-up-p2p */}
+## Next steps {/* #next-steps */}
+
+- [Set up data synchronization across nodes -> Peer-to-peer setup](/p2p/index.md)
+- [Explore the graph of commits](/commits.md)

@@ -109,7 +109,7 @@ For example, given a property of JSON format with the following value:
   }
 }
 ```
-You can query documents of that type filtering on the `user.device.os` property:
+Assuming an index is present on `Collections.jsonField`, you can query documents of that type filtering on the `user.device.os` property:
 
 ```graphql
 query {

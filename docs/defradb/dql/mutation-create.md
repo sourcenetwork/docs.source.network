@@ -5,11 +5,12 @@ title: Create new documents
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-Once you have [created collections](/collections/create.md), you can start adding documents into them. This page assumes your database contains `Book` and `Person` collections:
+Once you have [created collections](/schema/collections.md), you can start adding documents into them. This page assumes your database contains `Book` and `Person` collections:
 
 ```graphql title="Database schema"
 type Person {
   name: String
+  authoredBooks: [Book]
 }
 
 type Book {
@@ -26,7 +27,7 @@ type Book {
   <TabItem value="cli" label="CLI" default>
     You can create new documents into `<collection>` via the mutation `add_<collection>` and the CLI command [`defradb client query`](/references/cli/defradb_client_query.md).
 
-    ```shell title="Create a new document of type Book"
+    ```graphql title="Create a new document of type Book"
     defradb client query '
       mutation {
         add_Book(input: {
@@ -203,21 +204,71 @@ To avoid clashes, you need to [alias](aliases.md) the results.
 
 ## Create documents with relationships
 
-to add with relationships
+To add documents with relationships to each other, you need two queries: one to insert the documents, and another to set the new docID.
 
-```graphql title="Create a new document"
+For example, to create a book and link it to an author, first create the documents and return their docIDs:
+
+```graphql title="Create new documents for Person and Book"
 mutation {
-  v:add_Person(input: {
-    name: Victor Hugo
+  p:add_Person(input: {
+    name: "Victor Hugo"
+  }) {
+    _docID
+    name
   }
   b:add_Book(input: {
     title: "Les Misérables",
     plot: "Victor Hugo's tale of injustice, heroism and love follows the fortunes of Jean Valjean, an escaped convict determined to put his criminal past behind him.",
     rating: 4.21
-    author: v
   }) {
+    _docID
     title
-    author
+  }
+}
+```
+```json title="Result"
+{
+  "data": {
+    "b": [
+      {
+        "_docID": "bae-1a617fbe-1a13-5ad7-b727-bc2792243801",
+        "title": "Les Misérables"
+      }
+    ],
+    "p": [
+      {
+        "_docID": "bae-c169e917-df52-5603-9224-39c1757f1b04",
+        "name": "Victor Hugo"
+      }
+    ]
+  }
+}
+```
+
+Then use an [update mutation](/dql/mutation-update.md) to set the field `_authorID` on `Book` with the docID from the desired `Person`:
+
+```graphql title="Link book and author via Book._authorID"
+mutation {
+  update_Book(
+    docID: "bae-1a617fbe-1a13-5ad7-b727-bc2792243801",
+    input: { _authorID: "bae-c169e917-df52-5603-9224-39c1757f1b04" }
+  ) {
+    _docID
+    title
+    _authorID
+  }
+}
+```
+```json title="Result"
+{
+  "data": {
+    "update_Book": [
+      {
+        "_authorID": "bae-c169e917-df52-5603-9224-39c1757f1b04",
+        "_docID": "bae-1a617fbe-1a13-5ad7-b727-bc2792243801",
+        "title": "Les Misérables"
+      }
+    ]
   }
 }
 ```
