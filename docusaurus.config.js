@@ -162,6 +162,7 @@ const config = {
       },
       prism: {
         theme: variableCodeTheme,
+        additionalLanguages: ['http'],
       },
       algolia: {
         appId: "N3M9YBYYQY",
