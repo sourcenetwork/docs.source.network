@@ -21,7 +21,7 @@ type Book {
 }
 ```
 
-## Create one new document
+## Create one new document {/* #single */}
 
 <Tabs groupId="defra">
   <TabItem value="cli" label="CLI" default>
@@ -67,7 +67,7 @@ type Book {
   </TabItem>
 </Tabs>
 
-## Create and return one document
+## Create and return one document {/* #single-return */}
 
 To output some of the inserted information, provide a list of fields to be returned.
 
@@ -125,7 +125,7 @@ To output some of the inserted information, provide a list of fields to be retur
 `_docID` is the document's unique identifier, determined by the collection it belongs to and the data it is initialized with.
 :::
 
-## Create multiple documents at once
+## Create multiple documents at once {/* #multiple */}
 
 You can create (and return) multiple documents in the same request by concatenating several `add_<collection>` statements.
 To avoid clashes, you need to [alias](aliases.md) the results.
@@ -202,7 +202,7 @@ To avoid clashes, you need to [alias](aliases.md) the results.
 }
 ```
 
-## Create documents with relationships
+## Create documents with relationships {/* #relationships */}
 
 To add documents with relationships to each other, you need two queries: one to insert the documents, and another to set the new docID.
 

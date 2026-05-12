@@ -17,7 +17,7 @@ type Book {
 }
 ```
 
-## Field types
+## Field types {/* #field-types */}
 
 Fields can be of different types:
 
@@ -39,7 +39,7 @@ To specify that a field should be Non-Null, append an exclamation mark `!` after
 - `[Int!]!`: A Non-Null list of Non-Null `Int`.
 */}
 
-## Create collections
+## Create collections {/* #create */}
 
 You can create a collection with either the CLI command [`defradb client collection add`](/references/cli/defradb_client_collection_add.md), the HTTP API endpoint [`/collections`](/defradb/references/http/api/add-collection/), or the method `AddCollection`.
 
@@ -161,7 +161,7 @@ type Enrollment {
 }
 ```
 
-### Rename a relationship field
+### Rename a relationship field {/* #relationships-rename */}
 
 By default, 
 
@@ -177,7 +177,7 @@ type Wife {
 }
 ```
 
-## Show collections
+## Show collections {/* #show */}
 
 To see all collections available on an instance, use the CLI command [`defradb client collection describe`](/references/cli/defradb_client_collection_describe.md) or the HTTP API endpoint [`/collections`](/defradb/references/http/api/describe-collection/).
 
@@ -287,7 +287,7 @@ To see all collections available on an instance, use the CLI command [`defradb c
 ]
 ```
 
-## Delete collections
+## Delete collections {/* #delete */}
 
 To delete a collection, you need to truncate it (i.e. delete all its documents) and patch it for deletion. 
 

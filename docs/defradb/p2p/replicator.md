@@ -4,7 +4,7 @@ title: Replicator
 
 With a [publisher-subscriber setup](pub-sub.md), a node subscribes to updates broadcasted by other nodes. It is the recipients who decide to be part of the community and keep in sync with the collection's shared state. With replicator peering, a node sends updates for a selected collection to another node. One node decides to impose its will onto another.
 
-### Create a common collection {/* #create-a-common-collection */}
+### Create a common collection {/* #create-collection */}
 
 Both peers must know about the collection they are going to send/receive updates about. The collection must have the same fields across both peers.
 
@@ -30,7 +30,7 @@ defradb client collection add '
 ' --url localhost:9182
 ```
 
-## Set up replication
+## Set up replication {/* #setup */}
 
 Start by retrieving the peer info for the target node.
 In this example, Node1 will send updates to Node2.

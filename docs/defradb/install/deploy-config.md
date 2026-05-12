@@ -6,15 +6,15 @@ title: Deployment & Configuration
 For the full list of configuration settings, see [Reference -> Configuration](/references/config.md).
 :::
 
-## Configuration
+## Configuration {/* #config */}
 
 DefraDB's root directory is located at `~/.defradb/` on UNIX, and at `%USERPROFILE%\.defradb`​ on Windows. Among other things, it contains the data, [keys](/install/keys.md), and the [configuration file](/references/config.md). To specify a different path for the root directory, use the CLI option `--rootdir` when starting the instance.
 
-## Set up Access Control Policies (ACP)
+## Set up Access Control Policies (ACP) {/* #acp */}
 
 To restrict what different users are allowed to do, set up suitable [access control policies](/references/acp.md).
 
-## Ports
+## Ports {/* #ports */}
 
 DefraDB uses two ports:
 
@@ -25,7 +25,7 @@ DefraDB uses two ports:
 defradb start --url localhost:9182 --p2paddr /ip4/127.0.0.1/tcp/9172
 ```
 
-### External port binding
+### External port binding {/* #ports-external */}
 
 By default, the HTTP API and P2P network use localhost. To expose the ports externally, specify the addresses in the config or command line parameters:
 
@@ -33,7 +33,7 @@ By default, the HTTP API and P2P network use localhost. To expose the ports exte
 defradb start --p2paddr /ip4/0.0.0.0/tcp/9171 --url 0.0.0.0:9181
 ```
 
-## Secure the HTTP API with TLS
+## Secure the HTTP API with TLS {/* #tls */}
 
 The HTTP API is exposed unencrypted by default, but you can configure it to use TLS.
 
@@ -50,7 +50,7 @@ openssl req -new -x509 -sha256 -key ~/.defradb/certs/privkey.key -out ~/.defradb
 ```
 :::
 
-## Set up peer-to-peer synchronization
+## Set up peer-to-peer synchronization {/* #p2p-setup */}
 
 By default, DefraDB starts with its P2P features active. For information on how to set up P2P, see [Synchronize documents across multiple nodes](./p2p/).
 
@@ -62,7 +62,7 @@ defradb start --no-p2p
 ```
 :::
 
-## Support Cross-Origin Resource Sharing (CORS)
+## Support Cross-Origin Resource Sharing (CORS) {/* #cors */}
 
 Because DefraDB doesn't have any allowed origins set by default, you may face a Cross-Origin Resource Sharing (CORS) error when accessing DefraDB through a frontend interface. To specify which origins should be allowed to access the DefraDB endpoint, specify them when starting the database:
 
@@ -80,7 +80,7 @@ defradb start --allowed-origins=http://localhost:3000
 The catch-all `*` is also a valid origin.
 :::
 
-## Telemetry
+## Telemetry {/* #telemetry */}
 
 DefraDB has no telemetry reporting by default. To enable OpenTelemetry in DefraDB you must [build](/setup/install/#build) with the `telemetry` tag set. To configure the HTTP exporters, use the environment variables described in the
 [metric exporter documentation](https://pkg.go.dev/go.opentelemetry.io/otel/exporters/otlp/otlpmetric/otlpmetrichttp) and [trace exporter documentation](https://pkg.go.dev/go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracehttp).

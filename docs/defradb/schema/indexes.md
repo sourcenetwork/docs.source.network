@@ -22,7 +22,7 @@ Valid values: `ASC` or `DESC`.
 Default: `ASC`.
 - `includes` &ndash; List of fields the index is created on. (Not required when the directive is used in a field definition).
 
-## Index for individual fields
+## Indexes for individual fields {/* #single */}
 
 To create an index for a specific field in a collection, use the `@index` directive when defining the field.
 
@@ -55,7 +55,7 @@ type Person {
 }
 ```
 
-## Unique indexes
+## Unique indexes {/* #unique */}
 
 An indexed unique field ensures that no two documents have the same value for one field. Null values are still allowed though.
 
@@ -83,7 +83,7 @@ type Address {
 }
 ```
 
-## Index for multiple fields (composite)
+## Indexes for multiple fields (composite) {/* #composite */}
 
 To create an index on the combination of multiple fields (composite index), use the `@index` directive at the collection level.
 
@@ -95,7 +95,7 @@ type User @index(unique: true, includes: [{field: "title"}, {field: "plot"}]) {
 }
 ```
 
-## JSON fields indexing
+## JSON fields indexing {/* #json-fields */}
 
 JSON fields are treated specially: their leaf nodes are indexed, so that their structure can be traversed in queries. Each JSON field generates multiple entries in the index: one for every leaf node, each with their value and path.
 For example, given a property of JSON format with the following value:
@@ -129,7 +129,7 @@ query {
 Scalar types (ex. integers) are normalized to standard types (ex. int64).
 :::
 
-## Performance considerations
+## Performance considerations {/* #performance */}
 
 More indexes is not better. The right indexes is better.
 

@@ -30,7 +30,7 @@ An online node responds with `"Healthy"`.
 
 [-> More information and install options](/install/index.md)
 
-## Interact with the database {/* #interact-with-the-database */}
+## Interact with the database {/* #interact */}
 
 You can interact with DefraBD in a few different ways. Most actions can be run with all tools, but some are not available on all options.
 
