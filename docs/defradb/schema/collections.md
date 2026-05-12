@@ -31,6 +31,10 @@ Fields can be of different types:
 - `Blob`: A hex string (ex. `00FF`).
 - List: An array of another type (ex. `[String]`). Lists can not be nested.
 
+:::note
+There's currently no way to require a field to be non-null.
+:::
+
 {/*
 To specify that a field should be Non-Null, append an exclamation mark `!` after its type (ex. `Int!`). The Non-Null modifier can be used with lists with different behaviors:
 
@@ -81,23 +85,27 @@ You can create a collection with either the CLI command [`defradb client collect
   </TabItem>
 </Tabs>
 
-## Relationships
+## Relationships {/* #relationships */}
 
 To create a relationship between two types, define a field having the other side of the relationship as type.
-
 The way in which you define relationships depends on their kind:
 
-- [One-to-one](#one-to-one) &ndash; Each document of one type is linked to one and only one document of the other type.
-- [One-to-many](#one-to-many) &ndash; Each document of one type is linked to multiple documents of the other type.
-- [Many-to-many](#many-to-many) &ndash; Each document of one type is linked to multiple documents of the other type.
+- [One-to-one](#one-to-one) &ndash; Each document of type `A` is linked to one document of type `B`. The same applies in the opposite direction.
+- [One-to-many](#one-to-many) &ndash; Each document of type `A` is linked to one document of type `B`. Each document of type `B` is linked to one or more documents of type `A`.
+- [Many-to-many](#many-to-many) &ndash; Each document of type `A` is linked to one or more documents of type `B`. The same applies in the opposite direction.
 
-See also: [Create documents with relationships](/dql/mutation-create.md#relationships) and [Query the database](/dql/mutation-query.md#relationships).
+This section shows how to create relationships. For information on how to populate them, see [Create documents with relationships](/dql/mutation-create.md#relationships) and [Query the database](/dql/mutation-query.md#relationships).
 
-### One-to-one
+:::note
+As all other fields, relationship fields can be null. For example, definying a one-to-one relationship doesn't guarantee that each document of type `A` will be linked to a document of type `B`: a document can leave the relationship undefined.
+:::
+
+### One-to-one {/* #relationships-one-to-one */}
 
 One-to-one relationships are such that each document of one type is linked to one and only one document of another type.
+In practice, type `A` defines a field of type `B`, and type `B` defines a field of type `A`.
 
-In practice, type `A` defines a field of type `B`, and type `B` defines a field of type `A`. For example, there's a one-to-one relationship between `Husband` and `Wife` (disregarding avant-garde polyamorous relationships).
+For example, each `Husband` is married to one `Wife` and viceversa (disregarding avant-garde polyamorous relationships).
 
 ```graphql title="Type Husband with 1:1 relationship with Wife"
 type Husband {
@@ -115,12 +123,14 @@ type Wife {
 - `index(unique: true)` &ndash; Creates a [unique index](indexes.md#unique-indexes) on `_husbandID`, making the relationship one-to-one.
 
 :::warning
-There's currently no validation on the type when creating documents with relationships. It is the client's responsibility to validate that the `Wife.husbandID` is populated with the docID of a `Husband` document. It's up to you to marry humans.
+There's currently no validation on the type when creating relationships across documents. It is the client's responsibility to validate that the `Wife.husbandID` is populated with the docID of a `Husband` document. It's up to you to marry humans.
 :::
 
-### One-to-many
+### One-to-many {/* #relationships-one-to-many */}
 
-One-to-many relationships link one document of one type with many documents of another type. Type `A` defines a field of type `B`, whereas type `B` defines a field of type `[A]` (_list_ of `A`). For example, each book is written by one author, whereas one author can write multiple books.
+One-to-many relationships link one document of one type with document of another type, while allowing the other side to be linked to multiple documentes. Type `A` defines a field of type `B`, whereas type `B` defines a field of type `[A]` (_list_ of `A`).
+
+For example, each book is written by one author, whereas one author can write multiple books.
 
 ```graphql title="Type Book with 1:many relationship with Author"
 type Book {
@@ -135,12 +145,14 @@ type Author {
 ```
 
 :::warning
-There's currently no validation on the type when creating documents with relationships. It is the client's responsibility to validate that the `Book.authorID` is populated with the docID of a `Author` document.
+There's currently no validation on the type when creating relationships across documents. It is the client's responsibility to validate that the `Book.authorID` is populated with the docID of a `Author` document.
 :::
 
-### Many-to-many
+### Many-to-many {/* #relationships-many-to-many */}
 
-Many-to-many relationships link multiple documents of one type to multiple documents of another type. In DefraDB, you achieve this with two [one-to-many relationships](#one-to-many) and a join type. For example, a student can enroll in many courses, and a course can have many students enrolled.
+Many-to-many relationships link multiple documents of one type to multiple documents of another type, allowing the same on the other side. For example, a student can enroll in many courses, and a course can have many students enrolled.
+
+In DefraDB, you achieve this with two [one-to-many relationships](#one-to-many) and a join type.
 
 ```graphql title="Type Student with many:many relationship with Course"
 type Student {
@@ -187,7 +199,7 @@ To see all collections available on an instance, use the CLI command [`defradb c
     defradb client collection describe
     ```
     :::tip
-    Use the `--name` parameter to request a specific collection by its name.
+    Use the `--name` parameter to restrict the output to a specific collection.
     :::
   </TabItem>
   <TabItem value="http" label="HTTP API">
@@ -195,7 +207,7 @@ To see all collections available on an instance, use the CLI command [`defradb c
     GET http://localhost:9181/api/v1/collections
     ```
     :::tip
-    Use the `name` parameter to request a specific collection by its name.
+    Use the `name` parameter to restrict the output to a specific collection.
     :::
   </TabItem>
 </Tabs>

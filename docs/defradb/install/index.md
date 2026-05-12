@@ -28,6 +28,10 @@ This will produce a `defradb` binary in your [Go workspace](https://go.dev/wiki/
 export PATH=$PATH:$(go env GOPATH)/bin
 ```
 
+:::note
+Although included in [pre-compiled binaries](#precompiled), the [DefraDB Playground](https://github.com/sourcenetwork/defradb-playground) is not included in manual builds. It needs to be built separately.
+:::
+
 :::tip
 
 The Go compiler requires substantial memory during compilation. Builds with less than 2 GB of available RAM will likely fail with out-of-memory errors.
