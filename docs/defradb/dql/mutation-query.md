@@ -13,6 +13,8 @@ Query blocks are read-only GraphQL operations designed only to request informati
 
 Queries support database query operations such as filtering, sorting, grouping, skipping/limiting, aggregation, etc. These query operations can be used on different GraphQL object levels, mostly on fields that have some relation or embedding to other objects.
 
+## Run a query
+
 <Tabs groupId="defra">
   <TabItem value="cli" label="CLI" default>
     ```shell title="Retrieve all documents of type Book"
@@ -28,15 +30,18 @@ Queries support database query operations such as filtering, sorting, grouping, 
 ```
   </TabItem>
   <TabItem value="http" label="HTTP API">
-    ```request title="Retrieve all documents of type Book"
-    POST http://localhost:9181/api/v1/graphql
+    ```http title="Retrieve all documents of type Book"
+    POST http://localhost:9181/api/v1/graphql HTTP/2
+    accept: application/json
+    content-type: application/json
     
     {
-      "operationName": "",
-      "query": "{ Book { _docID title plot } }",
-      "variables": {}
+      "query": "{ Book { _docID title plot } }"
     }
     ```
+    :::note
+    Newlines are not supported within the `query` string field.
+    :::
   </TabItem>
   <TabItem value="graphql" label="GraphQL API">
     ```graphql title="Retrieve all documents of type Book"
@@ -96,3 +101,12 @@ Queries support database query operations such as filtering, sorting, grouping, 
 }
 ```
 
+## Use variables
+
+## Run different query parts
+```
+{
+"operationName":"U",
+  "query": "query U{ Book { _docID title plot } } query B{ Book { _docID title plot } }"
+}
+```

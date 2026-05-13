@@ -75,8 +75,10 @@ You can create a collection with either the CLI command [`defradb client collect
     ```
   </TabItem>
   <TabItem value="http" label="HTTP API">
-    ```request title="Request"
-    POST http://localhost:9181/api/v1/collections
+    ```http title="Request"
+    POST http://localhost:9181/api/v1/collections HTTP/2
+    accept: application/json
+    content-type: text/plain
 
     type Book {
       title: String

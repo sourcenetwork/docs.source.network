@@ -42,8 +42,10 @@ type Book {
   <TabItem value="http" label="HTTP API">
     You can create new documents into `<collection>` via POST requests to the HTTP endpoint [`/api/v1/collections/<collection>`](/defradb/references/http/api/add-document/). The request body should contain the document information in JSON format.
 
-    ```json title="Create a new document of type Book"
-    POST http://localhost:9181/api/v1/collections/Book
+    ```http title="Create a new document of type Book"
+    POST http://localhost:9181/api/v1/collections/Book HTTP/2
+    accept: application/json
+    content-type: application/json
     
     {
       "title": "Infinite Jest",
@@ -89,6 +91,26 @@ To output some of the inserted information, provide a list of fields to be retur
       }
     '
     ```
+
+    ```json title="Result"
+    {
+      "data": {
+        "add_Book": [
+          {
+            "_docID": "bae-429075e7-f4b2-5fa6-aa03-380ecdad0703",
+            "title": "Infinite Jest"
+          }
+        ]
+      }
+    }
+    ```
+
+    :::tip
+    `_docID` is the document's unique identifier, determined by the collection it belongs to and the data it is initialized with. The data in the document might change over time, but its docID will stay the same.
+    :::
+  </TabItem>
+  <TabItem value="http" label="HTTP API">
+    The HTTP API doesn't support creating and returning documents in the same request.
   </TabItem>
   <TabItem value="graphql" label="GraphQL API">
     ```graphql title="Create a new document and return some fields"
@@ -105,29 +127,29 @@ To output some of the inserted information, provide a list of fields to be retur
       // highlight-end
     }
     ```
+
+    ```json title="Result"
+    {
+      "data": {
+        "add_Book": [
+          {
+            "_docID": "bae-429075e7-f4b2-5fa6-aa03-380ecdad0703",
+            "title": "Infinite Jest"
+          }
+        ]
+      }
+    }
+    ```
+
+    :::tip
+    `_docID` is the document's unique identifier, determined by the collection it belongs to and the data it is initialized with. The data in the document might change over time, but its docID will stay the same.
+    :::
   </TabItem>
 </Tabs>
 
-```json title="Result"
-{
-  "data": {
-    "add_Book": [
-      {
-        "_docID": "bae-429075e7-f4b2-5fa6-aa03-380ecdad0703",
-        "title": "Infinite Jest"
-      }
-    ]
-  }
-}
-```
-
-:::tip
-`_docID` is the document's unique identifier, determined by the collection it belongs to and the data it is initialized with.
-:::
-
 ## Create multiple documents at once {/* #multiple */}
 
-You can create (and return) multiple documents in the same request by concatenating several `add_<collection>` statements.
+You can create multiple documents in the same request by concatenating several `add_<collection>` statements.
 To avoid clashes, you need to [alias](aliases.md) the results.
 
 <Tabs groupId="defra">
@@ -156,6 +178,30 @@ To avoid clashes, you need to [alias](aliases.md) the results.
     }
     '
     ```
+  </TabItem>
+  <TabItem value="http" label="HTTP API">
+    ```http title="Create two documents"
+    POST http://localhost:9181/api/v1/collections/Book HTTP/2
+    accept: application/json
+    content-type: application/json
+    
+    [
+      {
+        "title": "1984",
+        "plot": "A masterpiece of rebellion and imprisonment where war is peace, freedom is slavery, and Big Brother is watching.",
+        "rating": 4.20
+      },
+      {
+        "title": "Lord of the Flies",
+        "plot": "At the dawn of the next world war, a plane crashes on an uncharted island, stranding a group of schoolboys.",
+        "rating": 3.70
+      }
+    ]
+    ```
+
+    :::note
+    The HTTP API doesn't support creating and returning documents in the same request.
+    :::
   </TabItem>
   <TabItem value="graphql" label="GraphQL API">
     ```graphql title="Create two documents"

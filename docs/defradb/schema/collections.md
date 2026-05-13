@@ -47,7 +47,7 @@ To specify that a field should be Non-Null, append an exclamation mark `!` after
 
 You can create a collection with either the CLI command [`defradb client collection add`](/references/cli/defradb_client_collection_add.md), the HTTP API endpoint [`/collections`](/defradb/references/http/api/add-collection/), or the method `AddCollection`.
 
-<Tabs>
+<Tabs groupId="defra">
   <TabItem value="cli" label="CLI" default>
     ```shell
     defradb client collection add '
@@ -60,8 +60,10 @@ You can create a collection with either the CLI command [`defradb client collect
     ```
   </TabItem>
   <TabItem value="http" label="HTTP API">
-    ```request title="Request"
-    POST http://localhost:9181/api/v1/collections
+    ```http title="Request"
+    POST http://localhost:9181/api/v1/collections HTTP/2
+    accept: application/json
+    content-type: text/plain
 
     type Book {
       title: String
@@ -97,7 +99,7 @@ The way in which you define relationships depends on their kind:
 This section shows how to create relationships. For information on how to populate them, see [Create documents with relationships](/dql/mutation-create.md#relationships) and [Query the database](/dql/mutation-query.md#relationships).
 
 :::note
-As all other fields, relationship fields can be null. For example, definying a one-to-one relationship doesn't guarantee that each document of type `A` will be linked to a document of type `B`: a document can leave the relationship undefined.
+As all other fields, relationship fields can be null. For example, defining a one-to-one relationship doesn't guarantee that each document of type `A` will be linked to a document of type `B`: a document can leave the relationship undefined.
 :::
 
 ### One-to-one {/* #relationships-one-to-one */}
@@ -193,7 +195,7 @@ type Wife {
 
 To see all collections available on an instance, use the CLI command [`defradb client collection describe`](/references/cli/defradb_client_collection_describe.md) or the HTTP API endpoint [`/collections`](/defradb/references/http/api/describe-collection/).
 
-<Tabs>
+<Tabs groupId="defra">
   <TabItem value="cli" label="CLI" default>
     ```shell
     defradb client collection describe
@@ -203,8 +205,9 @@ To see all collections available on an instance, use the CLI command [`defradb c
     :::
   </TabItem>
   <TabItem value="http" label="HTTP API">
-    ```request title="Request"
-    GET http://localhost:9181/api/v1/collections
+    ```http title="Request"
+    GET http://localhost:9181/api/v1/collections HTTP/2
+    accept: application/json
     ```
     :::tip
     Use the `name` parameter to restrict the output to a specific collection.
@@ -303,7 +306,7 @@ To see all collections available on an instance, use the CLI command [`defradb c
 
 To delete a collection, you need to truncate it (i.e. delete all its documents) and patch it for deletion. 
 
-<Tabs>
+<Tabs groupId="defra">
   <TabItem value="cli" label="CLI" default>
     Use the CLI commands [`defradb client collection truncate`](/references/cli/defradb_client_collection_truncate.md) and [`defradb client collection patch`](/references/cli/defradb_client_collection_patch.md).
 
@@ -319,12 +322,14 @@ To delete a collection, you need to truncate it (i.e. delete all its documents) 
     For example, to delete the collection `Book`:
     ```http title="Request"
     DELETE http://localhost:9181/api/v1/collections/Book HTTP/2
+    accept: application/json
     content-type: application/json
     
     {}
     ```
     ```http title="Request"
     PATCH http://localhost:9181/api/v1/collections/ HTTP/2
+    accept: application/json
     content-type: application/json
 
     {
