@@ -28,7 +28,7 @@ export default {
     },
     {
       type: 'category',
-      label: 'Query the database (DQL)',
+      label: 'Create, alter, and query documents (DQL)',
       items: [
         'dql/index',
         'dql/mutation-create',

@@ -58,12 +58,12 @@ You can interact with DefraBD in a few different ways. Most actions can be run w
 
 ## Add a collection {/* #add-collection */}
 
-Collections are the _types_ into which documents fit. Because every document belongs to a collection, you need to create collections before you can insert any data in the database.
-
-You can create a collection with either the CLI command [`defradb client collection add`](/references/cli/defradb_client_collection_add.md), the HTTP API endpoint [`/collections`](/defradb/references/http/api/add-collection/), or the method `AddCollection`.
+Collections are the _types_ into which documents fit. Because every document belongs to a collection, you need to create collections before you can insert any data in the database. A collection has a name (ex. `Book`) and a number of typed fields (ex. `title: String`).
 
 <Tabs groupId="defra">
   <TabItem value="cli" label="CLI" default>
+    You can create a collection with the CLI command [`defradb client collection add`](/references/cli/defradb_client_collection_add.md).
+
     ```shell
     defradb client collection add '
       type Book {
@@ -75,6 +75,8 @@ You can create a collection with either the CLI command [`defradb client collect
     ```
   </TabItem>
   <TabItem value="http" label="HTTP API">
+    You can create a collection via the HTTP API endpoint [`/collections`](/defradb/references/http/api/add-collection/).
+
     ```http title="Request"
     POST http://localhost:9181/api/v1/collections HTTP/2
     accept: application/json
@@ -136,8 +138,10 @@ You can create a collection with either the CLI command [`defradb client collect
   <TabItem value="http" label="HTTP API">
     You can create new documents into `<collection>` via POST requests to the HTTP endpoint [`/api/v1/collections/<collection>`](/defradb/references/http/api/add-document/). The request body should contain the document information in JSON format.
 
-    ```json title="Create two new documents of type Book"
-    POST http://localhost:9181/api/v1/collections/Book
+    ```http title="Create two new documents of type Book"
+    POST http://localhost:9181/api/v1/collections/Book HTTP/2
+    accept: application/json
+    content-type: text/plain
 
     [
       {
@@ -151,10 +155,6 @@ You can create a collection with either the CLI command [`defradb client collect
         "rating": 3.70
       }
     ]
-    ```
-
-    ```text title="Response"
-    HTTP 200
     ```
   </TabItem>
   <TabItem value="graphql" label="GraphQL API">
@@ -181,7 +181,7 @@ You can create a collection with either the CLI command [`defradb client collect
     }
     ```
 
-    ```text title="Result"
+    ```json title="Result"
     {
       "data": {
         "b1": [

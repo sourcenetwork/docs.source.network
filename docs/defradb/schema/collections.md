@@ -27,21 +27,14 @@ Fields can be of different types:
 - `Boolean`: `true` or `false`.
 - `ID`: A unique identifier. Although the `ID` type is serialized in the same way as a `String`, defining it as an ID communicates that it is not intended to be human‐readable.
 - `DateTime`: (ex. `2017-07-23T03:46:56.647Z`)
-- `JSON`: A JSON string (ex. `{ "privacy": {"is": "sexy"} }`). JSON fields get [specially indexed](indexes.md#json-fields-indexing).
+- `JSON`: A JSON string (ex. `{ "privacy": { "is": "sexy" } }`). JSON fields get [specially indexed](indexes.md#json-fields-indexing).
 - `Blob`: A hex string (ex. `00FF`).
 - List: An array of another type (ex. `[String]`). Lists can not be nested.
 
-:::note
-There's currently no way to require a field to be non-null.
-:::
-
-{/*
-To specify that a field should be Non-Null, append an exclamation mark `!` after its type (ex. `Int!`). The Non-Null modifier can be used with lists with different behaviors:
-
-- `[Int!]`: A list of Non-Null `Int`.
-- `[Int]!`: A Non-Null list of (possibly Null) `Int`.
-- `[Int!]!`: A Non-Null list of Non-Null `Int`.
-*/}
+In the GraphQL syntax, an exclamation mark `!` appended to a type (ex. `Int!`) in a field definition specifies that the field should be Non-Null. Although DefraDB does not support non-null scalar types, it does support lists of non-null types. For example:
+- `[Int!]` &ndash; Supported: a list of non-null `Int`.
+- `[Int]!` &ndash; Unsupported: a non-null list of (possibly null) `Int`.
+- `[Int!]!` &ndash; Unsupported: a non-null list of non-null `Int`.
 
 ## Create collections {/* #create */}
 
@@ -107,7 +100,7 @@ As all other fields, relationship fields can be null. For example, defining a on
 One-to-one relationships are such that each document of one type is linked to one and only one document of another type.
 In practice, type `A` defines a field of type `B`, and type `B` defines a field of type `A`.
 
-For example, each `Husband` is married to one `Wife` and viceversa (disregarding avant-garde polyamorous relationships).
+For example, each `Husband` is married to one `Wife` and viceversa (disregarding avant-garde polyamorous relationships):
 
 ```graphql title="Type Husband with 1:1 relationship with Wife"
 type Husband {
@@ -117,12 +110,15 @@ type Husband {
 
 type Wife {
   name: String
-  husband: Husband @primary @index(unique: true)
+  husband: Husband @primary
 }
 ```
 
-- `@primary` &ndash; This side stores a direct pointer to the other end of the relationship, resulting in faster queries. In the example above, `Wife` contains a (implicit) field `_husbandID`, so retrieving a _wife's husband_ is quick. On the other hand, documents of type `Husband` do not contain any pointer to the relative `Wife`, so a collection scan is needed to retrieve a _husband's wife_. Which side should be _primary_ depends on your query patterns.
-- `index(unique: true)` &ndash; Creates a [unique index](indexes.md#unique-indexes) on `_husbandID`, making the relationship one-to-one.
+The type with the `@primary` directive stores a direct pointer to the other end of the relationship, resulting in faster queries. `@primary` fields also get automatically [indexed](indexes.md). In the example above, `Wife` contains a (implicit) field `_husbandID`, so retrieving a _wife's husband_ is quick. On the other hand, documents of type `Husband` do not contain any pointer to the relative `Wife`, so a collection scan is needed to retrieve a _husband's wife_. Which side should be _primary_ depends on your query patterns.
+
+:::note
+One-to-one relationships are enforced via a [unique index](indexes.md#unique-indexes) under the hood. The index must not be dropped, or the 1:1 nature of the relationship will not be fulfilled anymore.
+:::
 
 :::warning
 There's currently no validation on the type when creating relationships across documents. It is the client's responsibility to validate that the `Wife.husbandID` is populated with the docID of a `Husband` document. It's up to you to marry humans.
@@ -132,7 +128,7 @@ There's currently no validation on the type when creating relationships across d
 
 One-to-many relationships link one document of one type with document of another type, while allowing the other side to be linked to multiple documentes. Type `A` defines a field of type `B`, whereas type `B` defines a field of type `[A]` (_list_ of `A`).
 
-For example, each book is written by one author, whereas one author can write multiple books.
+For example, each book is written by one author, whereas one author can write multiple books:
 
 ```graphql title="Type Book with 1:many relationship with Author"
 type Book {
@@ -152,9 +148,9 @@ There's currently no validation on the type when creating relationships across d
 
 ### Many-to-many {/* #relationships-many-to-many */}
 
-Many-to-many relationships link multiple documents of one type to multiple documents of another type, allowing the same on the other side. For example, a student can enroll in many courses, and a course can have many students enrolled.
+Many-to-many relationships link multiple documents of one type to multiple documents of another type, allowing the same on the other side. To create many-to-many relationships, use two [one-to-many relationships](#one-to-many) and a join type.
 
-In DefraDB, you achieve this with two [one-to-many relationships](#one-to-many) and a join type.
+For example, a student can enroll in many courses, and a course can have many students enrolled:
 
 ```graphql title="Type Student with many:many relationship with Course"
 type Student {
@@ -169,25 +165,43 @@ type Course {
   enrollment: [Enrollment]
 }
 
-type Enrollment {
+type Enrollment {  # the join type
   student: Student
   course: Course
 }
 ```
 
-### Rename a relationship field {/* #relationships-rename */}
+### Define multiple relationship fields of the same type {/* #relationships-rename */}
 
-By default, 
+A type defining multiple relationships to the same type requires extra directives to disambiguate their target. For example, in the scenario in which a book has both an author and a reviewer, the following definitions would be ambiguous:
 
-```graphql title="Type Husband with 1:1 relationship with Wife"
-type Husband {
-  name: String
-  wife: Wife
+```graphql title="Invalid &ndash; Ambiguous definition of multiple relationships"
+type Book {
+  title: String
+  author: Person
+  reviewer: Person
 }
 
-type Wife {
+type Person {
   name: String
-  husband: Husband @primary @index(unique: true)
+  authoredBooks: [Book]
+  reviewedBooks: [Book]
+}
+```
+
+At query time, the database cannot infer whether `Person.authoredBooks` is linked to `Person.author` or `Person.reviewer`. To clarify which fields should get paired, use the `@relation(name: String)` directive, coupling each relationship together with the same name:
+
+```graphql title="Valid &ndash; Unambiguous definition of multiple relationships"
+type Book {
+  title: String
+  author: Person @relation(name: "book_author")
+  reviewer: Person @relation(name: "book_reviewer")
+}
+
+type Person {
+  name: String
+  authoredBooks: [Book] @relation(name: "book_author")
+  reviewedBooks: [Book] @relation(name: "book_reviewer")
 }
 ```
 

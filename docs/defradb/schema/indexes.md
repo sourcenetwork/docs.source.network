@@ -2,7 +2,7 @@
 title: Indexes
 ---
 
-By default, every collection has an index on the `_docID` property.
+By default, every collection has an index on the `_docID` property and on `@primary` relationship fields.
 The `@index` directive allows you to set up further indexes on selected properties.
 
 ```graphql title="@index directive syntax"
@@ -28,16 +28,16 @@ To create an index for a specific field in a collection, use the `@index` direct
 
 ```graphql title="Index the title property using default values"
 type Book {
-  // highlight-next-line
+  # highlight-next-line
   title: String @index
 }
 ```
 
-```graphql title="Index multiple properties, separately, overriding defaults for name"
+```graphql title="Index multiple properties, individually, overriding defaults for name"
 type Book {
-  // highlight-next-line
+  # highlight-next-line
   title: String @index(name: "book_title")
-  // highlight-next-line
+  # highlight-next-line
   plot: String @index(name: "book_plot")
 }
 ```
@@ -45,7 +45,7 @@ type Book {
 ```graphql title="Index a relationship property"
 type Book {
     title: String
-    // highlight-next-line
+    # highlight-next-line
     author: Person @primary @index
 }
 
@@ -61,39 +61,39 @@ An indexed unique field ensures that no two documents have the same value for on
 
 ```graphql title="Index the title property and enforce value uniqueness"
 type Book {
-// highlight-next-line
+# highlight-next-line
   title: String @index(unique: true)
 }
 ```
 
-When applied to a relationship field, the `@index(unique: true)` makes it into a [one-to-one relationship](collections.md#one-to-one). In the example below, no two `User` can share the same `Address`.
-
-```graphql title="Define a one-to-one relationship between User and Address"
-type User {
-    name: String 
-    age: Int
-    // highlight-next-line
-    address: Address @primary @index(unique: true)
-} 
-
-type Address {
-    user: User
-    city: String
-    street: String 
-}
-```
+:::note
+Unique indexes are used under the hood to enforce [one-to-one relationships](collections.md#relationships-one-to-one). The index must not be dropped, or the 1:1 nature of the relationship will not be fulfilled anymore.
+:::
 
 ## Indexes for multiple fields (composite) {/* #composite */}
 
 To create an index on the combination of multiple fields (composite index), use the `@index` directive at the collection level.
 
-```graphql title="(Unique) Index for (name, plot)"
-// highlight-next-line
-type User @index(unique: true, includes: [{field: "title"}, {field: "plot"}]) {
-  title: String
-  plot: String
+```graphql title="(Unique) Index for (genre, author)"
+# highlight-next-line
+type Book @index(unique: true, includes: [{field: "genre"}, {field: "author"}]) {
+  genre: String
+  author: String
 }
 ```
+
+The order of fields in `includes` defines the structure of the index. An index defined on fields `genre` and `author` will give no performance benefit to queries filtering only on `author`. Think of a composite index storing references to documents in a hierarchical structure defined by its order:
+
+```text
+Fiction/David Foster Wallace/docID1
+Fiction/David Foster Wallace/docID2
+Fiction/George Orwell/docID3
+Fiction/George Orwell/docID4
+Physics/Richard Feynman/docID5
+...
+```
+
+Although there is a partial benefit to queries filtering only on `genre`, there is no benefit if a query skips fields. This becomes even more relevant as more fields are added to a composite index.
 
 ## JSON fields indexing {/* #json-fields */}
 

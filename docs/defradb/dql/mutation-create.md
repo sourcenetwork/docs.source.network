@@ -5,27 +5,33 @@ title: Create new documents
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-Once you have [created collections](/schema/collections.md), you can start adding documents into them. This page assumes your database contains `Book` and `Person` collections:
+Once you have [created collections](/schema/collections.md), you can start adding documents into them. 
 
-```graphql title="Database schema"
-type Person {
-  name: String
-  authoredBooks: [Book]
-}
+<details>
+  <summary>Display database setup</summary>
+  
+  This page assumes your database contains `Book` and `Person` [collections](/schema/collections.md):
 
-type Book {
-  title: String
-  plot: String
-  rating: Float
-  author: Person
-}
-```
+  ```graphql title="Database schema"
+  type Person {
+    name: String
+    authoredBooks: [Book]
+  }
+
+  type Book {
+    title: String
+    plot: String
+    rating: Float
+    author: Person
+  }
+  ```
+</details>
 
 ## Create one new document {/* #single */}
 
 <Tabs groupId="defra">
   <TabItem value="cli" label="CLI" default>
-    You can create new documents into `<collection>` via the mutation `add_<collection>` and the CLI command [`defradb client query`](/references/cli/defradb_client_query.md).
+    To create documents of type `<type>`, use the mutation `add_<type>` and the CLI command [`defradb client query`](/references/cli/defradb_client_query.md).
 
     ```graphql title="Create a new document of type Book"
     defradb client query '
@@ -40,7 +46,7 @@ type Book {
     ```
   </TabItem>
   <TabItem value="http" label="HTTP API">
-    You can create new documents into `<collection>` via POST requests to the HTTP endpoint [`/api/v1/collections/<collection>`](/defradb/references/http/api/add-document/). The request body should contain the document information in JSON format.
+    To create documents of type `<type>`, submit a POST request to the HTTP endpoint [`/api/v1/collections/<collection>`](/defradb/references/http/api/add-document/). The request body should contain the documents information in JSON format.
 
     ```http title="Create a new document of type Book"
     POST http://localhost:9181/api/v1/collections/Book HTTP/2
@@ -55,7 +61,7 @@ type Book {
     ```
   </TabItem>
   <TabItem value="graphql" label="GraphQL API">
-    You can create new documents into `<collection>` via the mutation `add_<collection>`.
+    To create a document of type `<type>`, use the mutation `add_<type>`.
 
     ```graphql title="Create a new document of type Book"
     mutation {
@@ -68,8 +74,6 @@ type Book {
     ```
   </TabItem>
 </Tabs>
-
-## Create and return one document {/* #single-return */}
 
 To output some of the inserted information, provide a list of fields to be returned.
 
@@ -104,10 +108,6 @@ To output some of the inserted information, provide a list of fields to be retur
       }
     }
     ```
-
-    :::tip
-    `_docID` is the document's unique identifier, determined by the collection it belongs to and the data it is initialized with. The data in the document might change over time, but its docID will stay the same.
-    :::
   </TabItem>
   <TabItem value="http" label="HTTP API">
     The HTTP API doesn't support creating and returning documents in the same request.
@@ -140,20 +140,25 @@ To output some of the inserted information, provide a list of fields to be retur
       }
     }
     ```
-
-    :::tip
-    `_docID` is the document's unique identifier, determined by the collection it belongs to and the data it is initialized with. The data in the document might change over time, but its docID will stay the same.
-    :::
   </TabItem>
 </Tabs>
+
+## The document ID
+
+The field `_docID` is the document's unique identifier, determined by the collection it belongs to and the data it is initialized with. The data in the document might change over time, but its docID will stay the same. 
+
+:::tip
+The `_docID` field is the only one to be [automatically indexed](/schema/indexes.md).
+:::
 
 ## Create multiple documents at once {/* #multiple */}
 
 You can create multiple documents in the same request by concatenating several `add_<collection>` statements.
-To avoid clashes, you need to [alias](aliases.md) the results.
 
 <Tabs groupId="defra">
   <TabItem value="cli" label="CLI" default>
+    To avoid clashes, you need to [alias](aliases.md) the results (`b1` and `b2` in the example). The aliases are used as keys in the result json.
+
     ```shell title="Create two documents"
     defradb client query '
       mutation {
@@ -177,6 +182,25 @@ To avoid clashes, you need to [alias](aliases.md) the results.
       }
     }
     '
+    ```
+
+    ```json title="Result"
+    {
+      "data": {
+        "b1": [
+          {
+            "_docID": "bae-546ae840-77c7-51a5-ab0a-b5a893bfa546",
+            "title": "1984"
+          }
+        ],
+        "b2": [
+          {
+            "_docID": "bae-6c91c35c-e548-58f8-86a6-d60ab5174072",
+            "title": "Lord of the Flies"
+          }
+        ]
+      }
+    }
     ```
   </TabItem>
   <TabItem value="http" label="HTTP API">
@@ -204,6 +228,8 @@ To avoid clashes, you need to [alias](aliases.md) the results.
     :::
   </TabItem>
   <TabItem value="graphql" label="GraphQL API">
+    To avoid clashes, you need to [alias](aliases.md) the results (`b1` and `b2` in the example). The aliases are used as keys in the result json.
+
     ```graphql title="Create two documents"
     mutation {
       // highlight-next-line
@@ -226,31 +252,31 @@ To avoid clashes, you need to [alias](aliases.md) the results.
       }
     }
     ```
+
+    ```json title="Result"
+    {
+      "data": {
+        "b1": [
+          {
+            "_docID": "bae-546ae840-77c7-51a5-ab0a-b5a893bfa546",
+            "title": "1984"
+          }
+        ],
+        "b2": [
+          {
+            "_docID": "bae-6c91c35c-e548-58f8-86a6-d60ab5174072",
+            "title": "Lord of the Flies"
+          }
+        ]
+      }
+    }
+    ```
   </TabItem>
 </Tabs>
 
-```json title="Result"
-{
-  "data": {
-    "b1": [
-      {
-        "_docID": "bae-546ae840-77c7-51a5-ab0a-b5a893bfa546",
-        "title": "1984"
-      }
-    ],
-    "b2": [
-      {
-        "_docID": "bae-6c91c35c-e548-58f8-86a6-d60ab5174072",
-        "title": "Lord of the Flies"
-      }
-    ]
-  }
-}
-```
-
 ## Create documents with relationships {/* #relationships */}
 
-To add documents with relationships to each other, you need two queries: one to insert the documents, and another to set the new docID.
+To add documents with relationships to each other, you need two queries: one to create the documents, and another to link them together via their docIDs.
 
 For example, to create a book and link it to an author, first create the documents and return their docIDs:
 
@@ -291,17 +317,19 @@ mutation {
 }
 ```
 
-Then use an [update mutation](/dql/mutation-update.md) to set the field `_authorID` on `Book` with the docID from the desired `Person`:
+To link them, use an [update mutation](/dql/mutation-update.md) to set the field `_authorID` on `Book` with the docID from the desired `Person`:
 
 ```graphql title="Link book and author via Book._authorID"
 mutation {
   update_Book(
     docID: "bae-1a617fbe-1a13-5ad7-b727-bc2792243801",
-    input: { _authorID: "bae-c169e917-df52-5603-9224-39c1757f1b04" }
+    input: {  # properties to be altered
+      _authorID: "bae-c169e917-df52-5603-9224-39c1757f1b04" 
+    }
   ) {
     _docID
-    title
     _authorID
+    title
   }
 }
 ```
