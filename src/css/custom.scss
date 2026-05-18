@@ -556,10 +556,6 @@ body .DocSearch {
     var(--ifm-color-emphasis-100) 100%
   );
 }
-
-
-
-
 // External link icon indicator.
 a[target="_blank"]::after {
   content: "";
