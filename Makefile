@@ -1,4 +1,4 @@
-.PHONY: version\:replace help
+.PHONY: version\:replace help lint\:docs lint\:docs\:strict vale\:sync deps\:lint-docs
 
 # Color codes for output
 RED := \033[0;31m
@@ -11,20 +11,23 @@ NC := \033[0m # No Color
 VALID_PROJECTS := defradb sourcehub orbis lensvm
 
 help:
-	@echo "$(BLUE)Docusaurus Version Management$(NC)"
+	@echo "$(BLUE)Source Network Documentation Tools$(NC)"
 	@echo ""
-	@echo "$(GREEN)Available commands:$(NC)"
+	@echo "$(GREEN)Version Management:$(NC)"
 	@echo "  make version:replace PROJECT=<project> VERSION=<version>"
+	@echo "    Regenerates and replaces Docusaurus versioned docs for a specific version"
+	@echo "    PROJECT: defradb, sourcehub, orbis, lensvm"
+	@echo "    VERSION: must exist in <project>_versions.json"
 	@echo ""
-	@echo "$(GREEN)Description:$(NC)"
-	@echo "  Regenerates and replaces Docusaurus versioned docs for a specific version"
+	@echo "$(GREEN)Documentation Linting:$(NC)"
+	@echo "  make deps:lint-docs    - Install Vale documentation linter"
+	@echo "  make vale:sync         - Sync Vale style packages"
+	@echo "  make lint:docs         - Run Vale on all documentation (all levels)"
+	@echo "  make lint:docs:strict  - Run Vale (errors only)"
 	@echo ""
-	@echo "$(GREEN)Arguments:$(NC)"
-	@echo "  PROJECT  - Project name (defradb, sourcehub, orbis, lensvm)"
-	@echo "  VERSION  - Version identifier (must exist in <project>_versions.json)"
-	@echo ""
-	@echo "$(GREEN)Example:$(NC)"
+	@echo "$(GREEN)Examples:$(NC)"
 	@echo "  make version:replace PROJECT=defradb VERSION=0.19.0"
+	@echo "  make lint:docs"
 	@echo ""
 
 version\:replace:
@@ -145,3 +148,35 @@ version\:replace:
 	@echo "  2. Test the docs locally with: npm run start"
 	@echo "  3. Commit the changes when satisfied"
 	@echo ""
+
+# ============================================================================
+# Vale Documentation Linting
+# ============================================================================
+
+deps\:lint-docs:
+	@echo "$(BLUE)Installing Vale documentation linter...$(NC)"
+	@if command -v vale >/dev/null 2>&1; then \
+		echo "$(GREEN)✓ Vale is already installed$(NC)"; \
+		vale --version; \
+	else \
+		echo "$(YELLOW)Installing Vale via Homebrew...$(NC)"; \
+		brew install vale; \
+	fi
+
+vale\:sync:
+	@echo "$(BLUE)Syncing Vale style packages...$(NC)"
+	@vale sync
+	@echo "$(GREEN)✓ Vale packages synced$(NC)"
+
+lint\:docs: vale\:sync
+	@echo "$(BLUE)Running Vale documentation linter...$(NC)"
+	@echo ""
+	@vale --minAlertLevel=suggestion docs README.md || true
+	@echo ""
+	@echo "$(GREEN)Linting complete.$(NC)"
+	@echo "$(YELLOW)Note: Run 'make lint:docs:strict' to see only errors.$(NC)"
+
+lint\:docs\:strict: vale\:sync
+	@echo "$(BLUE)Running Vale documentation linter (errors only)...$(NC)"
+	@echo ""
+	@vale --minAlertLevel=error docs README.md
