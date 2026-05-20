@@ -36,7 +36,6 @@ export default {
         'dql/filtering',
         'dql/sorting-and-ordering',
         'dql/limiting-and-pagination',
-        'dql/relationships',
         'dql/mutation-update',
         'dql/mutation-delete',
         'dql/aliases',
