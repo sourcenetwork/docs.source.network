@@ -3,9 +3,9 @@ title: Filter documents
 ---
 
 Filters allow you to specify criterias for selecting documents. You provide them with an optional `filter` object. You can filter on the following:
-- [Individual fields]()
-- [A combination of fields]()
-- [Relationship sub-objects]()
+- [Individual fields](#fields-individual)
+- [A combination of fields](#fields-combined)
+- [Relationship sub-objects](#rel-sub-objects)
 
 <details>
   <summary>Display database setup</summary>
@@ -27,11 +27,12 @@ Filters allow you to specify criterias for selecting documents. You provide them
   ```
 </details>
 
-## Individual fields
+## Individual fields  {/* #individual-fields */}
 
-```graphql title="Return books with title 'A Painted House'"
+```graphql title='Return books with title "A Painted House"'
 {
-  Books(filter: { 
+  Books(filter: {
+    // highlight-next-line
     title: { _eq: "A Painted House" }
   }) {
     title
@@ -41,29 +42,12 @@ Filters allow you to specify criterias for selecting documents. You provide them
 }
 ```
 
-- `fieldName: { operator: Value }`
+To filter on a single field, use the syntax `fieldName: { operator: Value }`, where:
+- `fieldName` &ndash; The name of the collection field to compare against.
+- `operator` &ndash; The [comparison operator](#operators) to use.
+- `Value` &ndash; To value to compare against, of the same type of `fieldName`.
 
-Where:
-- `operator` &ndash; The [comparison operator](#operators) to use
-- `fieldName` &ndash; The name of the field to filter
-- `Value` &ndash; To value to compare against, of the same type of `fieldName`
-
-Additional fields listed in the filter object are implicitly combined with an `AND` operator.
-
-```graphql title="Return books with title 'A Painted House' and genre 'Thriller'"
-{
-  Books(filter: {  # filters combined with AND by default
-    title: { _eq: "A Painted House" }, 
-    genre: { _eq: "Thriller" }
-  }) {
-    title
-    genre
-    description
-  }
-}
-```
-
-You must however explicitly specify the `_and` operator in case of two filters on the same field, because JSON objects cannot contain duplicate fields:
+You need to explicitly specify the `_and` operator in case of two filters on the same field, because JSON objects cannot contain duplicate fields:
 
 ```graphql title="Invalid &ndash; Multiple filters on same field without operator"
 filter: {
@@ -81,128 +65,166 @@ filter: {
 }
 ```
 
-## Combine fields
+## Combine fields  {/* #fields-combined */}
 
-- `operator: [ { fieldName: Value }, ... ]`
+Additional fields listed in the `filter` object are implicitly combined with an `AND` operator.
 
-Where:
-- `operator` &ndash; The [comparison operator](#operators) to use
-- `fieldName` &ndash; The name of the field to filter
-- `Value` &ndash; To value to compare against, of the same type of `fieldName`
+```graphql title='Return books with title "A Painted House" and genre "Thriller"'
+{
+  Books(filter: {  # filters combined with AND by default
+    //highlight-next-line
+    title: { _eq: "A Painted House" },
+    //highlight-next-line
+    genre: { _eq: "Thriller" }
+  }) {
+    title
+    genre
+    description
+  }
+}
+```
 
-```graphql title="Retrieve all books that either have Genre == Fiction, or rating between 4 and 5"
+To use other operators and nested comparisons, use the syntax
+
+```json
+filter: {
+  operator: [ { fieldName: Value }, ... ],
+  ...
+}
+```
+
+- `operator` &ndash; The [comparison operator](#operators) to use.
+- `fieldName` &ndash; The name of the collection field to compare against.
+- `Value` &ndash; To value to compare against, of the same type of `fieldName`.
+
+```graphql title='Retrieve all books that either have genre == "Fiction", or rating between 4 and 5'
 {
   Books(
+    //highlight-start
     filter: {
       _or: [
-	{ genre: { _eq: "Thriller" } },
+	{ genre: { _eq: "Fiction" } },
 	{ _and: [
 	  { rating: { _gte: 4 } },
 	  { rating: { _lte: 5 } },
 	] },
       ]
     }
-  )
-  title
-  genre
-  description
+    //highlight-end
+  ) {
+    title
+    genre
+    description
+  }
 }
 ```
 
-There are 3 types of conditional keywords, i.e, `_and`, `_or`, and `_not`. Conditional keywords like `_and` and `_or` are used when we need to apply filters on multiple fields simultaneously.  The `_not` conditional keyword only accepts an object.
+:::note
+The conditional keywords `_and` and `_or` accept an array, whereas `_not` accepts an object.
 
-The `_not` conditional accepts an object instead of an array.
+```graphql title='Filter all objects that *do not* have the genre "Fiction"'
+{
+  Books(
+    //highlight-next-line
+    filter: { _not: { genre: { _eq: "Fiction" } } }
+  ) {
+    title
+    genre
+    description
+  }
+}
+```
+:::
 
-> Filter all objects that *do not* have the genre "Thriller"
-> `filter: { _not: { genre: { _eq: "Thriller" } } }`
 
+## Relationship sub-objects  {/* #rel-sub-objects */}
 
-## Relationship sub-objects
-
-- `relFieldName: { fieldName: { operator: Value } }` + nesting on fieldName
-
-Where:
-- `operator` &ndash; The [comparison operator](#operators) to use
-- `fieldName` &ndash; The name of the field to filter
-- `Value` &ndash; To value to compare against, of the same type of `fieldName`
-
-You can also apply filters to a relationship's fields.
+Filters can access fields within nested objects, such as in relationships:
 
 ```graphql title="Filter books by genre and author's name"
 {
-  Books(filter: { genre: {_eq: "Thriller"}, author: {name: {_eq: "John Grisham"}}}) {
+  Books(filter: { 
+    genre: { _eq: "Fiction" }, 
+    author: { name: { _eq: "George Orwell" } }
+  }) {
     title
-    genre
     plot
-    Person {
-      name
-    }
   }
 }
 ```
 
-When filtering over 1:many rels, a doc is returned if at least one of the linked docs fulfills, not if all do.
+The syntax to filter over sub-objects has one more level of nesting in field names: `relFieldName: { fieldName: { operator: Value } }`, where:
+
+- `relFieldName`, `fieldName` &ndash; The name of the collection field to compare against.
+- `operator` &ndash; The [comparison operator](#operators) to use.
+- `Value` &ndash; To value to compare against, of the same type of `fieldName`.
+
+### One-to-many relationships {/* #rels-one-to-many */}
+
+When filtering over one-to-many relationships from the _many_ side, a document is returned if _at least one_ of the linked documents fulfills the conditions; not all documents need to match the conditions.
+
+For example, when filtering over people that have authored books of genre `Fiction`, every person that has _at least one_ fiction book among their authored books will be returned:
+
 ```graphql
 {
-  Person(filter: {authoredBooks: {genre: {_eq: "Thriller"}}}) {
+  Person(filter: {
+    authoredBooks: { genre: { _eq: "Fiction" } }
+  }) {
     name
-    bio
   }
 }
 ```
 
-Additionally, in the selection set, if we include the sub-object array we are filtering on, the filter is then implicitly applied unless otherwise specified.
+If the return fields include the sub-object you filter on, the same filter is implicitly applied to the result unless otherwise specified. For example, when filtering over people who have authored `Fiction` books, the returned books will also be of `genre == "Fiction"` only:
 
-In the query snippet above, let's add `books` to the selection set using the query below .
-```graphql
+```graphql title="Get persons who have authored at least one fiction book; return their names and their fiction books *only*"
 {
-	Authors(filter: {book: {genre: {_eq: "Thriller"}}}) {
-        name
-        bio
-        books {
-            title
-            genre
-        }
+  Person(filter: {
+    authoredBooks: { genre: { _eq: "Fiction" } }
+  }) {
+    name
+    authoredBooks {
+      title
+      genre
     }
+  }
 }
 ```
 
-Here, the `books` section will only contain books that match the root object filter, namely, `{genre: {_eq: "Thriller"}}`. If we wish to return the same authors from the above query and include *all* their books, we can add an explicit filter directly to the sub-object instead of the sub-filters.
+You can override this behavior by specifying a different filter on the sub-object in the result fields:
 
-```graphql
+```graphql title="Get persons who have authored at least one fiction book; return their names and *all* their authored books"	
 {
-    Authors(filter: {book: {genre: {_eq: "Thriller"}}}) {
-        name
-        bio
-        books(filter: {}) {
-            title
-            genre
-        }
+  Person(filter: {
+    authoredBooks: { genre: { _eq: "Fiction" } }
+  }) {
+    name
+    //highlight-next-line
+    authoredBooks(filter: {}) {
+      title
+      genre
     }
+  }
 }
 ```
 
-In the code snippet above, the output returns authors who have at least one book with the genre "Thriller". The output also returns **all** the books written by these selected authors (not just the thrillers).
+When specified explicitly, root-level and sub-objects filters are evaluated indipendently: the root filters are applied first and the sub-object filters are applied on the given field, per each returned document.
 
-Filters applied solely to sub-objects, which are only applicable for array types, are computed independently from the root object filters.
-
-```graphql
+```graphql title="Return all fiction books from George Orwell"
 {
-	Authors(filter: {name: {_eq: "John Grisham"}}) {
-		name
-		bio
-		books(filter: { genre: {_eq: "Thriller" }}) {
-			title
-			genre
-			description
-		}
-	}
+  Person(filter: { name: { _eq: "George Orwell" } }) {
+    name
+    books(filter: { genre: { _eq: "Fiction" } } ) {
+      title
+      genre
+    }
+  }
 }
 ```
 
-The above query returns all authors with the name “John Grisham”, then filters and returns all the returned authors' books with the genre “Thriller”. This is similar to the previous query, but an important distinction is that it will return all the matching author objects regardless of the book's sub-object filter.
+## Operators and types  {/* #operators-types */}
 
-## Operators and types  {/* #operators */}
+### Supported operators  {/* #operators */}
 
 | Operator | Description |
 | -------- | --------    |
@@ -216,9 +238,8 @@ The above query returns all authors with the name “John Grisham”, then filte
 | `_nin`   | Not in List        |
 | `_like`  | Like Sub-String (supports `%` wildcard)        |
 |`_nlike`  | Unlike Sub-String (supports `%` wildcard)      |
-###### Table 1. Supported operators. {/* #table-1-supported-operators */}
 
-The table below displays the operators that can be used for every value type:
+### Operators supported by scalar types  {/* #operators-by-type */}
 
 | Scalar Type | Operators |
 | -------- | -------- |
@@ -227,4 +248,3 @@ The table below displays the operators that can be used for every value type:
 | Floating Point     | `_eq, _neq, _gt, _gte, _lt, _lte, _in, _nin`     |
 | Boolean     | `_eq, _neq, _in, _nin`     |
 | DateTime     | `_eq, _neq, _gt, _gte, _lt, _lte, _in, _nin`     |
-###### Table 2. Operators supported by Scalar types. {/* #table-2-operators-supported-by-scalar-types */}
