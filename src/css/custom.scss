@@ -583,5 +583,9 @@ body .DocSearch {
     [data-theme="dark"] & {
       background-color: rgb(47 47 47);
     }
+
+    [data-theme="light"] & {
+      background-color: rgb(230 230 230);
+    }
   }
 }
