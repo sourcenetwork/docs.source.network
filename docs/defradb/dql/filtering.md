@@ -392,76 +392,15 @@ For example, when filtering over people that have authored books of genre `Ficti
 }
 ```
 
-If the return fields include the sub-object you filter on, the same filter is implicitly applied to the result unless otherwise specified. For example, when filtering over people who have authored `Fiction` books, the returned books will also be of `genre == "Fiction"` only:
+If the return fields include the sub-object you filter on, the same filter is not applied to the result unless otherwise specified. For example, when filtering over people who have authored `Fiction` books, the returned books will include books of any genre:
 
-```graphql title="Get persons who have authored at least one fiction book; return their names and their fiction books *only*"
+```graphql title="Get persons who have authored at least one fiction book; return their names and *all* their authored books"
 {
   Person(filter: {
     authoredBooks: { genre: { _eq: "Fiction" } }
   }) {
     name
     authoredBooks {
-      title
-      genre
-    }
-  }
-}
-```
-```json title="Result"
-{
-  "data": {
-    "Person": [
-      {
-        "authoredBooks": [
-          {
-            "genre": "Fiction",
-            "title": "1984"
-          }
-        ],
-        "name": "George Orwell"
-      },
-      {
-        "authoredBooks": [
-          {
-            "genre": "Fiction",
-            "title": "Lord of the Flies"
-          }
-        ],
-        "name": "William Golding"
-      },
-      {
-        "authoredBooks": [
-          {
-            "genre": "Fiction",
-            "title": "Infinite Jest"
-          }
-        ],
-        "name": "David Foster Wallace"
-      },
-      {
-        "authoredBooks": [
-          {
-            "genre": "Fiction",
-            "title": "Les Misérables"
-          }
-        ],
-        "name": "Victor Hugo"
-      }
-    ]
-  }
-}
-```
-
-You can override this behavior by specifying a different filter on the sub-object in the result fields:
-
-```graphql title="Get persons who have authored at least one fiction book; return their names and *all* their authored books"	
-{
-  Person(filter: {
-    authoredBooks: { genre: { _eq: "Fiction" } }
-  }) {
-    name
-    # highlight-next-line
-    authoredBooks(filter: {}) {
       title
       genre
     }
@@ -521,7 +460,8 @@ You can override this behavior by specifying a different filter on the sub-objec
 }
 ```
 
-When specified explicitly, root-level and sub-objects filters are evaluated indipendently: the root filters are applied first and the sub-object filters are applied on the given field, per each returned document.
+You can override this behavior by specifying a different filter on the sub-object in the result fields.
+When specified explicitly, root-level and sub-objects filters are evaluated indipendently: the root filter is applied first and the sub-object filter is applied on the given field, per each returned document.
 
 ```graphql title="Return all fiction books from George Orwell"
 {
