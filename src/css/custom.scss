@@ -589,3 +589,8 @@ body .DocSearch {
     }
   }
 }
+
+/* Squash together query and result code blocks, when one after another */
+div.language-graphql + div.language-json {
+  margin-top: calc(var(--ifm-leading) * -1);
+}
