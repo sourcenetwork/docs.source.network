@@ -240,55 +240,30 @@ There's no limit on the number of ordering fields that can be specified. Their p
 Regardless of the number of fields in the `order` object, `_docID` is always used to solve ties on the latest level.
 :::
 
-## Sorting for relationship sub-objects
+## Sorting for array sub-objects
 
-Additionally, you can sort sub-object fields along with root object fields.
+Sorting on sub-objects from the root object is only allowed if the sub-object is not an array. If it is an array (such as the *many* side of one-to-many relationships), the sort must be applied to the object field in the selection set.
 
-The query below finds all books ordered by earliest published date and then by the latest authors' birthday.
-```graphql
+```graphql title="Valid &ndash; Sorting for relationship sub-object in the selection level"
+# valid
 {
-    Books(order: [{ published_at: ASC }, { Author: { birthday: DESC } }]) {
-        title
-        description
-        published_at
-        Author {
-            name
-            birthday
-        }
+  Person(order: { name: DESC }) {
+    name
+    authoredBooks(order: { title: ASC }) {
+      title
     }
+  }
 }
 ```
-
-Sorting multiple fields simultaneously is primarily driven by the first indicated sort field (primary field). In the query above, it is the “published_at” date. The following sort field (aka, secondary field), is used in the case that more than one record has the same value for the primary sort field. 
-
-Assuming there are more than two sort fields, in that case, the same behavior applies, except the primary, secondary pair shifts by one element. Hence, the 2nd field is the primary, and the 3rd is the secondary, until we reach the end of the sort fields.
-
-In case of a single sort field and objects with same value, the documents identifier (DocKey) is used as the secondary sort field by default. This is applicable regardless of the number of sort fields. As long as the DocKey is not already included in sort fields, it acts as the final tie-breaking secondary field.
-
-If the DocKey is included in the sort fields, any field included afterwards will never be evaluated. This is because all DocKeys are unique. If the sort fields are `published_at`, `id`, and `birthday`, the `birthday` sort field will never be evaluated and should be removed from the list.
-
-> Sorting on sub-objects from the root object is only allowed if the sub-object is not an array. If it is an array, the sort must be applied to the object field directly instead of through the root object. Therefore, sorting on array sub objects from the root field is ***strictly not allowed***.
 
 ```graphql title="Invalid &ndash; Sorting for relationship sub-object at root level"
 # invalid
 {
-    Authors(order: [{ name: DESC }, { Books: { title: ASC } }]) {
-        name
-        Books {
-            title
-        }
+  Person(order: [{ name: DESC }, { authoredBooks: { title: ASC } }]) {
+    name
+    authoredBooks {
+      title
     }
-}
-```
-
-```graphql title="Invalid &ndash; Sorting for relationship sub-object in the selection level"
-# valid
-{
-    Authors(order: { name: DESC }) {
-        name
-        Books(order: { title: ASC }) {
-            title
-        }
-    }
+  }
 }
 ```
