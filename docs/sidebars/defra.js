@@ -33,7 +33,7 @@ export default {
         'dql/index',
         'dql/mutation-create',
         'dql/mutation-query',
-        'dql/filtering',
+        'dql/filter',
         'dql/sorting-and-ordering',
         'dql/limiting-and-pagination',
         'dql/mutation-update',

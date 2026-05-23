@@ -163,6 +163,22 @@ const config = {
       prism: {
         theme: variableCodeTheme,
         additionalLanguages: ['http'],
+        magicComments: [
+          // Remember to extend the default highlight class name as well!
+          {
+            className: 'theme-code-block-highlighted-line',
+            line: 'highlight-next-line',
+            block: { start: 'highlight-start', end: 'highlight-end' },
+          },
+          {
+            className: 'code-block-invalid-line',
+            line: 'invalid',
+          },
+          {
+            className: 'code-block-valid-line',
+            line: 'valid',
+          },
+        ],
       },
       algolia: {
         appId: "N3M9YBYYQY",

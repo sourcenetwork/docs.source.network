@@ -595,3 +595,33 @@ div.language-graphql + div.language-json,
 div.language-shell + div.language-json {
   margin-top: calc(var(--ifm-leading) * -1);
 }
+
+/* Style for code blocks starting with `// invalid` */
+div.codeBlockContainer_Ckt0:has(.code-block-invalid-line),
+pre.prism-code:has(.code-block-invalid-line) {
+  [data-theme="dark"] & {
+    background: rgb(135, 0, 0);
+    border-color: rgb(135, 0, 0);
+  }
+  [data-theme="light"] & {
+    background: var(--ifm-color-danger);
+    border-color: var(--ifm-color-danger);
+  }
+}
+/* Style for code blocks starting with `// valid` */
+div.codeBlockContainer_Ckt0:has(.code-block-valid-line),
+pre.prism-code:has(.code-block-valid-line) {
+  [data-theme="dark"] & {
+    background: rgb(0, 90, 0);
+    border-color: rgb(0, 90, 0);
+  }
+  [data-theme="light"] & {
+    background: var(--ifm-color-success);
+    border-color: var(--ifm-color-success);
+  }
+}
+/* Remove border under title */
+div.codeBlockTitle_OeMC:has(+ .codeBlockContent_QJqH > pre > code > .code-block-invalid-line),
+div.codeBlockTitle_OeMC:has(+ .codeBlockContent_QJqH > pre > code > .code-block-valid-line) {
+  border-bottom: 0px;
+}
