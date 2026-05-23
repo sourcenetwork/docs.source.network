@@ -116,6 +116,10 @@ Queries support database query operations such as filtering, sorting, grouping, 
 }
 ```
 
+GraphQL queries only return the exact fields requested (there is no equivalent of the SQL SELECT * syntax).
+
+
+
 ## Relationships
 
 The notable distinction of "one-to-one" relationships is that only the DocKey of the corresponding object is stored.

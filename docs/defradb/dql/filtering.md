@@ -140,7 +140,7 @@ Filters allow you to specify criterias for selecting documents. You provide them
 {
   Book(filter: {
     # highlight-next-line
-    title: { _ilike: "%love%" }
+    plot: { _ilike: "%love%" }
   }) {
     title
     genre
@@ -154,8 +154,8 @@ Filters allow you to specify criterias for selecting documents. You provide them
     "Book": [
       {
         "genre": "Fiction",
-        "plot": "A masterpiece of rebellion and imprisonment where war is peace, freedom is slavery, and Big Brother is watching.",
-        "title": "1984"
+        "plot": "Victor Hugo's tale of injustice, heroism and love follows the fortunes of Jean Valjean, an escaped convict determined to put his criminal past behind him.",
+        "title": "Les Misérables"
       }
     ]
   }
@@ -281,7 +281,7 @@ filter: {
       },
       {
         "genre": "Fiction",
-        "rating": 3.7,
+        "rating": 4.25,
         "title": "Infinite Jest"
       }
     ]
