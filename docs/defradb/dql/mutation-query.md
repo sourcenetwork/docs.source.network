@@ -5,13 +5,111 @@ title: Query the database
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-The DefraDB Query Language (DQL) is a [GraphQL](https://graphql.org)-based language for storing and querying data in a DefraDB node.
+Once you have [created some documents](mutation-create.md), you can query the database for them.
 
-## Query Block
+Queries support standard database query operations such as [filtering](filter.md), [sorting](sorting-and-ordering.md), [grouping](grouping.md), [skipping/limiting](limiting-and-pagination.md), [aggregation](aggregate-functions.md), etc. 
 
-Query blocks are read-only GraphQL operations designed only to request information from the database, without the ability to mutate the database state. They contain multiple subqueries which are executed concurrently, unless there is some variable dependency between them.
+<details>
+  <summary>Display database setup</summary>
+  
+  This page assumes your database contains `Book` and `Person` [collections](/schema/collections.md) and some documents in them:
 
-Queries support database query operations such as filtering, sorting, grouping, skipping/limiting, aggregation, etc. These query operations can be used on different GraphQL object levels, mostly on fields that have some relation or embedding to other objects.
+  ```graphql title="Database schema" test-setup-collection
+  type Person {
+    name: String
+    authoredBooks: [Book]
+  }
+
+  type Book {
+    title: String
+    genre: String
+    plot: String
+    rating: Float
+    author: Person
+  }
+  ```
+  ```graphql title="Person documents setup" test-setup-data
+  mutation {
+    a1:add_Person(input: {
+      name: "George Orwell"
+    }) { _docID }
+    a2:add_Person(input: {
+      name: "William Golding"
+    }) { _docID }
+    a3:add_Person(input: {
+      name: "David Foster Wallace"
+    }) { _docID }
+    a4:add_Person(input: {
+      name: "Victor Hugo"
+    }) { _docID }
+  }
+  ```
+  ```graphql title="Book documents setup" test-setup-data
+  mutation {
+    b11:add_Book(input: {
+      title: "1984",
+      genre: "Fiction",
+      plot: "A masterpiece of rebellion and imprisonment where war is peace, freedom is slavery, and Big Brother is watching.",
+      rating: 4.20,
+      _authorID: "bae-3517d1eb-351b-5231-8387-870893ffb395"
+    }) {
+      _docID
+      title
+    }
+    b12:add_Book(input: {
+      title: "Down and Out in Paris and London",
+      genre: "Biography",
+      plot: "The adventures of a penniless British writer among the down-and-outs of two great cities.",
+      rating: 4.09,
+      _authorID: "bae-3517d1eb-351b-5231-8387-870893ffb395"
+    }) {
+      _docID
+      title
+    }
+    b21:add_Book(input: {
+      title: "Lord of the Flies",
+      genre: "Fiction",
+      plot: "At the dawn of the next world war, a plane crashes on an uncharted island, stranding a group of schoolboys.",
+      rating: 3.70,
+      _authorID: "bae-78e9c7be-10b9-5673-bad2-da3341367d4b"
+    }) {
+      _docID
+      title
+    }
+    b31:add_Book(input: {
+      title: "Infinite Jest",
+      genre: "Fiction",
+      plot: "A gargantuan, mind-altering tragi-comedy about the Pursuit of Happiness in America.",
+      rating: 4.25
+      _authorID: "bae-b59928dc-fd05-5fb7-aea2-9b24af5ebcea"
+    }) {
+      _docID
+      title
+    }
+    b32:add_Book(input: {
+      title: "Consider the Lobster and Other Essays",
+      genre: "Nonfiction",
+      plot: "Do lobsters feel pain? Did Franz Kafka have a funny bone? What is John Updike's deal, anyway? And what happens when adult video starlets meet their fans in person? Essays that are also enthralling narrative adventures.",
+      rating: 4.18,
+      _authorID: "bae-b59928dc-fd05-5fb7-aea2-9b24af5ebcea"
+    }) {
+      _docID
+      title
+    }
+    b41:add_Book(input: {
+      title: "Les Misérables",
+      genre: "Fiction",
+      plot: "Victor Hugo's tale of injustice, heroism and love follows the fortunes of Jean Valjean, an escaped convict determined to put his criminal past behind him.",
+      rating: 4.21,
+      _authorID: "bae-c169e917-df52-5603-9224-39c1757f1b04"
+    }) {
+      _docID
+      title
+    }
+  }
+  ```
+</details>
+
 
 ## Run a query
 

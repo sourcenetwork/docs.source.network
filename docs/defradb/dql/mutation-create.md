@@ -119,7 +119,7 @@ Once you have [created collections](/schema/collections.md), you can start addin
   </TabItem>
 </Tabs>
 
-## The document ID
+## The document ID  { /* #docid */ }
 
 The field `_docID` is the document's unique identifier, determined by the collection it belongs to and the data it is initialized with. The data in the document might change over time, but its docID will stay the same. 
 
@@ -203,10 +203,11 @@ mutation {
 
 ## Create multiple documents at once {/* #multiple */}
 
-You can create multiple documents in the same request by concatenating several `add_<collection>` statements.
+You can run several mutations at the same time, independently of one another. They are executed in parallel.
 
 <Tabs groupId="defra">
   <TabItem value="cli" label="CLI" default>
+    You can create multiple documents in the same request by concatenating several `add_<collection>` statements.
     To avoid clashes, you need to [alias](aliases.md) the results (`b1` and `b2` in the example). The aliases are used as keys in the result json.
 
     ```shell title="Create two documents"
@@ -256,6 +257,8 @@ You can create multiple documents in the same request by concatenating several `
     ```
   </TabItem>
   <TabItem value="http" label="HTTP API">
+    You can create multiple documents in the same request by providing a list object to the `/api/v1/collections/<type>` endpoint.
+    
     ```http title="Create two documents"
     POST http://localhost:9181/api/v1/collections/Book HTTP/2
     accept: application/json
@@ -278,6 +281,7 @@ You can create multiple documents in the same request by concatenating several `
     ```
   </TabItem>
   <TabItem value="graphql" label="GraphQL API">
+    You can create multiple documents in the same request by concatenating several `add_<collection>` statements.
     To avoid clashes, you need to [alias](aliases.md) the results (`b1` and `b2` in the example). The aliases are used as keys in the result json.
 
     ```graphql title="Create two documents"
