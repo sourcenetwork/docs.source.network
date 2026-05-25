@@ -1,5 +1,5 @@
 ---
-title: Sorting and ordering
+title: Sort and order results
 ---
 
 By default, results are sorted by [`_docID`](/dql/mutation-create.md#docid).
@@ -115,7 +115,7 @@ To order results, use the syntax `order: { fieldName: DIRECTION }`, where:
 ```graphql title="Sort books by title, A-Z"
 {
   # highlight-next-line
-  Books(order: { title: ASC }) {
+  Book(order: { title: ASC }) {
     title
     plot
   }
@@ -256,7 +256,7 @@ Sorting on sub-objects from the root object is only allowed if the sub-object is
 }
 ```
 
-```graphql title="Invalid &ndash; Sorting for relationship sub-object at root level"
+```graphql title="Invalid &ndash; Sorting for relationship sub-object at root level" test-error
 # invalid
 {
   Person(order: [{ name: DESC }, { authoredBooks: { title: ASC } }]) {
