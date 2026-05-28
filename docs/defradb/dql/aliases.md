@@ -1,51 +1,235 @@
 ---
-sidebar_label: Aliases
-sidebar_position: 90
+title: Rename result fields (Aliases)
 ---
-# Aliases
 
-If the structure of a returned query is not ideal for a given application, you can rename fields and entire query results to suit your use case. This is particularly useful, and sometimes necessary when using multiple queries within a single request.
+_Little Bobby Tables, we call him._ Other times, you might want to change the default names that the database returns in results. Aliases allow you to rename fields and entire query results with identifiers of your choice.
 
-```graphql
-{
-    topTenBooks: Books(order: {rating: DESC}, limit: 10) {
-        title
-        genre
-        description
+<details>
+  <summary>Display database setup</summary>
+  
+  This page assumes your database contains `Book` and `Person` [collections](/schema/collections.md) and some documents in them:
+
+  ```graphql title="Database schema" test-setup-collection
+  type Person {
+    name: String
+    authoredBooks: [Book]
+  }
+
+  type Book {
+    title: String
+    genre: String
+    plot: String
+    rating: Float
+    author: Person
+  }
+  ```
+  ```graphql title="Person documents setup" test-setup-data
+  mutation {
+    a1:add_Person(input: {
+      name: "George Orwell"
+    }) { _docID }
+    a2:add_Person(input: {
+      name: "William Golding"
+    }) { _docID }
+    a3:add_Person(input: {
+      name: "David Foster Wallace"
+    }) { _docID }
+    a4:add_Person(input: {
+      name: "Victor Hugo"
+    }) { _docID }
+  }
+  ```
+  ```graphql title="Book documents setup" test-setup-data
+  mutation {
+    b11:add_Book(input: {
+      title: "1984",
+      genre: "Fiction",
+      plot: "A masterpiece of rebellion and imprisonment where war is peace, freedom is slavery, and Big Brother is watching.",
+      rating: 4.20,
+      _authorID: "bae-3517d1eb-351b-5231-8387-870893ffb395"
+    }) {
+      _docID
+      title
     }
+    b12:add_Book(input: {
+      title: "Down and Out in Paris and London",
+      genre: "Biography",
+      plot: "The adventures of a penniless British writer among the down-and-outs of two great cities.",
+      rating: 4.09,
+      _authorID: "bae-3517d1eb-351b-5231-8387-870893ffb395"
+    }) {
+      _docID
+      title
+    }
+    b21:add_Book(input: {
+      title: "Lord of the Flies",
+      genre: "Fiction",
+      plot: "At the dawn of the next world war, a plane crashes on an uncharted island, stranding a group of schoolboys.",
+      rating: 3.70,
+      _authorID: "bae-78e9c7be-10b9-5673-bad2-da3341367d4b"
+    }) {
+      _docID
+      title
+    }
+    b31:add_Book(input: {
+      title: "Infinite Jest",
+      genre: "Fiction",
+      plot: "A gargantuan, mind-altering tragi-comedy about the Pursuit of Happiness in America.",
+      rating: 4.25
+      _authorID: "bae-b59928dc-fd05-5fb7-aea2-9b24af5ebcea"
+    }) {
+      _docID
+      title
+    }
+    b32:add_Book(input: {
+      title: "Consider the Lobster and Other Essays",
+      genre: "Nonfiction",
+      plot: "Do lobsters feel pain? Did Franz Kafka have a funny bone? What is John Updike's deal, anyway? And what happens when adult video starlets meet their fans in person? Essays that are also enthralling narrative adventures.",
+      rating: 4.18,
+      _authorID: "bae-b59928dc-fd05-5fb7-aea2-9b24af5ebcea"
+    }) {
+      _docID
+      title
+    }
+    b41:add_Book(input: {
+      title: "Les Misérables",
+      genre: "Fiction",
+      plot: "Victor Hugo's tale of injustice, heroism and love follows the fortunes of Jean Valjean, an escaped convict determined to put his criminal past behind him.",
+      rating: 4.21,
+      _authorID: "bae-c169e917-df52-5603-9224-39c1757f1b04"
+    }) {
+      _docID
+      title
+    }
+  }
+  ```
+</details>
+
+## Rename queries
+
+To rename the return key for a query, prepend the custom name to the query and separate the two with a colon `:`.
+
+```graphql title="Return the three top-rated books under the key topThreeBooks"
+{
+  # highlight-next-line
+  topThreeBooks: Book(order: { rating: DESC }, limit: 3) {
+    title
+    plot
+    rating
+  }
+}
+```
+```json title="Result"
+{
+  "data": {
+    "topThreeBooks": [
+      {
+        "plot": "A gargantuan, mind-altering tragi-comedy about the Pursuit of Happiness in America.",
+        "rating": 4.25,
+        "title": "Infinite Jest"
+      },
+      {
+        "plot": "Victor Hugo's tale of injustice, heroism and love follows the fortunes of Jean Valjean, an escaped convict determined to put his criminal past behind him.",
+        "rating": 4.21,
+        "title": "Les Misérables"
+      },
+      {
+        "plot": "A masterpiece of rebellion and imprisonment where war is peace, freedom is slavery, and Big Brother is watching.",
+        "rating": 4.2,
+        "title": "1984"
+      }
+    ]
+  }
 }
 ```
 
-In the above example, the books result is renamed to `topTenBooks`, which can be useful for semantic reasoning about the request, and for organizational purposes. It is suggested in production deployments to name your queries properly.
+You must alias queries when one request contains multiple queries to the same type.
 
-```graphql
+```graphql title="Two queries on Book type require aliasing"
 {
-    topTenBooks: Books(order: {rating: DESC}, limit: 10) {
-        title
-        genre
-        description
-    }
-    
-    bottomTenBooks: Books(order: {rating: ASC}, limit: 10) {
-        title
-        genre
-        description
-    }
+  # highlight-next-line
+  topThreeBooks: Book(order: { rating: DESC }, limit: 3) {
+    title
+    genre
+    plot
+  }
+
+  # highlight-next-line
+  worstThreeBooks: Book(order: { rating: ASC }, limit: 3) {
+    title
+    genre
+    plot
+  }
 }
 ```
+```json title="Result"
+{
+  "data": {
+    "topThreeBooks": [
+      {
+        "genre": "Fiction",
+        "plot": "A gargantuan, mind-altering tragi-comedy about the Pursuit of Happiness in America.",
+        "title": "Infinite Jest"
+      },
+      {
+        "genre": "Fiction",
+        "plot": "Victor Hugo's tale of injustice, heroism and love follows the fortunes of Jean Valjean, an escaped convict determined to put his criminal past behind him.",
+        "title": "Les Misérables"
+      },
+      {
+        "genre": "Fiction",
+        "plot": "A masterpiece of rebellion and imprisonment where war is peace, freedom is slavery, and Big Brother is watching.",
+        "title": "1984"
+      }
+    ],
+    "worstThreeBooks": [
+      {
+        "genre": "Fiction",
+        "plot": "At the dawn of the next world war, a plane crashes on an uncharted island, stranding a group of schoolboys.",
+        "title": "Lord of the Flies"
+      },
+      {
+        "genre": "Biography",
+        "plot": "The adventures of a penniless British writer among the down-and-outs of two great cities.",
+        "title": "Down and Out in Paris and London"
+      },
+      {
+        "genre": "Nonfiction",
+        "plot": "Do lobsters feel pain? Did Franz Kafka have a funny bone? What is John Updike's deal, anyway? And what happens when adult video starlets meet their fans in person? Essays that are also enthralling narrative adventures.",
+        "title": "Consider the Lobster and Other Essays"
+      }
+    ]
+  }
+}
+```
+
 
 In this query the two returned results are named `topTenBooks` and `bottomTenBooks` respectively. When dealing with multiple queries of the same type (e.g., `books`), it is required to alias one from another.
 
-Additionally, we can alias individual fields within our returned types. Aliasing a field works the same way as aliasing a query.
+## Rename fields
 
-```graphql
+To rename the return key for a field, prepend the custom name to the field in the selection set and separate the two with a colon `:`.
+
+```graphql title='Rename the field "plot" to "description"'
 {
-    Books {
-        name: title
-        genre
-        description
-    }
+  Book(limit: 1) {
+    title
+    genre
+    # highlight-next-line
+    description: plot
+  }
 }
 ```
-
-In the above example, we have renamed the `title` field to `name`. Unlike query aliases, there is no requirement in any context because name collisions are impossible within a defined query return type.
+```json title="Result"
+{
+  "data": {
+    "Book": [
+      {
+        "description": "At the dawn of the next world war, a plane crashes on an uncharted island, stranding a group of schoolboys.",
+        "genre": "Fiction",
+        "title": "Lord of the Flies"
+      }
+    ]
+  }
+}
+```
