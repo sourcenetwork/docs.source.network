@@ -135,13 +135,13 @@ For example, to create a book and link it to an author, first create the documen
 
 ```graphql title="Create new documents for Person and Book"
 mutation {
-  p:add_Person(input: {
+  add_Person(input: {
     name: "Victor Hugo"
   }) {
     _docID
     name
   }
-  b:add_Book(input: {
+  add_Book(input: {
     title: "Les Misérables",
     genre: "Fiction",
     plot: "Victor Hugo's tale of injustice, heroism and love follows the fortunes of Jean Valjean, an escaped convict determined to put his criminal past behind him.",
@@ -155,13 +155,13 @@ mutation {
 ```json title="Result"
 {
   "data": {
-    "b": [
+    "add_Book": [
       {
         "_docID": "bae-e1dcefa0-46ca-5ae5-bc0a-859f2e7e1259",
         "title": "Les Misérables"
       }
     ],
-    "p": [
+    "add_Person": [
       {
         "_docID": "bae-c169e917-df52-5603-9224-39c1757f1b04",
         "name": "Victor Hugo"

@@ -284,7 +284,7 @@ filter: {
       },
       {
         "genre": "Fiction",
-        "rating": 4,
+        "rating": 4.25,
         "title": "Infinite Jest"
       }
     ]

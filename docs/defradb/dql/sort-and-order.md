@@ -117,7 +117,6 @@ To order results, use the syntax `order: { fieldName: DIRECTION }`, where:
   # highlight-next-line
   Book(order: { title: ASC }) {
     title
-    plot
   }
 }
 ```
@@ -126,19 +125,21 @@ To order results, use the syntax `order: { fieldName: DIRECTION }`, where:
   "data": {
     "Book": [
       {
-        "plot": "A masterpiece of rebellion and imprisonment where war is peace, freedom is slavery, and Big Brother is watching.",
         "title": "1984"
       },
       {
-        "plot": "A gargantuan, mind-altering tragi-comedy about the Pursuit of Happiness in America.",
+        "title": "Consider the Lobster and Other Essays"
+      },
+      {
+        "title": "Down and Out in Paris and London"
+      },
+      {
         "title": "Infinite Jest"
       },
       {
-        "plot": "Victor Hugo's tale of injustice, heroism and love follows the fortunes of Jean Valjean, an escaped convict determined to put his criminal past behind him.",
         "title": "Les Misérables"
       },
       {
-        "plot": "At the dawn of the next world war, a plane crashes on an uncharted island, stranding a group of schoolboys.",
         "title": "Lord of the Flies"
       }
     ]

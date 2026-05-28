@@ -2,6 +2,8 @@
 title: Limit and paginate results
 ---
 
+There's no limit on the amount of data you can store in DefraDB, and thus there's no limit on how many results DefraDB will return when querying it. Things can get overwhelming quite quickly &ndash; before you realize, you might drown in your own data.
+
 The `limit` and `offset` keywords allow you to control how many records a query will return. You can combine them to create a pagination system.
 
 <details>
@@ -113,7 +115,7 @@ With the `limit` keyword you can specify the maximum number of records to return
 ```graphql title="Get the 3 top-rated books"
 {
   # highlight-next-line
-  Books(order: {rating: DESC}, limit: 3) {
+  Book(order: {rating: DESC}, limit: 3) {
     title
     plot
     rating
@@ -151,7 +153,7 @@ With the `offset` keyword you can specify how many records to be skipped in the 
 ```graphql title="Get the 3 top-rated books after the first 2"
 {
   # highlight-next-line
-  Books(order: {rating: DESC}, limit: 3, offset: 2) {
+  Book(order: {rating: DESC}, limit: 3, offset: 2) {
     title
     plot
     rating
