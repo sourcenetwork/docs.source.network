@@ -110,11 +110,11 @@ html[data-theme="dark"] {
 
   &__brand {
     margin-right: rem(40px);
+    flex-shrink: 0;
   }
 
   &__logo {
     max-width: rem(230px);
-    width: 100%;
     margin-left: rem(30px);
     @media (max-width: 996px) {
       margin-left: rem(20px);
@@ -434,6 +434,14 @@ body .DocSearch {
     &:after {
       content: " ...";
     }
+
+    // Between ~996px and 1200px, shrink the search bar so the logo
+    // (and other navbar items) keep their natural width. We start at
+    // 996px (rather than 997px) to avoid a sub-pixel gap where neither
+    // the mobile navbar rules nor this rule apply.
+    @media (min-width: 996px) and (max-width: 1200px) {
+      padding-right: 2rem;
+    }
   }
 
   &-Button {
@@ -562,13 +570,14 @@ body .DocSearch {
   );
 }
 
-
+/* Color for version selector */
 .navbar__item.dropdown {
   .navbar__link {
     color: var(--ifm-color-primary)
   }
 }
 
+/* Visual indication of tabs length */
 .tabs-container {
   .margin-top--md {
     border-left: 3px var(--ifm-color-primary) solid;
@@ -576,6 +585,7 @@ body .DocSearch {
   }
 }
 
+/* Color for highlighted lines in code blocks */
 .theme-code-block {
   .theme-code-block-highlighted-line {
     border-right: 3px var(--ifm-color-primary) solid;
@@ -620,8 +630,24 @@ pre.prism-code:has(.code-block-valid-line) {
     border-color: var(--ifm-color-success);
   }
 }
-/* Remove border under title */
+/* Remove border under title for valid/invalid code blocks */
 div.codeBlockTitle_OeMC:has(+ .codeBlockContent_QJqH > pre > code > .code-block-invalid-line),
 div.codeBlockTitle_OeMC:has(+ .codeBlockContent_QJqH > pre > code > .code-block-valid-line) {
   border-bottom: 0px;
+
+/* External link icon indicator */
+a[target="_blank"]::after {
+  content: "";
+  display: inline-block;
+  width: 0.75em;
+  height: 0.75em;
+  margin-left: 0.2em;
+  vertical-align: baseline;
+  background-color: currentColor;
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M3.75 2a1.75 1.75 0 0 0-1.75 1.75v8.5c0 .966.784 1.75 1.75 1.75h8.5A1.75 1.75 0 0 0 14 12.25v-3.5a.75.75 0 0 0-1.5 0v3.5a.25.25 0 0 1-.25.25h-8.5a.25.25 0 0 1-.25-.25v-8.5a.25.25 0 0 1 .25-.25h3.5a.75.75 0 0 0 0-1.5h-3.5zm6.25 0a.75.75 0 0 0 0 1.5h2.19L6.72 9.03a.75.75 0 1 0 1.06 1.06l5.5-5.5v2.19a.75.75 0 0 0 1.5 0v-3.5a.75.75 0 0 0-.75-.75h-4.25z'/%3E%3C/svg%3E");
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M3.75 2a1.75 1.75 0 0 0-1.75 1.75v8.5c0 .966.784 1.75 1.75 1.75h8.5A1.75 1.75 0 0 0 14 12.25v-3.5a.75.75 0 0 0-1.5 0v3.5a.25.25 0 0 1-.25.25h-8.5a.25.25 0 0 1-.25-.25v-8.5a.25.25 0 0 1 .25-.25h3.5a.75.75 0 0 0 0-1.5h-3.5zm6.25 0a.75.75 0 0 0 0 1.5h2.19L6.72 9.03a.75.75 0 1 0 1.06 1.06l5.5-5.5v2.19a.75.75 0 0 0 1.5 0v-3.5a.75.75 0 0 0-.75-.75h-4.25z'/%3E%3C/svg%3E");
+  -webkit-mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
 }
