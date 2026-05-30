@@ -634,6 +634,7 @@ pre.prism-code:has(.code-block-valid-line) {
 div.codeBlockTitle_OeMC:has(+ .codeBlockContent_QJqH > pre > code > .code-block-invalid-line),
 div.codeBlockTitle_OeMC:has(+ .codeBlockContent_QJqH > pre > code > .code-block-valid-line) {
   border-bottom: 0px;
+}
 
 /* External link icon indicator */
 a[target="_blank"]::after {
