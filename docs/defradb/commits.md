@@ -1,5 +1,5 @@
 ---
-title: Explore the graph of commits
+title: Explore the history of documents
 ---
 
 ## Obtain document commits {/* #obtain-document-commits */}

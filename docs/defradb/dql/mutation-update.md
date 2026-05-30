@@ -2,58 +2,200 @@
 title: Update existing documents
 ---
 
-Updates are distinct from Inserts in several ways. Firstly, it relies on a query to select the correct document or documents to update. Secondly, it uses a different payload system.
+The only constant is change, and so shall it be. Even if the [*history*](/commits.md) of data in DefraDB is permanent, you can still alter stored documents. Similarly to the `add_TYPE` mutation to [create documents](mutation-create.md), you update documents via the `update_TYPE` mutation. The mutation returns the updated documents.
 
-Update filters use the same format and types from the Query system. Hence, it easily transferable.
-
-The structure of the generated update mutation for a `Book` type is given below:
-```graphql
+```graphql title="Syntax for update mutation" test-skip
 mutation {
-    update_Book(docID: ID, filter: BookFilterArg, input: updateBookInput) [Book]
+  update_TYPE(docID: [ID], filter: filterObj, input: updateInput) [TYPE]
 }
 ```
 
-See the structure and syntax of the filter query above. You can also see an additional field `id`, thawhich will supersede the `filter`; this makes it easy to update a single document by a given ID.
+- `docID` &ndash; DocID of the document(s) to update. Either a string or a list of strings.
+- `filter` &ndash; Criteria for selecting documents to update (see [Filter documents](filter.md)).
+- `input` &ndash; JSON-like object containing the updates, same format as for [creating documents](mutation-create.md).
 
-The input object type is the same for both `update_TYPE` and `create_TYPE` mutations.
+Only one among `docID` and `filter` is needed to pinpoint the documents to update. If you provide both, `docID` takes precedence.
 
-Here's an example.
-```json
+:::tip
+To remove a field from a document, set its value to `null`.
+:::
+
+## Examples  { /* #examples */ }
+
+<details>
+  <summary>Display database setup</summary>
+  
+  This page assumes your database contains `Book` and `Person` [collections](/schema/collections.md) and some documents in them:
+
+  ```graphql title="Database schema" test-setup-collection
+  type Person {
+    name: String
+    authoredBooks: [Book]
+  }
+
+  type Book {
+    title: String
+    genre: String
+    plot: String
+    rating: Float
+    author: Person
+  }
+  ```
+  ```graphql title="Person documents setup" test-setup-data
+  mutation {
+    a1:add_Person(input: {
+      name: "George Orwell"
+    }) { _docID }
+    a2:add_Person(input: {
+      name: "William Golding"
+    }) { _docID }
+    a3:add_Person(input: {
+      name: "David Foster Wallace"
+    }) { _docID }
+    a4:add_Person(input: {
+      name: "Victor Hugo"
+    }) { _docID }
+  }
+  ```
+  ```graphql title="Book documents setup" test-setup-data
+  mutation {
+    b11:add_Book(input: {
+      title: "1984",
+      genre: "Fiction",
+      plot: "A masterpiece of rebellion and imprisonment where war is peace, freedom is slavery, and Big Brother is watching.",
+      rating: 4.20,
+      _authorID: "bae-3517d1eb-351b-5231-8387-870893ffb395"
+    }) {
+      _docID
+      title
+    }
+    b12:add_Book(input: {
+      title: "Down and Out in Paris and London",
+      genre: "Biography",
+      plot: "The adventures of a penniless British writer among the down-and-outs of two great cities.",
+      rating: 4.09,
+      _authorID: "bae-3517d1eb-351b-5231-8387-870893ffb395"
+    }) {
+      _docID
+      title
+    }
+    b21:add_Book(input: {
+      title: "Lord of the Flies",
+      genre: "Fiction",
+      plot: "At the dawn of the next world war, a plane crashes on an uncharted island, stranding a group of schoolboys.",
+      rating: 3.70,
+      _authorID: "bae-78e9c7be-10b9-5673-bad2-da3341367d4b"
+    }) {
+      _docID
+      title
+    }
+    b31:add_Book(input: {
+      title: "Infinite Jest",
+      genre: "Fiction",
+      plot: "A gargantuan, mind-altering tragi-comedy about the Pursuit of Happiness in America.",
+      rating: 4.25
+      _authorID: "bae-b59928dc-fd05-5fb7-aea2-9b24af5ebcea"
+    }) {
+      _docID
+      title
+    }
+    b32:add_Book(input: {
+      title: "Consider the Lobster and Other Essays",
+      genre: "Nonfiction",
+      plot: "Do lobsters feel pain? Did Franz Kafka have a funny bone? What is John Updike's deal, anyway? And what happens when adult video starlets meet their fans in person? Essays that are also enthralling narrative adventures.",
+      rating: 4.18,
+      _authorID: "bae-b59928dc-fd05-5fb7-aea2-9b24af5ebcea"
+    }) {
+      _docID
+      title
+    }
+    b41:add_Book(input: {
+      title: "Les Misérables",
+      genre: "Fiction",
+      plot: "Victor Hugo's tale of injustice, heroism and love follows the fortunes of Jean Valjean, an escaped convict determined to put his criminal past behind him.",
+      rating: 4.21,
+      _authorID: "bae-c169e917-df52-5603-9224-39c1757f1b04"
+    }) {
+      _docID
+      title
+    }
+  }
+  ```
+</details>
+
+```graphql title="Update 1984's genre"
+mutation {
+  update_Book(
+    filter: { title: { _eq: "1984" } },
+    input: { genre: "Dystopia" }
+  ) {
+    genre
+    title
+  }
+}
+```
+```json title="Result"
 {
-    name: "John",
-    rating: nil
+  "data": {
+    "update_Book": [
+      {
+        "genre": "Dystopia",
+        "title": "1984"
+      }
+    ]
+  }
 }
 ```
 
-This update sets the `name` field to "John" and deletes the `rating` field value.
-
-Once we create our update, and select which document(s) to update, we can query the new state of all documents affected by the mutation. This is because our update mutation returns the type it mutates.
-
-A basic example is provided below:
-```graphql
+```graphql title="Remove genre value if not in list of allowed ones"
 mutation {
-    update_Book(docID: '123', input: {name: "John"}) {
-        _key
-        name
-    }
+  update_Book(
+    filter: { genre: { _nin: ["Fiction", "Dystopia"] } },
+    input: { genre: null }
+  ) {
+    title
+  }
 }
-
+```
+```json title="Result"
+{
+  "data": {
+    "update_Book": [
+      {
+        "title": "Down and Out in Paris and London"
+      },
+      {
+        "title": "Consider the Lobster and Other Essays"
+      }
+    ]
+  }
+}
 ```
 
-Here, we can see that after applying the mutation, we return the `_key` and `name` fields. We can return any field from the document (not just the updated ones). We can even return and filter on related types.
-
-Beyond updating by an ID or IDs, we can use a query filter to select which fields to apply our update to. This filter works the same as the queries.
-
-```graphql
+```graphql title="Update genre for several books via their docIDs"
 mutation {
-    update_Book(filter: {rating: {_leq: 1.0}}, input: {rating: 1.5}) {
-        _key
-        rating
-        name
-    }
+  update_Book(
+    docID: ["bae-49bbd74a-64a5-5d84-83bd-08319b2e413b", "bae-1515e526-1107-54fb-b582-60b3f967c3b1"],
+    input: { genre: "Dystopia" }
+  ) {
+    genre
+    title
+  }
 }
 ```
-
-Here, we select all documents with a rating less than or equal to 1.0, update the rating value to 1.5, and return all the affected documents `_key`, `rating`, and `name` fields.
-
-For additional filter details, see the above `Query Block` section.
+```json title="Result"
+{
+  "data": {
+    "update_Book": [
+      {
+        "genre": "Dystopia",
+        "title": "Lord of the Flies"
+      },
+      {
+        "genre": "Dystopia",
+        "title": "1984"
+      }
+    ]
+  }
+}
+```

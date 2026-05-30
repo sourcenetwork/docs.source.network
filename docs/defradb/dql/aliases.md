@@ -109,7 +109,7 @@ _Little Bobby Tables, we call him._ Other times, you might want to change the de
 
 To rename the return key for a query, prepend the custom name to the query and separate the two with a colon `:`.
 
-```graphql title="Return the three top-rated books under the key topThreeBooks"
+```graphql title='Return the three top-rated books under the key "topThreeBooks"'
 {
   # highlight-next-line
   topThreeBooks: Book(order: { rating: DESC }, limit: 3) {
@@ -145,7 +145,7 @@ To rename the return key for a query, prepend the custom name to the query and s
 
 You must alias queries when one request contains multiple queries to the same type.
 
-```graphql title="Two queries on Book type require aliasing"
+```graphql title='Two queries on type Book return results under "topThreeBooks" and "worstThreeBooks"'
 {
   # highlight-next-line
   topThreeBooks: Book(order: { rating: DESC }, limit: 3) {
@@ -153,7 +153,6 @@ You must alias queries when one request contains multiple queries to the same ty
     genre
     plot
   }
-
   # highlight-next-line
   worstThreeBooks: Book(order: { rating: ASC }, limit: 3) {
     title
