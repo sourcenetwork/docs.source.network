@@ -40,7 +40,7 @@ export default {
         'dql/mutation-delete',
         'dql/aliases',
         'dql/grouping',
-        'dql/aggregate-functions',
+        'dql/aggregating-functions',
       ],
     },
     {

@@ -1,5 +1,6 @@
 ---
 title: Database collections
+toc_max_heading_level: 5
 ---
 
 import Tabs from '@theme/Tabs';
@@ -80,7 +81,7 @@ You can create a collection with either the CLI command [`defradb client collect
   </TabItem>
 </Tabs>
 
-## Relationships {/* #relationships */}
+### Relationships {/* #relationships */}
 
 To create a relationship between two types, define a field having the other side of the relationship as type.
 The way in which you define relationships depends on their kind:
@@ -95,7 +96,7 @@ This section shows how to create relationships. For information on how to popula
 As all other fields, relationship fields can be null. For example, defining a one-to-one relationship doesn't guarantee that each document of type `A` will be linked to a document of type `B`: a document can leave the relationship undefined.
 :::
 
-### One-to-one {/* #relationships-one-to-one */}
+#### One-to-one {/* #relationships-one-to-one */}
 
 One-to-one relationships are such that each document of one type is linked to one and only one document of another type.
 In practice, type `A` defines a field of type `B`, and type `B` defines a field of type `A`.
@@ -124,7 +125,7 @@ One-to-one relationships are enforced via a [unique index](indexes.md#unique-ind
 There's currently no validation on the type when creating relationships across documents. It is the client's responsibility to validate that the `Wife.husbandID` is populated with the docID of a `Husband` document. It's up to you to marry humans.
 :::
 
-### One-to-many {/* #relationships-one-to-many */}
+#### One-to-many {/* #relationships-one-to-many */}
 
 One-to-many relationships link one document of one type with document of another type, while allowing the other side to be linked to multiple documentes. Type `A` defines a field of type `B`, whereas type `B` defines a field of type `[A]` (_list_ of `A`).
 
@@ -146,7 +147,7 @@ type Author {
 There's currently no validation on the type when creating relationships across documents. It is the client's responsibility to validate that the `Book.authorID` is populated with the docID of a `Author` document.
 :::
 
-### Many-to-many {/* #relationships-many-to-many */}
+#### Many-to-many {/* #relationships-many-to-many */}
 
 Many-to-many relationships link multiple documents of one type to multiple documents of another type, allowing the same on the other side. To create many-to-many relationships, use two [one-to-many relationships](#one-to-many) and a join type.
 
@@ -171,7 +172,7 @@ type Enrollment {  # the join type
 }
 ```
 
-### Define multiple relationship fields of the same type {/* #relationships-rename */}
+#### Define multiple relationship fields of the same type {/* #relationships-rename */}
 
 A type defining multiple relationships to the same type requires extra directives to disambiguate their target. For example, in the scenario in which a book has both an author and a reviewer, the following definitions would be ambiguous:
 
@@ -316,24 +317,21 @@ To see all collections available on an instance, use the CLI command [`defradb c
 ]
 ```
 
-## Delete collections {/* #delete */}
+## Truncate collections {/* #truncate */}
 
-To delete a collection, you need to truncate it (i.e. delete all its documents) and patch it for deletion. 
+Truncating a collection means deleting all documents belonging to it, including their histories. It's an irreversible operation that clears the collection's contents entirely.
 
 <Tabs groupId="defra">
   <TabItem value="cli" label="CLI" default>
-    Use the CLI commands [`defradb client collection truncate`](/references/cli/defradb_client_collection_truncate.md) and [`defradb client collection patch`](/references/cli/defradb_client_collection_patch.md).
-
-    For example, to delete the collection `Book`:
+    Use the CLI commands [`defradb client collection truncate`](/references/cli/defradb_client_collection_truncate.md).  
+    For example, to truncate the collection `Book`:
     ```shell
     defradb client collection truncate --collection-id bafyreihqndwux4ewnlvmtcfvptikfvzu76tri2i5x4nbpiqh3hskxmagcm
-    defradb client collection patch '[{"op": "remove", "path": "/Book"}]'
     ```
   </TabItem>
   <TabItem value="http" label="HTTP API">
-    Send a `DELETE` request to the endpoint [`/collections/<name>`](/defradb/references/http/api/delete-collection-with-filter/) and a `PATCH` request to the endpoint [`/collections/`](/defradb/references/http/api/patch-collection/).
-
-    For example, to delete the collection `Book`:
+    Send a `DELETE` request to the endpoint [`/collections/<name>`](/defradb/references/http/api/delete-collection-with-filter/).  
+    For example, to truncate the collection `Book`:
     ```http title="Request"
     DELETE http://localhost:9181/api/v1/collections/Book HTTP/2
     accept: application/json
@@ -341,14 +339,32 @@ To delete a collection, you need to truncate it (i.e. delete all its documents) 
     
     {}
     ```
-    ```http title="Request"
-    PATCH http://localhost:9181/api/v1/collections/ HTTP/2
-    accept: application/json
-    content-type: application/json
+  </TabItem>
+</Tabs>
 
-    {
-      "Patch": "[{\"op\": \"remove\", \"path\": \"/Book\"}]"
-    }
+
+## Delete collections {/* #delete */}
+
+The delete command takes one (or more) collection name and erases their schema from the database. Collections linked together through relationships must be deleted together.
+
+<Tabs groupId="defra">
+  <TabItem value="cli" label="CLI" default>
+    Use the CLI command [`defradb client collection delete`](/references/cli/defradb_client_collection_delete.md) with a comma-separated list of collection names.  
+    For example, to delete the collections `Book` and `Person`:
+    ```shell
+    defradb client collection delete Book,Person
+    ```
+  </TabItem>
+  <TabItem value="http" label="HTTP API">
+    Send a `DELETE` request to the endpoint [`/collections/`](/defradb/references/http/api/delete-collection/) with a comma-separated list of collection names in the `name` parameter.  
+    For example, to delete the collections `Book` and `Person`:
+    ```http title="Request"
+    DELETE http://localhost:9181/api/v1/collections/?name=Book,Person HTTP/2
+    accept: application/json
     ```
   </TabItem>
 </Tabs>
+
+:::note
+You can only delete empty collections. If a collection has data, or has had data, you need to [truncate it](#truncate) first. [Deleting documents](/dql/mutation-delete.md) is not equivalent to truncating the collection.
+:::

@@ -1,9 +1,6 @@
 ---
-sidebar_label: Aggregate Functions
-sidebar_position: 115
+title: Aggregating Functions
 ---
-
-# Aggregate Functions
 
 The most common use case of grouping queries is to compute some aggregate function over the sub-group. Like the special `_group` field, aggregate functions are defined and returned using special fields. These fields prefix the target field name with the name of the aggregate function you wish to apply. If we had the field `rating`, we could access the average value of all sub-group ratings by including the special field `_avg { rating }` in our return object. The available aggregate functions and their associated scalars can be found above in `Table 3`.
 
