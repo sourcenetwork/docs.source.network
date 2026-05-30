@@ -602,6 +602,7 @@ body .DocSearch {
 
 /* Squash together query and result code blocks, when one after another */
 div.language-graphql + div.language-json,
+div.language-http + div.language-json,
 div.language-shell + div.language-json {
   margin-top: calc(var(--ifm-leading) * -1);
 }
@@ -637,7 +638,7 @@ div.codeBlockTitle_OeMC:has(+ .codeBlockContent_QJqH > pre > code > .code-block-
 }
 
 /* External link icon indicator */
-a[target="_blank"]::after {
+main a[target="_blank"]::after {
   content: "";
   display: inline-block;
   width: 0.75em;

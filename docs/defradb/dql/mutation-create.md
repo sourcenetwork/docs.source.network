@@ -32,7 +32,7 @@ Once you have [created collections](/schema/collections.md), you can start addin
 
 <Tabs groupId="defra">
   <TabItem value="cli" label="CLI" default>
-    To create documents of type `<type>`, use the mutation `add_<type>`. For example, to create a document in the `Book` collection, use `add_Book`.
+    To create documents of type `<type>`, use the mutation `add_<type>` via the CLI command [`defradb client query`](/references/cli/defradb_client_query.md). For example, to create a document in the `Book` collection, use `add_Book`.
 
     Every `add_<type>` mutation must return some of the inserted information. Because GraphQL queries only return the exact fields requested, you have to provide a list of fields to be returned (there is no equivalent of the SQL `SELECT *` syntax).
 
@@ -202,8 +202,6 @@ mutation {
 ```
 
 ## Create multiple documents at once {/* #multiple */}
-
-You can run several mutations at the same time, independently of one another. They are executed in parallel.
 
 <Tabs groupId="defra">
   <TabItem value="cli" label="CLI" default>

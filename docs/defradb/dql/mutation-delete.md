@@ -17,6 +17,10 @@ mutation {
 
 Only one among `docID` and `filter` is needed to pinpoint the documents to delete. If you provide both, `docID` takes precedence.
 
+:::note
+You cannot restore a deleted document, nor re-create a document with the exact same content as a previously deleted one, because the `docID` would conflict. In case you need to re-create a deleted document, create a new document with only _some_ of the fields of the deleted document, and then update it to include all the wished information.
+:::
+
 ## Examples  { /* #examples */ }
 
 <details>
@@ -147,7 +151,7 @@ mutation {
 }
 ```
 
-It looks like *power* has eliminated the dystopians, as a regular query does not return them as existing people:
+It looks like *power* has eliminated the dystopians, as a regular query does not return them as existing people.
 
 ```graphql title="The dystopians are gone"
 {
@@ -164,14 +168,17 @@ It looks like *power* has eliminated the dystopians, as a regular query does not
 }
 ```
 
-True dystopians are however never erased. If the query requests to include deleted documents, they show up again.
+True dystopians are however never erased. Deleted documents show up if the query requests to include them. The `_deleted` return field marks whether a document is deleted.
 
 ```graphql title="The dystopians are gone"
 {
   Person(
     filter: { authoredBooks: { genre: { _eq: "Dystopia"} } },
+    # highlight-next-line
     showDeleted: true
   ) {
+    # highlight-next-line
+    _deleted
     name
   }
 }
@@ -181,9 +188,13 @@ True dystopians are however never erased. If the query requests to include delet
   "data": {
     "Person": [
       {
+        // highlight-next-line
+        "_deleted": true,
         "name": "George Orwell"
       },
       {
+        // highlight-next-line
+        "_deleted": true,
         "name": "William Golding"
       }
     ]

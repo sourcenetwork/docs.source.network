@@ -7,8 +7,6 @@ import TabItem from '@theme/TabItem';
 
 Once you have [created some documents](mutation-create.md), you can query the database for them.
 
-Queries support standard database query operations such as [filtering](filter.md), [sorting](sorting-and-ordering.md), [grouping](grouping.md), [skipping/limiting](limiting-and-pagination.md), [aggregation](aggregate-functions.md), etc. 
-
 <details>
   <summary>Display database setup</summary>
   
@@ -20,12 +18,28 @@ Queries support standard database query operations such as [filtering](filter.md
     authoredBooks: [Book]
   }
 
+  type Company {
+    name: String
+    sells: [Book]
+  }
+
   type Book {
     title: String
     genre: String
     plot: String
     rating: Float
     author: Person
+    seller: Company
+  }
+  ```
+  ```graphql title="Company documents setup" test-setup-data
+  mutation {
+    c1:add_Company(input: {
+      name: "The indipendent hipster bookshop"
+    }) { _docID }
+    c2:add_Company(input: {
+      name: "The world-destroying large chain"
+    }) { _docID }
   }
   ```
   ```graphql title="Person documents setup" test-setup-data
@@ -51,7 +65,8 @@ Queries support standard database query operations such as [filtering](filter.md
       genre: "Fiction",
       plot: "A masterpiece of rebellion and imprisonment where war is peace, freedom is slavery, and Big Brother is watching.",
       rating: 4.20,
-      _authorID: "bae-3517d1eb-351b-5231-8387-870893ffb395"
+      _authorID: "bae-3517d1eb-351b-5231-8387-870893ffb395",
+      _sellerID: "bae-e1cae0d8-391a-5a85-be36-62455d731f18"
     }) {
       _docID
       title
@@ -61,7 +76,8 @@ Queries support standard database query operations such as [filtering](filter.md
       genre: "Biography",
       plot: "The adventures of a penniless British writer among the down-and-outs of two great cities.",
       rating: 4.09,
-      _authorID: "bae-3517d1eb-351b-5231-8387-870893ffb395"
+      _authorID: "bae-3517d1eb-351b-5231-8387-870893ffb395",
+      _sellerID: "bae-e1cae0d8-391a-5a85-be36-62455d731f18"
     }) {
       _docID
       title
@@ -71,7 +87,8 @@ Queries support standard database query operations such as [filtering](filter.md
       genre: "Fiction",
       plot: "At the dawn of the next world war, a plane crashes on an uncharted island, stranding a group of schoolboys.",
       rating: 3.70,
-      _authorID: "bae-78e9c7be-10b9-5673-bad2-da3341367d4b"
+      _authorID: "bae-78e9c7be-10b9-5673-bad2-da3341367d4b",
+      _sellerID: "bae-9b2b0b42-c6a4-5678-8be3-4137699b4e65"
     }) {
       _docID
       title
@@ -81,7 +98,8 @@ Queries support standard database query operations such as [filtering](filter.md
       genre: "Fiction",
       plot: "A gargantuan, mind-altering tragi-comedy about the Pursuit of Happiness in America.",
       rating: 4.25
-      _authorID: "bae-b59928dc-fd05-5fb7-aea2-9b24af5ebcea"
+      _authorID: "bae-b59928dc-fd05-5fb7-aea2-9b24af5ebcea",
+      _sellerID: "bae-e1cae0d8-391a-5a85-be36-62455d731f18"
     }) {
       _docID
       title
@@ -91,7 +109,8 @@ Queries support standard database query operations such as [filtering](filter.md
       genre: "Nonfiction",
       plot: "Do lobsters feel pain? Did Franz Kafka have a funny bone? What is John Updike's deal, anyway? And what happens when adult video starlets meet their fans in person? Essays that are also enthralling narrative adventures.",
       rating: 4.18,
-      _authorID: "bae-b59928dc-fd05-5fb7-aea2-9b24af5ebcea"
+      _authorID: "bae-b59928dc-fd05-5fb7-aea2-9b24af5ebcea",
+      _sellerID: "bae-9b2b0b42-c6a4-5678-8be3-4137699b4e65"
     }) {
       _docID
       title
@@ -101,7 +120,8 @@ Queries support standard database query operations such as [filtering](filter.md
       genre: "Fiction",
       plot: "Victor Hugo's tale of injustice, heroism and love follows the fortunes of Jean Valjean, an escaped convict determined to put his criminal past behind him.",
       rating: 4.21,
-      _authorID: "bae-c169e917-df52-5603-9224-39c1757f1b04"
+      _authorID: "bae-c169e917-df52-5603-9224-39c1757f1b04",
+      _sellerID: "bae-9b2b0b42-c6a4-5678-8be3-4137699b4e65"
     }) {
       _docID
       title
@@ -110,12 +130,43 @@ Queries support standard database query operations such as [filtering](filter.md
   ```
 </details>
 
+## Query blocks
+
+GraphQL queries have the following form:
+
+```graphql title="Syntax" test-skip
+{
+  TYPE(args) {
+    [returnField]
+  }
+}
+```
+- `TYPE` &ndash; Name of the collection to query.
+- `args` &ndash; Arguments for directing the query, such as [filtering](filter.md), [sorting](sorting-and-ordering.md), [grouping](grouping.md), [skipping/limiting](limiting-and-pagination.md).
+- `[returnField]` &ndash; A list of fields to return for the matched documents. Queries only return the exact fields requested (GraphQL has no equivalent of the `SQL SELECT *` syntax).
+
+```graphql title="Example query &ndash; Filter books by genre and author's name"
+{
+  Book(filter: {
+    genre: { _eq: "Fiction" },
+    author: { name: { _eq: "George Orwell" } }
+  }, limit: 3) {
+    title
+    plot
+    author {
+      name
+    }
+  }
+}
+```
 
 ## Run a query
 
 <Tabs groupId="defra">
   <TabItem value="cli" label="CLI" default>
-    ```shell title="Retrieve all documents of type Book"
+    You can run a query via the CLI command [`defradb client query`](/references/cli/defradb_client_query.md).
+
+    ```shell title="Retrieve all documents of type Book, returning docID, title, plot"
     defradb client query '
     {
       Book {
@@ -124,11 +175,52 @@ Queries support standard database query operations such as [filtering](filter.md
         plot
       }
     }
-'
-```
+    '
+    ```
+    ```json title="Result"
+    {
+      "data": {
+        "Book": [
+          {
+            "_docID": "bae-1b57692a-3412-5efd-a0d7-726d1c2d1985",
+            "plot": "Victor Hugo's tale of injustice, heroism and love follows the fortunes of Jean Valjean, an escaped convict determined to put his criminal past behind him.",
+            "title": "Les Misérables"
+          },
+          {
+            "_docID": "bae-1b669ad4-6de9-5916-bf9e-efbd9ca6ac95",
+            "plot": "At the dawn of the next world war, a plane crashes on an uncharted island, stranding a group of schoolboys.",
+            "title": "Lord of the Flies"
+          },
+          {
+            "_docID": "bae-32b88360-3cef-5a0d-a85f-8f1bf9faa873",
+            "plot": "The adventures of a penniless British writer among the down-and-outs of two great cities.",
+            "title": "Down and Out in Paris and London"
+          },
+          {
+            "_docID": "bae-a816dce7-bd09-5728-a272-ef97e8552973",
+            "plot": "A masterpiece of rebellion and imprisonment where war is peace, freedom is slavery, and Big Brother is watching.",
+            "title": "1984"
+          },
+          {
+            "_docID": "bae-aa5eb5c3-e6e9-55ff-b19c-08b2ffb63172",
+            "plot": "Do lobsters feel pain? Did Franz Kafka have a funny bone? What is John Updike's deal, anyway? And what happens when adult video starlets meet their fans in person? Essays that are also enthralling narrative adventures.",
+            "title": "Consider the Lobster and Other Essays"
+          },
+          {
+            "_docID": "bae-fa83f9f4-e4ed-5db5-a926-13e42260be2b",
+            "plot": "A gargantuan, mind-altering tragi-comedy about the Pursuit of Happiness in America.",
+            "title": "Infinite Jest"
+          }
+        ]
+      }
+    }
+
+    ```
   </TabItem>
   <TabItem value="http" label="HTTP API">
-    ```http title="Retrieve all documents of type Book"
+    You can run a query by submitting a `POST` request to the HTTP endpoint [`/api/v1/graphql`](/references/http/api/post-graphql/). The body must be a JSON object, with the GraphQL query under the `query` key. Newlines are not supported within the `query` string field.
+
+    ```http title="Retrieve all documents of type Book, returning docID, title, plot"
     POST http://localhost:9181/api/v1/graphql HTTP/2
     accept: application/json
     content-type: application/json
@@ -137,12 +229,48 @@ Queries support standard database query operations such as [filtering](filter.md
       "query": "{ Book { _docID title plot } }"
     }
     ```
-    :::note
-    Newlines are not supported within the `query` string field.
-    :::
+    ```json title="Result"
+    {
+      "data": {
+        "Book": [
+          {
+            "_docID": "bae-1b57692a-3412-5efd-a0d7-726d1c2d1985",
+            "plot": "Victor Hugo's tale of injustice, heroism and love follows the fortunes of Jean Valjean, an escaped convict determined to put his criminal past behind him.",
+            "title": "Les Misérables"
+          },
+          {
+            "_docID": "bae-1b669ad4-6de9-5916-bf9e-efbd9ca6ac95",
+            "plot": "At the dawn of the next world war, a plane crashes on an uncharted island, stranding a group of schoolboys.",
+            "title": "Lord of the Flies"
+          },
+          {
+            "_docID": "bae-32b88360-3cef-5a0d-a85f-8f1bf9faa873",
+            "plot": "The adventures of a penniless British writer among the down-and-outs of two great cities.",
+            "title": "Down and Out in Paris and London"
+          },
+          {
+            "_docID": "bae-a816dce7-bd09-5728-a272-ef97e8552973",
+            "plot": "A masterpiece of rebellion and imprisonment where war is peace, freedom is slavery, and Big Brother is watching.",
+            "title": "1984"
+          },
+          {
+            "_docID": "bae-aa5eb5c3-e6e9-55ff-b19c-08b2ffb63172",
+            "plot": "Do lobsters feel pain? Did Franz Kafka have a funny bone? What is John Updike's deal, anyway? And what happens when adult video starlets meet their fans in person? Essays that are also enthralling narrative adventures.",
+            "title": "Consider the Lobster and Other Essays"
+          },
+          {
+            "_docID": "bae-fa83f9f4-e4ed-5db5-a926-13e42260be2b",
+            "plot": "A gargantuan, mind-altering tragi-comedy about the Pursuit of Happiness in America.",
+            "title": "Infinite Jest"
+          }
+        ]
+      }
+    }
+
+    ```
   </TabItem>
   <TabItem value="graphql" label="GraphQL API">
-    ```graphql title="Retrieve all documents of type Book"
+    ```graphql title="Retrieve all documents of type Book, returning docID, title, plot"
     {
       Book {
         _docID
@@ -151,143 +279,187 @@ Queries support standard database query operations such as [filtering](filter.md
       }
     }
     ```
-  </TabItem>
-  <TabItem value="embedded" label="Embedded">
-    ```go title="Create a new document of type Book"
-    createResult := db.DB.ExecRequest(
-        ctx, `
-        mutation {
-          add_Book(input: {
-            title: $title,
-            plot: $plot,
-            rating: $rating
-          })
-        }
-        `,
-        client.WithVariables(map[string]any{
-            "title": "Infinite Jest",
+    ```json title="Result"
+    {
+      "data": {
+        "Book": [
+          {
+            "_docID": "bae-1b57692a-3412-5efd-a0d7-726d1c2d1985",
+            "plot": "Victor Hugo's tale of injustice, heroism and love follows the fortunes of Jean Valjean, an escaped convict determined to put his criminal past behind him.",
+            "title": "Les Misérables"
+          },
+          {
+            "_docID": "bae-1b669ad4-6de9-5916-bf9e-efbd9ca6ac95",
+            "plot": "At the dawn of the next world war, a plane crashes on an uncharted island, stranding a group of schoolboys.",
+            "title": "Lord of the Flies"
+          },
+          {
+            "_docID": "bae-32b88360-3cef-5a0d-a85f-8f1bf9faa873",
+            "plot": "The adventures of a penniless British writer among the down-and-outs of two great cities.",
+            "title": "Down and Out in Paris and London"
+          },
+          {
+            "_docID": "bae-a816dce7-bd09-5728-a272-ef97e8552973",
+            "plot": "A masterpiece of rebellion and imprisonment where war is peace, freedom is slavery, and Big Brother is watching.",
+            "title": "1984"
+          },
+          {
+            "_docID": "bae-aa5eb5c3-e6e9-55ff-b19c-08b2ffb63172",
+            "plot": "Do lobsters feel pain? Did Franz Kafka have a funny bone? What is John Updike's deal, anyway? And what happens when adult video starlets meet their fans in person? Essays that are also enthralling narrative adventures.",
+            "title": "Consider the Lobster and Other Essays"
+          },
+          {
+            "_docID": "bae-fa83f9f4-e4ed-5db5-a926-13e42260be2b",
             "plot": "A gargantuan, mind-altering tragi-comedy about the Pursuit of Happiness in America.",
-            "rating": 4.25,
-        }),
-    )
-    if len(createResult.GQL.Errors) > 0 {
-        for _, gqlErr := range createResult.GQL.Errors {
-            log.Printf("GraphQL error on create: %v\n", gqlErr)
-        }
-        log.Fatalf("Failed to create document in DefraDB.")
+            "title": "Infinite Jest"
+          }
+        ]
+      }
     }
-  ```
+    ```
   </TabItem>
 </Tabs>
 
-```json title="Output"
+## Relationships
+
+When a document contains a relationship to another document, the return fields can include the fields of the linked document. This applies both for one-to-one and to one-to-many relationships, and to both sides of the relationship.
+
+```graphql title="Retrieve all persons and the titles of their authored books"
+{
+  Person {
+    authoredBooks {
+      title
+    }
+    name
+  }
+}
+```
+```json title="Result"
 {
   "data": {
-    "Book": [
+    "Person": [
       {
-        "_docID": "bae-546ae840-77c7-51a5-ab0a-b5a893bfa546",
-        "plot": "A masterpiece of rebellion and imprisonment where war is peace, freedom is slavery, and Big Brother is watching.",
-        "title": "1984"
+        "authoredBooks": [
+          {
+            "title": "Down and Out in Paris and London"
+          },
+          {
+            "title": "1984"
+          }
+        ],
+        "name": "George Orwell"
       },
       {
-        "_docID": "bae-6c91c35c-e548-58f8-86a6-d60ab5174072",
-        "plot": "At the dawn of the next world war, a plane crashes on an uncharted island, stranding a group of schoolboys.",
-        "title": "Lord of the Flies"
+        "authoredBooks": [
+          {
+            "title": "Lord of the Flies"
+          }
+        ],
+        "name": "William Golding"
+      },
+      {
+        "authoredBooks": [
+          {
+            "title": "Consider the Lobster and Other Essays"
+          },
+          {
+            "title": "Infinite Jest"
+          }
+        ],
+        "name": "David Foster Wallace"
+      },
+      {
+        "authoredBooks": [
+          {
+            "title": "Les Misérables"
+          }
+        ],
+        "name": "Victor Hugo"
       }
     ]
   }
 }
 ```
 
-```graphql title="Filter books by genre and author's name"
+You can walk connected types without boundaries: if type `Person` has a relationships with type `Book`, which has a relationship with type `Company`, you can query `Person` and return `Person.Book.Company.<field>`. The result will reflect the nested structure of the documents.
+
+```graphql title="Retrieve all persons and the titles of their authored books"
 {
-  Books(filter: { 
-    genre: { _eq: "Fiction" }, 
-    author: { name: { _eq: "George Orwell" } }
-  }) {
-    title
-    plot
-    Person {
-      name
-    }
-  }
-}
-```
-
-GraphQL queries only return the exact fields requested (there is no equivalent of the SQL SELECT * syntax).
-
-
-
-## Relationships
-
-The notable distinction of "one-to-one" relationships is that only the DocKey of the corresponding object is stored.
-
-On the other hand, if you simply embed the Address within the Author type without the internal relational system, you can include the `@embed` directive, which will embed it within. Objects embedded inside another using the `@embed` directive do not expose a query endpoint, so they can *only* be accessed through their parent object. Additionally they are not assigned a DocKey.
-
-```graphql
-# Get students with their enrolled courses
-query {
-  Student {
-    _docID
-    name
-    enrollment {
-      course {
-        title
-        code
-      }
-    }
-  }
-}
-```
-
-```graphql
-# Get courses with their enrolled students
-query {
-  Course {
-    _docID
-    title
-    enrollment {
-      student {
-        name
-        age
-      }
-    }
-  }
-}
-```
-
-You can also query the join type directly:
-
-```graphql
-# Get all enrollments with student and course details
-query {
-  Enrollment {
-    student {
-      name
-      age
-    }
-    course {
+  Person {
+    authoredBooks {
       title
-      code
+      seller {
+        name
+      }
     }
+    name
   }
 }
 ```
-
-DefraDB handles the traversal through the join type automatically, allowing you to express complex many-to-many queries in a single request, but it still must go through the join type.
-
-The join type can also include additional fields specific to the relationship, such as enrollment date, grade, or status:
-
-```graphql
-type Enrollment {
-  student: Student @relation(name: "student_enrollments")
-  course: Course @relation(name: "course_enrollments")
-  enrollmentDate: DateTime
-  status: String
-  grade: Float
+```json title="Result"
+{
+  "data": {
+    "Person": [
+      {
+        "authoredBooks": [
+          {
+            "seller": {
+              "name": "The indipendent hipster bookshop"
+            },
+            "title": "Down and Out in Paris and London"
+          },
+          {
+            "seller": {
+              "name": "The indipendent hipster bookshop"
+            },
+            "title": "1984"
+          }
+        ],
+        "name": "George Orwell"
+      },
+      {
+        "authoredBooks": [
+          {
+            "seller": {
+              "name": "The world-destroying large chain"
+            },
+            "title": "Lord of the Flies"
+          }
+        ],
+        "name": "William Golding"
+      },
+      {
+        "authoredBooks": [
+          {
+            "seller": {
+              "name": "The world-destroying large chain"
+            },
+            "title": "Consider the Lobster and Other Essays"
+          },
+          {
+            "seller": {
+              "name": "The indipendent hipster bookshop"
+            },
+            "title": "Infinite Jest"
+          }
+        ],
+        "name": "David Foster Wallace"
+      },
+      {
+        "authoredBooks": [
+          {
+            "seller": {
+              "name": "The world-destroying large chain"
+            },
+            "title": "Les Misérables"
+          }
+        ],
+        "name": "Victor Hugo"
+      }
+    ]
+  }
 }
 ```
-
 
 ## Use variables
 
