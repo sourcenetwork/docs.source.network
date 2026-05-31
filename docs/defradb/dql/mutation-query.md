@@ -35,10 +35,10 @@ Once you have [created some documents](mutation-create.md), you can query the da
   ```graphql title="Company documents setup" test-setup-data
   mutation {
     c1:add_Company(input: {
-      name: "The indipendent hipster bookshop"
+      name: "The Indipendent Hipster Bookshop"
     }) { _docID }
     c2:add_Company(input: {
-      name: "The world-destroying large chain"
+      name: "The World-Destroying Large Chain"
     }) { _docID }
   }
   ```
@@ -66,7 +66,7 @@ Once you have [created some documents](mutation-create.md), you can query the da
       plot: "A masterpiece of rebellion and imprisonment where war is peace, freedom is slavery, and Big Brother is watching.",
       rating: 4.20,
       _authorID: "bae-3517d1eb-351b-5231-8387-870893ffb395",
-      _sellerID: "bae-e1cae0d8-391a-5a85-be36-62455d731f18"
+      _sellerID: "bae-dd31ceba-9ffd-57b6-b6b2-365081ef4b7a"
     }) {
       _docID
       title
@@ -77,7 +77,7 @@ Once you have [created some documents](mutation-create.md), you can query the da
       plot: "The adventures of a penniless British writer among the down-and-outs of two great cities.",
       rating: 4.09,
       _authorID: "bae-3517d1eb-351b-5231-8387-870893ffb395",
-      _sellerID: "bae-e1cae0d8-391a-5a85-be36-62455d731f18"
+      _sellerID: "bae-dd31ceba-9ffd-57b6-b6b2-365081ef4b7a"
     }) {
       _docID
       title
@@ -88,7 +88,7 @@ Once you have [created some documents](mutation-create.md), you can query the da
       plot: "At the dawn of the next world war, a plane crashes on an uncharted island, stranding a group of schoolboys.",
       rating: 3.70,
       _authorID: "bae-78e9c7be-10b9-5673-bad2-da3341367d4b",
-      _sellerID: "bae-9b2b0b42-c6a4-5678-8be3-4137699b4e65"
+      _sellerID: "bae-e467e3b8-9ba5-52b4-ae6b-4499f2f0c483"
     }) {
       _docID
       title
@@ -99,7 +99,7 @@ Once you have [created some documents](mutation-create.md), you can query the da
       plot: "A gargantuan, mind-altering tragi-comedy about the Pursuit of Happiness in America.",
       rating: 4.25
       _authorID: "bae-b59928dc-fd05-5fb7-aea2-9b24af5ebcea",
-      _sellerID: "bae-e1cae0d8-391a-5a85-be36-62455d731f18"
+      _sellerID: "bae-dd31ceba-9ffd-57b6-b6b2-365081ef4b7a"
     }) {
       _docID
       title
@@ -110,7 +110,7 @@ Once you have [created some documents](mutation-create.md), you can query the da
       plot: "Do lobsters feel pain? Did Franz Kafka have a funny bone? What is John Updike's deal, anyway? And what happens when adult video starlets meet their fans in person? Essays that are also enthralling narrative adventures.",
       rating: 4.18,
       _authorID: "bae-b59928dc-fd05-5fb7-aea2-9b24af5ebcea",
-      _sellerID: "bae-9b2b0b42-c6a4-5678-8be3-4137699b4e65"
+      _sellerID: "bae-e467e3b8-9ba5-52b4-ae6b-4499f2f0c483"
     }) {
       _docID
       title
@@ -121,7 +121,7 @@ Once you have [created some documents](mutation-create.md), you can query the da
       plot: "Victor Hugo's tale of injustice, heroism and love follows the fortunes of Jean Valjean, an escaped convict determined to put his criminal past behind him.",
       rating: 4.21,
       _authorID: "bae-c169e917-df52-5603-9224-39c1757f1b04",
-      _sellerID: "bae-9b2b0b42-c6a4-5678-8be3-4137699b4e65"
+      _sellerID: "bae-e467e3b8-9ba5-52b4-ae6b-4499f2f0c483"
     }) {
       _docID
       title
@@ -130,7 +130,7 @@ Once you have [created some documents](mutation-create.md), you can query the da
   ```
 </details>
 
-## Query blocks
+## Anatomy of a query block
 
 GraphQL queries have the following form:
 
@@ -162,6 +162,8 @@ GraphQL queries have the following form:
 
 ## Run a query
 
+The basic skeleton of a query is made of the type/collection you want to fetch from (ex. `Book`) and the fields you want to return among the ones defined on the collection (ex. `_docID`, `title`, `plot`).
+
 <Tabs groupId="defra">
   <TabItem value="cli" label="CLI" default>
     You can run a query via the CLI command [`defradb client query`](/references/cli/defradb_client_query.md).
@@ -182,39 +184,38 @@ GraphQL queries have the following form:
       "data": {
         "Book": [
           {
-            "_docID": "bae-1b57692a-3412-5efd-a0d7-726d1c2d1985",
-            "plot": "Victor Hugo's tale of injustice, heroism and love follows the fortunes of Jean Valjean, an escaped convict determined to put his criminal past behind him.",
-            "title": "Les Misérables"
-          },
-          {
-            "_docID": "bae-1b669ad4-6de9-5916-bf9e-efbd9ca6ac95",
-            "plot": "At the dawn of the next world war, a plane crashes on an uncharted island, stranding a group of schoolboys.",
-            "title": "Lord of the Flies"
-          },
-          {
-            "_docID": "bae-32b88360-3cef-5a0d-a85f-8f1bf9faa873",
-            "plot": "The adventures of a penniless British writer among the down-and-outs of two great cities.",
-            "title": "Down and Out in Paris and London"
-          },
-          {
-            "_docID": "bae-a816dce7-bd09-5728-a272-ef97e8552973",
+            "_docID": "bae-526a42c6-c147-57e4-89e0-875d27a1532d",
             "plot": "A masterpiece of rebellion and imprisonment where war is peace, freedom is slavery, and Big Brother is watching.",
             "title": "1984"
           },
           {
-            "_docID": "bae-aa5eb5c3-e6e9-55ff-b19c-08b2ffb63172",
+            "_docID": "bae-8a6c163a-29cd-5607-a965-199487e58b00",
+            "plot": "Victor Hugo's tale of injustice, heroism and love follows the fortunes of Jean Valjean, an escaped convict determined to put his criminal past behind him.",
+            "title": "Les Misérables"
+          },
+          {
+            "_docID": "bae-92465255-4869-5994-9898-83576ee9ff60",
+            "plot": "The adventures of a penniless British writer among the down-and-outs of two great cities.",
+            "title": "Down and Out in Paris and London"
+          },
+          {
+            "_docID": "bae-9579541e-f15d-506e-a74a-63d00cb3ab56",
+            "plot": "At the dawn of the next world war, a plane crashes on an uncharted island, stranding a group of schoolboys.",
+            "title": "Lord of the Flies"
+          },
+          {
+            "_docID": "bae-a3dad950-43cc-5f03-9b33-b61ebc936ac4",
             "plot": "Do lobsters feel pain? Did Franz Kafka have a funny bone? What is John Updike's deal, anyway? And what happens when adult video starlets meet their fans in person? Essays that are also enthralling narrative adventures.",
             "title": "Consider the Lobster and Other Essays"
           },
           {
-            "_docID": "bae-fa83f9f4-e4ed-5db5-a926-13e42260be2b",
+            "_docID": "bae-c26135f1-59d6-5f32-a7c0-16dbec525abe",
             "plot": "A gargantuan, mind-altering tragi-comedy about the Pursuit of Happiness in America.",
             "title": "Infinite Jest"
           }
         ]
       }
     }
-
     ```
   </TabItem>
   <TabItem value="http" label="HTTP API">
@@ -234,39 +235,38 @@ GraphQL queries have the following form:
       "data": {
         "Book": [
           {
-            "_docID": "bae-1b57692a-3412-5efd-a0d7-726d1c2d1985",
-            "plot": "Victor Hugo's tale of injustice, heroism and love follows the fortunes of Jean Valjean, an escaped convict determined to put his criminal past behind him.",
-            "title": "Les Misérables"
-          },
-          {
-            "_docID": "bae-1b669ad4-6de9-5916-bf9e-efbd9ca6ac95",
-            "plot": "At the dawn of the next world war, a plane crashes on an uncharted island, stranding a group of schoolboys.",
-            "title": "Lord of the Flies"
-          },
-          {
-            "_docID": "bae-32b88360-3cef-5a0d-a85f-8f1bf9faa873",
-            "plot": "The adventures of a penniless British writer among the down-and-outs of two great cities.",
-            "title": "Down and Out in Paris and London"
-          },
-          {
-            "_docID": "bae-a816dce7-bd09-5728-a272-ef97e8552973",
+            "_docID": "bae-526a42c6-c147-57e4-89e0-875d27a1532d",
             "plot": "A masterpiece of rebellion and imprisonment where war is peace, freedom is slavery, and Big Brother is watching.",
             "title": "1984"
           },
           {
-            "_docID": "bae-aa5eb5c3-e6e9-55ff-b19c-08b2ffb63172",
+            "_docID": "bae-8a6c163a-29cd-5607-a965-199487e58b00",
+            "plot": "Victor Hugo's tale of injustice, heroism and love follows the fortunes of Jean Valjean, an escaped convict determined to put his criminal past behind him.",
+            "title": "Les Misérables"
+          },
+          {
+            "_docID": "bae-92465255-4869-5994-9898-83576ee9ff60",
+            "plot": "The adventures of a penniless British writer among the down-and-outs of two great cities.",
+            "title": "Down and Out in Paris and London"
+          },
+          {
+            "_docID": "bae-9579541e-f15d-506e-a74a-63d00cb3ab56",
+            "plot": "At the dawn of the next world war, a plane crashes on an uncharted island, stranding a group of schoolboys.",
+            "title": "Lord of the Flies"
+          },
+          {
+            "_docID": "bae-a3dad950-43cc-5f03-9b33-b61ebc936ac4",
             "plot": "Do lobsters feel pain? Did Franz Kafka have a funny bone? What is John Updike's deal, anyway? And what happens when adult video starlets meet their fans in person? Essays that are also enthralling narrative adventures.",
             "title": "Consider the Lobster and Other Essays"
           },
           {
-            "_docID": "bae-fa83f9f4-e4ed-5db5-a926-13e42260be2b",
+            "_docID": "bae-c26135f1-59d6-5f32-a7c0-16dbec525abe",
             "plot": "A gargantuan, mind-altering tragi-comedy about the Pursuit of Happiness in America.",
             "title": "Infinite Jest"
           }
         ]
       }
     }
-
     ```
   </TabItem>
   <TabItem value="graphql" label="GraphQL API">
@@ -284,32 +284,32 @@ GraphQL queries have the following form:
       "data": {
         "Book": [
           {
-            "_docID": "bae-1b57692a-3412-5efd-a0d7-726d1c2d1985",
-            "plot": "Victor Hugo's tale of injustice, heroism and love follows the fortunes of Jean Valjean, an escaped convict determined to put his criminal past behind him.",
-            "title": "Les Misérables"
-          },
-          {
-            "_docID": "bae-1b669ad4-6de9-5916-bf9e-efbd9ca6ac95",
-            "plot": "At the dawn of the next world war, a plane crashes on an uncharted island, stranding a group of schoolboys.",
-            "title": "Lord of the Flies"
-          },
-          {
-            "_docID": "bae-32b88360-3cef-5a0d-a85f-8f1bf9faa873",
-            "plot": "The adventures of a penniless British writer among the down-and-outs of two great cities.",
-            "title": "Down and Out in Paris and London"
-          },
-          {
-            "_docID": "bae-a816dce7-bd09-5728-a272-ef97e8552973",
+            "_docID": "bae-526a42c6-c147-57e4-89e0-875d27a1532d",
             "plot": "A masterpiece of rebellion and imprisonment where war is peace, freedom is slavery, and Big Brother is watching.",
             "title": "1984"
           },
           {
-            "_docID": "bae-aa5eb5c3-e6e9-55ff-b19c-08b2ffb63172",
+            "_docID": "bae-8a6c163a-29cd-5607-a965-199487e58b00",
+            "plot": "Victor Hugo's tale of injustice, heroism and love follows the fortunes of Jean Valjean, an escaped convict determined to put his criminal past behind him.",
+            "title": "Les Misérables"
+          },
+          {
+            "_docID": "bae-92465255-4869-5994-9898-83576ee9ff60",
+            "plot": "The adventures of a penniless British writer among the down-and-outs of two great cities.",
+            "title": "Down and Out in Paris and London"
+          },
+          {
+            "_docID": "bae-9579541e-f15d-506e-a74a-63d00cb3ab56",
+            "plot": "At the dawn of the next world war, a plane crashes on an uncharted island, stranding a group of schoolboys.",
+            "title": "Lord of the Flies"
+          },
+          {
+            "_docID": "bae-a3dad950-43cc-5f03-9b33-b61ebc936ac4",
             "plot": "Do lobsters feel pain? Did Franz Kafka have a funny bone? What is John Updike's deal, anyway? And what happens when adult video starlets meet their fans in person? Essays that are also enthralling narrative adventures.",
             "title": "Consider the Lobster and Other Essays"
           },
           {
-            "_docID": "bae-fa83f9f4-e4ed-5db5-a926-13e42260be2b",
+            "_docID": "bae-c26135f1-59d6-5f32-a7c0-16dbec525abe",
             "plot": "A gargantuan, mind-altering tragi-comedy about the Pursuit of Happiness in America.",
             "title": "Infinite Jest"
           }
@@ -322,7 +322,7 @@ GraphQL queries have the following form:
 
 ## Relationships
 
-When a document contains a relationship to another document, the return fields can include the fields of the linked document. This applies both for one-to-one and to one-to-many relationships, and to both sides of the relationship.
+If a document contains a relationship to another document, the return fields can include the fields of the linked document. This applies both for one-to-one and to one-to-many relationships, and to both sides of the relationship.
 
 ```graphql title="Retrieve all persons and the titles of their authored books"
 {
@@ -341,10 +341,10 @@ When a document contains a relationship to another document, the return fields c
       {
         "authoredBooks": [
           {
-            "title": "Down and Out in Paris and London"
+            "title": "1984"
           },
           {
-            "title": "1984"
+            "title": "Down and Out in Paris and London"
           }
         ],
         "name": "George Orwell"
@@ -404,15 +404,15 @@ You can walk connected types without boundaries: if type `Person` has a relation
         "authoredBooks": [
           {
             "seller": {
-              "name": "The indipendent hipster bookshop"
+              "name": "The Indipendent Hipster Bookshop"
             },
-            "title": "Down and Out in Paris and London"
+            "title": "1984"
           },
           {
             "seller": {
-              "name": "The indipendent hipster bookshop"
+              "name": "The Indipendent Hipster Bookshop"
             },
-            "title": "1984"
+            "title": "Down and Out in Paris and London"
           }
         ],
         "name": "George Orwell"
@@ -421,7 +421,7 @@ You can walk connected types without boundaries: if type `Person` has a relation
         "authoredBooks": [
           {
             "seller": {
-              "name": "The world-destroying large chain"
+              "name": "The World-Destroying Large Chain"
             },
             "title": "Lord of the Flies"
           }
@@ -432,13 +432,13 @@ You can walk connected types without boundaries: if type `Person` has a relation
         "authoredBooks": [
           {
             "seller": {
-              "name": "The world-destroying large chain"
+              "name": "The World-Destroying Large Chain"
             },
             "title": "Consider the Lobster and Other Essays"
           },
           {
             "seller": {
-              "name": "The indipendent hipster bookshop"
+              "name": "The Indipendent Hipster Bookshop"
             },
             "title": "Infinite Jest"
           }
@@ -449,7 +449,7 @@ You can walk connected types without boundaries: if type `Person` has a relation
         "authoredBooks": [
           {
             "seller": {
-              "name": "The world-destroying large chain"
+              "name": "The World-Destroying Large Chain"
             },
             "title": "Les Misérables"
           }
@@ -461,9 +461,87 @@ You can walk connected types without boundaries: if type `Person` has a relation
 }
 ```
 
-## Use variables
+## Get documents by ID
+
+You can query the database for a specific document ID via the `docID` argument in the type constructor. You can query for one or more documents by providing either a string or a list of strings.
+
+```graphql title="Get one author by ID and return his books"
+{
+  # highlight-next-line
+  Person(docID: "bae-3517d1eb-351b-5231-8387-870893ffb395") {
+    name
+    authoredBooks { title }
+  }
+}
+```
+```json title="Result"
+{
+  "data": {
+    "Person": [
+      {
+        "authoredBooks": [
+          {
+            "title": "1984"
+          },
+          {
+            "title": "Down and Out in Paris and London"
+          }
+        ],
+        "name": "George Orwell"
+      }
+    ]
+  }
+}
+```
+
+```graphql title="Get several authors by ID and return their books"
+{
+  Person(
+    # highlight-start
+    docID: [
+      "bae-3517d1eb-351b-5231-8387-870893ffb395",
+      "bae-b59928dc-fd05-5fb7-aea2-9b24af5ebcea"
+    ]
+    # highlight-end
+  ) {
+    name
+    authoredBooks { title }
+  }
+}
+```
+```json title="Result"
+{
+  "data": {
+    "Person": [
+      {
+        "authoredBooks": [
+          {
+            "title": "1984"
+          },
+          {
+            "title": "Down and Out in Paris and London"
+          }
+        ],
+        "name": "George Orwell"
+      },
+      {
+        "authoredBooks": [
+          {
+            "title": "Consider the Lobster and Other Essays"
+          },
+          {
+            "title": "Infinite Jest"
+          }
+        ],
+        "name": "David Foster Wallace"
+      }
+    ]
+  }
+}
+```
 
 ## Run different query parts
+
 ```
 {
 "operationName":"U",
