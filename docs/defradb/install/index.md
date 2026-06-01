@@ -6,7 +6,7 @@ title: Install
 
 There's a few different options to obtain an executable of DefraDB.
 
-### Download a pre-compiled binary {/* #precompiled */}
+### Download binaries {/* #binaries */}
 
 [Download the executable](https://github.com/sourcenetwork/defradb/releases) appropriate to your system.
 
@@ -29,11 +29,10 @@ export PATH=$PATH:$(go env GOPATH)/bin
 ```
 
 :::note
-Although included in [pre-compiled binaries](#precompiled), the [DefraDB Playground](https://github.com/sourcenetwork/defradb-playground) is not included in manual builds. It needs to be built separately.
+Although included in [pre-compiled binaries](#binaries), the [DefraDB Playground](https://github.com/sourcenetwork/defradb-playground) is not included in manual builds. It needs to be built separately.
 :::
 
 :::tip
-
 The Go compiler requires substantial memory during compilation. Builds with less than 2 GB of available RAM will likely fail with out-of-memory errors.
 
 <details>
@@ -58,12 +57,12 @@ The Go compiler requires substantial memory during compilation. Builds with less
   ```
 
 </details>
-
 :::
 
 ### Docker container {/* #docker */}
 
-You can also run DefraDB in a Docker container. Official images are hosted on [GitHub](ghcr.io/sourcenetwork/defradb).
+To run DefraDB in a Docker container, use one of the official images hosted on [GitHub](https://ghcr.io/sourcenetwork/defradb).
+The environment variable `DEFRA_KEYRING_SECRET` is used to initialize [DefraDB's keys](keys.md), so set it to a value that you will later have access to.
 
 ```shell
 docker run \
@@ -75,8 +74,7 @@ docker run \
   start
 ```
 
-The environment variable `DEFRA_KEYRING_SECRET` is used to initialize [DefraDB's keys](keys.md), so set it to a value that you will later have access to.
-
+You don't have to start the database when using a Docker image &ndash; you can directly [verify the connection](#verify-connection).
 
 ## Start DefraDB {/* #start */}
 

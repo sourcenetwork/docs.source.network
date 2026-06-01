@@ -507,19 +507,18 @@ When specified explicitly, root-level and sub-objects filters are evaluated indi
 | `_geq`     | Greater or Equal to        |
 | `_lt`      | Less Than        |
 | `_leq`     | Less or Equal to        |
-| `_in`      | In List        |
-| `_nin`     | Not In List        |
-| `_like`    | Like Sub-String (supports `%` wildcard)        |
-| `_ilike`   | Case-Insensitive Like Sub-String (supports `%` wildcard)        |
-| `_nlike`   | Unlike Sub-String (supports `%` wildcard)      |
-| `_nilike`  | Unlike Case-Insensitive Sub-String (supports `%` wildcard)      |
+| `_in`      | In list        |
+| `_nin`     | Not In list        |
+| `_like`    | Like sub-string (supports `%` wildcard)        |
+| `_ilike`   | Case-Insensitive Like sub-string (supports `%` wildcard)        |
+| `_nlike`   | Not like sub-string (supports `%` wildcard)      |
+| `_nilike`  | Not like case-Insensitive sub-string (supports `%` wildcard)      |
 
 ### Operators supported by scalar types  {/* #operators-by-type */}
 
 | Scalar Type | Operators |
 | -------- | -------- |
 | String     | `_eq, _neq, _like, _ilike, _nlike, _nilike, _in, _nin`     |
-| Integer     | `_eq, _neq, _gt, _geq, _lt, _leq, _in, _nin`     |
-| Floating Point     | `_eq, _neq, _gt, _geq, _lt, _leq, _in, _nin`     |
+| Int, Float    | `_eq, _neq, _gt, _geq, _lt, _leq, _in, _nin`     |
 | Boolean     | `_eq, _neq, _in, _nin`     |
 | DateTime     | `_eq, _neq, _gt, _geq, _lt, _leq, _in, _nin`     |

@@ -1,5 +1,5 @@
 ---
-title: Variables
+title: Query variables
 ---
 
 For simplicity, most examples have hardcoded values in queries. Although that is fine for understanding and prototyping, it is **not** fine for production applications. For *oh god so many* reasons:
@@ -195,9 +195,8 @@ query ($title: String, $minRating: Float64) {
   }
 }
 ```
-```json title="Variables"
+```json title="Variables (no value for title)"
 {
-  // no value for title
   "minRating": 3.8
 }
 ```

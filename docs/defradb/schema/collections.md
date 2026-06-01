@@ -23,7 +23,8 @@ type Book {
 Fields can be of different types:
 
 - `Int`: A signed 32‐bit integer.
-- `Float`: A signed double-precision floating-point value.
+- `Float` (alias `Float64`): A signed double-precision floating-point value.
+- `Float32`: A signed single-precision floating-point value.
 - `String`: A UTF‐8 character sequence.
 - `Boolean`: `true` or `false`.
 - `ID`: A unique identifier. Although the `ID` type is serialized in the same way as a `String`, defining it as an ID communicates that it is not intended to be human‐readable.
@@ -32,7 +33,7 @@ Fields can be of different types:
 - `Blob`: A hex string (ex. `00FF`).
 - List: An array of another type (ex. `[String]`). Lists can not be nested.
 
-In the GraphQL syntax, an exclamation mark `!` appended to a type (ex. `Int!`) in a field definition specifies that the field should be non-null. Although DefraDB does not support non-null scalar types, it does support lists of non-null types. For example:
+In the GraphQL syntax, an exclamation mark `!` after a type (ex. `Int!`) specifies that the field should be non-null. Although DefraDB does not support non-null scalar types, it does support lists of non-null types. For example:
 - `[Int!]` &ndash; Supported: a list of non-null `Int`.
 - `[Int]!` &ndash; Unsupported: a non-null list of (possibly null) `Int`.
 - `[Int!]!` &ndash; Unsupported: a non-null list of non-null `Int`.
