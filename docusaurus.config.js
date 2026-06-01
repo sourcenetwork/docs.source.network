@@ -5,8 +5,8 @@ const variableCodeTheme = require("./src/code-theme/code-theme");
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
-  title: "Source Developer Portal",
-  tagline: "The Home of Source Developers",
+  title: "Source Docs",
+  tagline: "The Source Stack Documentation",
   url: "https://docs.source.network",
   baseUrl: "/",
   onBrokenLinks: "warn",
