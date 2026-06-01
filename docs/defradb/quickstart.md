@@ -6,7 +6,7 @@ slug: /
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-DefraDB is the database for local-first application that prioritizes data ownership, personal privacy, and P2P synchronization. It features data encryption and signature, the ability to travel in time through the history of documents, and a multi-write-master architecture. The [DefraDB Query Language (DQL)](/query-specification/query-language-overview.md) is based on GraphQL.
+DefraDB is the database for local-first applications that prioritizes data ownership, personal privacy, and P2P synchronization. It features data encryption and verification, the ability to travel in time through the history of documents, and a multi-write-master architecture. The [DefraDB Query Language (DQL)](/query-specification/query-language-overview.md) is based on GraphQL.
 
 For more background on the local-first paradigm, see [The Edge-First Awakening: Redefining the Foundations of Modern Computing](https://source.network/blog/the-edge-first-awakening-redefining-the-foundations-of-modern-computing).
 
@@ -58,7 +58,7 @@ You can interact with DefraBD in a few different ways. Most actions can be run w
 
 ## Add collections {/* #add-collections */}
 
-Collections are the _types_ into which documents fit. Because every document belongs to a collection, you need to create collections before you can insert any data in the database. A collection has a name (ex. `Book`) and a number of typed fields (ex. `title: String`).
+Collections are the _types_ into which documents fit, like tables in SQL. Because every document belongs to a collection, you need to create collections before you can insert any data. A collection has a name (ex. `Book`) and a number of typed fields (ex. `title: String`).
 
 <Tabs groupId="defra">
   <TabItem value="cli" label="CLI" default>
@@ -112,7 +112,7 @@ Collections are the _types_ into which documents fit. Because every document bel
   <TabItem value="cli" label="CLI" default>
     To create documents of type `<type>`, use the mutation `add_<type>` via the CLI command [`defradb client query`](/references/cli/defradb_client_query.md). For example, to create a document in the `Book` collection, use `add_Book`.
 
-    Every `add_<type>` mutation must return some of the inserted information. Because GraphQL queries only return the exact fields requested, you have to provide a list of fields to be returned (there is no equivalent of the SQL `SELECT *` syntax).
+    Every `add_<type>` mutation must return some of the inserted information. Because GraphQL queries only return the exact fields requested, you have to provide a list of return fields (there is no equivalent of the SQL `SELECT *` syntax).
 
     ```shell title="Create a new document of type Book"
     defradb client query '
@@ -136,6 +136,24 @@ Collections are the _types_ into which documents fit. Because every document bel
       }
     '
     ```
+    ```json title="Result"
+    {
+      "data": {
+        "b1": [
+          {
+            "_docID": "bae-546ae840-77c7-51a5-ab0a-b5a893bfa546",
+            "title": "1984"
+          }
+        ],
+        "b2": [
+          {
+            "_docID": "bae-6c91c35c-e548-58f8-86a6-d60ab5174072",
+            "title": "Lord of the Flies"
+          }
+        ]
+      }
+    }
+    ```
   </TabItem>
   <TabItem value="http" label="HTTP API">
     To create documents of type `<type>`, submit a POST request to the HTTP endpoint [`/api/v1/collections/<collection>`](/defradb/references/http/api/add-document/). For example, submit a request to `/api/v1/collections/Book`. The request body should contain the documents information in JSON format.
@@ -143,7 +161,7 @@ Collections are the _types_ into which documents fit. Because every document bel
     ```http title="Create two new documents of type Book"
     POST http://localhost:9181/api/v1/collections/Book HTTP/2
     accept: application/json
-    content-type: text/plain
+    content-type: application/json
 
     [
       {
@@ -161,6 +179,8 @@ Collections are the _types_ into which documents fit. Because every document bel
   </TabItem>
   <TabItem value="graphql" label="GraphQL API">
     To create documents of type `<type>`, use the mutation `add_<type>`. For example, to create a document in the `Book` collection, use `add_Book`.
+
+    Every `add_<type>` mutation must return some of the inserted information. Because GraphQL queries only return the exact fields requested, you have to provide a list of return fields (there is no equivalent of the SQL `SELECT *` syntax).
 
     ```graphql title="Create two new documents of type Book, returning their title and ID"
     mutation {
@@ -235,7 +255,7 @@ Collections are the _types_ into which documents fit. Because every document bel
 
 ## Query documents {/* #query-documents */}
 
-The basic skeleton of a query is made of the type/collection you want to fetch from (ex. `Book`) and the fields you want to return among the ones defined on the collection (ex. `_docID`, `title`, `plot`).
+The basic skeleton of a query is made of the collection you want to fetch from (ex. `Book`) and the fields you want to return (ex. `_docID`, `title`, `plot`).
 
 <Tabs groupId="defra">
   <TabItem value="cli" label="CLI" default>

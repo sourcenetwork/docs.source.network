@@ -16,7 +16,7 @@ There's two types of peer-to-peer relationships:
 When a node is started for the first time, a key pair is generated and stored in its root directory (`~/.defradb/` by default).
 Each node has a unique `PeerID` generated from its public key. This ID allows other nodes to connect to it.
 
-The following P2P pages assume that you have two instances of DefraDB running on the same network. One way to start multiple DefraDB nodes, each with its root directory and port bindings, is by tweaking CLI options `--rootdir`, `--p2paddr`, and `--url` when calling `defradb start`:
+The following P2P pages assume that you have two instances of DefraDB running on the same network. One way to start multiple DefraDB nodes, each with its root directory and port bindings, is by tweaking the CLI options `--rootdir`, `--p2paddr`, and `--url` when calling `defradb start`:
 
 ```shell title="Start Node1 - Ports 9171 and 9181, root dir ~/.defradb-node1"
 defradb start --rootdir ~/.defradb-node1 --p2paddr /ip4/127.0.0.1/tcp/9171 --url localhost:9181

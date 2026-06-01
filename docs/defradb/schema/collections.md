@@ -10,7 +10,7 @@ Collections represent groups of documents with similar structures, like tables f
 
 A collection has a name (ex. `Book`) and a number of typed fields (ex. `title: String`).
 
-```graphql title="An example collection"
+```graphql title='Example &ndash; Collection "Book"'
 type Book {
   title: String
   plot: String
@@ -19,8 +19,6 @@ type Book {
 ```
 
 ## Field types {/* #field-types */}
-
-Fields can be of different types:
 
 - `Int`: A signed 32‐bit integer.
 - `Float` (alias `Float64`): A signed double-precision floating-point value.
@@ -40,11 +38,11 @@ In the GraphQL syntax, an exclamation mark `!` after a type (ex. `Int!`) specifi
 
 ## Create collections {/* #create */}
 
-You can create a collection with either the CLI command [`defradb client collection add`](/references/cli/defradb_client_collection_add.md), the HTTP API endpoint [`/collections`](/defradb/references/http/api/add-collection/), or the method `AddCollection`.
+You can create a collection with either the CLI command [`defradb client collection add`](/references/cli/defradb_client_collection_add.md), or the HTTP API endpoint [`/collections`](/defradb/references/http/api/add-collection/).
 
 <Tabs groupId="defra">
   <TabItem value="cli" label="CLI" default>
-    ```shell
+    ```shell title='Create collection "Book"'
     defradb client collection add '
       type Book {
         title: String
@@ -67,19 +65,6 @@ You can create a collection with either the CLI command [`defradb client collect
     }
     ```
   </TabItem>
-  <TabItem value="embedded" label="Embedded">
-    ```go
-    _, err = db.DB.AddCollection(ctx, `type Book {
-      title: String
-      plot: String
-      rating: Float
-    }`)
-    if err != nil {
-        // Fails for example if the collection is already added
-        log.Fatalf("Failed to add collection: %v", err)
-    }
-  ```
-  </TabItem>
 </Tabs>
 
 ### Relationships {/* #relationships */}
@@ -87,9 +72,9 @@ You can create a collection with either the CLI command [`defradb client collect
 To create a relationship between two types, define a field having the other side of the relationship as type.
 The way in which you define relationships depends on their kind:
 
-- [One-to-one](#one-to-one) &ndash; Each document of type `A` is linked to one document of type `B`. The same applies in the opposite direction.
+- [One-to-one](#one-to-one) &ndash; Each document of type `A` is linked to one document of type `B`, and viceversa.
 - [One-to-many](#one-to-many) &ndash; Each document of type `A` is linked to one document of type `B`. Each document of type `B` is linked to one or more documents of type `A`.
-- [Many-to-many](#many-to-many) &ndash; Each document of type `A` is linked to one or more documents of type `B`. The same applies in the opposite direction.
+- [Many-to-many](#many-to-many) &ndash; Each document of type `A` is linked to one or more documents of type `B`, and viceversa.
 
 This section shows how to create relationships. For information on how to populate them, see [Create documents with relationships](/dql/mutation-create.md#relationships) and [Query the database](/dql/mutation-query.md#relationships).
 
@@ -99,10 +84,10 @@ As all other fields, relationship fields can be null. For example, defining a on
 
 #### One-to-one {/* #relationships-one-to-one */}
 
-One-to-one relationships are such that each document of one type is linked to one and only one document of another type.
+One-to-one relationships are such that each document of type `A` is linked to one and only one document of type `B`.
 In practice, type `A` defines a field of type `B`, and type `B` defines a field of type `A`.
 
-For example, each `Husband` is married to one `Wife` and viceversa (disregarding avant-garde polyamorous relationships):
+For example, each `Husband` is married to one `Wife` and viceversa. At least disregarding avant-garde polyamorous relationships.
 
 ```graphql title="Type Husband with 1:1 relationship with Wife"
 type Husband {
@@ -116,19 +101,19 @@ type Wife {
 }
 ```
 
-The type with the `@primary` directive stores a direct pointer to the other end of the relationship, resulting in faster queries. `@primary` fields also get automatically [indexed](indexes.md). In the example above, `Wife` contains a (implicit) field `_husbandID`, so retrieving a _wife's husband_ is quick. On the other hand, documents of type `Husband` do not contain any pointer to the relative `Wife`, so a collection scan is needed to retrieve a _husband's wife_. Which side should be _primary_ depends on your query patterns.
+The type holding the `@primary` directive stores a direct pointer to the other end of the relationship, resulting in faster queries. `@primary` fields also get automatically [indexed](indexes.md). In the example above, `Wife` contains a (implicit) field `_husbandID`, so retrieving a _wife's husband_ is quick. On the other hand, documents of type `Husband` do not contain any pointer to the relative `Wife`, so a collection scan is needed to retrieve a _husband's wife_. Which side should be _primary_ depends on your query patterns.
 
 :::note
-One-to-one relationships are enforced via a [unique index](indexes.md#unique-indexes) under the hood. The index must not be dropped, or the 1:1 nature of the relationship will not be fulfilled anymore.
+One-to-one relationships are enforced via [unique indexes](indexes.md#unique-indexes) under the hood. The index must not be dropped, or the 1:1 nature of the relationship will not be fulfilled anymore.
 :::
 
 :::warning
-There's currently no validation on the type when creating relationships across documents. It is the client's responsibility to validate that the `Wife.husbandID` is populated with the docID of a `Husband` document. It's up to you to marry humans.
+There's no validation on the type when creating relationships across documents. It is the client's responsibility to validate that the `Wife.husbandID` is populated with the docID of a `Husband` document. It's up to you to marry humans.
 :::
 
 #### One-to-many {/* #relationships-one-to-many */}
 
-One-to-many relationships link one document of one type with document of another type, while allowing the other side to be linked to multiple documentes. Type `A` defines a field of type `B`, whereas type `B` defines a field of type `[A]` (_list_ of `A`).
+One-to-many relationships link one document of type `A` with one document of type `B`, but allows documents of type `B` to be linked to multiple documents of type `A`. In practice, type `A` defines a field of type `B`, whereas type `B` defines a field of type `[A]` (_list_ of `A`).
 
 For example, each book is written by one author, whereas one author can write multiple books:
 
@@ -145,7 +130,7 @@ type Author {
 ```
 
 :::warning
-There's currently no validation on the type when creating relationships across documents. It is the client's responsibility to validate that the `Book.authorID` is populated with the docID of a `Author` document.
+There's no validation on the type when creating relationships across documents. It is the client's responsibility to validate that the `Book.authorID` is populated with the docID of an `Author` document.
 :::
 
 #### Many-to-many {/* #relationships-many-to-many */}
@@ -175,9 +160,10 @@ type Enrollment {  # the join type
 
 #### Define multiple relationship fields of the same type {/* #relationships-rename */}
 
-A type defining multiple relationships to the same type requires extra directives to disambiguate their target. For example, in the scenario in which a book has both an author and a reviewer, the following definitions would be ambiguous:
+A type defining multiple relationships to the same type requires extra directives to disambiguate their targets. For example, in the scenario in which a book has both an author and a reviewer, the following definitions would be ambiguous:
 
 ```graphql title="Invalid &ndash; Ambiguous definition of multiple relationships"
+# invalid
 type Book {
   title: String
   author: Person
@@ -194,6 +180,7 @@ type Person {
 At query time, the database cannot infer whether `Person.authoredBooks` is linked to `Person.author` or `Person.reviewer`. To clarify which fields should get paired, use the `@relation(name: String)` directive, coupling each relationship together with the same name:
 
 ```graphql title="Valid &ndash; Unambiguous definition of multiple relationships"
+# valid
 type Book {
   title: String
   author: Person @relation(name: "book_author")
@@ -213,7 +200,7 @@ To see all collections available on an instance, use the CLI command [`defradb c
 
 <Tabs groupId="defra">
   <TabItem value="cli" label="CLI" default>
-    ```shell
+    ```shell title="Show all collections"
     defradb client collection describe
     ```
     :::tip
@@ -360,12 +347,12 @@ The delete command takes one (or more) collection name and erases their schema f
     Send a `DELETE` request to the endpoint [`/collections/`](/defradb/references/http/api/delete-collection/) with a comma-separated list of collection names in the `name` parameter.  
     For example, to delete the collections `Book` and `Person`:
     ```http title="Request"
-    DELETE http://localhost:9181/api/v1/collections/?name=Book,Person HTTP/2
+    DELETE http://localhost:9181/api/v1/collections?name=Book,Person HTTP/2
     accept: application/json
     ```
   </TabItem>
 </Tabs>
 
 :::note
-You can only delete empty collections. If a collection has data, or has had data, you need to [truncate it](#truncate) first. [Deleting documents](/dql/mutation-delete.md) is not equivalent to truncating the collection.
+You can only delete empty collections. If a collection has data, or *has had* data, you need to [truncate it](#truncate) first. [Deleting documents](/dql/mutation-delete.md) is not equivalent to truncating the collection.
 :::

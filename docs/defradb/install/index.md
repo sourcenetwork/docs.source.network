@@ -2,6 +2,8 @@
 title: Install
 ---
 
+To get a running instance of DefraDB, you need to source the `defradb` executable and start a node.
+
 ## Get DefraDB {/* #get-defradb */}
 
 There's a few different options to obtain an executable of DefraDB.
@@ -29,7 +31,7 @@ export PATH=$PATH:$(go env GOPATH)/bin
 ```
 
 :::note
-Although included in [pre-compiled binaries](#binaries), the [DefraDB Playground](https://github.com/sourcenetwork/defradb-playground) is not included in manual builds. It needs to be built separately.
+Although included in [pre-compiled binaries](#binaries), the [DefraDB Playground](https://github.com/sourcenetwork/defradb-playground) is not included in manual builds. It is built separately.
 :::
 
 :::tip

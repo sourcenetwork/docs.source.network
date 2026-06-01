@@ -2,7 +2,7 @@
 title: Rename result fields (Aliases)
 ---
 
-_Little Bobby Tables, we call him._ Other times, you might want to change the default names that the database returns in results. Aliases allow you to rename fields and entire query results with identifiers of your choice.
+Sometimes, _Little Bobby Tables_ is the right name. Other times, you might want to change the default names that the database returns in results. Aliases allow you to rename fields and entire query results with identifiers of your choice.
 
 <details>
   <summary>Display database setup</summary>
@@ -107,7 +107,7 @@ _Little Bobby Tables, we call him._ Other times, you might want to change the de
 
 ## Rename queries
 
-To rename the return key for a query, prepend the custom name to the query and separate the two with a colon `:`.
+To rename the return key for a query, prefix the custom name to the query and separate the two with a colon `:`.
 
 ```graphql title='Return the three top-rated books under the key "topThreeBooks"'
 {
@@ -122,6 +122,7 @@ To rename the return key for a query, prepend the custom name to the query and s
 ```json title="Result"
 {
   "data": {
+    // highlight-next-line
     "topThreeBooks": [
       {
         "plot": "A gargantuan, mind-altering tragi-comedy about the Pursuit of Happiness in America.",
@@ -164,6 +165,7 @@ You must alias queries when one request contains multiple queries to the same ty
 ```json title="Result"
 {
   "data": {
+    // highlight-next-line
     "topThreeBooks": [
       {
         "genre": "Fiction",
@@ -181,6 +183,7 @@ You must alias queries when one request contains multiple queries to the same ty
         "title": "1984"
       }
     ],
+    // highlight-next-line
     "worstThreeBooks": [
       {
         "genre": "Fiction",
@@ -202,12 +205,9 @@ You must alias queries when one request contains multiple queries to the same ty
 }
 ```
 
-
-In this query the two returned results are named `topTenBooks` and `bottomTenBooks` respectively. When dealing with multiple queries of the same type (e.g., `books`), it is required to alias one from another.
-
 ## Rename fields
 
-To rename the return key for a field, prepend the custom name to the field in the selection set and separate the two with a colon `:`.
+To rename the return key for a field, prefix the custom name to the field in the selection set and separate the two with a colon `:`.
 
 ```graphql title='Rename the field "plot" to "description"'
 {

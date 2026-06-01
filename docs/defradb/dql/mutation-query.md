@@ -5,7 +5,7 @@ title: Query the database
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-Once you have [created some documents](mutation-create.md), you can query the database for them.
+Once you have [created some documents](mutation-create.md), you can query the database for them. Time to claim your stuff back.
 
 <details>
   <summary>Display database setup</summary>
@@ -134,7 +134,7 @@ Once you have [created some documents](mutation-create.md), you can query the da
 
 GraphQL queries have the following form:
 
-```graphql title="Syntax" test-skip
+```graphql title="Syntax &ndash; Query block" test-skip
 {
   TYPE(args) {
     [returnField]
@@ -540,6 +540,7 @@ You can query the database for a specific document ID via the `docID` argument i
 }
 ```
 
+{/*
 ## Run different query parts
 
 ```
@@ -548,3 +549,4 @@ You can query the database for a specific document ID via the `docID` argument i
   "query": "query U{ Book { _docID title plot } } query B{ Book { _docID title plot } }"
 }
 ```
+*/}

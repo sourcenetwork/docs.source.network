@@ -5,7 +5,7 @@ title: Indexes
 By default, every collection has an index on the `_docID` property and on `@primary` relationship fields.
 The `@index` directive allows you to set up further indexes on selected properties.
 
-```graphql title="@index directive syntax"
+```graphql title="Syntax &ndash; @index directive"
 @index(
   name: String,
   unique: Bool,
@@ -17,23 +17,23 @@ The `@index` directive allows you to set up further indexes on selected properti
 Default: concatenation of _collection name, field names, direction_.
 - `unique` &ndash; Enforce uniqueness constraint (i.e. no two documents can have the same value for the given fields).  
 Default: `false`.
-- `direction` &ndash; The index order. This affects the default sorting of results when querying documents.  
+- `direction` &ndash; Order direction. This affects the default sorting of results when querying documents.  
 Valid values: `ASC` or `DESC`.  
 Default: `ASC`.
-- `includes` &ndash; List of fields the index is created on. (Not required when the directive is used in a field definition).
+- `includes` &ndash; List of fields the index is created on (not required when the directive is used in a field definition).
 
 ## Indexes for individual fields {/* #single */}
 
-To create an index for a specific field in a collection, use the `@index` directive when defining the field.
+To create an index for a specific field, use the `@index` directive on the field when creating the collection.
 
-```graphql title="Index the title property using default values"
+```graphql title='Index the "title" property using default values'
 type Book {
   # highlight-next-line
   title: String @index
 }
 ```
 
-```graphql title="Index multiple properties, individually, overriding defaults for name"
+```graphql title='Index multiple properties, individually, overriding defaults for "name"'
 type Book {
   # highlight-next-line
   title: String @index(name: "book_title")
@@ -76,7 +76,7 @@ To create an index on the combination of multiple fields (composite index), use 
 
 ```graphql title="(Unique) Index for (genre, author)"
 # highlight-next-line
-type Book @index(unique: true, includes: [{field: "genre"}, {field: "author"}]) {
+type Book @index(unique: true, includes: [{ field: "genre" }, { field: "author" }]) {
   genre: String
   author: String
 }
@@ -93,12 +93,12 @@ Physics/Richard Feynman/docID5
 ...
 ```
 
-Although there is a partial benefit to queries filtering only on `genre`, there is no benefit if a query skips fields. This becomes even more relevant as more fields are added to a composite index.
+Although there is a partial benefit to queries filtering only on `genre`, there is no benefit if a query skips fields.
 
 ## JSON fields indexing {/* #json-fields */}
 
-JSON fields are treated specially: their leaf nodes are indexed, so that their structure can be traversed in queries. Each JSON field generates multiple entries in the index: one for every leaf node, each with their value and path.
-For example, given a property of JSON format with the following value:
+Fields of type `JSON` are treated specially: their leaf nodes are indexed, so that the JSON structure can be traversed in queries. Each JSON field generates multiple entries in the index: one for every leaf node, each with their value and path.
+For example, given a JSON property with the following value:
 
 ```json
 {
@@ -109,10 +109,10 @@ For example, given a property of JSON format with the following value:
   }
 }
 ```
-Assuming an index is present on `Collections.jsonField`, you can query documents of that type filtering on the `user.device.os` property:
+Assuming an index is present on `Collection.jsonField`, you can query documents of that type filtering on the `user.device.os` property:
 
 ```graphql
-query {
+{
   Collection(filter: {
     jsonField: {
       user: {

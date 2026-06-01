@@ -137,7 +137,7 @@ The `filter` object allow you to specify criterias for selecting documents. You 
 }
 ```
 
-```graphql title='It is all about love, is it not? &ndash; Return books containing "love" in their plot (flexible matching).'
+```graphql title='It is all about love, is it not? &ndash; Return books containing "love" in their plot (flexible matching)'
 {
   Book(filter: {
     # highlight-next-line
@@ -164,9 +164,9 @@ The `filter` object allow you to specify criterias for selecting documents. You 
 ```
 
 To filter on a single field, use the syntax `fieldName: { operator: Value }`, where:
-- `fieldName` &ndash; The name of the collection field to compare against.
-- `operator` &ndash; The [comparison operator](#operators) to use.
-- `Value` &ndash; To value to compare against, of the same type of `fieldName`.
+- `fieldName` &ndash; Name of the collection field to compare against.
+- `operator` &ndash; [Comparison operator](#operators) to use.
+- `Value` &ndash; Value to compare against, of the same type of `fieldName`.
 
 You need to explicitly specify the `_and` operator in case of two filters on the same field, because JSON objects cannot contain duplicate fields:
 
@@ -228,9 +228,9 @@ filter: {
 }
 ```
 
-- `operator` &ndash; The [comparison operator](#operators) to use.
-- `fieldName` &ndash; The name of the collection field to compare against.
-- `Value` &ndash; To value to compare against, of the same type of `fieldName`.
+- `operator` &ndash; [Comparison operator](#operators) to use.
+- `fieldName` &ndash; Name of the collection field to compare against.
+- `Value` &ndash; Value to compare against, of the same type of `fieldName`.
 
 ```graphql title='Retrieve all books that either have genre == "Fiction", or rating between 4 and 5'
 {
@@ -355,9 +355,9 @@ Filters can access fields within nested objects, such as in relationships:
 
 The syntax to filter over sub-objects has one more level of nesting in field names: `relFieldName: { fieldName: { operator: Value } }`, where:
 
-- `relFieldName`, `fieldName` &ndash; The name of the collection field to compare against.
-- `operator` &ndash; The [comparison operator](#operators) to use.
-- `Value` &ndash; To value to compare against, of the same type of `fieldName`.
+- `relFieldName`, `fieldName` &ndash; Name of the collection field to compare against.
+- `operator` &ndash; [Comparison operator](#operators) to use.
+- `Value` &ndash; Value to compare against, of the same type of `fieldName`.
 
 ### One-to-many relationships {/* #rels-one-to-many */}
 
@@ -395,7 +395,7 @@ For example, when filtering over people that have authored books of genre `Ficti
 }
 ```
 
-If the return fields include the sub-object you filter on, the same filter is not applied to the result unless otherwise specified. For example, when filtering over people who have authored `Fiction` books, the returned books will include books of any genre:
+If the return fields include the sub-object you filter on, the same filter is **not** applied to the result unless otherwise specified. For example, when filtering over people who have authored `Fiction` books, the returned books will include books of any genre:
 
 ```graphql title="Get persons who have authored at least one fiction book; return their names and *all* their authored books"
 {

@@ -2,13 +2,15 @@
 title: Replicator
 ---
 
-With a [publisher-subscriber setup](pub-sub.md), a node subscribes to updates broadcasted by other nodes. It is the recipients who decide to be part of the community and keep in sync with the collection's shared state. With replicator peering, a node sends updates for a selected collection to another node. One node decides to impose its will onto another.
+With a [publisher-subscriber setup](pub-sub.md), a node subscribes to updates broadcasted by other nodes. It is the recipients who decide to be part of the community and keep in sync with the collection's shared state. 
+
+With a replicator peering, a node sends updates for a selected collection to another node. One node decides to impose its will onto another.
 
 ### Create a common collection {/* #create-collection */}
 
 Both peers must know about the collection they are going to send/receive updates about. The collection must have the same fields across both peers.
 
-```shell title="Create the User collection on Node1"
+```shell title='Create the "User" collection on Node1'
 defradb client collection add '
   type User {
     name: String
@@ -19,7 +21,7 @@ defradb client collection add '
 ' --url localhost:9181
 ```
 
-```shell title="Create the User collection on Node2"
+```shell title='Create the "User" collection on Node2'
 defradb client collection add '
   type User {
     name: String

@@ -34,9 +34,9 @@ Once you have [created collections](/schema/collections.md), you can start addin
   <TabItem value="cli" label="CLI" default>
     To create documents of type `<type>`, use the mutation `add_<type>` via the CLI command [`defradb client query`](/references/cli/defradb_client_query.md). For example, to create a document in the `Book` collection, use `add_Book`.
 
-    Every `add_<type>` mutation must return some of the inserted information. Because GraphQL queries only return the exact fields requested, you have to provide a list of fields to be returned (there is no equivalent of the SQL `SELECT *` syntax).
+    Every `add_<type>` mutation must return some of the inserted information. Because GraphQL queries only return the exact fields requested, you have to provide a list of return fields (there is no equivalent of the SQL `SELECT *` syntax).
 
-    ```shell title="Create a new document of type Book"
+    ```shell title='Create a new document of type "Book"'
     defradb client query '
       mutation {
         add_Book(input: {
@@ -68,7 +68,7 @@ Once you have [created collections](/schema/collections.md), you can start addin
   <TabItem value="http" label="HTTP API">
     To create documents of type `<type>`, submit a POST request to the HTTP endpoint [`/api/v1/collections/<collection>`](/defradb/references/http/api/add-document/). For example, submit a request to `/api/v1/collections/Book`. The request body should contain the documents information in JSON format.
 
-    ```http title="Create a new document of type Book"
+    ```http title='Create a new document of type "Book"'
     POST http://localhost:9181/api/v1/collections/Book HTTP/2
     accept: application/json
     content-type: application/json
@@ -88,9 +88,9 @@ Once you have [created collections](/schema/collections.md), you can start addin
   <TabItem value="graphql" label="GraphQL API">
     To create documents of type `<type>`, use the mutation `add_<type>`. For example, to create a document in the `Book` collection, use `add_Book`.
 
-    Every `add_<type>` mutation must return some of the inserted information. Because GraphQL queries only return the exact fields requested, you have to provide a list of fields to be returned (there is no equivalent of the SQL `SELECT *` syntax).
+    Every `add_<type>` mutation must return some of the inserted information. Because GraphQL queries only return the exact fields requested, you have to provide a list of return fields (there is no equivalent of the SQL `SELECT *` syntax).
     
-    ```graphql title="Create a new document of type Book"
+    ```graphql title='Create a new document of type "Book"'
     mutation {
       add_Book(input: {
         title: "Infinite Jest",
@@ -124,7 +124,7 @@ Once you have [created collections](/schema/collections.md), you can start addin
 The field `_docID` is the document's unique identifier, determined by the collection it belongs to and the data it is initialized with. The data in the document might change over time, but its docID will stay the same. 
 
 :::tip
-The `_docID` field is the only one to be [automatically indexed](/schema/indexes.md).
+The `_docID` field is [automatically indexed](/schema/indexes.md).
 :::
 
 ## Create documents with relationships {/* #relationships */}
@@ -133,7 +133,7 @@ To add documents with relationships to each other, you need two queries: one to 
 
 For example, to create a book and link it to an author, first create the documents and return their docIDs:
 
-```graphql title="Create new documents for Person and Book"
+```graphql title='Create new documents for "Person" and "Book"'
 mutation {
   add_Person(input: {
     name: "Victor Hugo"
@@ -205,8 +205,8 @@ mutation {
 
 <Tabs groupId="defra">
   <TabItem value="cli" label="CLI" default>
-    You can create multiple documents in the same request by concatenating several `add_<collection>` statements.
-    To avoid clashes, you need to [alias](aliases.md) the results (`b1` and `b2` in the example). The aliases are used as keys in the result json.
+    You can create multiple documents in the same request by concatenating several `add_<type>` statements.
+    To avoid clashes, you need to [alias](aliases.md) the results (`b1` and `b2` in the example). The aliases are used as keys in the result JSON.
 
     ```shell title="Create two documents"
     defradb client query '
@@ -234,7 +234,6 @@ mutation {
     }
     '
     ```
-
     ```json title="Result"
     {
       "data": {
@@ -255,7 +254,7 @@ mutation {
     ```
   </TabItem>
   <TabItem value="http" label="HTTP API">
-    You can create multiple documents in the same request by providing a list object to the `/api/v1/collections/<type>` endpoint.
+    You can create multiple documents in the same request by providing a JSON list object to the `/api/v1/collections/<type>` endpoint.
     
     ```http title="Create two documents"
     POST http://localhost:9181/api/v1/collections/Book HTTP/2
@@ -279,8 +278,8 @@ mutation {
     ```
   </TabItem>
   <TabItem value="graphql" label="GraphQL API">
-    You can create multiple documents in the same request by concatenating several `add_<collection>` statements.
-    To avoid clashes, you need to [alias](aliases.md) the results (`b1` and `b2` in the example). The aliases are used as keys in the result json.
+    You can create multiple documents in the same request by concatenating several `add_<type>` statements.
+    To avoid clashes, you need to [alias](aliases.md) the results (`b1` and `b2` in the example). The aliases are used as keys in the result JSON.
 
     ```graphql title="Create two documents"
     mutation {
@@ -306,7 +305,6 @@ mutation {
       }
     }
     ```
-
     ```json title="Result"
     {
       "data": {

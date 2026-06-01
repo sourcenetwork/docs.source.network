@@ -2,11 +2,11 @@
 title: Delete documents
 ---
 
-**Deletion in DefraDB works differently** than in most other databases. Because the history of documents is append-only, the deletion of a document is registered just as another record in the history. Queries don't return deleted documents though, unless [they explicitly request for deleted documents](mutation-query.md#show-deleted). In other words: the details of a deleted document is still available, but queries ignore its existence when retrieving results. The only way to permanently delete a document is to [truncate the collection](/schema/collections.md#truncate) it belongs to.
+**Deletion in DefraDB works differently** than in most other databases. Because the history of documents is append-only, the deletion of a document is registered just as another record in the history. Queries don't return deleted documents though, unless [the query explicitly requests deleted documents](mutation-query.md#show-deleted). In other words: the details of a deleted document are still available, but queries ignore its existence when retrieving results. The only way to permanently delete a document is to [truncate the collection](/schema/collections.md#truncate) it belongs to.
 
 Similarly to the `update_TYPE` mutation to [update documents](mutation-update.md), you delete documents via the `delete_TYPE` mutation. The mutation returns the deleted documents.
 
-```graphql title="Syntax for delete mutation" test-skip
+```graphql title="Syntax &ndash; Delete mutation" test-skip
 mutation {
   delete_TYPE(docID: [ID], filter: filterObj) [TYPE]
 }
@@ -15,7 +15,7 @@ mutation {
 - `docID` &ndash; DocID of the document(s) to delete. Either a string or a list of strings.
 - `filter` &ndash; Criteria for selecting documents to delete (see [Filter documents](filter.md)).
 
-Only one among `docID` and `filter` is needed to pinpoint the documents to delete. If you provide both, `docID` takes precedence.
+Only one among `docID` and `filter` is needed to pinpoint the documents to delete. If both are given, `docID` takes precedence.
 
 :::note
 You cannot restore a deleted document, nor re-create a document with the exact same content as a previously deleted one, because the `docID` would conflict. In case you need to re-create a deleted document, create a new document with only _some_ of the fields of the deleted document, and then update it to include all the wished information.
@@ -168,7 +168,7 @@ It looks like *power* has eliminated the dystopians, as a regular query does not
 }
 ```
 
-True dystopians are however never erased. Deleted documents show up if the query requests to include them. The `_deleted` return field marks whether a document is deleted.
+True dystopians are however never erased. Deleted documents show up if the query requests to include them with `showDeleted: true`. The `_deleted` return field marks whether a document is deleted.
 
 ```graphql title="The dystopians are gone"
 {
