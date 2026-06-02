@@ -147,6 +147,7 @@ query ($bookID: [ID!]) {
   Book(docID: $bookID) {
     _docID
     title
+    plot
     author { name }
   }
 }
@@ -157,15 +158,30 @@ query ($bookID: [ID!]) {
 }
 ```
 ```json title="Result"
-p
+{
+  "data": {
+    "Book": [
+      {
+        "_docID": "bae-c26135f1-59d6-5f32-a7c0-16dbec525abe",
+        "author": {
+          "name": "David Foster Wallace"
+        },
+        "plot": "A gargantuan, mind-altering tragi-comedy about the Pursuit of Happiness in America.",
+        "title": "Infinite Jest"
+      }
+    ]
+  }
+}
+
 ```
 
 ```graphql title="Query a document with filters"
-query ($title: String, $minRating: Float64) {
+query ($plot: String, $minRating: Float64) {
   Book(filter: {
-    title: { _like: $title }, rating: { _geq: $minRating }
+    plot: { _like: $plot }, rating: { _geq: $minRating }
   }) {
     title
+    plot
     author { name }
     rating
   }
@@ -173,12 +189,25 @@ query ($title: String, $minRating: Float64) {
 ```
 ```json title="Variables"
 {
-  "title": "%love%",
+  "plot": "%love%",
   "minRating": 3.8
 }
 ```
 ```json title="Result"
-p
+{
+  "data": {
+    "Book": [
+      {
+        "author": {
+          "name": "Victor Hugo"
+        },
+        "plot": "Victor Hugo's tale of injustice, heroism and love follows the fortunes of Jean Valjean, an escaped convict determined to put his criminal past behind him.",
+        "rating": 4.21,
+        "title": "Les Misérables"
+      }
+    ]
+  }
+}
 ```
 
 ## Optional and mandatory variables
@@ -186,22 +215,43 @@ p
 By default, it is optional to provide a value to a variable for a given query. No value (i.e. `null`) is an allowed value. For example, omitting the value for `bookID` is valid, and results in all books being returned:
 
 ```graphql title="Query with optional variables"
-query ($title: String, $minRating: Float64) {
+query ($plot: String, $minRating: Float64) {
   Book(filter: {
-    title: { _like: $title }, rating: { _geq: $minRating }
+    plot: { _like: $plot }, rating: { _geq: $minRating }
   }) {
     title
+    plot
     rating
   }
 }
 ```
-```json title="Variables (no value for title)"
+```json title="Variables (no value for plot)"
 {
-  "minRating": 3.8
+  "minRating": 4.2
 }
 ```
 ```json title="Result"
-p
+{
+  "data": {
+    "Book": [
+      {
+        "plot": "A masterpiece of rebellion and imprisonment where war is peace, freedom is slavery, and Big Brother is watching.",
+        "rating": 4.2,
+        "title": "1984"
+      },
+      {
+        "plot": "Victor Hugo's tale of injustice, heroism and love follows the fortunes of Jean Valjean, an escaped convict determined to put his criminal past behind him.",
+        "rating": 4.21,
+        "title": "Les Misérables"
+      },
+      {
+        "plot": "A gargantuan, mind-altering tragi-comedy about the Pursuit of Happiness in America.",
+        "rating": 4.25,
+        "title": "Infinite Jest"
+      }
+    ]
+  }
+}
 ```
 
 You can make it mandatory to provide a value to a variable by appending an exclamation mark `!` to the type in the query constructor.
