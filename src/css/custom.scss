@@ -639,7 +639,7 @@ div.codeBlockTitle_OeMC:has(+ .codeBlockContent_QJqH > pre > code > .code-block-
 }
 
 /* External link icon indicator */
-main a[target="_blank"]::after {
+main.docMainContainer_TBSr a[target="_blank"]::after {
   content: "";
   display: inline-block;
   width: 0.75em;
