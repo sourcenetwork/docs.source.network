@@ -49,10 +49,6 @@ You can interact with DefraBD in a few different ways. Most actions can be run w
     GraphQL clients (ex. [Altair](https://altairgraphql.dev/)) are a popular option to interact with the GraphQL API.  
     The Playground at `http://localhost:9181` also provides a basic GraphQL client.
   </TabItem>
-  <TabItem value="embedded" label="Embedded">
-    You can import the [`defradb` Go package](https://pkg.go.dev/github.com/sourcenetwork/defradb) and interact with DefraDB directly via Go.  
-    Technically, any language supporting C bindings will work.
-  </TabItem>
 </Tabs>
 
 
@@ -88,19 +84,6 @@ Collections are the _types_ into which documents fit, like tables in SQL. Becaus
       rating: Float
     }
     ```
-  </TabItem>
-  <TabItem value="embedded" label="Embedded">
-    ```go
-    _, err = db.DB.AddCollection(ctx, `type Book {
-        title: String
-        plot: String
-        rating: Float}
-    }`)
-    if err != nil {
-        // Fails for example if the collection is already added
-        log.Fatalf("Failed to add collection: %v", err)
-    }
-  ```
   </TabItem>
 </Tabs>
 
@@ -220,32 +203,6 @@ Collections are the _types_ into which documents fit, like tables in SQL. Becaus
       }
     }
     ```
-  </TabItem>
-  <TabItem value="embedded" label="Embedded">
-    ```go title="Create a new document of type Book"
-    createResult := db.DB.ExecRequest(
-        ctx, `
-        mutation {
-          add_Book(input: {
-            title: $title,
-            plot: $plot,
-            rating: $rating
-          })
-        }
-        `,
-        client.WithVariables(map[string]any{
-            "title": "Infinite Jest",
-            "plot": "A gargantuan, mind-altering tragi-comedy about the Pursuit of Happiness in America.",
-            "rating": 4.25,
-        }),
-    )
-    if len(createResult.GQL.Errors) > 0 {
-        for _, gqlErr := range createResult.GQL.Errors {
-            log.Printf("GraphQL error on create: %v\n", gqlErr)
-        }
-        log.Fatalf("Failed to create document in DefraDB.")
-    }
-  ```
   </TabItem>
 </Tabs>
 

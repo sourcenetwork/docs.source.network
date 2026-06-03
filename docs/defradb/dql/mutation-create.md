@@ -51,7 +51,6 @@ Once you have [created collections](/schema/collections.md), you can start addin
       }
     '
     ```
-
     ```json title="Result"
     {
       "data": {
@@ -103,7 +102,6 @@ Once you have [created collections](/schema/collections.md), you can start addin
       }
     }
     ```
-
     ```json title="Result"
     {
       "data": {

@@ -1,8 +1,6 @@
 ---
-sidebar_label: Grouping
-sidebar_position: 110
+title: Group results
 ---
-# Grouping
 
 Grouping allows a collection of results from a query to be "grouped" into sections based on some field. These sections are called sub-groups, and are based on the equality of fields within objects, resulting in clusters of groups. Any object field may be used to group objects together. Additionally, multiple fields may be used in the group by clause to further segment the groups over multiple dimensions.
 
