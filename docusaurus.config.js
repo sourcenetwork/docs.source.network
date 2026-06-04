@@ -178,6 +178,14 @@ const config = {
             className: 'code-block-valid-line',
             line: 'valid',
           },
+          {
+            className: 'code-block-collapse',
+            line: 'collapse',
+          },
+          {
+            className: 'code-block-no-collapse',
+            line: 'no-collapse',
+          },
         ],
       },
       algolia: {
@@ -186,7 +194,9 @@ const config = {
         indexName: "source-docs",
       },
     }),
-  clientModules: [],
+  clientModules: [
+    require.resolve('./src/plugins/code-blocks.js')
+  ],
   plugins: [
     [
       require.resolve("./src/plugins/plausible"),
