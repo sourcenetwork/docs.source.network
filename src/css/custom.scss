@@ -588,7 +588,7 @@ body .DocSearch {
 /* Color for highlighted lines in code blocks */
 .theme-code-block {
   .theme-code-block-highlighted-line {
-    border-right: 3px var(--ifm-color-primary) solid;
+    border-left: 3px var(--ifm-color-primary) solid;
 
     [data-theme="dark"] & {
       background-color: rgb(47 47 47);
