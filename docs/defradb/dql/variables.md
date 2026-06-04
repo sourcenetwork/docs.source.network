@@ -256,7 +256,7 @@ query ($plot: String, $minRating: Float64) {
 
 You can make it mandatory to provide a value to a variable by appending an exclamation mark `!` to the type in the query constructor.
 
-```graphql title="Query without value for variable"
+```graphql title="Query with mandatory $title variable"
 # highlight-next-line
 query ($title: String!, $minRating: Float64) {
   Book(filter: {
@@ -278,8 +278,16 @@ query ($title: String!, $minRating: Float64) {
 
 ## Default values
 
-blabla
+You can set a default value for a variable in its declaration:
 
-Variable definitions can be optional or required. In the case above, since there isn’t an ! next to the Episode type, it’s optional. But if the field you are passing the variable into requires a non-null argument, then the variable has to be required as well.
-
-Default values can also be assigned to the variables in the query by adding the default value after the type declaration:
+```graphql title="Query with default value for $title variable"
+# highlight-next-line
+query ($title: String = "%%", $minRating: Float64) {
+  Book(filter: {
+    title: { _like: $title }, rating: { _geq: $minRating }
+  }) {
+    title
+    rating
+  }
+}
+```

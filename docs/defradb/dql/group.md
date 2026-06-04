@@ -2,80 +2,463 @@
 title: Group results
 ---
 
-Grouping allows a collection of results from a query to be "grouped" into sections based on some field. These sections are called sub-groups, and are based on the equality of fields within objects, resulting in clusters of groups. Any object field may be used to group objects together. Additionally, multiple fields may be used in the group by clause to further segment the groups over multiple dimensions.
+The `groupBy` argument allows you to group results into buckets basing on the value of one or more fields. For example, books of different genre can be grouped together, and separated from books of other genres.
 
-Once one or more group by fields have been selected using the `groupBy` argument, which accepts an array of length one or more, you may only access certain fields in the return object. Only the indicated `groupBy` fields and aggregate function results may be included in the result object. If you wish to access the sub-groups of individual objects, a special return field called `_group` is available. This field matches the root query type, and can access any field in the object type.
+## Group by a single field
 
-In the example below, we are querying for all the books whose author's name begins with 'John'. The results will then be grouped by genre, and will return the genre name and the sub-groups `title` and `rating`.
-```graphql
+```graphql title="Group books by genre"
 {
-    Books(filter: {author: {name: {_like: "John%"}}}, groupBy: [genre]) {
-        genre
-        _group {
-            title
-            rating
-        }
+  Book(groupBy: [genre]) {
+    genre
+    GROUP {
+      title
+      plot
+      Author {
+        name
+      }
     }
+  }
 }
 ```
-
-In the above example, we can see how the `groupBy` argument is provided and that it accepts an array of field names. We can also see how the special `_group` field can be used to access the sub-group elements.
-
-It's important to note that in the above example, the only available field from the root `Book` type is the `groupBy` field `genre`, along with the special group and aggregate proxy fields.
-
-#### Grouping on Multiple Fields {/* #grouping-on-multiple-fields */}
-As mentioned, we can include any number of fields in the `groupBy` argument to segment the data further. Which can then also be accessed in the return object, as demonstrated in the example below:
-```graphql
+```json title="Result"
 {
-    Books(filter: {author: {name: {_like: "John%"}}}, groupBy: [genre, rating]) {
-        genre
-        rating
-        _group {
-            title
-            description
-        }
-    }
+  "data": {
+    "Book": [
+      {
+        "GROUP": [
+          {
+            "author": {
+              "name": "William Golding"
+            },
+            "plot": "At the dawn of the next world war, a plane crashes on an uncharted island, stranding a group of schoolboys.",
+            "title": "Lord of the Flies"
+          },
+          {
+            "author": {
+              "name": "George Orwell"
+            },
+            "plot": "A masterpiece of rebellion and imprisonment where war is peace, freedom is slavery, and Big Brother is watching.",
+            "title": "1984"
+          },
+          {
+            "author": {
+              "name": "George Orwell"
+            },
+            "plot": "A masterpiece of rebellion and imprisonment where war is peace, freedom is slavery, and Big Brother is watching.",
+            "title": "1985"
+          },
+          {
+            "author": {
+              "name": "Victor Hugo"
+            },
+            "plot": "Victor Hugo's tale of injustice, heroism and love follows the fortunes of Jean Valjean, an escaped convict determined to put his criminal past behind him.",
+            "title": "Les Misérables"
+          },
+          {
+            "author": {
+              "name": "David Foster Wallace"
+            },
+            "plot": "A gargantuan, mind-altering tragi-comedy about the Pursuit of Happiness in America.",
+            "title": "Infinite Jest"
+          }
+        ],
+        "genre": "Fiction"
+      },
+      {
+        "GROUP": [
+          {
+            "author": {
+              "name": "George Orwell"
+            },
+            "plot": "The adventures of a penniless British writer among the down-and-outs of two great cities.",
+            "title": "Down and Out in Paris and London"
+          }
+        ],
+        "genre": "Biography"
+      },
+      {
+        "GROUP": [
+          {
+            "author": {
+              "name": "David Foster Wallace"
+            },
+            "plot": "Do lobsters feel pain? Did Franz Kafka have a funny bone? What is John Updike's deal, anyway? And what happens when adult video starlets meet their fans in person? Essays that are also enthralling narrative adventures.",
+            "title": "Consider the Lobster and Other Essays"
+          }
+        ],
+        "genre": "Nonfiction"
+      }
+    ]
+  }
 }
 ```
 
-#### Grouping on Related Objects {/* #grouping-on-related-objects */}
-Objects often have related objects within their type definition indicated by the `@relation` directive on the respective object. We can use the grouping system to split results over the related object and the root type fields.
+- `groupBy` &ndash; Takes a list of field names.
+- `GROUP` &ndash; The aggregate sub-object contains all fields of the root object (`Book`), including relationships. The sub-object can be tweaked to further refine its output with (see [Combine root and `GROUP` query arguments](#root-group-query-args)).
 
-Like any other group query, we are limited in which fields we can access indicated by the `groupBy` argument's fields. If we include a subtype that has a `@relation` directive in the `groupBy` list, we can access the entire relations fields.
+:::important Allowed return fields
+The return object can only include the grouped-by fields and the `GROUP` sub-object. For example, in a query with `groupBy: [genre, rating]`, `genre` and `rating` are the only fields that can be directly returned. Any other field can be accessed from the `GROUP` sub-object.
+:::
 
-Only "One-to-One" and "One-to-Many" relations can be used in a `groupBy` argument.
+## Group by relationship {/* #relationships */}
 
-Given a type definition defined as:
-```graphql
-type Book {
-    title: String
-    genre: String
-    rating: Float
-    author: Author @relation
-}
+You can group results by a relationship fields as well. You can only group by the whole object; grouping by object sub-fields (i.e. `groupBy: author.name` ) is not supported.
 
-type Author {
-    name: String
-    written: [Book] @relation
-}
-```
-
-We can create a group query over books and their authors, as demonstrated in the example below:
-```graphql
+```graphql title="Group books by author"
 {
-    Books(groupBy: [author]) {
-        Author {
-            name
-        }
-        _group {
-            title
-            genre
-            rating
-        }
+  Book(groupBy: [author]) {
+    author {
+      name
     }
+    GROUP {
+      title
+      plot
+    }
+  }
+}
+```
+```json title="Result"
+{
+  "data": {
+    "Book": [
+      {
+        "GROUP": [
+          {
+            "plot": "At the dawn of the next world war, a plane crashes on an uncharted island, stranding a group of schoolboys.",
+            "title": "Lord of the Flies"
+          }
+        ],
+        "author": {
+          "name": "William Golding"
+        }
+      },
+      {
+        "GROUP": [
+          {
+            "plot": "The adventures of a penniless British writer among the down-and-outs of two great cities.",
+            "title": "Down and Out in Paris and London"
+          },
+          {
+            "plot": "A masterpiece of rebellion and imprisonment where war is peace, freedom is slavery, and Big Brother is watching.",
+            "title": "1984"
+          },
+          {
+            "plot": "A masterpiece of rebellion and imprisonment where war is peace, freedom is slavery, and Big Brother is watching.",
+            "title": "1985"
+          }
+        ],
+        "author": {
+          "name": "George Orwell"
+        }
+      },
+      {
+        "GROUP": [
+          {
+            "plot": "Do lobsters feel pain? Did Franz Kafka have a funny bone? What is John Updike's deal, anyway? And what happens when adult video starlets meet their fans in person? Essays that are also enthralling narrative adventures.",
+            "title": "Consider the Lobster and Other Essays"
+          },
+          {
+            "plot": "A gargantuan, mind-altering tragi-comedy about the Pursuit of Happiness in America.",
+            "title": "Infinite Jest"
+          }
+        ],
+        "author": {
+          "name": "David Foster Wallace"
+        }
+      },
+      {
+        "GROUP": [
+          {
+            "plot": "Victor Hugo's tale of injustice, heroism and love follows the fortunes of Jean Valjean, an escaped convict determined to put his criminal past behind him.",
+            "title": "Les Misérables"
+          }
+        ],
+        "author": {
+          "name": "Victor Hugo"
+        }
+      }
+    ]
+  }
 }
 ```
 
-As you can see, we can access the entire `Author` object in the main return object without having to use any special proxy fields.
+## Group by multiple fields {/* #multiple-fields */}
 
-Group operations can include any combination, single or multiple, individual field or related object, that a developer needs.
+You can create sub-groups within groups by providing multiple fields to `groupBy`. The first field creates groups; the second field sub-groups for each group; and so on.
+
+```graphql title="Group books by genre first; then by author"
+{
+  Book(groupBy: [genre, author]) {
+    genre
+    GROUP {
+      title
+      plot
+    }
+  }
+}
+```
+```json title="Result"
+{
+  "data": {
+    "Book": [
+      {
+        "GROUP": [
+          {
+            "plot": "At the dawn of the next world war, a plane crashes on an uncharted island, stranding a group of schoolboys.",
+            "title": "Lord of the Flies"
+          }
+        ],
+        "author": {
+          "name": "William Golding"
+        }
+      },
+      {
+        "GROUP": [
+          {
+            "plot": "The adventures of a penniless British writer among the down-and-outs of two great cities.",
+            "title": "Down and Out in Paris and London"
+          },
+          {
+            "plot": "A masterpiece of rebellion and imprisonment where war is peace, freedom is slavery, and Big Brother is watching.",
+            "title": "1984"
+          },
+          {
+            "plot": "A masterpiece of rebellion and imprisonment where war is peace, freedom is slavery, and Big Brother is watching.",
+            "title": "1985"
+          }
+        ],
+        "author": {
+          "name": "George Orwell"
+        }
+      },
+      {
+        "GROUP": [
+          {
+            "plot": "Do lobsters feel pain? Did Franz Kafka have a funny bone? What is John Updike's deal, anyway? And what happens when adult video starlets meet their fans in person? Essays that are also enthralling narrative adventures.",
+            "title": "Consider the Lobster and Other Essays"
+          },
+          {
+            "plot": "A gargantuan, mind-altering tragi-comedy about the Pursuit of Happiness in America.",
+            "title": "Infinite Jest"
+          }
+        ],
+        "author": {
+          "name": "David Foster Wallace"
+        }
+      },
+      {
+        "GROUP": [
+          {
+            "plot": "Victor Hugo's tale of injustice, heroism and love follows the fortunes of Jean Valjean, an escaped convict determined to put his criminal past behind him.",
+            "title": "Les Misérables"
+          }
+        ],
+        "author": {
+          "name": "Victor Hugo"
+        }
+      }
+    ]
+  }
+}
+```
+
+## Combine root and `GROUP` query arguments {/* #root-group-query-args */}
+
+You can specify filters and other query arguments both at the root level and in the `GROUP` aggregate. For example, you can query for books rated at least `4.2`, group and sort them by genre, limit the group size to `3` and sort results within each group by book title:
+
+```graphql title="Grouping with query arguments at root and group level"
+{
+  Book(groupBy: [genre], order: { genre: ASC }, filter: { rating: { _geq: 4.2 }}) {
+    genre
+    GROUP(limit: 3, order: { title: ASC }) {
+      title
+    }
+  }
+}
+```
+```json title="Result"
+{
+  "data": {
+    "Book": [
+      {
+        "GROUP": [
+          {
+            "title": "1984"
+          },
+          {
+            "title": "Infinite Jest"
+          },
+          {
+            "title": "Les Misérables"
+          }
+        ],
+        "genre": "Fiction"
+      }
+    ]
+  }
+}
+```
+
+The interplay between root and `GROUP` arguments can be subtle. When grouping results, the root object returns _groups_, and individual results are moved into the `GROUP` aggregate. For example, a `limit` argument at the root level affects the number of _groups_ returned, not how many results get fed into the grouping:
+
+<div style={{float:'left', width: '49%'}}>
+```graphql title="Limit query to one group of unlimited size"
+{
+  # highlight-next-line
+  Book(groupBy: [genre, author], limit: 1) {
+    genre
+    GROUP {
+      title
+    }
+  }
+}
+```
+```json title="Result"
+{
+  "data": {
+    "Book": [
+      {
+        "GROUP": [
+          {
+            "title": "Lord of the Flies"
+          },
+          {
+            "title": "1984"
+          },
+          {
+            "title": "Les Misérables"
+          },
+          {
+            "title": "Infinite Jest"
+          }
+        ],
+        "genre": "Fiction"
+      }
+    ]
+  }
+}
+```
+</div>
+<div style={{float:'right', width: '49%'}}>
+```graphql title="Limit groups size to one result only"
+{
+  Book(groupBy: [genre, author]) {
+    genre
+    # highlight-next-line
+    GROUP(limit: 1) {
+      title
+    }
+  }
+}
+```
+```json title="Result"
+{
+  "data": {
+    "Book": [
+      {
+        "GROUP": [
+          {
+            "title": "Lord of the Flies"
+          }
+        ],
+        "genre": "Fiction"
+      },
+      {
+        "GROUP": [
+          {
+            "title": "Down and Out in Paris and London"
+          }
+        ],
+        "genre": "Biography"
+      },
+      {
+        "GROUP": [
+          {
+            "title": "Consider the Lobster and Other Essays"
+          }
+        ],
+        "genre": "Nonfiction"
+      }
+    ]
+  }
+}
+```
+</div>
+<div style={{clear:'both'}}></div>
+
+Filters at the `GROUP` level allow you to restrict the groups to get only some subset of results. However, combining filters at root and `GROUP` level can also be tricky business. If a root-level filter yields no records, there's no groups to be formed and the result set is empty. However, if a root-level filter yields enough records for a group to form, the group could still be present and empty if the `GROUP`-level filter further shrinks the result set.
+
+<div style={{float:'left', width: '49%'}}>
+```graphql title="Grouping with query arguments at root and group level"
+{
+  Book(
+    groupBy: [genre],
+    # highlight-start
+    filter: {
+      rating: { _geq: 4 },
+      plot: { _ilike: "%love%" }
+    # highlight-end
+    }
+  ) {
+    genre
+    GROUP {
+      title
+      plot
+    }
+  }
+}
+```
+```json title="Result"
+{
+  "data": {
+    "Book": []
+  }
+}
+```
+</div>
+<div style={{float:'right', width: '49%'}}>
+```graphql title="Grouping with query arguments at root and group level"
+{
+  Book(
+    groupBy: [genre],
+    # highlight-next-line
+    filter: { rating: { _geq: 4 }}
+  ) {
+    genre
+    GROUP(
+      # highlight-next-line
+      filter: { plot: { _ilike: "%love%" }}
+    ) {
+      title
+      plot
+    }
+  }
+}
+```
+```json title="Result"
+{
+  "data": {
+    "Book": [
+      {
+        "GROUP": [],
+        "genre": "Biography"
+      },
+      {
+        "GROUP": [
+          {
+            "plot": "Victor Hugo's tale of injustice, heroism and love follows the fortunes of Jean Valjean, an escaped convict determined to put his criminal past behind him.",
+            "title": "Les Misérables"
+          }
+        ],
+        "genre": "Fiction"
+      },
+      {
+        "GROUP": [],
+        "genre": "Nonfiction"
+      }
+    ]
+  }
+}
+```
+</div>
+<div style={{clear:'both'}}></div>
