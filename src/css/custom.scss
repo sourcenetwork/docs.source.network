@@ -570,6 +570,10 @@ body .DocSearch {
   );
 }
 
+.alert {
+  --ifm-link-color: var(--ifm-color-primary);
+}
+
 /* Color for version selector */
 .navbar__item.dropdown {
   .navbar__link {
