@@ -232,3 +232,7 @@ To rename the return key for a field, prefix the custom name to the field in the
   }
 }
 ```
+
+:::tip
+Filters over renamed fields require the `_alias` key. See [Filter -> Field aliases](filter.md#field-aliases) for more information.
+:::
