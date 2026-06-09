@@ -497,7 +497,7 @@ When specified explicitly, root-level and sub-objects filters are evaluated indi
 
 ## Renamed fields (aliases) {/* #field-aliases */}
 
-When a query [renames a return field](aliases.md), you can filter that field via the `_alias` key. The alias name cannot be used directly in the `filter` object.
+You can filter over [renamed fields](aliases.md) via the `_alias` key. Alias names cannot be used directly in the `filter` object.
 
 ```graphql title="Valid &ndash; Filter a renamed field with _alias"
 # valid

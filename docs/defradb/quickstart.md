@@ -139,7 +139,7 @@ Collections are the _types_ into which documents fit, like tables in SQL. Becaus
     ```
   </TabItem>
   <TabItem value="http" label="HTTP API">
-    To create documents of type `<type>`, submit a POST request to the HTTP endpoint [`/api/v1/collections/<collection>`](/defradb/references/http/api/add-document/). For example, submit a request to `/api/v1/collections/Book`. The request body should contain the documents information in JSON format.
+    To create documents of type `<type>`, submit a POST request to the HTTP endpoint [`/api/v1/collections/<type>`](/defradb/references/http/api/add-document/). For example, submit a request to `/api/v1/collections/Book`. The request body should contain the documents information in JSON format.
 
     ```http title="Create two new documents of type Book"
     POST http://localhost:9181/api/v1/collections/Book HTTP/2
