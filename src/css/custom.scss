@@ -654,3 +654,13 @@ main.docMainContainer_TBSr a[target="_blank"]::after {
   -webkit-mask-size: contain;
   -webkit-mask-repeat: no-repeat;
 }
+
+/* Override black background with green for :::info admonitions */
+.alert--info {
+  --ifm-alert-background-color: var(--ifm-color-success-contrast-background);
+}
+
+/* Override large margin bottom on code blocks within list elements */
+li div.theme-code-block {
+  margin-bottom: 0px;
+}

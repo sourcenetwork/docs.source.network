@@ -195,7 +195,7 @@ Type of Access Control Policy module to use. Options are:
 - `local`: Local-only ACP
 - `source-hub`: [SourceHub ACP](https://github.com/sourcenetwork/sourcehub)
 
-Default: `none`.
+Default: `local`.
 
 ## `acp.document.sourceHub.ChainID` {/* #acpdocumentsourcehubchainid */}
 

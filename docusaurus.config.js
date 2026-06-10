@@ -162,7 +162,7 @@ const config = {
       },
       prism: {
         theme: variableCodeTheme,
-        additionalLanguages: ['http'],
+        additionalLanguages: ['http', 'yaml'],
         magicComments: [
           // Remember to extend the default highlight class name as well!
           {
