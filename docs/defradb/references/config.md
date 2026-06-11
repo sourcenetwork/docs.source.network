@@ -191,7 +191,6 @@ Possible values:
 
 Type of Access Control Policy module to use. Options are:
 
-- `none`: Disabled
 - `local`: Local-only ACP
 - `source-hub`: [SourceHub ACP](https://github.com/sourcenetwork/sourcehub)
 
