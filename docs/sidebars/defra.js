@@ -58,6 +58,7 @@ export default {
       type: 'category',
       label: 'Security',
       items: [
+        'security/identities-authentication',
         'security/document-access-control-dac',
       ]
     },
