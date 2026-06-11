@@ -91,7 +91,7 @@ relations:
 
 ## Register policies {/* #register-policy */}
 
-After you have crafted a policy, you need to add into DefraDB so that it will be possible to attach it to specific collections. To register a policy you must provide the `PrivateKey` of an actor's identity. The actor registering the policy is stored as, _surprise_, policy creator (owner) and has administration rights on it.
+After you have crafted a policy, you need to add it into DefraDB. To register a policy you must provide the `PrivateKey` of an actor's identity. The actor registering the policy is stored as, _surprise_, policy creator (owner) and has administration rights on it. The returned `PolicyID` allows you to attach the policy to a collection.
 
 <Tabs groupId="defra">
   <TabItem value="cli" label="CLI" default>
@@ -113,6 +113,7 @@ After you have crafted a policy, you need to add into DefraDB so that it will be
     ```http 
     POST http://localhost:9181/api/v1/acp/document/policy HTTP/2
     accept: application/json
+    authorization: Bearer <jwtToken>
     content-type: text/plain
     
     name: A basic policy
@@ -285,6 +286,7 @@ You can only create ACP relationships to private documents (i.e. documents creat
     ```http
     POST http://localhost:9181/api/v1/acp/document/relationship HTTP/2
     accept: application/json
+    authorization: Bearer <jwtToken>
     content-type: application/json
 
     {
@@ -326,6 +328,7 @@ To grant a specific permission to any actor, use the wildcard `"*"` as value for
     ```http
     POST http://localhost:9181/api/v1/acp/document/relationship HTTP/2
     accept: application/json
+    authorization: Bearer <jwtToken>
     content-type: application/json
 
     {
@@ -369,6 +372,7 @@ The only actors allowed to revoke permissions are the policy creator and the ide
     ```http
     DELETE http://localhost:9181/api/v1/acp/document/relationship HTTP/2
     accept: application/json
+    authorization: Bearer <jwtToken>
     content-type: application/json
 
     {

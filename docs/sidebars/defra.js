@@ -53,6 +53,13 @@ export default {
         'p2p/replicator',
       ]
     },
+    {
+      type: 'category',
+      label: 'Security',
+      items: [
+        'security/document-access-control-dac',
+      ]
+    },
     'schema/migrate',
     'backup-restore',
     'commits',
