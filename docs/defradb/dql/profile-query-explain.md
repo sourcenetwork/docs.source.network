@@ -1,9 +1,6 @@
 ---
-sidebar_label: Explain systems
-sidebar_position: 11
+title: Profile and explain queries
 ---
-
-# Explain Systems
 
 This guide shows you how to run Explain requests in DefraDB to understand query execution and identify optimization opportunities.
 

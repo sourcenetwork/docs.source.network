@@ -42,6 +42,7 @@ export default {
         'dql/aliases',
         'dql/group',
         'dql/aggregating-functions',
+        'dql/profile-query-explain',
       ],
     },
     {
