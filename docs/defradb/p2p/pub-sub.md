@@ -10,10 +10,10 @@ When one node receives a query that updates a collection (ex. create/alter docum
 Any node in the community is at all times a *publisher* to other peers, and can at any moment become a *subscriber* to other peers.
 
 :::note
-This page assumes you have (at least) two running instances of DefraDB (see [Setup](/p2p/index#setup)).
+This page assumes you have (at least) two running instances of DefraDB (see [Peer-to-peer setup](/p2p/index.md#setup)).
 :::
 
-## DefraDB Pub-Sub P2P setup {/* #pub-sub-setup */}
+## Pub-Sub P2P setup {/* #pub-sub-setup */}
 
 To connect one node to other peers with the publisher-subscriber model, you only need the peers' [multiaddresses](https://docs.libp2p.io/concepts/addressing/). For example, a node at IP `127.0.0.1` listening on port `9171` with PeerID `12D3KooWDy7z9Y6qANCUXADpwYn7cnHoHBAL4MrAuYeWpwA9UePt` has multiaddress `/ip4/127.0.0.1/tcp/9171/p2p/12D3KooWDy7z9Y6qANCUXADpwYn7cnHoHBAL4MrAuYeWpwA9UePt`.
 
@@ -24,7 +24,7 @@ The requirements are two-fold:
     1. Connect with them
     1. Subscribe to updates on the collection
 
-### Create a common collection {/* #create-collection */}
+## Create a common collection {/* #create-collection */}
 
 All peers must know about the collection they are going to send/receive updates about. The collection must have the same fields across all peers.
 
@@ -50,7 +50,7 @@ defradb client collection add '
 ' --url localhost:9182
 ```
 
-### Connect peers {/* #connect-peers */}
+## Connect peers {/* #connect-peers */}
 
 Before being able to subscribe to collection updates, nodes must connect to each other (and become peers).
 
@@ -90,7 +90,7 @@ defradb client p2p active-peers --url localhost:9182
 ]
 ```
 
-### Subscribe to updates on a collection {/* #subscribe */}
+## Subscribe to updates on a collection {/* #subscribe */}
 
 To subscribe to collection updates, use the CLI command [`defradb client p2p collection add`](/references/cli/defradb_client_p2p_collection_add.md):
 
@@ -112,12 +112,14 @@ When a document update is submitted to Node1, Node2 receives the update as a *pu
 Apr 30 11:45:11.788 INF p2p Received new pubsub message PeerID=12D3KooWHwpvkxhfFtX7kPZSj9XJ5wvgitqZ5mt2uWVpV5kkzQX4 SenderId=12D3KooWDy7z9Y6qANCUXADpwYn7cnHoHBAL4MrAuYeWpwA9UePt Topic=bafyreigk7nwtnurbwzv3uemdqo5czgafh33q5s3cylol4ozgvja75i5mca
 ```
 
+Node2 will then broadcast the message further to any peers connected to it. This chatty architecture allows updates to travel across the P2P network to the largest extent possible, regardless of whether two specific peers are connected or not and any node's connectivity status at any one moment.
+
 :::info
 An instance's list of peers is cleared on shutdown, so you will need to reconnect peers when restarting it. Pub-sub subscriptions are instead retained across restarts.
 :::
 
-:::tip
-```shell title="Add multiple collection names at once"
+:::tip Add multiple collection names at once
+```shell
 defradb client p2p collection add <name1>,<name2>,... --url localhost:9182
 ```
 :::
