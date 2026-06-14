@@ -25,6 +25,7 @@ The `filter` object allow you to specify criterias for selecting documents. You 
     plot: String
     rating: Float
     author: Person
+    ratings: [Float]
   }
   ```
   ```graphql title="Person documents setup" test-setup-data
@@ -50,6 +51,7 @@ The `filter` object allow you to specify criterias for selecting documents. You 
       genre: "Fiction",
       plot: "A masterpiece of rebellion and imprisonment where war is peace, freedom is slavery, and Big Brother is watching.",
       rating: 4.20,
+      ratings: [3.8, 4.91, 3.1, 2.8],
       _authorID: "bae-3517d1eb-351b-5231-8387-870893ffb395"
     }) {
       _docID
@@ -79,7 +81,8 @@ The `filter` object allow you to specify criterias for selecting documents. You 
       title: "Infinite Jest",
       genre: "Fiction",
       plot: "A gargantuan, mind-altering tragi-comedy about the Pursuit of Happiness in America.",
-      rating: 4.25
+      rating: 4.25,
+      ratings: [3.1, 4.1, 4.5],
       _authorID: "bae-b59928dc-fd05-5fb7-aea2-9b24af5ebcea"
     }) {
       _docID
@@ -100,6 +103,7 @@ The `filter` object allow you to specify criterias for selecting documents. You 
       genre: "Fiction",
       plot: "Victor Hugo's tale of injustice, heroism and love follows the fortunes of Jean Valjean, an escaped convict determined to put his criminal past behind him.",
       rating: 4.21,
+      ratings: [3.9, 4.1],
       _authorID: "bae-c169e917-df52-5603-9224-39c1757f1b04"
     }) {
       _docID
@@ -263,19 +267,19 @@ filter: {
         "title": "Lord of the Flies"
       },
       {
-        "genre": "Biography",
-        "rating": 4.09,
-        "title": "Down and Out in Paris and London"
-      },
-      {
-        "genre": "Fiction",
-        "rating": 4.2,
-        "title": "1984"
-      },
-      {
         "genre": "Nonfiction",
         "rating": 4.18,
         "title": "Consider the Lobster and Other Essays"
+      },
+      {
+        "genre": "Fiction",
+        "rating": 4.25,
+        "title": "Infinite Jest"
+      },
+      {
+        "genre": "Biography",
+        "rating": 4.09,
+        "title": "Down and Out in Paris and London"
       },
       {
         "genre": "Fiction",
@@ -284,8 +288,8 @@ filter: {
       },
       {
         "genre": "Fiction",
-        "rating": 4.25,
-        "title": "Infinite Jest"
+        "rating": 4.2,
+        "title": "1984"
       }
     ]
   }
@@ -311,12 +315,12 @@ The conditional keywords `_and` and `_or` accept an array, whereas `_not` accept
   "data": {
     "Book": [
       {
-        "genre": "Biography",
-        "title": "Down and Out in Paris and London"
-      },
-      {
         "genre": "Nonfiction",
         "title": "Consider the Lobster and Other Essays"
+      },
+      {
+        "genre": "Biography",
+        "title": "Down and Out in Paris and London"
       }
     ]
   }
@@ -525,13 +529,22 @@ The [list operators](#list-operators) `_any`, `_none`, `_all` evaluate a scalar 
   Book(filter: {
     ratings: { _all: { _geq: 3.9 } }
   }) {
-    docID
+    _docID
     title
   }
 }
 ```
 ```json title="Result"
-p
+{
+  "data": {
+    "Book": [
+      {
+        "_docID": "bae-d056ef07-f21d-5c0b-885b-25c35f04dea8",
+        "title": "Les Misérables"
+      }
+    ]
+  }
+}
 ```
 
 ```graphql title="Return books having at least one rating lower than 3.5"
@@ -539,13 +552,26 @@ p
   Book(filter: {
     ratings: { _any: { _lt: 3.5 } }
   }) {
-    docID
+    _docID
     title
   }
 }
 ```
 ```json title="Result"
-p
+{
+  "data": {
+    "Book": [
+      {
+        "_docID": "bae-40292ec1-ab26-5184-8d63-486392e53dc4",
+        "title": "Infinite Jest"
+      },
+      {
+        "_docID": "bae-fca338d5-6a73-5676-8ae7-701165bd4f03",
+        "title": "1984"
+      }
+    ]
+  }
+}
 ```
 
 ```graphql title="Return books having not even one rating lower than 3.0"
@@ -553,13 +579,26 @@ p
   Book(filter: {
     ratings: { _none: { _lt: 3.0 } }
   }) {
-    docID
+    _docID
     title
   }
 }
 ```
 ```json title="Result"
-p
+{
+  "data": {
+    "Book": [
+      {
+        "_docID": "bae-40292ec1-ab26-5184-8d63-486392e53dc4",
+        "title": "Infinite Jest"
+      },
+      {
+        "_docID": "bae-d056ef07-f21d-5c0b-885b-25c35f04dea8",
+        "title": "Les Misérables"
+      }
+    ]
+  }
+}
 ```
 
 ## Operators and types  {/* #operators-types */}
