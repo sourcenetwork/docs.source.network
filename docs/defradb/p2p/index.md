@@ -21,7 +21,6 @@ The following P2P pages assume that you have two instances of DefraDB running on
 ```shell title="Start Node1 - Ports 9171 and 9181, root dir ~/.defradb-node1"
 defradb start --rootdir ~/.defradb-node1 --p2paddr /ip4/127.0.0.1/tcp/9171 --url localhost:9181
 ```
-
 ```shell title="Startup log for Node1"
 INF cli Starting DefraDB
 INF p2p Created LibP2P host PeerID=12D3KooWDy7z9Y6qANCUXADpwYn7cnHoHBAL4MrAuYeWpwA9UePt Address=[/ip4/127.0.0.1/tcp/9171]
@@ -31,8 +30,6 @@ INF p2p Created LibP2P host PeerID=12D3KooWDy7z9Y6qANCUXADpwYn7cnHoHBAL4MrAuYeWp
 ```shell title="Start Node2 - Ports 9172 and 9182, root dir ~/.defradb-node2"
 defradb start --rootdir ~/.defradb-node2 --p2paddr /ip4/127.0.0.1/tcp/9172 --url localhost:9182
 ```
-
-
 ```shell title="Startup log for Node2"
 INF cli Starting DefraDB
 INF p2p Created LibP2P host PeerID=12D3KooWHwpvkxhfFtX7kPZSj9XJ5wvgitqZ5mt2uWVpV5kkzQX4 Address=[/ip4/127.0.0.1/tcp/9172]

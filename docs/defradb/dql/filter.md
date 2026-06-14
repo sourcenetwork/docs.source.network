@@ -2,10 +2,10 @@
 title: Filter documents
 ---
 
-It's fantastic to store thousands of documents, but the world would be quite a silly place if you couldn't filter through them, wouldn't it?
+It's fantastic to be able to store thousands of documents, but all this would be a silly business if you couldn't filter through them, wouldn't it?
 The `filter` object allow you to specify criterias for selecting documents. You can filter on:
-- [Individual fields](#fields-individual)
-- [A combination of fields](#fields-combined)
+- [Single fields](#fields-single)
+- [A combination of fields](#fields-multiple)
 - [Relationship sub-objects](#rel-sub-objects)
 
 <details>
@@ -109,7 +109,7 @@ The `filter` object allow you to specify criterias for selecting documents. You 
   ```
 </details>
 
-## Individual fields  {/* #individual-fields */}
+## Single fields  {/* #fields-single */}
 
 ```graphql title='Return books with title "1984"'
 {
@@ -187,7 +187,7 @@ filter: {
 }
 ```
 
-## Combine fields  {/* #fields-combined */}
+## Multiple fields  {/* #fields-multiple */}
 
 Additional fields listed in the `filter` object are implicitly combined with an `AND` operator.
 
@@ -324,8 +324,7 @@ The conditional keywords `_and` and `_or` accept an array, whereas `_not` accept
 ```
 :::
 
-
-## Relationship sub-objects  {/* #rel-sub-objects */}
+## Relationship fields  {/* #rel-sub-objects */}
 
 Filters can access fields within nested objects, such as in relationships:
 
@@ -361,7 +360,7 @@ The syntax to filter over sub-objects has one more level of nesting in field nam
 
 ### One-to-many relationships {/* #rels-one-to-many */}
 
-When filtering over one-to-many relationships from the _many_ side, a document is returned if _at least one_ of the linked documents fulfills the conditions; not all documents need to match the conditions.
+When filtering over one-to-many relationships from the _many_ side, a document is returned if _at least one_ of the linked documents fulfills the conditions: not all documents need to match the conditions.
 
 For example, when filtering over people that have authored books of genre `Fiction`, every person that has _at least one_ fiction book among their authored books will be returned:
 
@@ -517,30 +516,85 @@ You can filter over [renamed fields](aliases.md) via the `_alias` key. Alias nam
 }
 ```
 
+## List fields {/* #field-list */}
+
+The [list operators](#list-operators) `_any`, `_none`, `_all` evaluate a scalar operator on the elements of a list or JSON field and return a boolean. For example, `_any: { _lt: 3.5 }` evaluates to `true` if all the elements of the list are lower than `3.5`. List operators yield `false` on empty lists, `null` values, or non-list fields.
+
+```graphql title="Return books having only ratings of at least 3.9"
+{
+  Book(filter: {
+    ratings: { _all: { _geq: 3.9 } }
+  }) {
+    docID
+    title
+  }
+}
+```
+```json title="Result"
+p
+```
+
+```graphql title="Return books having at least one rating lower than 3.5"
+{
+  Book(filter: {
+    ratings: { _any: { _lt: 3.5 } }
+  }) {
+    docID
+    title
+  }
+}
+```
+```json title="Result"
+p
+```
+
+```graphql title="Return books having not even one rating lower than 3.0"
+{
+  Book(filter: {
+    ratings: { _none: { _lt: 3.0 } }
+  }) {
+    docID
+    title
+  }
+}
+```
+```json title="Result"
+p
+```
+
 ## Operators and types  {/* #operators-types */}
 
-### Supported operators  {/* #operators */}
+### Scalar operators  {/* #scalar-operators */}
 
 | Operator   | Description |
 | ---------- | ----------- |
-| `_eq`      | Equal to        |
-| `_neq`     | Not Equal to        |
-| `_gt`      | Greater Than        |
-| `_geq`     | Greater or Equal to        |
-| `_lt`      | Less Than        |
-| `_leq`     | Less or Equal to        |
-| `_in`      | In list        |
-| `_nin`     | Not In list        |
-| `_like`    | Like sub-string (supports `%` wildcard)        |
-| `_ilike`   | Case-Insensitive Like sub-string (supports `%` wildcard)        |
-| `_nlike`   | Not like sub-string (supports `%` wildcard)      |
-| `_nilike`  | Not like case-Insensitive sub-string (supports `%` wildcard)      |
+| `_eq`      | Equal to |
+| `_neq`     | Not Equal to |
+| `_gt`      | Greater Than |
+| `_geq`     | Greater or Equal to |
+| `_lt`      | Less Than |
+| `_leq`     | Less or Equal to |
+| `_in`      | In list |
+| `_nin`     | Not In list |
+| `_like`    | Like sub-string (supports `%` wildcard) |
+| `_ilike`   | Case-Insensitive Like sub-string (supports `%` wildcard) |
+| `_nlike`   | Not like sub-string (supports `%` wildcard) |
+| `_nilike`  | Not like case-Insensitive sub-string (supports `%` wildcard) |
 
-### Operators supported by scalar types  {/* #operators-by-type */}
+### List operators  {/* #list-operators */}
+
+| Operator   | Description |
+| ---------- | ----------- |
+| `_any`      | `true` if at least one element is `true` |
+| `_none`     | `true` if none of the elements are `true` |
+| `_all`      | `true` if all of the elements are `true` |
+
+### Operators supported by type  {/* #scalar-operators-by-type */}
 
 | Scalar Type | Operators |
 | -------- | -------- |
-| String     | `_eq, _neq, _like, _ilike, _nlike, _nilike, _in, _nin`     |
-| Int, Float    | `_eq, _neq, _gt, _geq, _lt, _leq, _in, _nin`     |
-| Boolean     | `_eq, _neq, _in, _nin`     |
-| DateTime     | `_eq, _neq, _gt, _geq, _lt, _leq, _in, _nin`     |
+| String, JSON, Blob | `_eq, _neq, _like, _ilike, _nlike, _nilike, _in, _nin` |
+| Int, Float | `_eq, _neq, _gt, _geq, _lt, _leq, _in, _nin` |
+| Boolean, ID | `_eq, _neq, _in, _nin` |
+| DateTime | `_eq, _neq, _gt, _geq, _lt, _leq, _in, _nin` |
+| List | `_any, _all, _none, _eq, _neq` |

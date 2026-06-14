@@ -14,7 +14,7 @@ mutation {
 - `filter` &ndash; Criteria for selecting documents to update (see [Filter documents](filter.md)).
 - `input` &ndash; JSON-like object containing the updates, same format as for [creating documents](mutation-create.md).
 
-Only one among `docID` and `filter` is needed to pinpoint the documents to update. If both are given, `docID` takes precedence.
+If both `filter` and `docID` are given, both criteria must be fulfilled for a document to be selected.
 
 :::tip
 To remove a field from a document, set its value to `null`.

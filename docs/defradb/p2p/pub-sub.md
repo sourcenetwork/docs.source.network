@@ -123,3 +123,18 @@ An instance's list of peers is cleared on shutdown, so you will need to reconnec
 defradb client p2p collection add <name1>,<name2>,... --url localhost:9182
 ```
 :::
+
+## Pub-Sub and private documents {/* #private-docs */}
+
+[Private documents](/security/document-access-control-dac.md#public-private-docs) get synced to other nodes only if their identities have the appropriate permissions in the node serving the documents: Node2 will not receive a private document from Node1, unless it has a `reader` relation to it. However, local policies don't get synced together with the private documents they are attached to. Policies are enforced until the private documents are on the node hosting the policies; when a private document leaves the node, the document might get synched further than intended.
+
+Take for example this scenario:
+- Node1, Node2, Node3 share a collection over Pub-Sub
+- Node1 has a **local** Document Access Control policy attached to the collection
+- Node1 broadcasts an update for a private document in the collection
+- Node2 is a `reader` on the document; Node3 has no relation with it
+
+Only Node2 will receive the details of the updated document from Node1, because Node3 has no permissions to access the document _according to Node1's policies_.
+However, now Node2 also has the updated document, and will happily broadcast it to Node3, so that Node3 also receives the updated document even if Node1 didn't intend to.
+
+To ensure that private documents stay private in P2P networks, either deploy the same [Document Access Control policies](/security/document-access-control-dac.md) across all network peers, or host your policies on SourceHub.

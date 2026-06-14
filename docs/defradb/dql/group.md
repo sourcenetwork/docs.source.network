@@ -2,7 +2,14 @@
 title: Group results
 ---
 
-The `groupBy` argument allows you to group results into buckets basing on the value of one or more fields. For example, books of different genre can be grouped together, and separated from books of other genres.
+The `groupBy` argument allows you to group results into buckets basing on the value of one or more fields. For example, books of different genre can be grouped together, and separated from books of other genres. Queries with `groupBy` have an optional `GROUP` sub-object among its return fields, which supports all arguments of [query blocks](mutation-query.md#syntax).
+
+```graphql title="Syntax"
+TYPE(groupBy: [fieldName]) {
+  fieldName
+  GROUP(filter: object, docID: [ID], order: [object], limit: int, offset: int, orderBy: [object])
+}
+```
 
 ## Group by a single field
 
@@ -97,7 +104,7 @@ The `groupBy` argument allows you to group results into buckets basing on the va
 - `GROUP` &ndash; The aggregate sub-object contains all fields of the root object (`Book`), including relationships. The sub-object can be tweaked to further refine its output with (see [Combine root and `GROUP` query arguments](#root-group-query-args)).
 
 :::important Allowed return fields
-The return object can only include the grouped-by fields and the `GROUP` sub-object. For example, in a query with `groupBy: [genre, rating]`, `genre` and `rating` are the only fields that can be directly returned. Any other field can be accessed from the `GROUP` sub-object.
+The return object can only include the grouped-by fields, the `GROUP` sub-object, and the result of other [aggregating functions](aggregating-functions.md). For example, in a query with `groupBy: [genre, rating]`, `genre` and `rating` are the only fields that can be directly returned. Other fields can be accessed from the `GROUP` sub-object.
 :::
 
 ## Group by relationship {/* #relationships */}
@@ -264,7 +271,7 @@ You can create sub-groups within groups by providing multiple fields to `groupBy
 
 ## Combine root and `GROUP` query arguments {/* #root-group-query-args */}
 
-You can specify filters and other query arguments both at the root level and in the `GROUP` aggregate. For example, you can query for books rated at least `4.2`, group and sort them by genre, limit the group size to `3` and sort results within each group by book title:
+You can specify filters and other [query arguments](mutation-query.md#syntax) both at the root level and in the `GROUP` aggregate. For example, you can query for books rated at least `4.2`, group and sort them by genre, limit the group size to `3` and sort results within each group by book title:
 
 ```graphql title="Grouping with query arguments at root and group level"
 {

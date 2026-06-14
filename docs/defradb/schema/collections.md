@@ -25,7 +25,7 @@ type Book {
 - `Float32`: A signed single-precision floating-point value.
 - `String`: A UTF‐8 character sequence.
 - `Boolean`: `true` or `false`.
-- `ID`: A unique identifier. Although the `ID` type is serialized in the same way as a `String`, defining it as an ID communicates that it is not intended to be human‐readable.
+- `ID`: A unique identifier.
 - `DateTime`: (ex. `2017-07-23T03:46:56.647Z`)
 - `JSON`: A JSON string (ex. `{ "privacy": { "is": "sexy" } }`). JSON fields get [specially indexed](indexes.md#json-fields-indexing).
 - `Blob`: A hex string (ex. `00FF`).

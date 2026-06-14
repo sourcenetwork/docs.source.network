@@ -15,7 +15,7 @@ mutation {
 - `docID` &ndash; DocID of the document(s) to delete. Either a string or a list of strings.
 - `filter` &ndash; Criteria for selecting documents to delete (see [Filter documents](filter.md)).
 
-Only one among `docID` and `filter` is needed to pinpoint the documents to delete. If both are given, `docID` takes precedence.
+If both `filter` and `docID` are given, both criteria must be fulfilled for a document to be selected.
 
 :::note
 You cannot restore a deleted document, nor re-create a document with the exact same content as a previously deleted one, because the `docID` would conflict. In case you need to re-create a deleted document, create a new document with only _some_ of the fields of the deleted document, and then update it to include all the wished information.

@@ -130,27 +130,39 @@ Once you have [created some documents](mutation-create.md), you can query the da
   ```
 </details>
 
-## Anatomy of a query block
+## Anatomy of a query block {/* #syntax */}
 
-GraphQL queries have the following form:
+GraphQL queries in DefraDB have the following form:
 
 ```graphql title="Syntax &ndash; Query block" test-skip
 {
-  TYPE(args) {
-    [returnField]
+  TYPE(
+    filter: object, docID: [ID],
+    order: [object],
+    limit: int, offset: int,
+    orderBy: [object]
+  ) {
+    [fieldName]
   }
 }
 ```
 - `TYPE` &ndash; Name of the collection to query.
-- `args` &ndash; Arguments for directing the query, such as [filtering](filter.md), [sorting](sorting-and-ordering.md), [grouping](grouping.md), [skipping/limiting](limiting-and-pagination.md).
-- `[returnField]` &ndash; A list of fields to return for the matched documents. Queries only return the exact fields requested (GraphQL has no equivalent of the `SQL SELECT *` syntax).
+- `filter`, `docID` &ndash; Criteria for documents to select, see [Filter documents](filter.md).
+- `order` &ndash; Results sorting fields, see [Sort and order results](sort-order.md).
+- `limit`, `offset` &ndash; Number of results to return/skip, see [Limit and paginate results](limit-paginate.md).
+- `groupBy` &ndash; Fields to group results by, see [Group results](group.md).
+- `[fieldName]` &ndash; List of fields to return for the selected documents. Queries only return the exact fields requested (GraphQL has no equivalent of the SQL `SELECT *` syntax).
 
 ```graphql title="Example query &ndash; Filter books by genre and author's name"
 {
-  Book(filter: {
-    genre: { _eq: "Fiction" },
-    author: { name: { _eq: "George Orwell" } }
-  }, limit: 3) {
+  Book(
+    filter: {
+      genre: { _eq: "Fiction" },
+      author: { name: { _eq: "George Orwell" } }
+    },
+    limit: 3,
+    order: { "title": ASC }
+  ) {
     title
     plot
     author {
@@ -539,6 +551,10 @@ You can query the database for a specific document ID via the `docID` argument i
   }
 }
 ```
+
+:::tip
+If both `filter` and `docID` are given, both criteria must be fulfilled for a document to be selected.
+:::
 
 {/*
 ## Run different query parts

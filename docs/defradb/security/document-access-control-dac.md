@@ -54,12 +54,12 @@ resources:
   ```
 :::
 
-### The _policy administrator_ relation  {/* #admin-privileges */}
+### Relation managers  {/* #manages-relation */}
 
-The creator of a policy always retains administration privileges onto the policy: they can grant permissions to other people, as well as delete the policy entirely.
-The relation type `manages` grants administration privileges to other actors. Actors with the `manages` relation will be able to grant permissions to others and alter the policy in the same way as the owner can.
+The actor who [registers a policy](#register-policy) has always the privilege to [grant permissions](#grant-permissions) to other actors.
+The relation type `manages` gives other actors the permission to create relations of the specified type. They become _managers_ of the relation types given in the `manages` list.
 
-```yml
+```yml title='Relation name "admin" has privilege to grant the "reader" relation'
 relations:
   - name: reader
   - name: admin
@@ -69,7 +69,7 @@ relations:
 
 ## Register policies {/* #register-policy */}
 
-After you have crafted a policy, you need to add it into DefraDB. To register a policy you must provide the `PrivateKey` of an actor's identity. The actor registering the policy is stored as, _surprise_, policy creator (owner) and has administration rights on it. The returned `PolicyID` allows you to attach the policy to a collection.
+A policy doesn't do anything until it's added into DefraDB. To register a policy you must provide the `PrivateKey` of an actor's identity. The actor registering the policy is stored as, _surprise_, policy creator (owner) and has administration rights on it. The returned `PolicyID` allows you to attach the policy to a collection.
 
 <Tabs groupId="defra">
   <TabItem value="cli" label="CLI" default>
@@ -230,11 +230,15 @@ defradb client query '
 }
 ```
 
+:::important Private documents and Pub-Sub networks
+Private documents get synced to other nodes only if their identities have the appropriate permissions in the node serving the documents. However, local policies don't get synced together with the private documents they are attached to. For more information, see [Pub-Sub and private documents](/p2p/pub-sub.md#private-docs).
+:::
+
 ## Grant permissions to other actors {/* #grant-permissions */}
 
 To give another actor permission to access or alter a document, create a *relation* between the actor and the document ID. The relation defines what type of permission (according to the collection's policy) the actor will get. You can think that the relation assigns the identity a _role_ (ex. `reader`) with respect to a specific document. Target actors are identified by their `DID` key.
 
-The only actors allowed to grant permissions to others are the policy creator and the identities having the [administration relation](#admin-privileges).
+The only actors allowed to grant permissions to others are the policy creator and the identities with the appropriate [manage relation](#manage-relation).
 
 :::important
 You can only create ACP relationships to private documents (i.e. documents created with an identity). Public documents are not registered in the ACP system and cannot be permissioned.
@@ -324,7 +328,7 @@ To grant a specific permission to any actor, use the wildcard `"*"` as value for
 
 To revoke an actor's document permissions, delete their relationship with the given document ID. Revoking [relations granted to any actor with `"*"`](#wildcard-relations) only revokes that individual relation: it doesn't revoke _all_ relations registered for _any_ actor.
 
-The only actors allowed to revoke permissions are the policy creator and the identities having the [administration relation](#admin-privileges).
+The only actors allowed to revoke permissions are the policy creator and the identities with the appropriate [manage relation](#manage-reltion).
 
 <Tabs groupId="defra">
   <TabItem value="cli" label="CLI" default>

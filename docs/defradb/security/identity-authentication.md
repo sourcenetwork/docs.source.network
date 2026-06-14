@@ -47,7 +47,6 @@ The string `<jwtToken>` is a JSON Web Token resulting from the signature of a sp
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIwMzYzZjIyNGJmZGRiNjQxYmQwY2Q0YjU0MDliYzkyMWM0MDU0NjA3MjdmODY0ZjZkYmEzM2RhNWRkN2IwNjFiY2YiLCJhdWQiOiJsb2NhbGhvc3Q6OTE3MSIsImV4cCI6MTUxNjIzOTAyMjAsIm5iZiI6MTUxNjIzOTAsImlhdCI6MTUxNjIzOTAyMn0.KyLjB43k1IJ7VHgZOVFn3HIP71BmrEX1VPYkUzVRVpk
 ```
 
-
 ### Header
 ```json title="Example &ndash; Header"
 {
@@ -62,7 +61,8 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIwMzYzZjIyN
   "sub": "0363f224bfddb641bd0cd4b5409bc921c405460727f864f6dba33da5dd7b061bcf",
   "aud": "localhost:9171",
   "exp": 15162390220,
-  "nbf": 15162390
+  "nbf": 15162390,
+  "key_type": "secp256k1"
 }
 ```
 
