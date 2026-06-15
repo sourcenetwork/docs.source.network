@@ -3,7 +3,7 @@
 /** @type {(context: unknown, options: { websiteID: string; analyticsDomain: string; scriptName?: string; dataDomains?: string; trackOutboundLinks?: boolean; doNotTrack?: boolean; excludeSearch?: boolean; excludeHash?: boolean; performance?: boolean; enabled?: boolean }) => import('@docusaurus/types').Plugin} */
 function umamiPlugin(_context, options) {
   const {
-    enabled = process.env.NODE_ENV === "production",
+    enabled,
     scriptName = "script.js",
     websiteID,
     dataDomains,
@@ -14,12 +14,15 @@ function umamiPlugin(_context, options) {
     performance,
   } = options;
 
-  const dom = options.analyticsDomain.replace(/\/$/, "");
+  const analyticsDomain = options.analyticsDomain ?? "";
+  const dom = analyticsDomain.replace(/\/$/, "");
   const hasProtocol = dom.startsWith("http://") || dom.startsWith("https://");
   const isLocal = dom.startsWith("localhost") || dom.startsWith("127.0.0.1");
-  const scriptSrc = hasProtocol
-    ? `${dom}/${scriptName}`
-    : `${isLocal ? "http" : "https"}://${dom}/${scriptName}`;
+  const scriptSrc = dom
+    ? hasProtocol
+      ? `${dom}/${scriptName}`
+      : `${isLocal ? "http" : "https"}://${dom}/${scriptName}`
+    : "";
 
   return {
     name: "umami-analytics",
