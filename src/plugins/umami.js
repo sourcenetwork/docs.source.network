@@ -27,7 +27,7 @@ function umamiPlugin(_context, options) {
   return {
     name: "umami-analytics",
     injectHtmlTags() {
-      if (!enabled) return {};
+      if (!enabled || !websiteID || !dom) return {};
 
       const headTags = [
         {
