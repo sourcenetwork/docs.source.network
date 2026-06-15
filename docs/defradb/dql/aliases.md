@@ -11,12 +11,12 @@ Sometimes, _Little Bobby Tables_ is the right name. Other times, you might want 
 
   ```graphql title="Database schema" test-setup-collection
   type Person {
-    name: String
+    name: String!
     authoredBooks: [Book]
   }
 
   type Book {
-    title: String
+    title: String!
     genre: String
     plot: String
     rating: Float

@@ -29,12 +29,12 @@ To remove a field from a document, set its value to `null`.
 
   ```graphql title="Database schema" test-setup-collection
   type Person {
-    name: String
+    name: String!
     authoredBooks: [Book]
   }
 
   type Book {
-    title: String
+    title: String!
     genre: String
     plot: String
     rating: Float

@@ -13,12 +13,12 @@ The `limit` and `offset` keywords allow you to control how many records a query 
 
   ```graphql title="Database schema" test-setup-collection
   type Person {
-    name: String
+    name: String!
     authoredBooks: [Book]
   }
 
   type Book {
-    title: String
+    title: String!
     genre: String
     plot: String
     rating: Float

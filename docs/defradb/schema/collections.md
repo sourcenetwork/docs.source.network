@@ -31,10 +31,10 @@ type Book {
 - `Blob`: A hex string (ex. `00FF`).
 - List: An array of another type (ex. `[String]`). Lists can not be nested.
 
-In the GraphQL syntax, an exclamation mark `!` after a type (ex. `Int!`) specifies that the field should be non-null. Although DefraDB does not support non-null scalar types, it does support lists of non-null types. For example:
-- `[Int!]` &ndash; Supported: a list of non-null `Int`.
-- `[Int]!` &ndash; Unsupported: a non-null list of (possibly null) `Int`.
-- `[Int!]!` &ndash; Unsupported: a non-null list of non-null `Int`.
+An exclamation mark `!` after a type (ex. `Int!`) specifies that the field should be non-null. The non-null modifier can also be used with lists:
+- `[Int!]` &ndash; List of non-null `Int`.
+- `[Int]!` &ndash; Non-null list of (possibly null) `Int`.
+- `[Int!]!` &ndash; Non-null list of non-null `Int`.
 
 ## Create collections {/* #create */}
 
@@ -45,7 +45,7 @@ You can create a collection with either the CLI command [`defradb client collect
     ```shell title='Create collection "Book"'
     defradb client collection add '
       type Book {
-        title: String
+        title: String!
         plot: String
         rating: Float
       }
@@ -59,7 +59,7 @@ You can create a collection with either the CLI command [`defradb client collect
     content-type: text/plain
 
     type Book {
-      title: String
+      title: String!
       plot: String
       rating: Float
     }
@@ -119,12 +119,12 @@ For example, each book is written by one author, whereas one author can write mu
 
 ```graphql title="Type Book with 1:many relationship with Author"
 type Book {
-  title: String
+  title: String!
   author: Author
 }
 
 type Author {
-  name: String
+  name: String!
   authoredBooks: [Book]
 }
 ```
@@ -141,20 +141,20 @@ For example, a student can enroll in many courses, and a course can have many st
 
 ```graphql title="Type Student with many:many relationship with Course"
 type Student {
-  name: String
+  name: String!
   age: Int
   enrollment: [Enrollment]
 }
 
 type Course {
-  title: String
-  code: String
+  title: String!
+  code: String!
   enrollment: [Enrollment]
 }
 
 type Enrollment {  # the join type
-  student: Student
-  course: Course
+  student: Student!
+  course: Course!
 }
 ```
 

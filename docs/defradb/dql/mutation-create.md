@@ -14,12 +14,12 @@ Once you have [created collections](/schema/collections.md), you can start addin
 
   ```graphql title="Database schema" test-setup-collection
   type Person {
-    name: String
+    name: String!
     authoredBooks: [Book]
   }
 
   type Book {
-    title: String
+    title: String!
     genre: String
     plot: String
     rating: Float

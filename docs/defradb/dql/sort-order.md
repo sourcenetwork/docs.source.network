@@ -12,12 +12,12 @@ The `order` object allows you to specify a different sorting for documents retur
 
   ```graphql title="Database schema" test-setup-collection
   type Person {
-    name: String
+    name: String!
     authoredBooks: [Book]
   }
 
   type Book {
-    title: String
+    title: String!
     genre: String
     plot: String
     rating: Float

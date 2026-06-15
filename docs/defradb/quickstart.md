@@ -63,7 +63,7 @@ Collections are the _types_ into which documents fit, like tables in SQL. Becaus
     ```shell
     defradb client collection add '
       type Book {
-        title: String
+        title: String!
         plot: String
         rating: Float
       }
@@ -79,7 +79,7 @@ Collections are the _types_ into which documents fit, like tables in SQL. Becaus
     content-type: text/plain
 
     type Book {
-      title: String
+      title: String!
       plot: String
       rating: Float
     }

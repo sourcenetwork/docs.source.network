@@ -19,12 +19,12 @@ Once you have [created some documents](mutation-create.md), you can query the da
   }
 
   type Company {
-    name: String
+    name: String!
     sells: [Book]
   }
 
   type Book {
-    title: String
+    title: String!
     genre: String
     plot: String
     rating: Float
