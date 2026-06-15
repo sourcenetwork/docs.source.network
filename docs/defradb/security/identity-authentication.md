@@ -41,32 +41,34 @@ HTTP requests are authenticated with an extra header:
 Authorization: Bearer <jwtToken>
 ```
 
-The string `<jwtToken>` is a JSON Web Token resulting from the signature of a specific data structure.
+where `<jwtToken>` is a JSON Web Token. It is composed of header, payload, and signature part, separated by dots:
 
-```text title="Example &ndash; Authorization header"
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIwMzYzZjIyNGJmZGRiNjQxYmQwY2Q0YjU0MDliYzkyMWM0MDU0NjA3MjdmODY0ZjZkYmEzM2RhNWRkN2IwNjFiY2YiLCJhdWQiOiJsb2NhbGhvc3Q6OTE3MSIsImV4cCI6MTUxNjIzOTAyMjAsIm5iZiI6MTUxNjIzOTAsImlhdCI6MTUxNjIzOTAyMn0.KyLjB43k1IJ7VHgZOVFn3HIP71BmrEX1VPYkUzVRVpk
+```text title="JWT token structure"
+<header>.<payload>.<signature>
 ```
 
-### Header
+#### Header
 ```json title="Example &ndash; Header"
 {
-  "alg": "HS256",
+  "alg": "HS256K",
   "typ": "JWT"
 }
 ```
 
-### Payload
+Valid values for `alg` are: `HS256K`, `EdDSA`. The algorithm must match the identity key type.
+
+#### Payload
 ```json title="Example &ndash; Payload"
 {
   "sub": "0363f224bfddb641bd0cd4b5409bc921c405460727f864f6dba33da5dd7b061bcf",
   "aud": "localhost:9171",
-  "exp": 15162390220,
-  "nbf": 15162390,
+  "exp": 1781536870,
+  "nbf": 1781532870,
   "key_type": "secp256k1"
 }
 ```
 
-### Signature
+#### Signature
 
 The JWT token is signed with the `PrivateKey` corresponding to the `PublicKey` specified in the `sub` value of the payload.
 

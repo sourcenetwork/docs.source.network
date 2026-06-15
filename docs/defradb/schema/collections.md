@@ -284,7 +284,7 @@ To see all collections available on an instance, use the CLI command [`defradb c
       {
         "FieldID": "bafyreihfb2izf5akjuua5jkijrgsgievsspboopupjq2its25owgle5pzm",
         "Name": "title",
-        "Kind": 11,
+        "Kind": 26,
         "Typ": 1,
         "RelationName": null,
         "IsPrimary": false,

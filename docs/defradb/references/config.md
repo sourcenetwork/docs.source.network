@@ -10,9 +10,7 @@ DefraDB's configuration file is called `config.yaml` and located within DefraDB 
 The default root directory is `$HOME/.defradb`. It can be changed via the `--rootdir` CLI flag when starting a node with `defradb start`.
 
 ::::tip
-
 Relative paths in config settings are interpreted as relative to the DefraDB root directory.
-
 ::::
 
 ## `api.address` {/* #apiaddress */}
@@ -43,7 +41,7 @@ Maximum file size of the value log files. Default: `2^30`.
 
 Key type for `node-identity-key`: either `secp256k1` or `ed25519`. Default: `secp256k1`.
 
-See [Keys](./keys.md).
+See [Keys](/install/keys.md).
 
 ## `datastore.maxtxnretries` {/* #datastoremaxtxnretries */}
 
@@ -56,9 +54,7 @@ This is only used within the P2P system and does not affect operations initiated
 Whether to skip generating an encryption key and disable encryption at rest. Default: `false`.
 
 ::::warning
-
 The value of this option cannot be changed after the instance is started for the first time.
-
 ::::
 
 ## `datastore.nosearchableencryption` {/* #datastorenosearchableencryption */}
@@ -70,9 +66,7 @@ Whether to skip generating a searchable encryption key and disable searchable en
 Whether to skip signing new blocks.
 
 ::::warning
-
 The value of this option cannot be changed after the instance is started for the first time.
-
 ::::
 
 ## `datastore.store` {/* #datastorestore */}

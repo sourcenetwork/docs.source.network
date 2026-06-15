@@ -6,7 +6,7 @@ slug: /
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-DefraDB is the database for local-first applications that prioritizes data ownership, personal privacy, and P2P synchronization. It features data encryption and verification, the ability to travel in time through the history of documents, and a multi-write-master architecture. The [DefraDB Query Language (DQL)](/query-specification/query-language-overview.md) is based on GraphQL.
+DefraDB is the database for local-first applications that prioritizes data ownership, personal privacy, and P2P synchronization. It features data encryption and verification, the ability to travel in time through the history of documents, and a multi-write-master architecture. The [DefraDB Query Language (DQL)](/dql/index.md) is based on GraphQL.
 
 For more background on the local-first paradigm, see [The Edge-First Awakening: Redefining the Foundations of Modern Computing](https://source.network/blog/the-edge-first-awakening-redefining-the-foundations-of-modern-computing).
 

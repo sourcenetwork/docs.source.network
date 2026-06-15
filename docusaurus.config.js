@@ -164,7 +164,7 @@ const config = {
         theme: variableCodeTheme,
         additionalLanguages: ['http', 'yaml'],
         magicComments: [
-          // Remember to extend the default highlight class name as well!
+          // The default highlight class name must be present too!
           {
             className: 'theme-code-block-highlighted-line',
             line: 'highlight-next-line',
