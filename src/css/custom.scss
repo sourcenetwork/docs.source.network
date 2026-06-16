@@ -570,6 +570,10 @@ body .DocSearch {
   );
 }
 
+.alert {
+  --ifm-link-color: var(--ifm-color-primary);
+}
+
 /* Color for version selector */
 .navbar__item.dropdown {
   .navbar__link {
@@ -605,7 +609,7 @@ div.language-graphql + div.language-json,
 div.language-http + div.language-json,
 div.language-shell + div.language-json,
 div.language-json + div.language-json {
-  margin-top: calc(var(--ifm-leading) * -1);
+  margin-top: calc((var(--ifm-leading) * -1) + 2px);
 }
 
 /* Style for code blocks starting with `// invalid` */
@@ -663,4 +667,22 @@ main.docMainContainer_TBSr a[target="_blank"]::after {
 /* Override large margin bottom on code blocks within list elements */
 li div.theme-code-block {
   margin-bottom: 0px;
+}
+
+/* Collapsible code blocks */
+.theme-code-block{
+  pre.collapsed {
+    max-height: 150px;
+    overflow: hidden;
+    cursor: pointer;
+    mask-image: linear-gradient(to bottom, black, transparent 150px);
+  }
+}
+.theme-code-block {
+  .display-all {
+    height: 2.5rem;
+    text-align: center;
+    cursor: pointer;
+    font-weight: 600;
+  }
 }

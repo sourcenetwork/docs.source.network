@@ -144,7 +144,7 @@ type Book @policy(
   title: String
 }
 ```
-```json
+```json title="Result"
 [
   {
     "Name": "Book",
