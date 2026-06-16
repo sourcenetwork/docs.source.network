@@ -58,8 +58,9 @@ export default {
       type: 'category',
       label: 'Security',
       items: [
-        'security/identity-authentication',
-        'security/document-access-control-dac',
+        'security/identity',
+        'security/authentication',
+        'security/document-access-control',
       ]
     },
     'schema/migrate',

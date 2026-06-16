@@ -1,17 +1,29 @@
 ---
-title: Document Access Control (DAC) policies
+title: Document Access Control (DAC)
 ---
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
+Document Access Control describes _who_ should be allowed to do _what_ on the documents in a collection.
+At a high level, these are the steps to set up Document Access Control:
+
+- [Create a policy](#create-policy) &ndash; Describe the set of rules that will apply to some documents.
+- [Register a policy](#register-policy) &ndash; Upload the policy into DefraDB.
+- [Create a permissioned collection](#permissioned-collections) &ndash; Attach the policy to a collection.
+- [Grant permissions to other actors](#grant-permissions) &ndash; Create relations between an [identity](identity.md) and a document.
+
+When access control is configured, each actor should [authenticate](authentication.md) with their private key. Un-authenticated requests will only be able to access public documents.
+
 ## Create policies {/* #create-policy */}
+
+A _policy_ is the set of rules to enforce on the documents it will be applied to.
 
 ```yml title="Example &ndash; policy.yml" test-filename="policy.yml"
 name: A basic policy
-description: Thou shall not pass
+description: Thou shall read but not pass
 resources:
-  - name: book
+  - name: books
     relations:
       - name: reader
       - name: updater
@@ -57,7 +69,7 @@ resources:
 ### Relation managers  {/* #manages-relation */}
 
 The actor who [registers a policy](#register-policy) has always the privilege to [grant permissions](#grant-permissions) to other actors.
-The relation type `manages` gives other actors the permission to create relations of the specified type. They become _managers_ of the relation types given in the `manages` list.
+The relation type `manages` gives other actors the permission to grant permissions (i.e. create relations) of the specified type. They become _managers_ of the relations given in the `manages` list.
 
 ```yml title='Relation name "admin" has privilege to grant the "reader" relation'
 relations:
@@ -69,7 +81,7 @@ relations:
 
 ## Register policies {/* #register-policy */}
 
-A policy doesn't do anything until it's added into DefraDB. To register a policy you must provide the `PrivateKey` of an actor's identity. The actor registering the policy is stored as, _surprise_, policy creator (owner) and has administration rights on it. The returned `PolicyID` allows you to attach the policy to a collection.
+A policy doesn't do anything until it's added into DefraDB. The request to register a policy must be [authenticated](authentication.md). The actor registering the policy is stored as, _surprise_, policy creator (owner) and has administration rights on it. The returned `PolicyID` allows you to attach the policy to a collection.
 
 <Tabs groupId="defra">
   <TabItem value="cli" label="CLI" default>
@@ -86,7 +98,7 @@ A policy doesn't do anything until it's added into DefraDB. To register a policy
     ```
   </TabItem>
   <TabItem value="http" label="HTTP API">
-    Register a policy by submitting a POST request to the HTTP endpoint [`/api/v1/acp/document/policy`](/defradb/references/http/api/add-dac-policy/). The request body should contain the policy content in YAML format.
+    Register a policy by submitting a `POST` request to the HTTP endpoint [`/api/v1/acp/document/policy`](/defradb/references/http/api/add-dac-policy/). The request body should contain the policy content in YAML format.
 
     ```http 
     POST http://localhost:9181/api/v1/acp/document/policy HTTP/2
@@ -95,9 +107,9 @@ A policy doesn't do anything until it's added into DefraDB. To register a policy
     content-type: text/plain
     
     name: A basic policy
-    description: Thou shall not pass
+    description: Thou shall read but not pass
     resources:
-      - name: book
+      - name: books
         relations:
           - name: reader
           - name: updater
@@ -120,13 +132,13 @@ A policy doesn't do anything until it's added into DefraDB. To register a policy
 
 ## Create permissioned collections {/* #permissioned-collections */}
 
-For a policy to apply to some documents, the policy needs to be registered with the [collection](/schema/collections.md) holding such documents. Use the `@policy` directive to attach a policy to a collection, providing the policy ID and the name of the resource to attach. The result (and further calls to `defradb client collection describe`) shows the details under the `Policy` key.
+For a policy to apply to some documents, the policy needs to be registered with the [collection](/schema/collections.md) holding such documents. Use the `@policy` directive to attach a policy to a collection, providing the policy ID and the name of the resource (from the policy content) to attach. The result (and further calls to `defradb client collection describe`) shows the details under the `Policy` key.
 
 ```graphql
 # highlight-start
 type Book @policy(
   id: "9528839e7dac8d2c236ced23d49dcfb1cc1ece86a1329c7c512755ba1f56ca37",
-  resource: "book"
+  resource: "books"
 ) {
 # highlight-end
   title: String
@@ -183,7 +195,7 @@ type Book @policy(
 
 ## Private and public documents {/* #public-private-docs */}
 
-Permissioned collections can contain both private and public documents. Documents created without an identity are visible to all actors, whereas documents created with an identity are subject to the permission rules of the policy attached to the collection.
+Permissioned collections can contain both private and public documents. Documents created without an identity are visible to all actors, whereas documents created with an identity are subject to the permission rules of the policy attached to the collection. For information on how to authenticate with an identity, see [Authentication](authentication.md).
 
 ```shell title="Create a public document"
 defradb client query '
@@ -238,10 +250,10 @@ Private documents get synced to other nodes only if their identities have the ap
 
 To give another actor permission to access or alter a document, create a *relation* between the actor and the document ID. The relation defines what type of permission (according to the collection's policy) the actor will get. You can think that the relation assigns the identity a _role_ (ex. `reader`) with respect to a specific document. Target actors are identified by their `DID` key.
 
-The only actors allowed to grant permissions to others are the policy creator and the identities with the appropriate [manage relation](#manage-relation).
+The only actors allowed to grant permissions to others are the policy creator and the identities with the appropriate [manage relation](#manage-relation). The request to create a relation must be [authenticated](authentication.md).
 
 :::important
-You can only create ACP relationships to private documents (i.e. documents created with an identity). Public documents are not registered in the ACP system and cannot be permissioned.
+You can only create relations to private documents (i.e. documents created with an identity). Public documents are not registered in the DAC system and cannot be permissioned.
 :::
 
 <Tabs groupId="defra">
@@ -263,7 +275,7 @@ You can only create ACP relationships to private documents (i.e. documents creat
     ```
   </TabItem>
   <TabItem value="http" label="HTTP API">
-    Give an actor permissions to a given document by submitting a POST request to the HTTP endpoint [`/api/v1/acp/document/relationship`](/defradb/references/http/api/add-dac-relationship/).
+    Give an actor permissions to a given document by submitting a `POST` request to the HTTP endpoint [`/api/v1/acp/document/relationship`](/defradb/references/http/api/add-dac-relationship/).
 
     ```http
     POST http://localhost:9181/api/v1/acp/document/relationship HTTP/2
@@ -328,7 +340,7 @@ To grant a specific permission to any actor, use the wildcard `"*"` as value for
 
 To revoke an actor's document permissions, delete their relationship with the given document ID. Revoking [relations granted to any actor with `"*"`](#wildcard-relations) only revokes that individual relation: it doesn't revoke _all_ relations registered for _any_ actor.
 
-The only actors allowed to revoke permissions are the policy creator and the identities with the appropriate [manage relation](#manage-reltion).
+The only actors allowed to revoke permissions are the policy creator and the identities with the appropriate [manage relation](#manage-reltion). The request to delete a relation must be [authenticated](authentication.md).
 
 <Tabs groupId="defra">
   <TabItem value="cli" label="CLI" default>
