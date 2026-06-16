@@ -43,11 +43,13 @@ You can interact with DefraBD in a few different ways. Most actions can be run w
     A versionless endpoint is also available at `http://localhost:9181/api/` and points always to the latest version.
   </TabItem>
   <TabItem value="graphql" label="GraphQL">
+    GraphQL clients (ex. [Altair](https://altairgraphql.dev/)) are a popular option to interact with the GraphQL API.  
+
     The GraphQL endpoint is available at `http://localhost:9181/api/v1/graphql`.  
     A versionless endpoint is also available at  `http://localhost:9181/api/graphql` and points always to the latest version.
-    
-    GraphQL clients (ex. [Altair](https://altairgraphql.dev/)) are a popular option to interact with the GraphQL API.  
-    The Playground at `http://localhost:9181` also provides a basic GraphQL client.
+  </TabItem>
+  <TabItem value="explorer" label="Explorer">
+    The DefraDB Explorer is a web application available at `http://localhost:9181`, and also hosted at https://explorer.source.network/. It provides a GraphQL client and an interface to the most common instance management operations.
   </TabItem>
 </Tabs>
 

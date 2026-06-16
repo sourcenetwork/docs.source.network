@@ -31,7 +31,7 @@ export PATH=$PATH:$(go env GOPATH)/bin
 ```
 
 :::note
-Although included in [pre-compiled binaries](#binaries), the [DefraDB Playground](https://github.com/sourcenetwork/defradb-playground) is not included in manual builds. It is built separately.
+Although included in [pre-compiled binaries](#binaries), the [DefraDB Explorer](https://github.com/sourcenetwork/defradb-explorer) is not included in manual builds. It is built separately.
 :::
 
 :::tip
