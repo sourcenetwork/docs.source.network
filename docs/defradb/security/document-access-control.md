@@ -6,7 +6,7 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
 Document Access Control describes _who_ should be allowed to do _what_ on the documents in a collection.
-At a high level, these are the steps to set up Document Access Control:
+At a high level, these are the steps to set it up:
 
 - [Create a policy](#create-policy) &ndash; Describe the set of rules that will apply to some documents.
 - [Register a policy](#register-policy) &ndash; Upload the policy into DefraDB.
@@ -41,9 +41,9 @@ resources:
 - `description` (optional) &ndash; Policy description.
 - `resources` &ndash; List of permissions definitions.
   - `name` &ndash; Name of the permission object.
-  - `relations` &ndash; List of relationship types actors may be given to act on documents (similar to _user roles_).
-    - `name` &ndash; Name for relationship type.
-  - `permissions` &ndash; List specifying which relationship type will get which permission.
+  - `relations` &ndash; List of relations actors may be given to act on documents (similar to _user roles_).
+    - `name` &ndash; Name for relation.
+  - `permissions` &ndash; List specifying which relation will get which permission.
     - `name` &ndash; Permission name (`read`, `update`, `delete`).
     - `expr` (optional) &ndash; Expression involving `relations` names. Actors who fulfill the expression get the permission. Supported operators are union `+` and subtraction `-`.
 
@@ -338,7 +338,7 @@ To grant a specific permission to any actor, use the wildcard `"*"` as value for
 
 ## Revoke permissions {/* #revoke */}
 
-To revoke an actor's document permissions, delete their relationship with the given document ID. Revoking [relations granted to any actor with `"*"`](#wildcard-relations) only revokes that individual relation: it doesn't revoke _all_ relations registered for _any_ actor.
+To revoke an actor's document permissions, delete their relation with the given document ID. Revoking [relations granted to any actor with `"*"`](#wildcard-relations) only revokes that individual relation: it doesn't revoke _all_ relations registered for _any_ actor.
 
 The only actors allowed to revoke permissions are the policy creator and the identities with the appropriate [manage relation](#manage-reltion). The request to delete a relation must be [authenticated](authentication.md).
 
