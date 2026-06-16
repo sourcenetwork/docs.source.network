@@ -1,5 +1,5 @@
 ---
-title: Document Access Control (DAC)
+title: Restrict documents access
 ---
 
 import Tabs from '@theme/Tabs';
