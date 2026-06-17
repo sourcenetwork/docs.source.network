@@ -1,16 +1,12 @@
 ---
-sidebar_label: Configuration settings
-sidebar_position: 1
+title: Configuration settings
 ---
 
-# DefraDB configuration (YAML)
+- **Configuration file** &ndash; The config file is called `config.yaml` and located in the DefraDB root directory.
+- **DefraDB root directory** &ndash; The default root directory is `$HOME/.defradb`. You can change it via the `--rootdir` CLI flag when starting a node with `defradb start`.
 
-DefraDB's configuration file is called `config.yaml` and located within DefraDB root directory.
-
-The default root directory is `$HOME/.defradb`. It can be changed via the `--rootdir` CLI flag when starting a node with `defradb start`.
-
-::::tip
-Relative paths in config settings are interpreted as relative to the DefraDB root directory.
+::::tip Relative paths
+Relative paths in configuration settings are interpreted as relative to the DefraDB root directory.
 ::::
 
 ## `api.address` {/* #api-address */}

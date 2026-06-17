@@ -2,13 +2,17 @@
 title: Indexes
 ---
 
+Indexes allow queries to quickly locate data without having to look through each document in a collection.
+
 By default, every collection has an index on the `_docID` property and on `@primary` relationship fields.
 The `@index` directive allows you to set up further indexes on selected properties.
+
+## Syntax {/* #syntax */}
 
 ```graphql title="Syntax &ndash; @index directive"
 @index(
   name: String,
-  unique: Bool,
+  unique: Boolean,
   direction: ORDERING,
   includes: [{ field: String, direction: ORDERING }]
 )
@@ -22,7 +26,7 @@ Valid values: `ASC` or `DESC`.
 Default: `ASC`.
 - `includes` &ndash; List of fields the index is created on (not required when the directive is used in a field definition).
 
-## Indexes for individual fields {/* #single */}
+## Index single fields {/* #single */}
 
 To create an index for a specific field, use the `@index` directive on the field when creating the collection.
 
@@ -70,19 +74,19 @@ type Book {
 Unique indexes are used under the hood to enforce [one-to-one relationships](collections.md#relationships-one-to-one). The index must not be dropped, or the 1:1 nature of the relationship will not be fulfilled anymore.
 :::
 
-## Indexes for multiple fields (composite) {/* #composite */}
+## Indexes multiple fields (composite) {/* #composite */}
 
 To create an index on the combination of multiple fields (composite index), use the `@index` directive at the collection level.
 
-```graphql title="(Unique) Index for (genre, author)"
+```graphql title="Index for (genre, author)"
 # highlight-next-line
-type Book @index(unique: true, includes: [{ field: "genre" }, { field: "author" }]) {
+type Book @index(includes: [{ field: "genre" }, { field: "author" }]) {
   genre: String
   author: String
 }
 ```
 
-The order of fields in `includes` defines the structure of the index. An index defined on fields `genre` and `author` will give no performance benefit to queries filtering only on `author`. Think of a composite index storing references to documents in a hierarchical structure defined by its order:
+The order of fields in `includes` defines the structure of the index. An index defined on fields `genre` and `author` gives no performance benefit to queries filtering only on `author`. Think of a composite index storing references to documents in a hierarchical structure defined by its order:
 
 ```text
 Fiction/David Foster Wallace/docID1
@@ -97,7 +101,7 @@ Although there is a partial benefit to queries filtering only on `genre`, there 
 
 ## JSON fields indexing {/* #json-fields */}
 
-Fields of type `JSON` are treated specially: their leaf nodes are indexed, so that the JSON structure can be traversed in queries. Each JSON field generates multiple entries in the index: one for every leaf node, each with their value and path.
+Fields of type `JSON` are treated specially: when indexed, each leaf node is indexed together its path, so that queries traversing the JSON structure can take advantage of the index.
 For example, given a JSON property with the following value:
 
 ```json
@@ -109,7 +113,7 @@ For example, given a JSON property with the following value:
   }
 }
 ```
-Assuming an index is present on `Collection.jsonField`, you can query documents of that type filtering on the `user.device.os` property:
+queries filtering on the `user.device.os` property will be sped up if an index is present on `Collection.jsonField`:
 
 ```graphql
 {
@@ -133,7 +137,7 @@ Scalar types (ex. integers) are normalized to standard types (ex. int64).
 
 More indexes is not better. The right indexes is better.
 
-Although an index can improve read performance, it will decrease write performance, because every document update/create must also update the relevant indexes.
+An index can improve read performance, but it _will_ decrease write performance, because every document update/create must also update the relevant indexes.
 
-- Create indexes based on your query patterns. If you are tempted to index every field, remember that there's no free lunch and that the overhead (in storage and write speed) is likely to outweigh the benefit.
+- Create indexes based on your query patterns. If you are tempted to index every field, remember that there's no free lunch and that the overhead (in storage and write speed) likely outweighs the benefit.
 - Use unique indexes only when necessary. Because they require extra validation, their performance impact is more significant.

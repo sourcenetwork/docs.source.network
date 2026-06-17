@@ -142,7 +142,7 @@ GraphQL queries in DefraDB have the following form:
     limit: int, offset: int,
     orderBy: [object]
   ) {
-    [fieldName]
+    [field]
   }
 }
 ```
@@ -151,7 +151,7 @@ GraphQL queries in DefraDB have the following form:
 - `order` &ndash; Results sorting fields, see [Sort and order results](sort-order.md).
 - `limit`, `offset` &ndash; Number of results to return/skip, see [Limit and paginate results](limit-paginate.md).
 - `groupBy` &ndash; Fields to group results by, see [Group results](group.md).
-- `[fieldName]` &ndash; List of fields to return for the selected documents. Queries only return the exact fields requested (GraphQL has no equivalent of the SQL `SELECT *` syntax).
+- `[field]` &ndash; List of fields to return for the selected documents. Queries only return the exact fields requested (GraphQL has no equivalent of the SQL `SELECT *` syntax).
 
 ```graphql title="Example query &ndash; Filter books by genre and author's name"
 {

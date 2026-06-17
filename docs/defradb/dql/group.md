@@ -2,14 +2,7 @@
 title: Group results
 ---
 
-The `groupBy` argument allows you to group results into buckets basing on the value of one or more fields. For example, books of different genre can be grouped together, and separated from books of other genres. Queries with `groupBy` have an optional `GROUP` sub-object among its return fields, which supports all arguments of [query blocks](mutation-query.md#syntax).
-
-```graphql title="Syntax" test-skip
-TYPE(groupBy: [fieldName]) {
-  fieldName
-  GROUP(filter: object, docID: [ID], order: [object], limit: int, offset: int, orderBy: [object])
-}
-```
+The `groupBy` argument allows you to group results into buckets basing on the value of one or more fields. For example, books of different genre can be grouped together, and separated from books of other genres. 
 
 <details>
   <summary>Display database setup</summary>
@@ -125,6 +118,19 @@ TYPE(groupBy: [fieldName]) {
   }
   ```
 </details>
+
+## Syntax {/* #syntax */}
+
+Queries with `groupBy` have an optional `GROUP` sub-object among its return fields. It supports all arguments of [query blocks](mutation-query.md#syntax) and its return set gives access to all of the document's fields.
+
+```graphql title="Syntax" test-skip
+TYPE(groupBy: [field]) {
+  field
+  GROUP(filter: object, docID: [ID], order: [object], limit: int, offset: int, orderBy: [object]) {
+    innerField
+  }
+}
+```
 
 ## Group by a single field
 

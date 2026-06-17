@@ -2,7 +2,7 @@
 title: Install
 ---
 
-To get a running instance of DefraDB, you need to source the `defradb` executable and start a node.
+To get a running instance of DefraDB, you need to source the `defradb` executable and start a node. The process is similar to fetching any other binary, except it's _much nicer_ because it's a binary you really want, and because we have built it with utmost care.
 
 ## Get DefraDB {/* #get-defradb */}
 

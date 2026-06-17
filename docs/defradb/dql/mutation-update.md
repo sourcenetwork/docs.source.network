@@ -2,9 +2,13 @@
 title: Update existing documents
 ---
 
-The only constant is change: so shall it be. Even if the [*history*](/commits.md) of data in DefraDB is permanent, you can still alter stored documents. Similarly to the `add_TYPE` mutation to [create documents](mutation-create.md), you update documents via the `update_TYPE` mutation. The mutation returns the updated documents.
+The only constant is change: so shall it be. Even if the [*history*](/commits.md) of data in DefraDB is permanent, you can still alter stored documents. 
 
-```graphql title="Syntax for update mutation" test-skip
+## Syntax  {/* #syntax */}
+
+Similarly to the `add_TYPE` mutation to [create documents](mutation-create.md), you update documents via the `update_TYPE` mutation. The mutation returns the updated documents.
+
+```graphql title="Syntax &ndash; Update mutation" test-skip
 mutation {
   update_TYPE(docID: [ID], filter: filterObj, input: updateInput) [TYPE]
 }

@@ -632,8 +632,9 @@ The [list operators](#list-operators) `_any`, `_none`, `_all` evaluate a scalar 
 
 | Scalar Type | Operators |
 | -------- | -------- |
-| String, JSON, Blob | `_eq, _neq, _like, _ilike, _nlike, _nilike, _in, _nin` |
+| String, Blob | `_eq, _neq, _like, _ilike, _nlike, _nilike, _in, _nin` |
 | Int, Float | `_eq, _neq, _gt, _geq, _lt, _leq, _in, _nin` |
 | Boolean, ID | `_eq, _neq, _in, _nin` |
 | DateTime | `_eq, _neq, _gt, _geq, _lt, _leq, _in, _nin` |
+| JSON | `_any, _all, _none, _eq, _neq, _like, _ilike, _nlike, _nilike, _in, _nin` |
 | List | `_any, _all, _none, _eq, _neq` |

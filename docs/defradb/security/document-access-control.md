@@ -13,7 +13,13 @@ At a high level, these are the steps to set it up:
 - [Create a permissioned collection](#permissioned-collections) &ndash; Attach the policy to a collection.
 - [Grant permissions to other actors](#grant-permissions) &ndash; Create relations between an [identity](identity.md) and a document.
 
-When access control is configured, each actor should [authenticate](authentication.md) with their private key. Un-authenticated requests will only be able to access public documents.
+When access control is configured, each actor should [authenticate](authentication.md) with their private key. An actor that creates a document in a permissioned collection owns the document. Authenticated requests can see public documents and the private documents they have permission to; unauthenticated requests can access only public documents.
+
+<!--
+:::important
+Private documents are not included in [backups](/backup-restore.md).
+:::
+-->
 
 ## Create policies {/* #create-policy */}
 
@@ -40,9 +46,9 @@ resources:
 - `name` &ndash; Policy name.
 - `description` (optional) &ndash; Policy description.
 - `resources` &ndash; List of permissions definitions.
-  - `name` &ndash; Name of the permission object.
-  - `relations` &ndash; List of relations actors may be given to act on documents (similar to _user roles_).
-    - `name` &ndash; Name for relation.
+  - `name` &ndash; Permission object name (refer to this when creating a [permissioned collection](#permissioned-collections)).
+  - `relations` &ndash; List of relations that actors may be given to act on documents (similar to _user roles_).
+    - `name` &ndash; Relation name.
   - `permissions` &ndash; List specifying which relation will get which permission.
     - `name` &ndash; Permission name (`read`, `update`, `delete`).
     - `expr` (optional) &ndash; Expression involving `relations` names. Actors who fulfill the expression get the permission. Supported operators are union `+` and subtraction `-`.
@@ -68,10 +74,10 @@ resources:
 
 ### Relation managers  {/* #manages-relation */}
 
-The actor who [registers a policy](#register-policy) has always the privilege to [grant permissions](#grant-permissions) to other actors.
+The owner of a document has always the privilege to [grant permissions](#grant-permissions) to other actors.
 The relation type `manages` gives other actors the permission to grant permissions (i.e. create relations) of the specified type. They become _managers_ of the relations given in the `manages` list.
 
-```yml title='Relation name "admin" has privilege to grant the "reader" relation'
+```yml title='Relation "admin" has privilege to grant the "reader" relation'
 relations:
   - name: reader
   - name: admin
@@ -81,11 +87,11 @@ relations:
 
 ## Register policies {/* #register-policy */}
 
-A policy doesn't do anything until it's added into DefraDB. The request to register a policy must be [authenticated](authentication.md). The actor registering the policy is stored as, _surprise_, policy creator (owner) and has administration rights on it. The returned `PolicyID` allows you to attach the policy to a collection.
+A policy doesn't do anything until it's added into DefraDB. The request to register a policy must be [authenticated](authentication.md). The returned `PolicyID` allows you to attach the policy to a collection.
 
 <Tabs groupId="defra">
   <TabItem value="cli" label="CLI" default>
-    Register a policy via the CLI command [`defradb client acp document policy add`](/references/cli/defradb_client_acp_document_policy_add.md). The example sources the policy from file, but you can source a policy from argument string and stdin as well.
+    Register a policy via the CLI command [`defradb client acp document policy add`](/references/cli/defradb_client_acp_document_policy_add.md). The example sources the policy from file, but argument string and stdin are supported too.
 
     ```shell
     defradb client acp document policy add -f policy.yml \
@@ -132,7 +138,7 @@ A policy doesn't do anything until it's added into DefraDB. The request to regis
 
 ## Create permissioned collections {/* #permissioned-collections */}
 
-For a policy to apply to some documents, the policy needs to be registered with the [collection](/schema/collections.md) holding such documents. Use the `@policy` directive to attach a policy to a collection, providing the policy ID and the name of the resource (from the policy content) to attach. The result (and further calls to `defradb client collection describe`) shows the details under the `Policy` key.
+For a policy to apply to some documents, the policy needs to be registered with the [collection](/schema/collections.md) holding such documents. Use the `@policy` directive to attach a policy to a collection, providing the policy ID and the name of the resource to attach. The result (and further calls to `defradb client collection describe`) shows the details under the `Policy` key.
 
 ```graphql
 # highlight-start
@@ -195,7 +201,7 @@ type Book @policy(
 
 ## Private and public documents {/* #public-private-docs */}
 
-Permissioned collections can contain both private and public documents. Documents created without an identity are visible to all actors, whereas documents created with an identity are subject to the permission rules of the policy attached to the collection. For information on how to authenticate with an identity, see [Authentication](authentication.md).
+Permissioned collections can contain both private and public documents. Documents created without an identity are visible to all actors; documents created with an identity are subject to the permission rules of the policy attached to the collection. For information on how to authenticate with an identity, see [Authentication](authentication.md).
 
 ```shell title="Create a public document"
 defradb client query '
@@ -242,8 +248,8 @@ defradb client query '
 }
 ```
 
-:::important Private documents and Pub-Sub networks
-Private documents get synced to other nodes only if their identities have the appropriate permissions in the node serving the documents. However, local policies don't get synced together with the private documents they are attached to. For more information, see [Pub-Sub and private documents](/p2p/pub-sub.md#private-docs).
+:::important Private documents and P2P
+Private documents get synced to other nodes only if their identities have the appropriate permissions in the node serving the documents. However, local policies don't get synced together with the private documents they are attached to. For more information, see [P2P and private documents](/p2p/pub-sub.md#private-docs).
 :::
 
 ## Grant permissions to other actors {/* #grant-permissions */}
@@ -361,7 +367,7 @@ The only actors allowed to revoke permissions are the policy creator and the ide
     ```
   </TabItem>
   <TabItem value="http" label="HTTP API">
-    To revoke an actor's permissions to a given document, submit a DELETE request to the HTTP endpoint [`/api/v1/acp/document/relationship`](/defradb/references/http/api/add-dac-relationship/).
+    Revoke an actor's permissions to a given document by submitting a `DELETE` request to the HTTP endpoint [`/api/v1/acp/document/relationship`](/defradb/references/http/api/add-dac-relationship/).
 
     ```http
     DELETE http://localhost:9181/api/v1/acp/document/relationship HTTP/2
