@@ -1,43 +1,449 @@
 ---
-title: Aggregating Functions
+title: Aggregating functions
 ---
 
-The most common use case of grouping queries is to compute some aggregate function over the sub-group. Like the special `_group` field, aggregate functions are defined and returned using special fields. These fields prefix the target field name with the name of the aggregate function you wish to apply. If we had the field `rating`, we could access the average value of all sub-group ratings by including the special field `_avg { rating }` in our return object. The available aggregate functions and their associated scalars can be found above in `Table 3`.
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
 
-The special aggregate function fields' format is the function name and the field name as its sub-elements. Specifically: `_$function { $field }`, where `$function` is the list of functions from `Table 3`, and `$field` is the field name to which the function will be applied to. E.g., applying the `max` function to the `rating` field becomes `_max { rating }`.
+The aggregating functions `MIN`, `MAX`, `SUM`, `AVG`, and `COUNT` allow you to compute operations on groups of documents, such as the average rating of a group of books, or counting how many books are in each group. You can also use them at the root level and compute such operations on the whole result set.
 
-Let us augment the previous grouped books by genre example and include an aggregate function on the sub-groups ratings.
-```graphql
-{
-    Books(filter: {author: {name: {_like: "John%"}}}, groupBy: [genre]) {
-        genre
-        _avg {
-            rating
-            points
-        }
-        _group {
-            title
-            rating
-        }
+<details>
+  <summary>Display database setup</summary>
+  
+  This page assumes your database contains `Book` and `Person` [collections](/schema/collections.md) and some documents in them:
+
+  ```graphql title="Database schema" test-setup-collection
+  type Person {
+    name: String!
+    authoredBooks: [Book]
+  }
+
+  type Book {
+    title: String!
+    genre: String
+    plot: String
+    rating: Float
+    author: Person
+    ratings: [Float]
+  }
+  ```
+  ```graphql title="Person documents setup" test-setup-data
+  mutation {
+    a1:add_Person(input: {
+      name: "George Orwell"
+    }) { _docID name }
+    a2:add_Person(input: {
+      name: "William Golding"
+    }) { _docID name }
+    a3:add_Person(input: {
+      name: "David Foster Wallace"
+    }) { _docID name }
+    a4:add_Person(input: {
+      name: "Victor Hugo"
+    }) { _docID name }
+  }
+  ```
+  ```graphql title="Book documents setup" test-setup-data
+  mutation {
+    b11:add_Book(input: {
+      title: "1984",
+      genre: "Fiction",
+      plot: "A masterpiece of rebellion and imprisonment where war is peace, freedom is slavery, and Big Brother is watching.",
+      rating: 4.20,
+      ratings: [3.8, 4.91, 3.1, 2.8],
+      _authorID: "bae-f630242e-3faf-525e-864c-422e09b00667"
+    }) {
+      _docID
+      title
     }
-}
-```
+    b12:add_Book(input: {
+      title: "Down and Out in Paris and London",
+      genre: "Memoir",
+      plot: "The adventures of a penniless British writer among the down-and-outs of two great cities.",
+      rating: 4.09,
+      _authorID: "bae-f630242e-3faf-525e-864c-422e09b00667"
+    }) {
+      _docID
+      title
+    }
+    b21:add_Book(input: {
+      title: "Lord of the Flies",
+      genre: "Fiction",
+      plot: "At the dawn of the next world war, a plane crashes on an uncharted island, stranding a group of schoolboys.",
+      rating: 3.70,
+      _authorID: "bae-db573e8d-2466-55b9-8da0-39003f530d44"
+    }) {
+      _docID
+      title
+    }
+    b31:add_Book(input: {
+      title: "Infinite Jest",
+      genre: "Fiction",
+      plot: "A gargantuan, mind-altering tragi-comedy about the Pursuit of Happiness in America.",
+      rating: 4.25,
+      ratings: [3.1, 4.1, 4.5],
+      _authorID: "bae-40b16347-07e0-5e97-85e0-8742eaba786e"
+    }) {
+      _docID
+      title
+    }
+    b32:add_Book(input: {
+      title: "Consider the Lobster and Other Essays",
+      genre: "Nonfiction",
+      plot: "Do lobsters feel pain? Did Franz Kafka have a funny bone? What is John Updike's deal, anyway? And what happens when adult video starlets meet their fans in person? Essays that are also enthralling narrative adventures.",
+      rating: 4.18,
+      _authorID: "bae-40b16347-07e0-5e97-85e0-8742eaba786e"
+    }) {
+      _docID
+      title
+    }
+    b33:add_Book(input: {
+      title: "Girl with Curious Hair",
+      genre: "Fiction",
+      plot: "Remarkable and unsettling reimaginations of reality.",
+      rating: 3.85,
+      _authorID: "bae-40b16347-07e0-5e97-85e0-8742eaba786e"
+    }) {
+      _docID
+      title
+    }
+    b41:add_Book(input: {
+      title: "Les Misérables",
+      genre: "Fiction",
+      plot: "Victor Hugo's tale of injustice, heroism and love follows the fortunes of Jean Valjean, an escaped convict determined to put his criminal past behind him.",
+      rating: 4.21,
+      ratings: [3.9, 4.1],
+      _authorID: "bae-7f9e6642-03e3-5f62-b684-3d5555f46f7d"
+    }) {
+      _docID
+      title
+    }
+  }
+  ```
+</details>
 
-Here we return the average of all the ratings of the books whose authors name begins with "John" grouped by the genres.
+## Syntax
 
-We can also use simpler queries, without any `groupBy` clause, and still use aggregate functions. The difference is, instead of applying the aggregate function to only the sub-group, it applies it to the entire result set.
+<Tabs groupId="aggregating-funcs">
+  <TabItem value="MIN" label="MIN" default>
+    ```graphql title="Syntax &ndash; MIN"
+    MIN(GROUP: { 
+      field: String, 
+      filter: Object,
+      limit: Int, offset: Int
+    })
+    ```
+    - `field` &ndash; Field on which to run the aggregating function.
+    - `filter` &ndash; Restrict which documents are included, see [Filter documents](filter.md).
+    - `limit, offset` &ndash; Restrict how many documents are included, see [Limit and paginate results](limit-paginate.md).
+  </TabItem>
+  <TabItem value="MAX" label="MAX" default>
+    ```graphql title="Syntax &ndash; MAX"
+    MAX(GROUP: { 
+      field: String, 
+      filter: Object,
+      limit: Int, offset: Int
+    })
+    ```
+    - `field` &ndash; Field on which to run the aggregating function.
+    - `filter` &ndash; Restrict which documents are included, see [Filter documents](filter.md).
+    - `limit, offset` &ndash; Restrict how many documents are included, see [Limit and paginate results](limit-paginate.md).
+  </TabItem>
+  <TabItem value="SUM" label="SUM" default>
+    ```graphql title="Syntax &ndash; SUM"
+    SUM(GROUP: { 
+      field: String, 
+      filter: Object,
+      limit: Int, offset: Int
+    })
+    ```
+    - `field` &ndash; Field on which to run the aggregating function.
+    - `filter` &ndash; Restrict which documents are included, see [Filter documents](filter.md).
+    - `limit, offset` &ndash; Restrict how many documents are included, see [Limit and paginate results](limit-paginate.md).
+  </TabItem>
+  <TabItem value="AVG" label="AVG" default>
+    ```graphql title="Syntax &ndash; AVG"
+    AVG(GROUP: { 
+      field: String, 
+      filter: Object,
+      limit: Int, offset: Int
+    })
+    ```
+    - `field` &ndash; Field on which to run the aggregating function.
+    - `filter` &ndash; Restrict which documents are included, see [Filter documents](filter.md).
+    - `limit, offset` &ndash; Restrict how many documents are included, see [Limit and paginate results](limit-paginate.md).
+  </TabItem>
+  <TabItem value="COUNT" label="COUNT" default>
+    ```graphql title="Syntax &ndash; COUNT"
+    COUNT(GROUP: { 
+      filter: Object,
+      limit: Int, offset: Int
+    })
+    ```
+    - `filter` &ndash; Restrict which documents are included, see [Filter documents](filter.md).
+    - `limit, offset` &ndash; Restrict how many documents are included, see [Limit and paginate results](limit-paginate.md).
+  </TabItem>
+</Tabs>
 
-Let's simply count all the objects returned by a given filter.
-```graphql
+## Usage with groups
+
+When [grouping results](group.md), aggregating functions take as input the documents belonging to each group and produce a result for each group.
+
+```graphql title="Compute average rating for each book genre"
 {
-    _count(Books: {filter: {rating: {_gt: 3.5}}})
+  Book(groupBy: [genre]) {
+    genre
+    AVG(GROUP: { field: rating })
+    GROUP {
+      title
+      rating
+    }
+  }
 }
 ```
-This returns an array of objects that includes the respective books title, along with the repeated `_count` field, which is the total number of objects that match the filter.
+```json title="Result"
+{
+  "data": {
+    "Book": [
+      {
+        // highlight-next-line
+        "AVG": 4.042,
+        "GROUP": [
+          {
+            "rating": 4.21,
+            "title": "Les Misérables"
+          },
+          {
+            "rating": 4.25,
+            "title": "Infinite Jest"
+          },
+          {
+            "rating": 4.2,
+            "title": "1984"
+          },
+          {
+            "rating": 3.7,
+            "title": "Lord of the Flies"
+          },
+          {
+            "rating": 3.85,
+            "title": "Girl with Curious Hair"
+          }
+        ],
+        "genre": "Fiction"
+      },
+      {
+        // highlight-next-line
+        "AVG": 4.18,
+        "GROUP": [
+          {
+            "rating": 4.18,
+            "title": "Consider the Lobster and Other Essays"
+          }
+        ],
+        "genre": "Nonfiction"
+      },
+      {
+        // highlight-next-line
+        "AVG": 4.09,
+        "GROUP": [
+          {
+            "rating": 4.09,
+            "title": "Down and Out in Paris and London"
+          }
+        ],
+        "genre": "Memoir"
+      }
+    ]
+  }
+}
+```
 
-> Note, the special aggregate field `_count` has no subfields selected, so instead of applying the `count` function to a field, it applies to the entire object. This is only possible with the `count` function; all the other aggregate functions must specify their target field using the correct field name selection.
+```graphql title="Count how many documents are in each genre"
+{
+  Book(groupBy: [genre]) {
+    genre
+    COUNT(GROUP: {})
+    GROUP {
+      title
+    }
+  }
+}
+```
+```json title="Result"
+{
+  "data": {
+    "Book": [
+      {
+        // highlight-next-line
+        "COUNT": 5,
+        "GROUP": [
+          {
+            "title": "Les Misérables"
+          },
+          {
+            "title": "Infinite Jest"
+          },
+          {
+            "title": "1984"
+          },
+          {
+            "title": "Lord of the Flies"
+          },
+          {
+            "title": "Girl with Curious Hair"
+          }
+        ],
+        "genre": "Fiction"
+      },
+      {
+        // highlight-next-line
+        "COUNT": 1,
+        "GROUP": [
+          {
+            "title": "Consider the Lobster and Other Essays"
+          }
+        ],
+        "genre": "Nonfiction"
+      },
+      {
+        // highlight-next-line
+        "COUNT": 1,
+        "GROUP": [
+          {
+            "title": "Down and Out in Paris and London"
+          }
+        ],
+        "genre": "Memoir"
+      }
+    ]
+  }
+}
+```
 
-We can further simplify the above count query by including only the `_count` field. If we ***only*** return the `_count` field, then a single object is returned, instead of an array of objects.
+### Filter documents
+
+The `filter` object in the aggregating function only affects which documents are used to compute the function; it does not control which documents the query returns. To affect which documents are returned, place the filter at the root or group level. 
+
+Note how the following example differs from the previous example only in the `AVG` value for `Fiction`; the documents returned for the group still include ratings lower than 4.
+
+```graphql title="Compute average rating for each book genre, excluding ratings lower than 4"
+{
+  Book(groupBy: [genre]) {
+    genre
+    AVG(GROUP: { field: rating, filter: { rating: { _geq: 4 } } })
+    GROUP {
+      title
+      rating
+    }
+  }
+}
+```
+```json title="Result"
+{
+  "data": {
+    "Book": [
+      {
+        // highlight-next-line
+        "AVG": 4.22,
+        "GROUP": [
+          {
+            "rating": 4.21,
+            "title": "Les Misérables"
+          },
+          {
+            "rating": 4.25,
+            "title": "Infinite Jest"
+          },
+          {
+            "rating": 4.2,
+            "title": "1984"
+          },
+          {
+            "rating": 3.7,
+            "title": "Lord of the Flies"
+          },
+          {
+            "rating": 3.85,
+            "title": "Girl with Curious Hair"
+          }
+        ],
+        "genre": "Fiction"
+      },
+      {
+        "AVG": 4.18,
+        "GROUP": [
+          {
+            "rating": 4.18,
+            "title": "Consider the Lobster and Other Essays"
+          }
+        ],
+        "genre": "Nonfiction"
+      },
+      {
+        "AVG": 4.09,
+        "GROUP": [
+          {
+            "rating": 4.09,
+            "title": "Down and Out in Paris and London"
+          }
+        ],
+        "genre": "Memoir"
+      }
+    ]
+  }
+}
+```
+
+### Multiple fields
+
+When [grouping on multiple fields](group.md#multiple-fields), you can run an aggregating function _inside_ a `GROUP` sub-object, and use its output as input to another, higher-level aggregating function:
+
+```graphql title="Compute the maximum of group averages"
+{
+  Book(groupBy: [genre]) {
+    genre
+    MAX(GROUP: { field: AVG })
+    GROUP (groupBy: [author]){
+      author { name }
+      AVG(GROUP: { field: rating })
+    }
+  }
+}
+```
+```json title="Result"
+p
+```
+
+## Usage at root level
+
+You can provide the whole result set to an aggregating functions, and have its result as the only return field.
+
+```graphql title="Compute average rating of all books rated above 1"
+{
+  AVG(Book: {field: rating, filter: {rating: {_geq: 1}}})
+}
+```
+```json title="Result"
+{
+  "data": {
+    "AVG": 4.0685714285714285
+  }
+}
+```
+
+```graphql title="Count how many books are rated 4 or higher"
+{
+  COUNT(Book: {filter: {rating: {_geq: 4}}})
+}
+```
+```json title="Result"
+{
+  "data": {
+    "COUNT": 5
+  }
+}
+```
 
 DefraDB also supports applying aggregate functions to relations just like we do fields. However, only the `count` function is available directly on the related object type.
 
