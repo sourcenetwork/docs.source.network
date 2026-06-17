@@ -36,6 +36,20 @@ An exclamation mark `!` after a type (ex. `Int!`) specifies that the field shoul
 - `[Int]!` &ndash; Non-null list of (possibly null) `Int`.
 - `[Int!]!` &ndash; Non-null list of non-null `Int`.
 
+### Default values
+
+Specify a default value for a field with the `@default` directive. The default value and the field must be of the same data type. `UTC_NOW` is a special value for the current timestamp.
+
+```graphql
+active: Boolean @default(bool: true)
+age: Int @default(int: 0)
+status: String @default(string: "draft")
+creation: DateTime @default(dateTime: UTC_NOW)
+expiry: DateTime @default(dateTime: "2026-06-19T00:00:00Z")
+meta: JSON @default(json: "{}")
+thumb: Blob @default(blob: "ff0099")
+```
+
 ## Create collections {/* #create */}
 
 You can create a collection with either the CLI command [`defradb client collection add`](/references/cli/defradb_client_collection_add.md), or the HTTP API endpoint [`/collections`](/defradb/references/http/api/add-collection/).
