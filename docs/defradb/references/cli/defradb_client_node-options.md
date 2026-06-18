@@ -1,15 +1,19 @@
-## defradb client acp document relationship
+## defradb client node-options
 
-Interact with the document acp relationship features of DefraDB instance
+Get the node's configuration options as JSON
 
 ### Synopsis
 
-Interact with the document acp relationship features of DefraDB instance
+Get the node's configuration options as JSON.
+
+```
+defradb client node-options [flags]
+```
 
 ### Options
 
 ```
-  -h, --help   help for relationship
+  -h, --help   help for node-options
 ```
 
 ### Options inherited from parent commands
@@ -37,7 +41,5 @@ Interact with the document acp relationship features of DefraDB instance
 
 ### SEE ALSO
 
-* [defradb client acp document](defradb_client_acp_document.md)	 - Interact with the document access control system of a DefraDB node
-* [defradb client acp document relationship add](defradb_client_acp_document_relationship_add.md)	 - Add new relationship
-* [defradb client acp document relationship delete](defradb_client_acp_document_relationship_delete.md)	 - Delete relationship
+* [defradb client](defradb_client.md)	 - Interact with a DefraDB node
 

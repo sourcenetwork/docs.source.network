@@ -1,15 +1,29 @@
-## defradb client acp document relationship
+## defradb client p2p disconnect
 
-Interact with the document acp relationship features of DefraDB instance
+Disconnect from one or more peers
 
 ### Synopsis
 
-Interact with the document acp relationship features of DefraDB instance
+Disconnect from one or more peers with the given addresses
+
+```
+defradb client p2p disconnect <addresses...> [flags]
+```
+
+### Examples
+
+```
+Disconnect from a peer:  
+  defradb client p2p disconnect /ip4/0.0.0.0/tcp/9171/p2p/12D3KooW...
+
+Disconnect from multiple peers:  
+  defradb client p2p disconnect /ip4/0.0.0.0/tcp/9171/p2p/12D3KooW... /ip4/0.0.0.0/tcp/9172/p2p/1543LKs...
+```
 
 ### Options
 
 ```
-  -h, --help   help for relationship
+  -h, --help   help for disconnect
 ```
 
 ### Options inherited from parent commands
@@ -37,7 +51,5 @@ Interact with the document acp relationship features of DefraDB instance
 
 ### SEE ALSO
 
-* [defradb client acp document](defradb_client_acp_document.md)	 - Interact with the document access control system of a DefraDB node
-* [defradb client acp document relationship add](defradb_client_acp_document_relationship_add.md)	 - Add new relationship
-* [defradb client acp document relationship delete](defradb_client_acp_document_relationship_delete.md)	 - Delete relationship
+* [defradb client p2p](defradb_client_p2p.md)	 - Interact with the DefraDB P2P system
 

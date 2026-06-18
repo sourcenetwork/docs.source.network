@@ -1,15 +1,27 @@
-## defradb client acp document relationship
+## defradb client action list
 
-Interact with the document acp relationship features of DefraDB instance
+List action information.
 
 ### Synopsis
 
-Interact with the document acp relationship features of DefraDB instance
+List information pertaining to long running actions such as truncate, RefreshView,
+and the (re)building of indexes.
+
+```
+defradb client action list [flags]
+```
+
+### Examples
+
+```
+List information about actions:  
+  defradb client action list
+```
 
 ### Options
 
 ```
-  -h, --help   help for relationship
+  -h, --help   help for list
 ```
 
 ### Options inherited from parent commands
@@ -37,7 +49,5 @@ Interact with the document acp relationship features of DefraDB instance
 
 ### SEE ALSO
 
-* [defradb client acp document](defradb_client_acp_document.md)	 - Interact with the document access control system of a DefraDB node
-* [defradb client acp document relationship add](defradb_client_acp_document_relationship_add.md)	 - Add new relationship
-* [defradb client acp document relationship delete](defradb_client_acp_document_relationship_delete.md)	 - Delete relationship
+* [defradb client action](defradb_client_action.md)	 - Manage DefraDB actions
 
