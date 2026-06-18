@@ -132,7 +132,7 @@ TYPE(groupBy: [field]) {
 }
 ```
 
-## Group by a single field
+## Group by a single field {/* #single */}
 
 ```graphql title="Group books by genre"
 {

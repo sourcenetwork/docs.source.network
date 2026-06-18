@@ -106,7 +106,7 @@ The `order` object allows you to specify a different sorting for documents retur
   ```
 </details>
 
-## Sorting results
+## Sorting results {/* #sort */}
 
 To order results, use the syntax `order: { fieldName: DIRECTION }`, where:
 - `fieldName` &ndash; The name of the collection field to order by.
@@ -147,7 +147,7 @@ To order results, use the syntax `order: { fieldName: DIRECTION }`, where:
 }
 ```
 
-## Resolving ties &ndash; Sorting multiple fields
+## Resolving ties &ndash; Sorting multiple fields {/* #multiple-fields */}
 
 If multiple documents have the same value for the field used for ordering, by default the secondary ordering is on the `_docID`. In other words, ties are resolved with the unique document IDs.
 
@@ -241,7 +241,7 @@ There's no limit on the number of ordering fields that can be specified. Their p
 Regardless of the number of fields in the `order` object, `_docID` is always used to solve ties on the latest level.
 :::
 
-## Sorting for array sub-objects
+## Sorting for array sub-objects {/* #array-sub-objects */}
 
 Sorting on sub-objects from the root object is only allowed if the sub-object is not an array. If it is an array (such as the *many* side of one-to-many relationships), the sort must be applied to the object field in the selection set.
 

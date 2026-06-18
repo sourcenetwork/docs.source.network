@@ -105,7 +105,7 @@ Sometimes, _Little Bobby Tables_ is the right name. Other times, you might want 
   ```
 </details>
 
-## Rename queries
+## Rename queries {/* #queries */}
 
 To rename the return key for a query, prefix the custom name to the query and separate the two with a colon `:`.
 
@@ -205,7 +205,7 @@ You must alias queries when one request contains multiple queries to the same ty
 }
 ```
 
-## Rename fields
+## Rename fields {/* #fields */}
 
 To rename the return key for a field, prefix the custom name to the field in the selection set and separate the two with a colon `:`.
 

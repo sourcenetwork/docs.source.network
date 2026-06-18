@@ -342,7 +342,7 @@ To grant a specific permission to any actor, use the wildcard `"*"` as value for
   </TabItem>
 </Tabs>
 
-## Revoke permissions {/* #revoke */}
+## Revoke permissions {/* #revoke-permissions */}
 
 To revoke an actor's document permissions, delete their relation with the given document ID. Revoking [relations granted to any actor with `"*"`](#wildcard-relations) only revokes that individual relation: it doesn't revoke _all_ relations registered for _any_ actor.
 

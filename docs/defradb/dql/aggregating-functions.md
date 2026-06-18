@@ -122,7 +122,7 @@ The aggregating functions `MIN`, `MAX`, `SUM`, `AVG`, and `COUNT` allow you to c
   ```
 </details>
 
-## Syntax
+## Syntax {/* #syntax */}
 
 <Tabs groupId="aggregating-funcs">
   <TabItem value="MIN" label="MIN" default>
@@ -185,7 +185,7 @@ The aggregating functions `MIN`, `MAX`, `SUM`, `AVG`, and `COUNT` allow you to c
   </TabItem>
 </Tabs>
 
-## Usage with groups
+## Usage with groups {/* #groups */}
 
 When [grouping results](group.md), aggregating functions take as input the documents belonging to each group and produce a result for each group. It is optional to include the `GROUP` sub-object in the return fields.
 
@@ -321,7 +321,7 @@ When [grouping results](group.md), aggregating functions take as input the docum
 }
 ```
 
-### Filter documents
+### Filter documents {/* #filter-documents */}
 
 The `filter` object in the aggregating function only affects which documents are used to compute the function; it does not control which documents the query returns. To affect which documents are returned, place the filter at the root or group level. 
 
@@ -395,7 +395,7 @@ Note how the following example result differs from the previous one only in the 
 }
 ```
 
-### Multiple fields
+### Multiple fields {/* #multiple-fields */}
 
 When [grouping on multiple fields](group.md#multiple-fields), you can run an aggregating function _inside_ a `GROUP` sub-object, and use its output as input to another, higher-level aggregating function:
 
@@ -533,7 +533,7 @@ When [grouping on multiple fields](group.md#multiple-fields), you can run an agg
 }
 ```
 
-## Usage at root level
+## Usage at root level {/* #root-level */}
 
 You can provide the whole result set to an aggregating functions, and have its result as the only return field.
 

@@ -25,7 +25,7 @@ As GraphQL queries and mutations must always return some fields, all blocks retu
 - `<type>` &ndash; Object type, such as a [collection](/schema/collections.md) name.
 - `<documentObject>` &ndash; Return object for each selected document.
 
-In case of error, the `data` object is `null` and the `error` object contains the error details:
+In case of error, the `data` object is `null` and the `error` object contains a list of error objects:
 
 ```json title="Error object structure"
 {

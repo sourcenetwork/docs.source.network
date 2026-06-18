@@ -46,7 +46,7 @@ JWT tokens are not scoped to specific actions, so anybody with a valid token can
 
 HTTP requests carrying an invalid JWT token result in a `403 Forbidden` HTTP status code.
 
-### Header
+### Header {/* #jwt-header */}
 
 ```json title="Example &ndash; Header"
 {
@@ -57,7 +57,7 @@ HTTP requests carrying an invalid JWT token result in a `403 Forbidden` HTTP sta
 
 Valid values for `alg` are: `HS256K`, `EdDSA`. The algorithm must match the [identity](identity.md) key type. Most tools implicitly craft the header object for you basing on the signing algorithm.
 
-### Payload
+### Payload {/* #jwt-payload */}
 
 ```json title="Example &ndash; Payload"
 {
@@ -83,7 +83,7 @@ For policies hosted on SourceHub, more fields are required in the payload:
 - `authorized_account` &ndash; SourceHub address of the account signing transactions on your behalf (a `Bech32` address with a specific SourceHub prefix).
 :::
 
-### Signature
+### Signature {/* #jwt-signature */}
 
 The JWT token is signed with the `PrivateKey` corresponding to the `PublicKey` specified in the payload `sub` field.
 
@@ -91,7 +91,7 @@ The JWT token is signed with the `PrivateKey` corresponding to the `PublicKey` s
 b17a7b973f629b900cf23654db9c4be935f90281707dd3e2cd7a56bdd2c1bf4f
 ```
 
-### Generate tokens programmatically
+### Generate tokens programmatically {/* #generate-langs */}
 
 <Tabs groupId="lang">
   <TabItem value="python" label="Python" default>

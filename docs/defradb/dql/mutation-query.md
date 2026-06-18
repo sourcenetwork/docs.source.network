@@ -172,7 +172,7 @@ GraphQL queries in DefraDB have the following form:
 }
 ```
 
-## Run a query
+## Run a query {/* #run */}
 
 The basic skeleton of a query is made of the type/collection you want to fetch from (ex. `Book`) and the fields you want to return among the ones defined on the collection (ex. `_docID`, `title`, `plot`).
 
@@ -332,7 +332,7 @@ The basic skeleton of a query is made of the type/collection you want to fetch f
   </TabItem>
 </Tabs>
 
-## Relationships
+## Relationships {/* #relationships */}
 
 If a document contains a relationship to another document, the return fields can include the fields of the linked document. This applies both for one-to-one and to one-to-many relationships, and to both sides of the relationship.
 
@@ -473,7 +473,7 @@ You can walk connected types without boundaries: if type `Person` has a relation
 }
 ```
 
-## Get documents by ID
+## Get documents by ID {/* #get-by-id */}
 
 You can query the database for a specific document ID via the `docID` argument in the type constructor. You can query for one or more documents by providing either a string or a list of strings.
 
@@ -557,7 +557,7 @@ If both `filter` and `docID` are given, both criteria must be fulfilled for a do
 :::
 
 {/*
-## Run different query parts
+## Run different query parts {/* #query-parts */}
 
 ```
 {

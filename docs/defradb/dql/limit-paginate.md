@@ -108,7 +108,7 @@ The `limit` and `offset` keywords allow you to control how many records a query 
 </details>
 
 
-## Limit results (`limit`)
+## Limit results (`limit`) {/* #limit */}
 
 With the `limit` keyword you can specify the maximum number of records to return from a query's result set.
 
@@ -146,7 +146,7 @@ With the `limit` keyword you can specify the maximum number of records to return
 }
 ```
 
-## Skip results (`offset`)
+## Skip results (`offset`) {/* #offset */}
 
 With the `offset` keyword you can specify how many records to be skipped in the result set. The database will return records after the given `offset` number.
 

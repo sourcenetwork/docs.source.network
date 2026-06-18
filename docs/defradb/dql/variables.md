@@ -35,105 +35,81 @@ The best practice is thus to use variables for all values that might change over
     seller: Company
   }
   ```
-  ```graphql title="Company documents setup" test-setup-data
+  ```graphql title="Documents setup" test-setup-data
   mutation {
     c1:add_Company(input: {
       name: "The Indipendent Hipster Bookshop"
-    }) { _docID }
+    }) { _docID name }
     c2:add_Company(input: {
       name: "The World-Destroying Large Chain"
-    }) { _docID }
-  }
-  ```
-  ```graphql title="Person documents setup" test-setup-data
-  mutation {
+    }) { _docID name }
+
     a1:add_Person(input: {
       name: "George Orwell"
-    }) { _docID }
+    }) { _docID name }
     a2:add_Person(input: {
       name: "William Golding"
-    }) { _docID }
+    }) { _docID name }
     a3:add_Person(input: {
       name: "David Foster Wallace"
-    }) { _docID }
+    }) { _docID name }
     a4:add_Person(input: {
       name: "Victor Hugo"
-    }) { _docID }
-  }
-  ```
-  ```graphql title="Book documents setup" test-setup-data
-  mutation {
+    }) { _docID name }
+
     b11:add_Book(input: {
       title: "1984",
       genre: "Fiction",
       plot: "A masterpiece of rebellion and imprisonment where war is peace, freedom is slavery, and Big Brother is watching.",
       rating: 4.20,
-      _authorID: "bae-3517d1eb-351b-5231-8387-870893ffb395",
-      _sellerID: "bae-dd31ceba-9ffd-57b6-b6b2-365081ef4b7a"
-    }) {
-      _docID
-      title
-    }
+      _authorID: "bae-f630242e-3faf-525e-864c-422e09b00667",
+      _sellerID: "bae-e2120437-8282-5e59-9e02-e98d82f73cc3"
+    }) { _docID title }
     b12:add_Book(input: {
       title: "Down and Out in Paris and London",
       genre: "Biography",
       plot: "The adventures of a penniless British writer among the down-and-outs of two great cities.",
       rating: 4.09,
-      _authorID: "bae-3517d1eb-351b-5231-8387-870893ffb395",
-      _sellerID: "bae-dd31ceba-9ffd-57b6-b6b2-365081ef4b7a"
-    }) {
-      _docID
-      title
-    }
+      _authorID: "bae-f630242e-3faf-525e-864c-422e09b00667",
+      _sellerID: "bae-e2120437-8282-5e59-9e02-e98d82f73cc3"
+    }) { _docID title }
     b21:add_Book(input: {
       title: "Lord of the Flies",
       genre: "Fiction",
       plot: "At the dawn of the next world war, a plane crashes on an uncharted island, stranding a group of schoolboys.",
       rating: 3.70,
-      _authorID: "bae-78e9c7be-10b9-5673-bad2-da3341367d4b",
-      _sellerID: "bae-e467e3b8-9ba5-52b4-ae6b-4499f2f0c483"
-    }) {
-      _docID
-      title
-    }
+      _authorID: "bae-db573e8d-2466-55b9-8da0-39003f530d44",
+      _sellerID: "bae-f8755a60-c49f-510f-a435-c4ddfec82499"
+    }) { _docID title }
     b31:add_Book(input: {
       title: "Infinite Jest",
       genre: "Fiction",
       plot: "A gargantuan, mind-altering tragi-comedy about the Pursuit of Happiness in America.",
       rating: 4.25
-      _authorID: "bae-b59928dc-fd05-5fb7-aea2-9b24af5ebcea",
-      _sellerID: "bae-dd31ceba-9ffd-57b6-b6b2-365081ef4b7a"
-    }) {
-      _docID
-      title
-    }
+      _authorID: "bae-40b16347-07e0-5e97-85e0-8742eaba786e",
+      _sellerID: "bae-e2120437-8282-5e59-9e02-e98d82f73cc3"
+    }) { _docID title }
     b32:add_Book(input: {
       title: "Consider the Lobster and Other Essays",
       genre: "Nonfiction",
       plot: "Do lobsters feel pain? Did Franz Kafka have a funny bone? What is John Updike's deal, anyway? And what happens when adult video starlets meet their fans in person? Essays that are also enthralling narrative adventures.",
       rating: 4.18,
-      _authorID: "bae-b59928dc-fd05-5fb7-aea2-9b24af5ebcea",
-      _sellerID: "bae-e467e3b8-9ba5-52b4-ae6b-4499f2f0c483"
-    }) {
-      _docID
-      title
-    }
+      _authorID: "bae-40b16347-07e0-5e97-85e0-8742eaba786e",
+      _sellerID: "bae-f8755a60-c49f-510f-a435-c4ddfec82499"
+    }) { _docID title }
     b41:add_Book(input: {
       title: "Les Misérables",
       genre: "Fiction",
       plot: "Victor Hugo's tale of injustice, heroism and love follows the fortunes of Jean Valjean, an escaped convict determined to put his criminal past behind him.",
       rating: 4.21,
-      _authorID: "bae-c169e917-df52-5603-9224-39c1757f1b04",
-      _sellerID: "bae-e467e3b8-9ba5-52b4-ae6b-4499f2f0c483"
-    }) {
-      _docID
-      title
-    }
+      _authorID: "bae-7f9e6642-03e3-5f62-b684-3d5555f46f7d",
+      _sellerID: "bae-f8755a60-c49f-510f-a435-c4ddfec82499"
+    }) { _docID title }
   }
   ```
 </details>
 
-## Use variables
+## Use variables {/* #use-variables */}
 
 Variables are identified by the dollar sign `$`.
 The path to using them has three steps:
@@ -154,7 +130,7 @@ query ($bookID: [ID!]) {
 ```
 ```json title="Variables"
 {
-  "bookID": "bae-c26135f1-59d6-5f32-a7c0-16dbec525abe"
+  "bookID": "bae-b99349d9-9419-52c3-9b53-7a9b28e0ea33"
 }
 ```
 ```json title="Result"
@@ -162,7 +138,7 @@ query ($bookID: [ID!]) {
   "data": {
     "Book": [
       {
-        "_docID": "bae-c26135f1-59d6-5f32-a7c0-16dbec525abe",
+        "_docID": "bae-b99349d9-9419-52c3-9b53-7a9b28e0ea33",
         "author": {
           "name": "David Foster Wallace"
         },
@@ -210,7 +186,7 @@ query ($plot: String, $minRating: Float64) {
 }
 ```
 
-## Optional and mandatory variables
+## Optional and mandatory variables {/* #optional-mandatory */}
 
 By default, it is optional to provide a value to a variable for a given query. No value (i.e. `null`) is an allowed value. For example, omitting the value for `bookID` is valid, and results in all books being returned:
 
@@ -235,11 +211,6 @@ query ($plot: String, $minRating: Float64) {
   "data": {
     "Book": [
       {
-        "plot": "A masterpiece of rebellion and imprisonment where war is peace, freedom is slavery, and Big Brother is watching.",
-        "rating": 4.2,
-        "title": "1984"
-      },
-      {
         "plot": "Victor Hugo's tale of injustice, heroism and love follows the fortunes of Jean Valjean, an escaped convict determined to put his criminal past behind him.",
         "rating": 4.21,
         "title": "Les Misérables"
@@ -248,6 +219,11 @@ query ($plot: String, $minRating: Float64) {
         "plot": "A gargantuan, mind-altering tragi-comedy about the Pursuit of Happiness in America.",
         "rating": 4.25,
         "title": "Infinite Jest"
+      },
+      {
+        "plot": "A masterpiece of rebellion and imprisonment where war is peace, freedom is slavery, and Big Brother is watching.",
+        "rating": 4.2,
+        "title": "1984"
       }
     ]
   }
@@ -276,7 +252,7 @@ query ($title: String!, $minRating: Float64) {
 ```
 */ }
 
-## Default values
+## Default values {/* #default-values */}
 
 You can set a default value for a variable in its declaration:
 
