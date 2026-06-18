@@ -187,14 +187,14 @@ The aggregating functions `MIN`, `MAX`, `SUM`, `AVG`, and `COUNT` allow you to c
 
 ## Usage with groups
 
-When [grouping results](group.md), aggregating functions take as input the documents belonging to each group and produce a result for each group.
+When [grouping results](group.md), aggregating functions take as input the documents belonging to each group and produce a result for each group. It is optional to include the `GROUP` sub-object in the return fields.
 
 ```graphql title="Compute average rating for each book genre"
 {
   Book(groupBy: [genre]) {
     genre
     AVG(GROUP: { field: rating })
-    GROUP {
+    GROUP {  # optional
       title
       rating
     }
@@ -325,7 +325,7 @@ When [grouping results](group.md), aggregating functions take as input the docum
 
 The `filter` object in the aggregating function only affects which documents are used to compute the function; it does not control which documents the query returns. To affect which documents are returned, place the filter at the root or group level. 
 
-Note how the following example differs from the previous example only in the `AVG` value for `Fiction`; the documents returned for the group still include ratings lower than 4.
+Note how the following example result differs from the previous one only in the `AVG` value for `Fiction`; the documents returned for the group still include ratings lower than 4.
 
 ```graphql title="Compute average rating for each book genre, excluding ratings lower than 4"
 {
@@ -403,16 +403,134 @@ When [grouping on multiple fields](group.md#multiple-fields), you can run an agg
 {
   Book(groupBy: [genre]) {
     genre
+    author { name }
+    # highlight-next-line
     MAX(GROUP: { field: AVG })
     GROUP (groupBy: [author]){
       author { name }
+      # highlight-next-line
       AVG(GROUP: { field: rating })
+      GROUP {
+        title
+        rating
+      }
     }
   }
 }
 ```
 ```json title="Result"
-p
+{
+  "data": {
+    "Book": [
+      {
+        "GROUP": [
+          {
+            "AVG": 4.21,
+            "GROUP": [
+              {
+                "rating": 4.21,
+                "title": "Les Misérables"
+              }
+            ],
+            "author": {
+              "name": "Victor Hugo"
+            }
+          },
+          {
+            "AVG": 4.05,
+            "GROUP": [
+              {
+                "rating": 4.25,
+                "title": "Infinite Jest"
+              },
+              {
+                "rating": 3.85,
+                "title": "Girl with Curious Hair"
+              }
+            ],
+            "author": {
+              "name": "David Foster Wallace"
+            }
+          },
+          {
+            "AVG": 4.2,
+            "GROUP": [
+              {
+                "rating": 4.2,
+                "title": "1984"
+              }
+            ],
+            "author": {
+              "name": "George Orwell"
+            }
+          },
+          {
+            "AVG": 3.7,
+            "GROUP": [
+              {
+                "rating": 3.7,
+                "title": "Lord of the Flies"
+              }
+            ],
+            "author": {
+              "name": "William Golding"
+            }
+          }
+        ],
+        // highlight-next-line
+        "MAX": 4.21,
+        "author": {
+          "name": "David Foster Wallace"
+        },
+        "genre": "Fiction"
+      },
+      {
+        "GROUP": [
+          {
+            "AVG": 4.18,
+            "GROUP": [
+              {
+                "rating": 4.18,
+                "title": "Consider the Lobster and Other Essays"
+              }
+            ],
+            "author": {
+              "name": "David Foster Wallace"
+            }
+          }
+        ],
+        // highlight-next-line
+        "MAX": 4.18,
+        "author": {
+          "name": "David Foster Wallace"
+        },
+        "genre": "Nonfiction"
+      },
+      {
+        "GROUP": [
+          {
+            "AVG": 4.09,
+            "GROUP": [
+              {
+                "rating": 4.09,
+                "title": "Down and Out in Paris and London"
+              }
+            ],
+            "author": {
+              "name": "George Orwell"
+            }
+          }
+        ],
+        // highlight-next-line
+        "MAX": 4.09,
+        "author": {
+          "name": "George Orwell"
+        },
+        "genre": "Memoir"
+      }
+    ]
+  }
+}
 ```
 
 ## Usage at root level
@@ -421,7 +539,10 @@ You can provide the whole result set to an aggregating functions, and have its r
 
 ```graphql title="Compute average rating of all books rated above 1"
 {
-  AVG(Book: {field: rating, filter: {rating: {_geq: 1}}})
+  AVG(Book: {
+    field: rating,
+    filter: { rating: { _geq: 1 } }
+  })
 }
 ```
 ```json title="Result"
@@ -434,7 +555,9 @@ You can provide the whole result set to an aggregating functions, and have its r
 
 ```graphql title="Count how many books are rated 4 or higher"
 {
-  COUNT(Book: {filter: {rating: {_geq: 4}}})
+  COUNT(Book: {
+    filter: { rating: { _geq: 4 } }
+  })
 }
 ```
 ```json title="Result"
@@ -444,7 +567,3 @@ You can provide the whole result set to an aggregating functions, and have its r
   }
 }
 ```
-
-DefraDB also supports applying aggregate functions to relations just like we do fields. However, only the `count` function is available directly on the related object type.
-
-

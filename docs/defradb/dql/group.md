@@ -126,8 +126,8 @@ Queries with `groupBy` have an optional `GROUP` sub-object among its return fiel
 ```graphql title="Syntax" test-skip
 TYPE(groupBy: [field]) {
   field
-  GROUP(filter: object, docID: [ID], order: [object], limit: int, offset: int, orderBy: [object]) {
-    innerField
+  GROUP(filter: object, docID: [ID], order: [object], limit: int, offset: int, orderBy: [object], groupBy: [field]) {
+    field
   }
 }
 ```

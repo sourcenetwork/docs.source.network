@@ -65,6 +65,7 @@ function isPageAlreadyCollapsed(blocks) {
 }
 
 // For react re-paints, after first page load
+// TODO: investigate if the module can work when a md page is hot reloaded during development
 export function onRouteDidUpdate({location, previousLocation}) {
   collapseBlocks();
 }
