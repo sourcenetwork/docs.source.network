@@ -227,6 +227,16 @@ const config = {
         },
       },
     ],
+    [
+      "docusaurus-plugin-llms",
+      {
+        docsDir: "content",
+        generateLLMsTxt: true,
+        generateLLMsFullTxt: true,
+        excludeImports: true,
+        removeDuplicateHeadings: true,
+      },
+    ],
     // DefraDB instance
     [
       "@docusaurus/plugin-content-docs",
