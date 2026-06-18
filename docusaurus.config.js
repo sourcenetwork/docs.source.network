@@ -19,17 +19,6 @@ const config = {
     [
       "docusaurus-preset-openapi",
       /** @type {import('docusaurus-preset-openapi').Options} */
-      ({
-        api: {
-          path: "openapi.yml",
-          routeBasePath: "/sourcehub/api",
-        },
-        docs: false, // Disable the default docs plugin
-        proxy: false, // Disable the proxy plugin to avoid webpack-dev-server config errors
-        theme: {
-          customCss: require.resolve("./src/css/custom.scss"),
-        },
-      },
       {
         api: {
           path: "docs/defradb/references/http/openapi.json",
@@ -40,7 +29,14 @@ const config = {
         theme: {
           customCss: require.resolve("./src/css/custom.scss"),
         },
-      }),
+        sitemap: {
+          lastmod: "date",
+          changefreq: "weekly",
+          priority: 0.5,
+          ignorePatterns: ['/defradb/0.20.0/**'],
+          filename: "sitemap.xml",
+        },
+      },
     ],
   ],
   themeConfig:
