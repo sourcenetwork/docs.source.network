@@ -132,6 +132,10 @@ TYPE(groupBy: [field]) {
 }
 ```
 
+:::important Allowed return fields
+The return object can only include the grouped-by fields, the `GROUP` sub-object, and the result of other [aggregating functions](aggregating-functions.md). For example, in a query with `groupBy: [genre, rating]`, `genre` and `rating` are the only fields that can be directly returned. Other fields can be accessed from the `GROUP` sub-object.
+:::
+
 ## Group by a single field {/* #single */}
 
 ```graphql title="Group books by genre"
@@ -224,10 +228,6 @@ TYPE(groupBy: [field]) {
 - `groupBy` &ndash; Takes a list of field names.
 - `GROUP` &ndash; The aggregate sub-object contains all fields of the root object (`Book`), including relationships. The sub-object can be tweaked to further refine its output with (see [Combine root and `GROUP` query arguments](#root-group-query-args)).
 
-:::important Allowed return fields
-The return object can only include the grouped-by fields, the `GROUP` sub-object, and the result of other [aggregating functions](aggregating-functions.md). For example, in a query with `groupBy: [genre, rating]`, `genre` and `rating` are the only fields that can be directly returned. Other fields can be accessed from the `GROUP` sub-object.
-:::
-
 ## Group by relationship {/* #relationships */}
 
 You can group results by a relationship fields as well. You can only group by the whole object; grouping by object sub-fields (i.e. `groupBy: author.name` ) is not supported.
@@ -312,10 +312,125 @@ You can group results by a relationship fields as well. You can only group by th
 
 ## Group by multiple fields {/* #multiple-fields */}
 
-You can create groups basing on the value of multiple fields by providing a list to `groupBy`. The groups are not nested: each combination of `groupBy` fields values results in a separate group.
+To create groups basing on the value of multiple fields, you have two options:
 
-```graphql title="Group books by genre and author"
+1. Provide the first field to the root `groupBy` argument and the second field to the `groupBy` argument in the `GROUP` sub-object. You get first-order groups basing on the first field, and _nested_ groups basing on the second field. Continue to add fields for further nesting.
+1. Provide all fields as a list to the root `groupBy` argument. Each combination of `groupBy` fields values gives a separate group: the groups are not nested.
+
+<div style={{float:'left', width: '49%'}}>
+```graphql title="Option 1 &ndash; Groups by genre and author, nested"
 {
+  Book(groupBy: [genre]) {
+    genre
+    author { name }
+    # highlight-next-line
+    GROUP(groupBy: [author]) {
+      author { name }
+      GROUP { title }
+    }
+  }
+}
+```
+```json title="Result"
+{
+  "data": {
+    "Book": [
+      {
+        "GROUP": [
+          {
+            "GROUP": [
+              {
+                "title": "Lord of the Flies"
+              }
+            ],
+            "author": {
+              "name": "William Golding"
+            }
+          },
+          {
+            "GROUP": [
+              {
+                "title": "1985"
+              },
+              {
+                "title": "1984"
+              }
+            ],
+            "author": {
+              "name": "George Orwell"
+            }
+          },
+          {
+            "GROUP": [
+              {
+                "title": "Les Misérables"
+              }
+            ],
+            "author": {
+              "name": "Victor Hugo"
+            }
+          },
+          {
+            "GROUP": [
+              {
+                "title": "Infinite Jest"
+              }
+            ],
+            "author": {
+              "name": "David Foster Wallace"
+            }
+          }
+        ],
+        "author": {
+          "name": "George Orwell"
+        },
+        "genre": "Fiction"
+      },
+      {
+        "GROUP": [
+          {
+            "GROUP": [
+              {
+                "title": "Consider the Lobster and Other Essays"
+              }
+            ],
+            "author": {
+              "name": "David Foster Wallace"
+            }
+          }
+        ],
+        "author": {
+          "name": "David Foster Wallace"
+        },
+        "genre": "Nonfiction"
+      },
+      {
+        "GROUP": [
+          {
+            "GROUP": [
+              {
+                "title": "Down and Out in Paris and London"
+              }
+            ],
+            "author": {
+              "name": "George Orwell"
+            }
+          }
+        ],
+        "author": {
+          "name": "George Orwell"
+        },
+        "genre": "Biography"
+      }
+    ]
+  }
+}
+```
+</div>
+<div style={{float:'right', width: '49%'}}>
+```graphql title="Option 2 &ndash; Groups by genre and author, no nesting"
+{
+  # highlight-next-line
   Book(groupBy: [genre, author]) {
     genre
     author { name }
@@ -400,6 +515,8 @@ You can create groups basing on the value of multiple fields by providing a list
   }
 }
 ```
+</div>
+<div style={{clear:'both'}}></div>
 
 ## Combine root and `GROUP` query arguments {/* #root-group-query-args */}
 
@@ -444,7 +561,7 @@ The interplay between root and `GROUP` arguments can be subtle. When grouping re
 ```graphql title="Limit query to one group of unlimited size"
 {
   # highlight-next-line
-  Book(groupBy: [genre, author], order: { genre: ASC }, limit: 1) {
+  Book(groupBy: [genre], limit: 1) {
     genre
     GROUP {
       title
@@ -484,7 +601,7 @@ The interplay between root and `GROUP` arguments can be subtle. When grouping re
 <div style={{float:'right', width: '49%'}}>
 ```graphql title="Limit groups size to one result only"
 {
-  Book(groupBy: [genre, author]) {
+  Book(groupBy: [genre]) {
     genre
     # highlight-next-line
     GROUP(limit: 1) {
