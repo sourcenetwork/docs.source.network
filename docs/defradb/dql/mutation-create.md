@@ -323,3 +323,28 @@ mutation {
     ```
   </TabItem>
 </Tabs>
+
+## JSON fields
+
+JSON fields expect the value to be an unserialized object, not its string representation.
+
+```graphql title="Valid &ndash; JSON unserialized object"
+#valid
+mutation {
+  add_jsonBlob(input: {
+    jsonField: {
+      i: {
+        love: "eating my family and commas"
+      }
+    }
+  }) { jsonField }
+}
+```
+```graphql title="Invalid &ndash; JSON string representation"
+#invalid
+mutation {
+  add_jsonBlob(input: {
+    jsonField: "{\"i\": {\"love\": \"eating my family and commas\"}}"
+  }) { jsonField }
+}
+```

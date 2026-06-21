@@ -27,7 +27,7 @@ type Book {
 - `Boolean`: `true` or `false`.
 - `ID`: Unique identifier.
 - `DateTime`: ISO-8601 time (ex. `2017-07-23T03:46:56.647Z`).
-- `JSON`: JSON string (ex. `{ "privacy": { "is": "sexy" } }`). JSON fields get [specially indexed](indexes.md#json-fields-indexing).
+- `JSON`: JSON data (ex. `{ privacy: { is: "sexy" } }`). Query filters extend to JSON inner properties if the field is [indexed](indexes.md#json-fields).
 - `Blob`: Hex string (ex. `00FF`).
 - List: Array of another type (ex. `[String]`). Lists can not be nested.
 

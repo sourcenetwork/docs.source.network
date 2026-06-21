@@ -498,6 +498,72 @@ When specified explicitly, root-level and sub-objects filters are evaluated indi
 }
 ```
 
+## JSON fields {/* #json-fields */}
+
+If a `JSON` field is [indexed](schema/indexes.md), queries can traverse the JSON structure and filter by its inner properties. Inner properties support all [operators](#scalar-operators-by-type) of the related type (a string property supports all string operators, etc).
+
+For example, the following setup allows to filter on `i.love`:
+
+```graphql title='Schema for "jsonBlob" collection' test-setup-collection
+type jsonBlob {
+  jsonField: JSON @index
+}
+```
+```graphql title="A document with a JSON property"
+mutation {
+  add_jsonBlob(input: {
+    jsonField: {
+      i: {
+        love: "eating my family and commas"
+      }
+    }
+  }) { jsonField }
+}
+```
+```graphql title="Filter for JSON's inner properties"
+{
+  jsonBlob(filter: {
+    jsonField: {
+      i: {
+        love: { _like: "%family%" }
+      }
+    }
+  }) { jsonField }
+}
+```
+```json title="Result"
+{
+  "data": {
+    "jsonBlob": [
+      {
+        "jsonField": {
+          "i": {
+            "love": "eating my family and commas"
+          }
+        }
+      }
+    ]
+  }
+}
+```
+
+:::important
+It is possible to _filter_ for a JSON field's inner properties, but it's not possible to return them.
+
+```graphql title="Invalid &ndash; Return JSON field inner properties" test-error
+# invalid
+{
+  jsonBlob {
+    jsonField {
+      i {
+        love
+      }
+    }
+  {
+}
+```
+:::
+
 ## Renamed fields (aliases) {/* #field-aliases */}
 
 You can filter over [renamed fields](aliases.md) via the `_alias` key. Alias names cannot be used directly in the `filter` object.
@@ -636,5 +702,5 @@ The [list operators](#list-operators) `_any`, `_none`, `_all` evaluate a scalar 
 | Int, Float | `_eq, _neq, _gt, _geq, _lt, _leq, _in, _nin` |
 | Boolean, ID | `_eq, _neq, _in, _nin` |
 | DateTime | `_eq, _neq, _gt, _geq, _lt, _leq, _in, _nin` |
-| JSON | `_any, _all, _none, _eq, _neq, _like, _ilike, _nlike, _nilike, _in, _nin` |
+| JSON | Each inner field supports all operators supported by that type |
 | List | `_any, _all, _none, _eq, _neq` |

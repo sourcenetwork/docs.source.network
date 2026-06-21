@@ -99,39 +99,11 @@ Physics/Richard Feynman/docID5
 
 Although there is a partial benefit to queries filtering only on `genre`, there is no benefit if a query skips fields.
 
-## JSON fields indexing {/* #json-fields */}
+## JSON fields {/* #json-fields */}
 
-Fields of type `JSON` are treated specially: when indexed, each leaf node is indexed together its path, so that queries traversing the JSON structure can take advantage of the index.
-For example, given a JSON property with the following value:
+If a `JSON` field is indexed, queries can traverse the JSON structure and filter by its inner properties. See [Filter documents -> JSON fields](/dql/filter.md#json-fields).
 
-```json
-{
-  "user": {
-    "device": {
-      "os": "Linux"
-    }
-  }
-}
-```
-queries filtering on the `user.device.os` property will be sped up if an index is present on `Collection.jsonField`:
-
-```graphql
-{
-  Collection(filter: {
-    jsonField: {
-      user: {
-        device: {
-          model: {_eq: "Linux"}
-        }
-      }
-    }
-  })
-}
-```
-
-:::note
-Scalar types (ex. integers) are normalized to standard types (ex. int64).
-:::
+Scalar types (ex. integers) are normalized to DefraDB types (ex. int64).
 
 ## Performance considerations {/* #performance */}
 
