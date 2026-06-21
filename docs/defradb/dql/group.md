@@ -317,7 +317,7 @@ To create groups basing on the value of multiple fields, you have two options:
 1. Provide the first field to the root `groupBy` argument and the second field to the `groupBy` argument in the `GROUP` sub-object. You get first-order groups basing on the first field, and _nested_ groups basing on the second field. Continue to add fields for further nesting.
 1. Provide all fields as a list to the root `groupBy` argument. Each combination of `groupBy` fields values gives a separate group: the groups are not nested.
 
-<div style={{float:'left', width: '49%'}}>
+<div class="sidebyside-left">
 ```graphql title="Option 1 &ndash; Groups by genre and author, nested"
 {
   Book(groupBy: [genre]) {
@@ -427,7 +427,7 @@ To create groups basing on the value of multiple fields, you have two options:
 }
 ```
 </div>
-<div style={{float:'right', width: '49%'}}>
+<div class="sidebyside-right">
 ```graphql title="Option 2 &ndash; Groups by genre and author, no nesting"
 {
   # highlight-next-line
@@ -516,7 +516,7 @@ To create groups basing on the value of multiple fields, you have two options:
 }
 ```
 </div>
-<div style={{clear:'both'}}></div>
+<div class="sidebyside-clear"></div>
 
 ## Combine root and `GROUP` query arguments {/* #root-group-query-args */}
 
@@ -557,7 +557,7 @@ You can specify filters and other [query arguments](mutation-query.md#syntax) bo
 
 The interplay between root and `GROUP` arguments can be subtle. When grouping results, the root object returns _groups_, and individual results are moved into the `GROUP` aggregate. For example, a `limit` argument at the root level affects the number of _groups_ returned, not how many results get fed into the grouping:
 
-<div style={{float:'left', width: '49%'}}>
+<div class="sidebyside-left">
 ```graphql title="Limit query to one group of unlimited size"
 {
   # highlight-next-line
@@ -598,7 +598,7 @@ The interplay between root and `GROUP` arguments can be subtle. When grouping re
 }
 ```
 </div>
-<div style={{float:'right', width: '49%'}}>
+<div class="sidebyside-right">
 ```graphql title="Limit groups size to one result only"
 {
   Book(groupBy: [genre]) {
@@ -643,11 +643,11 @@ The interplay between root and `GROUP` arguments can be subtle. When grouping re
 }
 ```
 </div>
-<div style={{clear:'both'}}></div>
+<div class="sidebyside-clear"></div>
 
 Filters at the `GROUP` level allow you to restrict the groups to get only some subset of results. However, combining filters at root and `GROUP` level can also be tricky business. If a root-level filter yields no records, there's no groups to be formed and the result set is empty. However, if a root-level filter yields enough records for a group to form, the group could still be present and empty if the `GROUP`-level filter further shrinks the result set.
 
-<div style={{float:'left', width: '49%'}}>
+<div class="sidebyside-left">
 ```graphql title="Grouping with query arguments at root and group level"
 {
   Book(
@@ -685,7 +685,7 @@ Filters at the `GROUP` level allow you to restrict the groups to get only some s
 }
 ```
 </div>
-<div style={{float:'right', width: '49%'}}>
+<div class="sidebyside-right">
 ```graphql title="Grouping with query arguments at root and group level"
 {
   Book(
@@ -730,4 +730,4 @@ Filters at the `GROUP` level allow you to restrict the groups to get only some s
 }
 ```
 </div>
-<div style={{clear:'both'}}></div>
+<div class="sidebyside-clear"></div>

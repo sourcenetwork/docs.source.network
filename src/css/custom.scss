@@ -686,3 +686,17 @@ li div.theme-code-block {
     font-weight: 600;
   }
 }
+
+@media (min-width: 800px) {
+  .sidebyside-left {
+    float: left;
+    width: 49%
+  }
+  .sidebyside-right {
+    float: right;
+    width: 49%
+  }
+  .sidebyside-clear {
+    clear: both;
+  }
+}
