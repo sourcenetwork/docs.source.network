@@ -63,6 +63,7 @@ export default {
         'security/document-access-control',
       ]
     },
+    'transactions',
     'schema/migrate',
     'backup-restore',
     'commits',
