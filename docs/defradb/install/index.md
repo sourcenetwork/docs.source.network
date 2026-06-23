@@ -2,7 +2,7 @@
 title: Install
 ---
 
-To get a running instance of DefraDB, you need to source the `defradb` executable and start a node. The process is similar to fetching any other binary, except it's _much nicer_ because it's a binary you really want, and because we have built it with utmost care.
+To get a running instance of DefraDB, you need to source the `defradb` executable and start a node. The process is similar to that of any other software, except it's _much nicer_ because it's a binary you really want, and because it was built with utmost care.
 
 ## Get DefraDB {/* #get-defradb */}
 
@@ -12,7 +12,7 @@ There's a few different options to obtain an executable of DefraDB.
 
 [Download the executable](https://github.com/sourcenetwork/defradb/releases) appropriate to your system.
 
-To be able to run `defradb` commands, the binary must be located in a directory included in your `PATH`. On UNIX systems, a common choice is to place `defradb` in `/usr/local/bin`.
+To be able to run `defradb` CLI commands, place the binary in a directory included in your `PATH`. On UNIX systems, a common choice is to put `defradb` in `/usr/local/bin`.
 
 ### Build locally {/* #build */}
 
@@ -31,7 +31,7 @@ export PATH=$PATH:$(go env GOPATH)/bin
 ```
 
 :::note
-Although included in [pre-compiled binaries](#binaries), the [DefraDB Explorer](https://github.com/sourcenetwork/defradb-explorer) is not included in manual builds. It is built separately.
+The [DefraDB Explorer](https://github.com/sourcenetwork/defradb-explorer) is included in [pre-compiled binaries](#binaries) but not in manual builds.
 :::
 
 :::tip
@@ -41,29 +41,25 @@ The Go compiler requires substantial memory during compilation. Builds with less
 <summary>Tips for building on resource-constrained systems</summary>
 
 - For out-of-memory errors, use `-p 1` to limit compiler parallelism:
-
   ```
   go build -p 1 ./cmd/defradb
   ```
 - If `/tmp` is located on a small filesystem, redirect Go's temp directories to locations with more space:
-
   ```
   export GOTMPDIR=/path/with/space
   export GOCACHE=/path/with/space/go-cache
   export GOMODCACHE=/path/with/space/go-mod
   ```
 - For extremely constrained environments, you can reduce memory usage by disabling optimizations (produces slower binary):
-
   ```
   go build -p 1 -gcflags="all=-N -l" ./cmd/defradb
   ```
-
 </details>
 :::
 
 ### Docker container {/* #docker */}
 
-To run DefraDB in a Docker container, use one of the official images hosted on [GitHub](https://ghcr.io/sourcenetwork/defradb).
+To run DefraDB in a Docker container, use one of the [official images](https://ghcr.io/sourcenetwork/defradb).
 The environment variable `DEFRA_KEYRING_SECRET` is used to initialize [DefraDB's keys](keys.md), so set it to a value that you will later have access to.
 
 ```shell
@@ -80,8 +76,8 @@ You don't have to start the database when using a Docker image &ndash; you can d
 
 ## Start DefraDB {/* #start */}
 
-The database provisions necessary keys when starting it for the first time, storing them securely in the `defradb` keyring.
-The environment variable `DEFRA_KEYRING_SECRET` provides the secret to generate keys and unlock the keyring. The variable can also be defined in a `.env` file located in the working directory, or at a filepath defined by the `--secret-file` flag.
+The database creates the necessary keys when starting it for the first time, storing them securely in the `defradb` keyring.
+The environment variable `DEFRA_KEYRING_SECRET` holds the secret to generate keys and unlock the keyring. The variable can also be defined in a `.env` file located in the working directory, or at a filepath defined by the `--secret-file` flag.
 
 ```shell title="Generate and store secret into .env file"
 echo "DEFRA_KEYRING_SECRET=$(openssl rand -base64 32)" > .env
@@ -97,7 +93,7 @@ The keyring secret unlocks the identity and encryption keys for the local node, 
 
 ## Verify connection {/* #verify-connection */}
 
-To verify the local connection to the node, ping the `/health-check` HTTP endpoint:
+Verify the local connection to the node by pinging the `/health-check` HTTP endpoint:
 
 ```shell
 wget -qO- http://localhost:9181/health-check

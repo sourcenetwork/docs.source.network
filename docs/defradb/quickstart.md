@@ -208,8 +208,6 @@ Collections are the _types_ into which documents fit, like tables in SQL. Becaus
   </TabItem>
 </Tabs>
 
-`_docID` is the document's unique identifier, determined by the collection it belongs to and the data it is initialized with.
-
 [-> More information on creating documents](/dql/mutation-create.md)
 
 ## Query documents {/* #query-documents */}

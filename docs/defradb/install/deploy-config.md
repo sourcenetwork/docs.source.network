@@ -6,11 +6,11 @@ title: Deployment & Configuration
 For the full list of configuration settings, see [Reference -> Configuration](/references/config.md).
 :::
 
-## Configuration {/* #config */}
+## Root directory {/* #root-dir */}
 
 DefraDB's root directory is located at `~/.defradb/` on UNIX and at `%USERPROFILE%\.defradb`​ on Windows. Among other things, it contains the data, [keys](/install/keys.md), and [configuration file](/references/config.md). To specify a different path for the root directory, use the CLI option `--rootdir` when starting the instance.
 
-## Set up Document Access Control policies {/* #acp */}
+## Set up Access Control Policies {/* #acp */}
 
 To restrict what different users are allowed to do, set up appropriate [document access control policies](/security/document-access-control.md).
 
@@ -37,6 +37,10 @@ defradb start --p2paddr /ip4/0.0.0.0/tcp/9171 --url 0.0.0.0:9181
 
 The HTTP API is exposed unencrypted by default, but you can configure it to use TLS.
 
+:::warning TLS and CLI commands
+The `defradb` CLI commands don't support connection to instances with TLS enabled.
+:::
+
 Although keys can be located in any directory, the default location is `~/.defradb/certs`. To enable TLS, start the instance providing the paths to the public (`pubkeypath`) and private (`privkeypath`) keys:
 
 ```shell title="Enable TLS for HTTP API"
@@ -54,8 +58,8 @@ openssl req -new -x509 -sha256 -key ~/.defradb/certs/privkey.key -out ~/.defradb
 
 By default, DefraDB starts with its P2P features active. For information on how to set up P2P, see [Synchronize documents across multiple nodes](/p2p/index.md).
 
-:::note
-To disable P2P on an instance, start it with the `--no-p2p` flag.
+:::note disable p2p
+Disable P2P on an instance by starting it with the `--no-p2p` flag.
 
 ```bash
 defradb start --no-p2p
@@ -64,9 +68,7 @@ defradb start --no-p2p
 
 ## Support Cross-Origin Resource Sharing (CORS) {/* #cors */}
 
-Because DefraDB doesn't have any allowed origins set by default, you may face a Cross-Origin Resource Sharing (CORS) error when accessing DefraDB through a frontend interface. Subdomains must be allowed too. 
-
-You specify which origins are allowed to access the DefraDB endpoint when starting the database:
+Because DefraDB doesn't have any allowed origins set by default, you may face a Cross-Origin Resource Sharing (CORS) error when accessing DefraDB through a frontend interface. Specify allowed origins when starting the database:
 
 ```shell
 defradb start --allowed-origins=https://yourdomain.com

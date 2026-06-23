@@ -24,7 +24,7 @@ Default: `false`.
 - `direction` &ndash; Order direction. This affects the default sorting of results when querying documents.  
 Valid values: `ASC` or `DESC`.  
 Default: `ASC`.
-- `includes` &ndash; List of fields the index is created on (not required when the directive is used in a field definition).
+- `includes` &ndash; List of fields the index is created on (not required when the directive is used on a field).
 
 ## Index single fields {/* #single */}
 
@@ -61,7 +61,7 @@ type Person {
 
 ## Unique indexes {/* #unique */}
 
-An indexed unique field ensures that no two documents have the same value for one field. Null values are still allowed though.
+An indexed unique field ensures that no two documents have the same value for one field. Multiple documents can have the `null` value for a unique field.
 
 ```graphql title="Index the title property and enforce value uniqueness"
 type Book {
@@ -74,7 +74,7 @@ type Book {
 Unique indexes are used under the hood to enforce [one-to-one relationships](collections.md#relationships-one-to-one). The index must not be dropped, or the 1:1 nature of the relationship will not be fulfilled anymore.
 :::
 
-## Indexes multiple fields (composite) {/* #composite */}
+## Index multiple fields (composite) {/* #composite */}
 
 To create an index on the combination of multiple fields (composite index), use the `@index` directive at the collection level.
 

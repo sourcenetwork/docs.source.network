@@ -61,11 +61,11 @@ thumb: Blob @default(blob: "ff0099")
 
     ```shell title='Create collection "Book"'
     defradb client collection add '
-      type Book {
-        title: String!
-        plot: String
-        rating: Float
-      }
+    type Book {
+      title: String!
+      plot: String
+      rating: Float
+    }
     '
     ```
     ```json title="Result"
@@ -135,7 +135,7 @@ thumb: Blob @default(blob: "ff0099")
   <TabItem value="http" label="HTTP API">
   Create a collection by submitting a `POST` request to the HTTP endpoint [`/collections`](/defradb/references/http/api/add-collection/).
 
-    ```http title="Request"
+    ```http title='Create collection "Book"'
     POST http://localhost:9181/api/v1/collections HTTP/2
     accept: application/json
     content-type: text/plain
@@ -305,9 +305,9 @@ type Enrollment {  # the join type
 
 #### Multiple relationships of same type {/* #relationships-rename */}
 
-A type defining multiple relationships to the same type requires extra directives to disambiguate their targets. For example, in the scenario in which a book has both an author and a reviewer, the following definitions would be ambiguous:
+A type defining multiple relationships to the same type requires extra directives to disambiguate their targets. For example, if a book has both an author and a reviewer, the following definitions would be ambiguous:
 
-```graphql title="Invalid &ndash; Ambiguous definition of multiple relationships"
+```graphql title="Invalid &ndash; Ambiguous definition of multiple relationships" test-fail
 # invalid
 type Book {
   title: String
@@ -343,7 +343,7 @@ type Person {
 
 <Tabs groupId="defra">
   <TabItem value="cli" label="CLI" default>
-    To see all collections available on an instance, use the CLI command [`defradb client collection describe`](/references/cli/defradb_client_collection_describe.md).
+    Show the collections available on an instance with the CLI command [`defradb client collection describe`](/references/cli/defradb_client_collection_describe.md).
 
     ```shell title="Show all collections"
     defradb client collection describe
@@ -353,7 +353,7 @@ type Person {
     :::
   </TabItem>
   <TabItem value="http" label="HTTP API">
-    To see all collections available on an instance, submit a `GET` request to the HTTP endpoint [`/collections`](/defradb/references/http/api/describe-collection/).
+    Show the collections available on an instance by submitting a `GET` request to the HTTP endpoint [`/collections`](/defradb/references/http/api/describe-collection/).
 
     ```http title="Show all collections"
     GET http://localhost:9181/api/v1/collections HTTP/2
@@ -431,7 +431,7 @@ type Person {
 
 ## Truncate collections {/* #truncate */}
 
-Truncating a collection means deleting all documents belonging to it, including their histories. It's an irreversible operation that clears the collection's contents entirely.
+Truncating a collection means deleting all documents belonging to it, including their histories. It's an **irreversible operation** that clears the collection's contents entirely.
 
 <Tabs groupId="defra">
   <TabItem value="cli" label="CLI" default>
@@ -455,7 +455,7 @@ Truncating a collection means deleting all documents belonging to it, including 
 
 ## Delete collections {/* #delete */}
 
-The delete command takes one (or more) collection name and erases their schema from the database. Collections linked together through relationships must be deleted together.
+The delete command takes one or more collection names and erases their schema from the database. Collections linked together through relationships must be deleted together.
 
 <Tabs groupId="defra">
   <TabItem value="cli" label="CLI" default>

@@ -28,7 +28,7 @@ Once you have [created collections](/schema/collections.md), you can start addin
   ```
 </details>
 
-## Create one new document {/* #single */}
+## Single document {/* #single */}
 
 <Tabs groupId="defra">
   <TabItem value="cli" label="CLI" default>
@@ -117,15 +117,11 @@ Once you have [created collections](/schema/collections.md), you can start addin
   </TabItem>
 </Tabs>
 
-## The document ID  { /* #docid */ }
-
-The field `_docID` is the document's unique identifier, determined by the collection it belongs to and the data it is initialized with. The data in the document might change over time, but its docID will stay the same. 
-
-:::tip
-The `_docID` field is [automatically indexed](/schema/indexes.md).
+:::tip The document ID
+The field `_docID` contains the document's unique identifier. The document data might change over time, but its docID will stay the same. The `_docID` field is [automatically indexed](/schema/indexes.md).
 :::
 
-## Create documents with relationships {/* #relationships */}
+## Relationships {/* #relationships */}
 
 To add documents with relationships to each other, you need two queries: one to create the documents, and another to link them together via their docIDs.
 
@@ -199,7 +195,7 @@ mutation {
 }
 ```
 
-## Create multiple documents at once {/* #multiple */}
+## Multiple documents {/* #multiple */}
 
 <Tabs groupId="defra">
   <TabItem value="cli" label="CLI" default>
