@@ -4,7 +4,6 @@ title: Overview
 slug: /
 ---
 # Orbis Overview
-![Orbis Overview](/img/orbis/cover.png)
 
 Orbis is a decentralized Secrets Management engine powered by [Threshold-Proxy ReEncryption](asd) and [Multi-Party Computation](asd) to enable trustless system to manage and share application and user secrets. Application and user secrets can be anything from encryption keys, API tokens, to general small sized messages. This is comparable to other Secrets Management systems like [Hashicorp Vault](vault) but without a single centralized entity. 
 
