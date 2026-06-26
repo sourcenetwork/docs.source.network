@@ -29,7 +29,7 @@ Path to the public key file for TLS / HTTPS.
 
 Path to the private key file for TLS / HTTPS.
 
-## `datastore.badger.path` {/* #datastore-badger-path */}
+## `datastore.path` {/* #datastore-path */}
 
 Path to the database data files. Default: `data`.
 
