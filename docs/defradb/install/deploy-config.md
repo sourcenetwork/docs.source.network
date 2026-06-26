@@ -37,21 +37,22 @@ defradb start --p2paddr /ip4/0.0.0.0/tcp/9171 --url 0.0.0.0:9181
 
 The HTTP API is exposed unencrypted by default, but you can configure it to use TLS.
 
-:::warning TLS and CLI commands
-The `defradb` CLI commands don't support connection to instances with TLS enabled.
-:::
-
-Although keys can be located in any directory, the default location is `~/.defradb/certs`. To enable TLS, start the instance providing the paths to the public (`pubkeypath`) and private (`privkeypath`) keys:
-
-```shell title="Enable TLS for HTTP API"
+DefraDB will automatically start with TLS if a valid key pair is found at paths `~/.defradb/certs/server.crt` and `~/.defradb/certs/server.key`.
+To enable TLS with keys located in custom paths, start the instance providing their paths with the flags `--pubkeypath` and `--privkeypath`:
+```shell title="Enable TLS for HTTP API with custom key paths"
 defradb start --pubkeypath ~/.defradb/certs/pubkey.crt --privkeypath ~/.defradb/certs/privkey.key
 ```
 
 :::tip generate a self-signed certificate
-```shell 
-openssl ecparam -genkey -name secp384r1 -out ~/.defradb/certs/privkey.key
-openssl req -new -x509 -sha256 -key ~/.defradb/certs/privkey.key -out ~/.defradb/certs/pubkey.crt -days 365
+```shell
+mkdir -p ~/.defradb/certs
+openssl ecparam -genkey -name secp384r1 -out ~/.defradb/certs/server.key
+openssl req -new -x509 -sha256 -key ~/.defradb/certs/server.key -out ~/.defradb/certs/server.crt -days 365
 ```
+:::
+
+:::warning TLS and CLI commands
+The `defradb` CLI commands don't support connection to instances with TLS enabled.
 :::
 
 ## Set up peer-to-peer synchronization {/* #p2p-setup */}
