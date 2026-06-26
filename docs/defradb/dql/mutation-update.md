@@ -2,7 +2,7 @@
 title: Update existing documents
 ---
 
-The only constant is change: so shall it be. Even if the [*history*](/commits.md) of data in DefraDB is permanent, you can still alter stored documents. 
+The only constant is change. Even if the [*history*](/commits.md) of data in DefraDB is permanent, you can still alter stored documents. 
 
 ## Syntax  {/* #syntax */}
 
@@ -10,13 +10,13 @@ Similarly to the `add_TYPE` mutation to [create documents](mutation-create.md), 
 
 ```graphql title="Syntax &ndash; Update mutation" test-skip
 mutation {
-  update_TYPE(docID: [ID], filter: filterObj, input: updateInput) [TYPE]
+  update_TYPE(docID: [ID], filter: filterObj, input: updateObj)
 }
 ```
-
+- `TYPE` &ndash; Name of the [collection](schema/collections.md) to query.
 - `docID` &ndash; DocID of the document(s) to update. Either a string or a list of strings.
 - `filter` &ndash; Criteria for selecting documents to update (see [Filter documents](filter.md)).
-- `input` &ndash; JSON-like object containing the updates, same format as for [creating documents](mutation-create.md).
+- `updateObj` &ndash; JSON-like object containing the updates, same format as for [creating documents](mutation-create.md).
 
 If both `filter` and `docID` are given, both criteria must be fulfilled for a document to be selected.
 

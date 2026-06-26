@@ -7,7 +7,7 @@ import TabItem from '@theme/TabItem';
 
 Node operations are gated by Node Access Control (NAC). When NAC is enabled, all instance management requests must be [authenticated](authentication.md) and only allowed [actors](identity.md) will be able to perform administration operations on the instance.
 
-## Enable NAC
+## Enable NAC {/* #enable */}
 
 Node Access Control is disabled by default. To enable it, start the instance with the `--node-acp-enable` flag and provide an [identity's private key](identity.md) to the `--identity` flag. The given identity will be registered as the instance administrator.
 
@@ -17,7 +17,7 @@ defradb start --node-acp-enable --identity b17a7b973f629b900cf23654db9c4be935f90
 
 After the first time NAC is enabled, further attempts to enable it on startup (possibly with a different identity) are ignored.
 
-## Re-enable NAC
+## Re-enable NAC {/* #re-enable */}
 
 If NAC gets [disabled](#disable-nac) after it had been enabled, you can re-enable it with either the CLI command [`defradb client acp node re-enable`](/references/cli/defradb_client_acp_node_re-enable.md) or the HTTP endpoint [`/acp/node/re-enable`](/defradb/references/http/api/re-enable-nac/). Only admins are allowed to re-enable NAC.
 
@@ -47,7 +47,7 @@ If NAC gets [disabled](#disable-nac) after it had been enabled, you can re-enabl
   </TabItem>
 </Tabs>
 
-## Disable NAC
+## Disable NAC {/* #disable */}
 
 You can temporarily disable NAC with either the CLI command [`defradb client acp node disable`](/references/cli/defradb_client_acp_node_disable.md) or the HTTP endpoint [`/acp/node/disable`](/defradb/references/http/api/disable-nac/). All NAC checks are suspended while NAC is disabled, so any actor will be able to perform any operation.
 
@@ -77,7 +77,7 @@ You can temporarily disable NAC with either the CLI command [`defradb client acp
   </TabItem>
 </Tabs>
 
-## Show NAC status
+## Show NAC status {/* #show-status */}
 
 You can show the current NAC status with either the CLI command [`defradb client acp node status`](/references/cli/defradb_client_acp_node_status.md) or the HTTP endpoint [`/acp/node/status`](/defradb/references/http/api/check-status-of-nac/).
 
@@ -107,7 +107,7 @@ You can show the current NAC status with either the CLI command [`defradb client
   </TabItem>
 </Tabs>
 
-## Grant permissions
+## Grant permissions {/* #grant-permissions */}
 
 You can make another actor an administrator on an instance with either the CLI command [`defradb client acp node relationship add`](/references/cli/defradb_client_acp_node_relationship_add.md) or the HTTP endpoint [`/api/v1/acp/node/relationship`](/defradb/references/http/api/add-nac-relationship/). Target actors are identified by their `DID` key.
 

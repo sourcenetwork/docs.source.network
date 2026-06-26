@@ -28,55 +28,43 @@ The `filter` object allow you to specify criterias for selecting documents. You 
     ratings: [Float]
   }
   ```
-  ```graphql title="Person documents setup" test-setup-data
+  ```graphql title="Documents setup" test-setup-data
   mutation {
     a1:add_Person(input: {
       name: "George Orwell"
-    }) { _docID }
+    }) { _docID name }
     a2:add_Person(input: {
       name: "William Golding"
-    }) { _docID }
+    }) { _docID name }
     a3:add_Person(input: {
       name: "David Foster Wallace"
-    }) { _docID }
+    }) { _docID name }
     a4:add_Person(input: {
       name: "Victor Hugo"
-    }) { _docID }
-  }
-  ```
-  ```graphql title="Book documents setup" test-setup-data
-  mutation {
+    }) { _docID name }
+  
     b11:add_Book(input: {
       title: "1984",
       genre: "Fiction",
       plot: "A masterpiece of rebellion and imprisonment where war is peace, freedom is slavery, and Big Brother is watching.",
       rating: 4.20,
       ratings: [3.8, 4.91, 3.1, 2.8],
-      _authorID: "bae-3517d1eb-351b-5231-8387-870893ffb395"
-    }) {
-      _docID
-      title
-    }
+      _authorID: "bae-f630242e-3faf-525e-864c-422e09b00667"
+    }) { _docID title }
     b12:add_Book(input: {
       title: "Down and Out in Paris and London",
       genre: "Biography",
       plot: "The adventures of a penniless British writer among the down-and-outs of two great cities.",
       rating: 4.09,
-      _authorID: "bae-3517d1eb-351b-5231-8387-870893ffb395"
-    }) {
-      _docID
-      title
-    }
+      _authorID: "bae-f630242e-3faf-525e-864c-422e09b00667"
+    }) { _docID title }
     b21:add_Book(input: {
       title: "Lord of the Flies",
       genre: "Fiction",
       plot: "At the dawn of the next world war, a plane crashes on an uncharted island, stranding a group of schoolboys.",
       rating: 3.70,
       _authorID: "bae-78e9c7be-10b9-5673-bad2-da3341367d4b"
-    }) {
-      _docID
-      title
-    }
+    }) { _docID title }
     b31:add_Book(input: {
       title: "Infinite Jest",
       genre: "Fiction",
@@ -84,20 +72,14 @@ The `filter` object allow you to specify criterias for selecting documents. You 
       rating: 4.25,
       ratings: [3.1, 4.1, 4.5],
       _authorID: "bae-b59928dc-fd05-5fb7-aea2-9b24af5ebcea"
-    }) {
-      _docID
-      title
-    }
+    }) { _docID title }
     b32:add_Book(input: {
       title: "Consider the Lobster and Other Essays",
       genre: "Nonfiction",
       plot: "Do lobsters feel pain? Did Franz Kafka have a funny bone? What is John Updike's deal, anyway? And what happens when adult video starlets meet their fans in person? Essays that are also enthralling narrative adventures.",
       rating: 4.18,
       _authorID: "bae-b59928dc-fd05-5fb7-aea2-9b24af5ebcea"
-    }) {
-      _docID
-      title
-    }
+    }) { _docID title }
     b41:add_Book(input: {
       title: "Les Misérables",
       genre: "Fiction",
@@ -105,15 +87,17 @@ The `filter` object allow you to specify criterias for selecting documents. You 
       rating: 4.21,
       ratings: [3.9, 4.1],
       _authorID: "bae-c169e917-df52-5603-9224-39c1757f1b04"
-    }) {
-      _docID
-      title
-    }
+    }) { _docID title }
   }
   ```
 </details>
 
 ## Single fields  {/* #fields-single */}
+
+To filter on a single field, use the syntax `fieldName: { operator: Value }`, where:
+- `fieldName` &ndash; Name of the collection field to compare against.
+- `operator` &ndash; [Comparison operator](#operators) to use.
+- `Value` &ndash; Value to compare against, of the same type of `fieldName`.
 
 ```graphql title='Return books with title "1984"'
 {
@@ -166,11 +150,6 @@ The `filter` object allow you to specify criterias for selecting documents. You 
   }
 }
 ```
-
-To filter on a single field, use the syntax `fieldName: { operator: Value }`, where:
-- `fieldName` &ndash; Name of the collection field to compare against.
-- `operator` &ndash; [Comparison operator](#operators) to use.
-- `Value` &ndash; Value to compare against, of the same type of `fieldName`.
 
 You need to explicitly specify the `_and` operator in case of two filters on the same field, because JSON objects cannot contain duplicate fields:
 
@@ -262,9 +241,9 @@ filter: {
   "data": {
     "Book": [
       {
-        "genre": "Fiction",
-        "rating": 3.7,
-        "title": "Lord of the Flies"
+        "genre": "Biography",
+        "rating": 4.09,
+        "title": "Down and Out in Paris and London"
       },
       {
         "genre": "Nonfiction",
@@ -277,14 +256,14 @@ filter: {
         "title": "Infinite Jest"
       },
       {
-        "genre": "Biography",
-        "rating": 4.09,
-        "title": "Down and Out in Paris and London"
-      },
-      {
         "genre": "Fiction",
         "rating": 4.21,
         "title": "Les Misérables"
+      },
+      {
+        "genre": "Fiction",
+        "rating": 3.7,
+        "title": "Lord of the Flies"
       },
       {
         "genre": "Fiction",
@@ -297,7 +276,7 @@ filter: {
 ```
 
 :::note
-The conditional keywords `_and` and `_or` accept an array, whereas `_not` accepts an object.
+The boolean operators `_and` and `_or` accept an array, whereas `_not` accepts an object.
 
 ```graphql title='Filter all objects that *do not* have the genre "Fiction"'
 {
@@ -315,12 +294,12 @@ The conditional keywords `_and` and `_or` accept an array, whereas `_not` accept
   "data": {
     "Book": [
       {
-        "genre": "Nonfiction",
-        "title": "Consider the Lobster and Other Essays"
-      },
-      {
         "genre": "Biography",
         "title": "Down and Out in Paris and London"
+      },
+      {
+        "genre": "Nonfiction",
+        "title": "Consider the Lobster and Other Essays"
       }
     ]
   }
@@ -330,12 +309,19 @@ The conditional keywords `_and` and `_or` accept an array, whereas `_not` accept
 
 ## Relationship fields  {/* #rel-sub-objects */}
 
-Filters can access fields within nested objects, such as in relationships:
+Filters can access fields within sub-objects, such as in relationships.
+The syntax to filter over sub-objects has one more level of nesting in field names: `relFieldName: { fieldName: { operator: Value } }`, where:
+
+- `relFieldName`, `fieldName` &ndash; Name of the collection field to compare against.
+- `operator` &ndash; [Comparison operator](#operators) to use.
+- `Value` &ndash; Value to compare against, of the same type of `fieldName`.
+
 
 ```graphql title="Filter books by genre and author's name"
 {
   Book(filter: { 
-    genre: { _eq: "Fiction" }, 
+    genre: { _eq: "Fiction" },
+    # highlight-next-line
     author: { name: { _eq: "George Orwell" } }
   }) {
     title
@@ -355,12 +341,6 @@ Filters can access fields within nested objects, such as in relationships:
   }
 }
 ```
-
-The syntax to filter over sub-objects has one more level of nesting in field names: `relFieldName: { fieldName: { operator: Value } }`, where:
-
-- `relFieldName`, `fieldName` &ndash; Name of the collection field to compare against.
-- `operator` &ndash; [Comparison operator](#operators) to use.
-- `Value` &ndash; Value to compare against, of the same type of `fieldName`.
 
 ### One-to-many relationships {/* #rels-one-to-many */}
 
@@ -509,7 +489,7 @@ type jsonBlob {
   jsonField: JSON @index
 }
 ```
-```graphql title="A document with a JSON property"
+```graphql title="Create a document with a JSON property"
 mutation {
   add_jsonBlob(input: {
     jsonField: {
@@ -595,8 +575,8 @@ The [list operators](#list-operators) `_any`, `_none`, `_all` evaluate a scalar 
   Book(filter: {
     ratings: { _all: { _geq: 3.9 } }
   }) {
-    _docID
     title
+    ratings
   }
 }
 ```
@@ -605,7 +585,10 @@ The [list operators](#list-operators) `_any`, `_none`, `_all` evaluate a scalar 
   "data": {
     "Book": [
       {
-        "_docID": "bae-d056ef07-f21d-5c0b-885b-25c35f04dea8",
+        "ratings": [
+          3.9,
+          4.1
+        ],
         "title": "Les Misérables"
       }
     ]
@@ -618,8 +601,8 @@ The [list operators](#list-operators) `_any`, `_none`, `_all` evaluate a scalar 
   Book(filter: {
     ratings: { _any: { _lt: 3.5 } }
   }) {
-    _docID
     title
+    ratings
   }
 }
 ```
@@ -628,11 +611,20 @@ The [list operators](#list-operators) `_any`, `_none`, `_all` evaluate a scalar 
   "data": {
     "Book": [
       {
-        "_docID": "bae-40292ec1-ab26-5184-8d63-486392e53dc4",
+        "ratings": [
+          3.1,
+          4.1,
+          4.5
+        ],
         "title": "Infinite Jest"
       },
       {
-        "_docID": "bae-fca338d5-6a73-5676-8ae7-701165bd4f03",
+        "ratings": [
+          3.8,
+          4.91,
+          3.1,
+          2.8
+        ],
         "title": "1984"
       }
     ]
@@ -645,8 +637,8 @@ The [list operators](#list-operators) `_any`, `_none`, `_all` evaluate a scalar 
   Book(filter: {
     ratings: { _none: { _lt: 3.0 } }
   }) {
-    _docID
     title
+    ratings
   }
 }
 ```
@@ -655,11 +647,18 @@ The [list operators](#list-operators) `_any`, `_none`, `_all` evaluate a scalar 
   "data": {
     "Book": [
       {
-        "_docID": "bae-40292ec1-ab26-5184-8d63-486392e53dc4",
+        "ratings": [
+          3.1,
+          4.1,
+          4.5
+        ],
         "title": "Infinite Jest"
       },
       {
-        "_docID": "bae-d056ef07-f21d-5c0b-885b-25c35f04dea8",
+        "ratings": [
+          3.9,
+          4.1
+        ],
         "title": "Les Misérables"
       }
     ]

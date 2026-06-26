@@ -32,34 +32,28 @@ Once you have [created some documents](mutation-create.md), you can query the da
     seller: Company
   }
   ```
-  ```graphql title="Company documents setup" test-setup-data
+  ```graphql title="Documents setup" test-setup-data
   mutation {
     c1:add_Company(input: {
       name: "The Indipendent Hipster Bookshop"
-    }) { _docID }
+    }) { _docID name }
     c2:add_Company(input: {
       name: "The World-Destroying Large Chain"
-    }) { _docID }
-  }
-  ```
-  ```graphql title="Person documents setup" test-setup-data
-  mutation {
+    }) { _docID name }
+  
     a1:add_Person(input: {
       name: "George Orwell"
-    }) { _docID }
+    }) { _docID name }
     a2:add_Person(input: {
       name: "William Golding"
-    }) { _docID }
+    }) { _docID name }
     a3:add_Person(input: {
       name: "David Foster Wallace"
-    }) { _docID }
+    }) { _docID name }
     a4:add_Person(input: {
       name: "Victor Hugo"
-    }) { _docID }
-  }
-  ```
-  ```graphql title="Book documents setup" test-setup-data
-  mutation {
+    }) { _docID name }
+
     b11:add_Book(input: {
       title: "1984",
       genre: "Fiction",
@@ -67,10 +61,7 @@ Once you have [created some documents](mutation-create.md), you can query the da
       rating: 4.20,
       _authorID: "bae-3517d1eb-351b-5231-8387-870893ffb395",
       _sellerID: "bae-dd31ceba-9ffd-57b6-b6b2-365081ef4b7a"
-    }) {
-      _docID
-      title
-    }
+    }) { _docID title }
     b12:add_Book(input: {
       title: "Down and Out in Paris and London",
       genre: "Biography",
@@ -78,10 +69,7 @@ Once you have [created some documents](mutation-create.md), you can query the da
       rating: 4.09,
       _authorID: "bae-3517d1eb-351b-5231-8387-870893ffb395",
       _sellerID: "bae-dd31ceba-9ffd-57b6-b6b2-365081ef4b7a"
-    }) {
-      _docID
-      title
-    }
+    }) { _docID title }
     b21:add_Book(input: {
       title: "Lord of the Flies",
       genre: "Fiction",
@@ -89,10 +77,7 @@ Once you have [created some documents](mutation-create.md), you can query the da
       rating: 3.70,
       _authorID: "bae-78e9c7be-10b9-5673-bad2-da3341367d4b",
       _sellerID: "bae-e467e3b8-9ba5-52b4-ae6b-4499f2f0c483"
-    }) {
-      _docID
-      title
-    }
+    }) { _docID title }
     b31:add_Book(input: {
       title: "Infinite Jest",
       genre: "Fiction",
@@ -100,10 +85,7 @@ Once you have [created some documents](mutation-create.md), you can query the da
       rating: 4.25
       _authorID: "bae-b59928dc-fd05-5fb7-aea2-9b24af5ebcea",
       _sellerID: "bae-dd31ceba-9ffd-57b6-b6b2-365081ef4b7a"
-    }) {
-      _docID
-      title
-    }
+    }) { _docID title }
     b32:add_Book(input: {
       title: "Consider the Lobster and Other Essays",
       genre: "Nonfiction",
@@ -111,10 +93,7 @@ Once you have [created some documents](mutation-create.md), you can query the da
       rating: 4.18,
       _authorID: "bae-b59928dc-fd05-5fb7-aea2-9b24af5ebcea",
       _sellerID: "bae-e467e3b8-9ba5-52b4-ae6b-4499f2f0c483"
-    }) {
-      _docID
-      title
-    }
+    }) { _docID title }
     b41:add_Book(input: {
       title: "Les Misérables",
       genre: "Fiction",
@@ -122,17 +101,12 @@ Once you have [created some documents](mutation-create.md), you can query the da
       rating: 4.21,
       _authorID: "bae-c169e917-df52-5603-9224-39c1757f1b04",
       _sellerID: "bae-e467e3b8-9ba5-52b4-ae6b-4499f2f0c483"
-    }) {
-      _docID
-      title
-    }
+    }) { _docID title }
   }
   ```
 </details>
 
 ## Anatomy of a query block {/* #syntax */}
-
-GraphQL queries in DefraDB have the following form:
 
 ```graphql title="Syntax &ndash; Query block" test-skip
 {
@@ -142,18 +116,18 @@ GraphQL queries in DefraDB have the following form:
     limit: int, offset: int,
     orderBy: [object]
   ) {
-    [field]
+    [returnfield]
   }
 }
 ```
-- `TYPE` &ndash; Name of the collection to query.
+- `TYPE` &ndash; Name of the [collection](schema/collections.md) to query.
 - `filter`, `docID` &ndash; Criteria for documents to select, see [Filter documents](filter.md).
 - `order` &ndash; Results sorting fields, see [Sort and order results](sort-order.md).
 - `limit`, `offset` &ndash; Number of results to return/skip, see [Limit and paginate results](limit-paginate.md).
 - `groupBy` &ndash; Fields to group results by, see [Group results](group.md).
-- `[field]` &ndash; List of fields to return for the selected documents. Queries only return the exact fields requested (GraphQL has no equivalent of the SQL `SELECT *` syntax).
+- `[field]` &ndash; List of fields to return for the selected documents. Queries return the exact fields requested (GraphQL has no equivalent of the SQL `SELECT *` syntax).
 
-```graphql title="Example query &ndash; Filter books by genre and author's name"
+```graphql title="Example query &ndash; Filter books by genre and author's name; return 3 ordered by title"
 {
   Book(
     filter: {
@@ -174,11 +148,11 @@ GraphQL queries in DefraDB have the following form:
 
 ## Run a query {/* #run */}
 
-The basic skeleton of a query is made of the type/collection you want to fetch from (ex. `Book`) and the fields you want to return among the ones defined on the collection (ex. `_docID`, `title`, `plot`).
+The basic skeleton of a query is made of the type/collection you want to fetch from (ex. `Book`) and the fields you want to return among the ones defined on the collection (ex. `title`, `plot`). `_docID` is a return field available available on any type.
 
 <Tabs groupId="defra">
   <TabItem value="cli" label="CLI" default>
-    You can run a query via the CLI command [`defradb client query`](/references/cli/defradb_client_query.md).
+    Run a query via the CLI command [`defradb client query`](/references/cli/defradb_client_query.md).
 
     ```shell title="Retrieve all documents of type Book, returning docID, title, plot"
     defradb client query '
@@ -231,7 +205,7 @@ The basic skeleton of a query is made of the type/collection you want to fetch f
     ```
   </TabItem>
   <TabItem value="http" label="HTTP API">
-    You can run a query by submitting a `POST` request to the HTTP endpoint [`/api/v1/graphql`](/references/http/api/post-graphql/). The body must be a JSON object, with the GraphQL query under the `query` key. Newlines are not supported within the `query` string field.
+    Run a query by submitting a `POST` request to the HTTP endpoint [`/api/v1/graphql`](/references/http/api/post-graphql/). The body must be a JSON object, with the DQL query under the `query` key. Newlines are not supported within the `query` string field.
 
     ```http title="Retrieve all documents of type Book, returning docID, title, plot"
     POST http://localhost:9181/api/v1/graphql HTTP/2
@@ -475,7 +449,7 @@ You can walk connected types without boundaries: if type `Person` has a relation
 
 ## Get documents by ID {/* #get-by-id */}
 
-You can query the database for a specific document ID via the `docID` argument in the type constructor. You can query for one or more documents by providing either a string or a list of strings.
+Query the database for a specific document ID via the `docID` argument in the type constructor. You can query for one or more documents by providing either a string or a list of strings.
 
 ```graphql title="Get one author by ID and return his books"
 {
@@ -556,8 +530,12 @@ You can query the database for a specific document ID via the `docID` argument i
 If both `filter` and `docID` are given, both criteria must be fulfilled for a document to be selected.
 :::
 
+## Show deleted documents {/* #show-deleted */}
+
+lala
+
 {/*
-## Run different query parts {/* #query-parts */}
+## Run different query parts
 
 ```
 {

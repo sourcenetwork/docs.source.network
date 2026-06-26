@@ -28,11 +28,24 @@ Once you have [created collections](/schema/collections.md), you can start addin
   ```
 </details>
 
+## Syntax  {/* #syntax */}
+
+You create documents via the `add_TYPE` mutation. The mutation returns the new documents.
+
+```graphql title="Syntax &ndash; Add mutation" test-skip
+mutation {
+  add_TYPE(input: docObj) { [returnField] }
+}
+```
+- `TYPE` &ndash; A [collection](schema/collections.md) name.
+- `docObj` &ndash; JSON-like object containing the document details.
+- `[returnField]` &ndash; List of fields to return for the created documents.
+
 ## Single document {/* #single */}
 
 <Tabs groupId="defra">
   <TabItem value="cli" label="CLI" default>
-    To create documents of type `<type>`, use the mutation `add_<type>` via the CLI command [`defradb client query`](/references/cli/defradb_client_query.md). For example, to create a document in the `Book` collection, use `add_Book`.
+    To create a document of a given `<type>`, use the mutation `add_<type>` via the CLI command [`defradb client query`](/references/cli/defradb_client_query.md). For example, to create a document in the `Book` collection, use `add_Book`.
 
     Every `add_<type>` mutation must return some of the inserted information. Because GraphQL queries only return the exact fields requested, you have to provide a list of return fields (there is no equivalent of the SQL `SELECT *` syntax).
 
@@ -65,7 +78,7 @@ Once you have [created collections](/schema/collections.md), you can start addin
     ```
   </TabItem>
   <TabItem value="http" label="HTTP API">
-    To create documents of type `<type>`, submit a POST request to the HTTP endpoint [`/api/v1/collections/<type>`](/defradb/references/http/api/add-document/). For example, submit a request to `/api/v1/collections/Book`. The request body should contain the documents information in JSON format.
+    To create a document of a given `<type>`, submit a POST request to the HTTP endpoint [`/api/v1/collections/<type>`](/defradb/references/http/api/add-document/). For example, submit a request to `/api/v1/collections/Book`. The request body should contain the document information in JSON format.
 
     ```http title='Create a new document of type "Book"'
     POST http://localhost:9181/api/v1/collections/Book HTTP/2
@@ -85,7 +98,7 @@ Once you have [created collections](/schema/collections.md), you can start addin
     :::
   </TabItem>
   <TabItem value="graphql" label="GraphQL API">
-    To create documents of type `<type>`, use the mutation `add_<type>`. For example, to create a document in the `Book` collection, use `add_Book`.
+    To create a document of a given `<type>`, use the mutation `add_<type>`. For example, to create a document in the `Book` collection, use `add_Book`.
 
     Every `add_<type>` mutation must return some of the inserted information. Because GraphQL queries only return the exact fields requested, you have to provide a list of return fields (there is no equivalent of the SQL `SELECT *` syntax).
     
@@ -120,6 +133,123 @@ Once you have [created collections](/schema/collections.md), you can start addin
 :::tip The document ID
 The field `_docID` contains the document's unique identifier. The document data might change over time, but its docID will stay the same. The `_docID` field is [automatically indexed](/schema/indexes.md).
 :::
+
+## Multiple documents {/* #multiple */}
+
+<Tabs groupId="defra">
+  <TabItem value="cli" label="CLI" default>
+    You can create multiple documents in the same request by concatenating several `add_<type>` statements.
+    To avoid clashes, you need to [alias](aliases.md) the results (`b1` and `b2` in the example). The aliases are used as keys in the result JSON.
+
+    ```shell title="Create two documents"
+    defradb client query '
+      mutation {
+      # highlight-next-line
+      b1:add_Book(input: {
+        title: "1984",
+        genre: "Fiction",
+        plot: "A masterpiece of rebellion and imprisonment where war is peace, freedom is slavery, and Big Brother is watching.",
+        rating: 4.20
+      }) {
+        title
+      }
+      # highlight-next-line
+      b2:add_Book(input: {
+        title: "Lord of the Flies",
+        genre: "Fiction",
+        plot: "At the dawn of the next world war, a plane crashes on an uncharted island, stranding a group of schoolboys.",
+        rating: 3.70
+      }) {
+        title
+      }
+    }
+    '
+    ```
+    ```json title="Result"
+    {
+      "data": {
+        "b1": [
+          {
+            "title": "1984"
+          }
+        ],
+        "b2": [
+          {
+            "title": "Lord of the Flies"
+          }
+        ]
+      }
+    }
+    ```
+  </TabItem>
+  <TabItem value="http" label="HTTP API">
+    You can create multiple documents in the same request by providing a JSON list object to the `/api/v1/collections/<type>` endpoint.
+    
+    ```http title="Create two documents"
+    POST http://localhost:9181/api/v1/collections/Book HTTP/2
+    accept: application/json
+    content-type: application/json
+    
+    [
+      {
+        "title": "1984",
+        "genre": "Fiction",
+        "plot": "A masterpiece of rebellion and imprisonment where war is peace, freedom is slavery, and Big Brother is watching.",
+        "rating": 4.20
+      },
+      {
+        "title": "Lord of the Flies",
+        "genre": "Fiction",
+        "plot": "At the dawn of the next world war, a plane crashes on an uncharted island, stranding a group of schoolboys.",
+        "rating": 3.70
+      }
+    ]
+    ```
+  </TabItem>
+  <TabItem value="graphql" label="GraphQL API">
+    You can create multiple documents in the same request by concatenating several `add_<type>` statements.
+    To avoid clashes, you need to [alias](aliases.md) the results (`b1` and `b2` in the example). The aliases are used as keys in the result JSON.
+
+    ```graphql title="Create two documents"
+    mutation {
+      # highlight-next-line
+      b1:add_Book(input: {
+        title: "1984",
+        genre: "Fiction",
+        plot: "A masterpiece of rebellion and imprisonment where war is peace, freedom is slavery, and Big Brother is watching.",
+        rating: 4.20
+      }) {
+        title
+      }
+      # highlight-next-line
+      b2:add_Book(input: {
+        title: "Lord of the Flies",
+        genre: "Fiction",
+        plot: "At the dawn of the next world war, a plane crashes on an uncharted island, stranding a group of schoolboys.",
+        rating: 3.70
+      }) {
+        title
+      }
+    }
+    ```
+    ```json title="Result"
+    {
+      "data": {
+        "b1": [
+          {
+            "title": "1984"
+          }
+        ],
+        "b2": [
+          {
+            "title": "Lord of the Flies"
+          }
+        ]
+      }
+    }
+    ```
+  </TabItem>
+</Tabs>
 
 ## Relationships {/* #relationships */}
 
@@ -194,131 +324,6 @@ mutation {
   }
 }
 ```
-
-## Multiple documents {/* #multiple */}
-
-<Tabs groupId="defra">
-  <TabItem value="cli" label="CLI" default>
-    You can create multiple documents in the same request by concatenating several `add_<type>` statements.
-    To avoid clashes, you need to [alias](aliases.md) the results (`b1` and `b2` in the example). The aliases are used as keys in the result JSON.
-
-    ```shell title="Create two documents"
-    defradb client query '
-      mutation {
-      # highlight-next-line
-      b1:add_Book(input: {
-        title: "1984",
-        genre: "Fiction",
-        plot: "A masterpiece of rebellion and imprisonment where war is peace, freedom is slavery, and Big Brother is watching.",
-        rating: 4.20
-      }) {
-        _docID
-        title
-      }
-      # highlight-next-line
-      b2:add_Book(input: {
-        title: "Lord of the Flies",
-        genre: "Fiction",
-        plot: "At the dawn of the next world war, a plane crashes on an uncharted island, stranding a group of schoolboys.",
-        rating: 3.70
-      }) {
-        _docID
-        title
-      }
-    }
-    '
-    ```
-    ```json title="Result"
-    {
-      "data": {
-        "b1": [
-          {
-            "_docID": "bae-87c50a88-e1de-5df9-9659-cfe52d10dc7a",
-            "title": "1984"
-          }
-        ],
-        "b2": [
-          {
-            "_docID": "bae-7e637e18-7c15-5ed9-a5bf-aea644e5fcb6",
-            "title": "Lord of the Flies"
-          }
-        ]
-      }
-    }
-    ```
-  </TabItem>
-  <TabItem value="http" label="HTTP API">
-    You can create multiple documents in the same request by providing a JSON list object to the `/api/v1/collections/<type>` endpoint.
-    
-    ```http title="Create two documents"
-    POST http://localhost:9181/api/v1/collections/Book HTTP/2
-    accept: application/json
-    content-type: application/json
-    
-    [
-      {
-        "title": "1984",
-        "genre": "Fiction",
-        "plot": "A masterpiece of rebellion and imprisonment where war is peace, freedom is slavery, and Big Brother is watching.",
-        "rating": 4.20
-      },
-      {
-        "title": "Lord of the Flies",
-        "genre": "Fiction",
-        "plot": "At the dawn of the next world war, a plane crashes on an uncharted island, stranding a group of schoolboys.",
-        "rating": 3.70
-      }
-    ]
-    ```
-  </TabItem>
-  <TabItem value="graphql" label="GraphQL API">
-    You can create multiple documents in the same request by concatenating several `add_<type>` statements.
-    To avoid clashes, you need to [alias](aliases.md) the results (`b1` and `b2` in the example). The aliases are used as keys in the result JSON.
-
-    ```graphql title="Create two documents"
-    mutation {
-      # highlight-next-line
-      b1:add_Book(input: {
-        title: "1984",
-        genre: "Fiction",
-        plot: "A masterpiece of rebellion and imprisonment where war is peace, freedom is slavery, and Big Brother is watching.",
-        rating: 4.20
-      }) {
-        _docID
-        title
-      }
-      # highlight-next-line
-      b2:add_Book(input: {
-        title: "Lord of the Flies",
-        genre: "Fiction",
-        plot: "At the dawn of the next world war, a plane crashes on an uncharted island, stranding a group of schoolboys.",
-        rating: 3.70
-      }) {
-        _docID
-        title
-      }
-    }
-    ```
-    ```json title="Result"
-    {
-      "data": {
-        "b1": [
-          {
-            "_docID": "bae-87c50a88-e1de-5df9-9659-cfe52d10dc7a",
-            "title": "1984"
-          }
-        ],
-        "b2": [
-          {
-            "_docID": "bae-7e637e18-7c15-5ed9-a5bf-aea644e5fcb6",
-            "title": "Lord of the Flies"
-          }
-        ]
-      }
-    }
-    ```
-  </TabItem>
-</Tabs>
 
 ## JSON fields
 

@@ -10,10 +10,10 @@ Similarly to the `update_TYPE` mutation to [update documents](mutation-update.md
 
 ```graphql title="Syntax &ndash; Delete mutation" test-skip
 mutation {
-  delete_TYPE(docID: [ID], filter: filterObj) [TYPE]
+  delete_TYPE(docID: [ID], filter: filterObj)
 }
 ```
-
+- `TYPE` &ndash; Name of the [collection](schema/collections.md) to query.
 - `docID` &ndash; DocID of the document(s) to delete. Either a string or a list of strings.
 - `filter` &ndash; Criteria for selecting documents to delete (see [Filter documents](filter.md)).
 

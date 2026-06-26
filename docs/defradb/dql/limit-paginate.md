@@ -2,8 +2,7 @@
 title: Limit and paginate results
 ---
 
-There's no limit on the amount of data you can store in DefraDB, and thus there's no limit on how many results DefraDB will return when querying it. Things can get overwhelming quite quickly &ndash; before you realize, you might drown in your own data.
-
+There's no limit on the amount of data you can store in DefraDB, and thus there's no limit on how many results DefraDB will return when querying it. Don't overwhelm yourself.
 The `limit` and `offset` keywords allow you to control how many records a query will return. You can combine them to create a pagination system.
 
 <details>
