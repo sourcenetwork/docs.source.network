@@ -5,8 +5,7 @@ title: Restrict node management operations
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-Node operations are managed by Node Access Control (NAC).
-lala
+Node operations are gated by Node Access Control (NAC). When NAC is enabled, all instance management requests must be [authenticated](authentication.md) and only allowed [actors](identity.md) will be able to perform administration operations on the instance.
 
 ## Enable NAC
 
@@ -18,11 +17,9 @@ defradb start --node-acp-enable --identity b17a7b973f629b900cf23654db9c4be935f90
 
 After the first time NAC is enabled, further attempts to enable it on startup (possibly with a different identity) are ignored.
 
-
-
 ## Re-enable NAC
 
-If NAC gets [disabled](#disable-nac) after it had been enabled, you can re-enable it with either the CLI command [`defradb client acp node re-enable`](/references/cli/defradb_client_acp_node_re-enable.md) or the HTTP endpoint [`/acp/node/re-enable`](/defradb/references/http/api/re-enable-nac/). An actor must have the `re-enable-nac` permission to re-enable NAC.
+If NAC gets [disabled](#disable-nac) after it had been enabled, you can re-enable it with either the CLI command [`defradb client acp node re-enable`](/references/cli/defradb_client_acp_node_re-enable.md) or the HTTP endpoint [`/acp/node/re-enable`](/defradb/references/http/api/re-enable-nac/). Only admins are allowed to re-enable NAC.
 
 <Tabs groupId="defra">
   <TabItem value="cli" label="CLI" default>
@@ -112,24 +109,13 @@ You can show the current NAC status with either the CLI command [`defradb client
 
 ## Grant permissions
 
-
-To give another actor permission to access or alter a document, create a *relation* between the actor and the document ID. The relation defines what type of permission (according to the collection's policy) the actor will get. You can think that the relation assigns the identity a _role_ (ex. `reader`) with respect to a specific document. Target actors are identified by their `DID` key.
-
-The only actors allowed to grant permissions to others are the policy creator and the identities with the appropriate [manage relation](#manage-relation). The request to create a relation must be [authenticated](authentication.md).
-
-:::important
-You can only create relations to private documents (i.e. documents created with an identity). Public documents are not registered in the DAC system and cannot be permissioned.
-:::
+You can make another actor an administrator on an instance with either the CLI command [`defradb client acp node relationship add`](/references/cli/defradb_client_acp_node_relationship_add.md) or the HTTP endpoint [`/api/v1/acp/node/relationship`](/defradb/references/http/api/add-nac-relationship/). Target actors are identified by their `DID` key.
 
 <Tabs groupId="defra">
   <TabItem value="cli" label="CLI" default>
-    Give an actor permissions to a given document via the CLI command [`defradb client acp document relationship add`](/references/cli/defradb_client_acp_document_relationship_add.md)
-
-   ```shell
-    defradb client acp document relationship add \
-      --collection Book \
-      --docID bae-04ba3b88-1ac9-54f0-89b5-6abedff7201f \
-      --relation reader \
+   ```shell title="Grant another actor the admin relation"
+    defradb client acp node relationship add \
+	  --relation admin \
       --actor did:key:z7r8osuVyok8SVnHH5tsyNDRGyniu9pQoqBt7misXTEJAon5vYCt72NmFpya4NUiLjPfyDvvayNMbYRrnqLMYjpD1cAgp \
       --identity b17a7b973f629b900cf23654db9c4be935f90281707dd3e2cd7a56bdd2c1bf4f
     ```
@@ -140,18 +126,14 @@ You can only create relations to private documents (i.e. documents created with 
     ```
   </TabItem>
   <TabItem value="http" label="HTTP API">
-    Give an actor permissions to a given document by submitting a `POST` request to the HTTP endpoint [`/api/v1/acp/document/relationship`](/defradb/references/http/api/add-dac-relationship/).
-
-    ```http
-    POST http://localhost:9181/api/v1/acp/document/relationship HTTP/2
+    ```http title="Grant another actor the admin relation"
+    POST http://localhost:9181/api/v1/acp/node/relationship HTTP/2
     accept: application/json
     authorization: Bearer <jwtToken>
     content-type: application/json
 
     {
-      "CollectionName": "Book",
-      "DocID": "bae-04ba3b88-1ac9-54f0-89b5-6abedff7201f",
-      "Relation": "reader",
+      "Relation": "admin",
       "TargetActor": "did:key:z7r8osuVyok8SVnHH5tsyNDRGyniu9pQoqBt7misXTEJAon5vYCt72NmFpya4NUiLjPfyDvvayNMbYRrnqLMYjpD1cAgp"
     }
     ```
@@ -167,7 +149,53 @@ You can only create relations to private documents (i.e. documents created with 
 Adding an already-existing relation doesn't result in an error: the return value `ExistedAlready` shows whether the relation is new or was already in place.
 :::
 
-### Available permissions
+## Revoke permissions {/* #revoke-permissions */}
+
+You can revoke another actor's admin privileges with either the CLI command [`defradb client acp node relationship delete`](/references/cli/defradb_client_acp_node_relationship_add.md) or the HTTP endpoint [`/api/v1/acp/node/relationship`](/defradb/references/http/api/delete-nac-relationship/). Target actors are identified by their `DID` key.
+
+<Tabs groupId="defra">
+  <TabItem value="cli" label="CLI" default>
+   ```shell title="Revoke the admin relation from an actor"
+    defradb client acp node relationship delete \
+	  --relation admin \
+      --actor did:key:z7r8osuVyok8SVnHH5tsyNDRGyniu9pQoqBt7misXTEJAon5vYCt72NmFpya4NUiLjPfyDvvayNMbYRrnqLMYjpD1cAgp \
+      --identity b17a7b973f629b900cf23654db9c4be935f90281707dd3e2cd7a56bdd2c1bf4f
+    ```
+    ```json title="Result"
+    {
+      "RecordFound": true
+    }
+    ```
+  </TabItem>
+  <TabItem value="http" label="HTTP API">
+    ```http title="Revoke the admin relation from an actor"
+    DELETE http://localhost:9181/api/v1/acp/node/relationship HTTP/2
+    accept: application/json
+    authorization: Bearer <jwtToken>
+    content-type: application/json
+
+    {
+      "Relation": "admin",
+      "TargetActor": "did:key:z7r8osuVyok8SVnHH5tsyNDRGyniu9pQoqBt7misXTEJAon5vYCt72NmFpya4NUiLjPfyDvvayNMbYRrnqLMYjpD1cAgp"
+    }
+    ```
+    ```json title="Result"
+    {
+      "RecordFound": false
+    }
+    ```
+  </TabItem>
+</Tabs>
+
+:::note
+Deleting a non-existing relation doesn't result in an error: the return value `RecordFound` shows whether the relation existed or not prior to deletion.
+:::
+
+## Available permissions
+
+The `admin` relation includes all the following permissions. It is not possible to grant an actor a subset of admin permissions.
+
+### Document Access Control
 
 - bypass-dac
 - enable-dac
@@ -178,6 +206,8 @@ Adding an already-existing relation doesn't result in an error: the return value
 - delete-dac-relation
 - add-dac-policy
 
+### Node Access Control
+
 - re-enable-nac
 - disable-nac
 - purge-nac
@@ -185,22 +215,29 @@ Adding an already-existing relation doesn't result in an error: the return value
 - add-nac-relation
 - delete-nac-relation
 
+### Collections
+
 - patch-collection
 - get-collection
 - truncate-collection
+
+### Documents
 
 - read-document
 - update-document
 - delete-document
 
+### Indexes
+
 - list-index
 - new-index
 - delete-index
-
 - new-encrypted-index
 - delete-encrypted-index
 - list-encrypted-index
 - list-all-encrypted-index
+
+### P2P
 
 - connect-p2p-peer
 - disconnect-p2p-peer
@@ -219,15 +256,21 @@ Adding an already-existing relation doesn't result in an error: the return value
 - sync-p2p-collection-versions
 - sync-p2p-branchable-collection
 
+### Blocks
+
 - verify-signature
+
+### Lenses & Migration
 
 - add-lens
 - list-lens
+- set-migration
+
+### Actions
 
 - list-action
 
+### Views
+
 - refresh-view
 - add-view
-
-- set-migration
-

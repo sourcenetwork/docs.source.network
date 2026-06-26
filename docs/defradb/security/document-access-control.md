@@ -266,7 +266,7 @@ You can only create relations to private documents (i.e. documents created with 
   <TabItem value="cli" label="CLI" default>
     Give an actor permissions to a given document via the CLI command [`defradb client acp document relationship add`](/references/cli/defradb_client_acp_document_relationship_add.md)
 
-   ```shell
+   ```shell title='Grant another actor the "reader" relation on a specific "Book" document'
     defradb client acp document relationship add \
       --collection Book \
       --docID bae-04ba3b88-1ac9-54f0-89b5-6abedff7201f \
@@ -283,7 +283,7 @@ You can only create relations to private documents (i.e. documents created with 
   <TabItem value="http" label="HTTP API">
     Give an actor permissions to a given document by submitting a `POST` request to the HTTP endpoint [`/api/v1/acp/document/relationship`](/defradb/references/http/api/add-dac-relationship/).
 
-    ```http
+    ```http title='Grant another actor the "reader" relation on a specific "Book" document'
     POST http://localhost:9181/api/v1/acp/document/relationship HTTP/2
     accept: application/json
     authorization: Bearer <jwtToken>
@@ -314,7 +314,7 @@ To grant a specific permission to any actor, use the wildcard `"*"` as value for
 
 <Tabs groupId="defra">
   <TabItem value="cli" label="CLI" default>
-   ```shell
+   ```shell title='Grant any actor the "reader" relation on a specific "Book" document'
     defradb client acp document relationship add \
       --collection Book \
       --docID bae-04ba3b88-1ac9-54f0-89b5-6abedff7201f \
@@ -325,7 +325,7 @@ To grant a specific permission to any actor, use the wildcard `"*"` as value for
     ```
   </TabItem>
   <TabItem value="http" label="HTTP API">
-    ```http
+    ```http title='Grant any actor the "reader" relation on a specific "Book" document'
     POST http://localhost:9181/api/v1/acp/document/relationship HTTP/2
     accept: application/json
     authorization: Bearer <jwtToken>
@@ -352,7 +352,7 @@ The only actors allowed to revoke permissions are the policy creator and the ide
   <TabItem value="cli" label="CLI" default>
     Revoke an actor's permissions to a given document via the CLI command [`defradb client acp document relationship delete`](/references/cli/defradb_client_acp_document_relationship_delete.md)
 
-   ```shell
+   ```shell title='Revoke an actor "reader" relation for a specific "Book" document'
     defradb client acp document relationship delete \
       --collection Book \
       --docID bae-04ba3b88-1ac9-54f0-89b5-6abedff7201f \
@@ -369,7 +369,7 @@ The only actors allowed to revoke permissions are the policy creator and the ide
   <TabItem value="http" label="HTTP API">
     Revoke an actor's permissions to a given document by submitting a `DELETE` request to the HTTP endpoint [`/api/v1/acp/document/relationship`](/defradb/references/http/api/add-dac-relationship/).
 
-    ```http
+    ```http title='Revoke an actor "reader" relation for a specific "Book" document'
     DELETE http://localhost:9181/api/v1/acp/document/relationship HTTP/2
     accept: application/json
     authorization: Bearer <jwtToken>
