@@ -61,6 +61,7 @@ export default {
         'security/identity',
         'security/authentication',
         'security/document-access-control',
+        'security/node-access-control',
       ]
     },
     'transactions',
