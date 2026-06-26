@@ -41,16 +41,11 @@ An exclamation mark `!` after a type (ex. `Int!`) specifies that it should be no
 
 ### Default values
 
-Specify a default value for a field with the `@default` directive. The default value and the field must be of the same data type. `UTC_NOW` is a special value for the current timestamp.
+Specify a default value for a field with the `@default` directive. `UTC_NOW` is a special value for the current timestamp.
 
 ```graphql
-active: Boolean @default(bool: true)
-age: Int @default(int: 0)
-status: String @default(string: "draft")
-creation: DateTime @default(dateTime: UTC_NOW)
-expiry: DateTime @default(dateTime: "2026-06-19T00:00:00Z")
-meta: JSON @default(json: "{}")
-thumb: Blob @default(blob: "ff0099")
+active: Boolean @default(value: true)
+creation: DateTime @default(value: UTC_NOW)
 ```
 
 ## Create collections {/* #create */}
