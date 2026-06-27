@@ -19,6 +19,10 @@ Transactions allow you to group together a number of database operations that mu
     ```json title="Result"
     {"id":27}
     ```
+
+    :::tip Expiration
+    A transaction automatically expires after 60 seconds of inactivity. Tweak the default expiration with the flag `--ttl <seconds>`.
+    :::
   </TabItem>
   <TabItem value="http" label="HTTP API">
     Open a new transaction by submitting a `POST` request to the HTTP endpoint [`/tx`](/defradb/references/http/api/new-transaction/). The returned transaction ID is needed for all operations that want to act within this transaction.
@@ -30,6 +34,10 @@ Transactions allow you to group together a number of database operations that mu
     ```json title="Result"
     {"id":27}
     ```
+
+    :::tip Expiration
+    A transaction automatically expires after 60 seconds of inactivity. Tweak the default expiration with the parameter `ttl=<seconds>`.
+    :::
   </TabItem>
 </Tabs>
 
