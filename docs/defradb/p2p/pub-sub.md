@@ -52,7 +52,7 @@ defradb client collection add '
 
 ## Connect peers {/* #connect-peers */}
 
-Before being able to subscribe to collection updates, nodes must connect to each other (and become peers).
+Before being able to subscribe to collection updates, nodes must connect to each other (i.e. become peers).
 
 ```shell title="Get peer info for Node1"
 defradb client p2p info --url localhost:9181
@@ -73,7 +73,9 @@ It's enough to connect one node to another for the other to reciprocate: unlike 
 You can also provide Node1's peer info via the `--peer` option when starting Node2:
 
 ```shell title="Start Node2 with Node1 as peer"
-defradb start --rootdir ~/.defradb-node2 --p2paddr /ip4/127.0.0.1/tcp/9172 --url localhost:9182 --peers /ip4/127.0.0.1/tcp/9171/p2p/12D3KooWDy7z9Y6qANCUXADpwYn7cnHoHBAL4MrAuYeWpwA9UePt
+defradb start \
+  --rootdir ~/.defradb-node2 --p2paddr /ip4/127.0.0.1/tcp/9172 --url localhost:9182 \
+  --peers /ip4/127.0.0.1/tcp/9171/p2p/12D3KooWDy7z9Y6qANCUXADpwYn7cnHoHBAL4MrAuYeWpwA9UePt
 ```
 
 More peers can always be added on a running instance with the CLI command [`defradb client p2p connect`](/references/cli/defradb_client_p2p_connect.md).
@@ -106,16 +108,10 @@ Apr 30 11:42:01.717 INF p2p Adding pubsub topic PeerID=12D3KooWDy7z9Y6qANCUXADpw
 
 Note how you don't specify *to what peer's* collection you subscribe to: Node2 will listen to updates from *any peer* and update its local state accordingly. The local collection is the result of the shared state of all peers.
 
-When a document update is submitted to Node1, Node2 receives the update as a *pubsub message*:
+When a document update is submitted to Node1, Node2 receives the update and will then broadcast the message further to any peers connected to it. This chatty architecture allows updates to travel across the P2P network wide and far, regardless of whether two specific peers are connected or not and any node's connectivity status at any one moment.
 
-```text title="Node2 - Log output"
-Apr 30 11:45:11.788 INF p2p Received new pubsub message PeerID=12D3KooWHwpvkxhfFtX7kPZSj9XJ5wvgitqZ5mt2uWVpV5kkzQX4 SenderId=12D3KooWDy7z9Y6qANCUXADpwYn7cnHoHBAL4MrAuYeWpwA9UePt Topic=bafyreigk7nwtnurbwzv3uemdqo5czgafh33q5s3cylol4ozgvja75i5mca
-```
-
-Node2 will then broadcast the message further to any peers connected to it. This chatty architecture allows updates to travel across the P2P network to the largest extent possible, regardless of whether two specific peers are connected or not and any node's connectivity status at any one moment.
-
-:::info
-An instance's list of peers is cleared on shutdown, so you will need to reconnect peers when restarting it. Pub-sub subscriptions are instead retained across restarts.
+:::info instance shutdown
+An instance's list of peers is cleared on shutdown, so you will need to reconnect peers when restarting it. Pub-Sub subscriptions are instead retained across restarts.
 :::
 
 :::tip Add multiple collection names at once
@@ -132,7 +128,7 @@ Take for example this scenario:
 - Node1, Node2, Node3 share a collection over Pub-Sub
 - Node1 has a **local** Document Access Control policy attached to the collection
 - Node1 broadcasts an update for a private document in the collection
-- Node2 is a `reader` on the document; Node3 has no relation with it
+- Node2 is a `reader` on the document; Node3 has no permission on it
 
 Only Node2 will receive the details of the updated document from Node1, because Node3 has no permissions to access the document _according to Node1's policies_.
 However, now Node2 also has the updated document, and will happily broadcast it to Node3, so that Node3 also receives the updated document even if Node1 didn't intend to.

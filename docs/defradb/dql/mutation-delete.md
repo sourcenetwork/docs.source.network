@@ -2,7 +2,7 @@
 title: Delete documents
 ---
 
-**Deletion in DefraDB works differently** than in most other databases. Because the history of documents is append-only, the deletion of a document is registered just as another record in the history. Queries don't return deleted documents though, unless [the query explicitly requests deleted documents](mutation-query.md#show-deleted). In other words: the details of a deleted document are still available, but queries ignore its existence when retrieving results. The only way to permanently delete a document is to [truncate the collection](/schema/collections.md#truncate) it belongs to.
+**Deletion in DefraDB works differently** than in most other databases. Because the history of documents is append-only, the deletion of a document is registered just as another record in the history. Queries don't return deleted documents though, unless the query explicitly requests deleted documents. In other words: the details of a deleted document are still available, but queries ignore its existence when retrieving results. The only way to permanently delete a document is to [truncate the collection](/schema/collections.md#truncate) it belongs to.
 
 ## Syntax  {/* #syntax */}
 

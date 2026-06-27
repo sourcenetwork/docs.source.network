@@ -5,7 +5,7 @@ title: Transactions
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-Transactions allow you to group together a number of database operations that must either succeed together or not at all. All database operations are wrapped in transactions by default &ndash; you can however also manually start a transaction, enqueue a number of operations in it (ex. create or update a number of documents), and then either commit or discard it.
+Transactions allow you to group together a number of database operations that must either succeed together or not at all. DefraDB wraps all database operations in transactions by default &ndash; you can however also manually start a transaction, enqueue a number of operations in it (ex. create or update a number of documents), and commit or discard it.
 
 ## Open transactions {/* #open */}
 

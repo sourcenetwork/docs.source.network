@@ -47,7 +47,7 @@ export default {
     },
     {
       type: 'category',
-      label: 'Synchronize documents across multiple nodes',
+      label: 'Synchronize documents across multiple nodes (P2P)',
       items: [
         'p2p/index',
         'p2p/pub-sub',

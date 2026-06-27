@@ -2,7 +2,7 @@
 title: Group results
 ---
 
-The `groupBy` argument allows you to group results into buckets basing on the value of one or more fields. For example, books of different genre can be grouped together, and separated from books of other genres. 
+The `groupBy` argument allows you to group results into buckets basing on the value of one or more fields. For example, books of different genre can be grouped together and separated from books of other genres.
 
 <details>
   <summary>Display database setup</summary>
@@ -126,7 +126,7 @@ Queries with `groupBy` have an optional `GROUP` sub-object among its return fiel
 ```graphql title="Syntax" test-skip
 TYPE(groupBy: [field]) {
   field
-  GROUP(filter: object, docID: [ID], order: [object], limit: int, offset: int, orderBy: [object], groupBy: [field]) {
+  GROUP(filter: Object, docID: [ID], order: [Object], limit: Int, offset: Int, groupBy: [fieldObj]) {
     field
   }
 }
@@ -226,7 +226,7 @@ The return object can only include the grouped-by fields, the `GROUP` sub-object
 ```
 
 - `groupBy` &ndash; Takes a list of field names.
-- `GROUP` &ndash; The aggregate sub-object contains all fields of the root object (`Book`), including relationships. The sub-object can be tweaked to further refine its output with (see [Combine root and `GROUP` query arguments](#root-group-query-args)).
+- `GROUP` &ndash; The aggregate sub-object contains all fields of the root object (`Book`), including relationships. Tweak the sub-object to further refine its output (see [Combine root and `GROUP` query arguments](#root-group-query-args)).
 
 ## Group by relationship {/* #relationships */}
 

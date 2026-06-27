@@ -530,10 +530,6 @@ Query the database for a specific document ID via the `docID` argument in the ty
 If both `filter` and `docID` are given, both criteria must be fulfilled for a document to be selected.
 :::
 
-## Show deleted documents {/* #show-deleted */}
-
-lala
-
 {/*
 ## Run different query parts
 

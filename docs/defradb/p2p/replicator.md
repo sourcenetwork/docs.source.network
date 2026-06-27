@@ -4,7 +4,7 @@ title: Replicator
 
 With a [publisher-subscriber setup](pub-sub.md), a node subscribes to updates broadcasted by other nodes. It is the recipients who decide to be part of the community and keep in sync with the collection's shared state. 
 
-With a replicator peering, a node sends updates for a selected collection to another node. One node decides to impose its will onto another.
+With a replicator peering, a node sends updates for a selected collection to another node. One node imposes its will onto another.
 
 ### Create a common collection {/* #create-collection */}
 

@@ -1,5 +1,6 @@
 ---
 title: Restrict node management operations
+toc_max_heading_level: 2
 ---
 
 import Tabs from '@theme/Tabs';
@@ -16,36 +17,6 @@ defradb start --node-acp-enable --identity b17a7b973f629b900cf23654db9c4be935f90
 ```
 
 After the first time NAC is enabled, further attempts to enable it on startup (possibly with a different identity) are ignored.
-
-## Re-enable NAC {/* #re-enable */}
-
-If NAC gets [disabled](#disable-nac) after it had been enabled, you can re-enable it with either the CLI command [`defradb client acp node re-enable`](/references/cli/defradb_client_acp_node_re-enable.md) or the HTTP endpoint [`/acp/node/re-enable`](/defradb/references/http/api/re-enable-nac/). Only admins are allowed to re-enable NAC.
-
-<Tabs groupId="defra">
-  <TabItem value="cli" label="CLI" default>
-   ```shell title="Re-enable Node Access Control"
-    defradb client acp node re-enable \
-      --identity b17a7b973f629b900cf23654db9c4be935f90281707dd3e2cd7a56bdd2c1bf4f
-    ```
-    ```json title="Result"
-    {
-      "success": true
-    }
-    ```
-  </TabItem>
-  <TabItem value="http" label="HTTP API">
-    ```http title="Re-enable Node Access Control"
-    POST http://localhost:9181/api/v1/acp/node/re-enable HTTP/2
-    accept: application/json
-    authorization: Bearer <jwtToken>
-    ```
-    ```json title="Result"
-    {
-      "success": true
-    }
-    ```
-  </TabItem>
-</Tabs>
 
 ## Disable NAC {/* #disable */}
 
@@ -102,6 +73,36 @@ You can show the current NAC status with either the CLI command [`defradb client
     ```json title="Result"
     {
       "Status": "disabled temporarily"
+    }
+    ```
+  </TabItem>
+</Tabs>
+
+## Re-enable NAC {/* #re-enable */}
+
+If NAC gets [disabled](#disable-nac) after it had been enabled, you can re-enable it with either the CLI command [`defradb client acp node re-enable`](/references/cli/defradb_client_acp_node_re-enable.md) or the HTTP endpoint [`/acp/node/re-enable`](/defradb/references/http/api/re-enable-nac/). Only admins are allowed to re-enable NAC.
+
+<Tabs groupId="defra">
+  <TabItem value="cli" label="CLI" default>
+   ```shell title="Re-enable Node Access Control"
+    defradb client acp node re-enable \
+      --identity b17a7b973f629b900cf23654db9c4be935f90281707dd3e2cd7a56bdd2c1bf4f
+    ```
+    ```json title="Result"
+    {
+      "success": true
+    }
+    ```
+  </TabItem>
+  <TabItem value="http" label="HTTP API">
+    ```http title="Re-enable Node Access Control"
+    POST http://localhost:9181/api/v1/acp/node/re-enable HTTP/2
+    accept: application/json
+    authorization: Bearer <jwtToken>
+    ```
+    ```json title="Result"
+    {
+      "success": true
     }
     ```
   </TabItem>
@@ -193,8 +194,12 @@ Deleting a non-existing relation doesn't result in an error: the return value `R
 
 ## Available permissions
 
-The `admin` relation includes all the following permissions. It is not possible to grant an actor a subset of admin permissions.
+The `admin` relation includes all the following permissions. It is not possible to grant an actor a subset of them.
 
+
+<details>
+  <summary>Permissions list</summary>
+  
 ### Document Access Control
 
 - bypass-dac
@@ -274,3 +279,5 @@ The `admin` relation includes all the following permissions. It is not possible 
 
 - refresh-view
 - add-view
+
+</details>
