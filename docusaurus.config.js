@@ -189,6 +189,7 @@ const config = {
         apiKey: "909584ed5214e2d24ae2a85a5cd8664a",
         indexName: "source-docs",
       },
+      image: 'img/source-logo.jpg',
     }),
   clientModules: [
     require.resolve('./src/plugins/code-blocks.js')
