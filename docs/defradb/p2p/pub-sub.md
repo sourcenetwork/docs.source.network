@@ -3,7 +3,7 @@ title: Publisher-Subscriber
 description: How to configure a group of DefraDB nodes to communicate via the Pub-Sub model, sharing a collection.
 ---
 
-When one node receives a query that updates a collection (ex. create/alter documents), it broadcasts the update to its network of peers. Peers can listen for updates on a specific collection and use those to keep its state in sync with the broadcaster's state. Any number of nodes can join a peer-to-peer network, and any number of nodes can publish updates at the same time. Like in a ghossip circle, there's no leader: just a friendly community of peers that live by two principles:
+When one node receives a query that updates a collection (ex. create/alter documents), it broadcasts the update to its network of peers. Peers can listen for updates on a specific collection and use those to keep its state in sync with the broadcaster's state. Any number of nodes can join a peer-to-peer network, and any number of nodes can publish updates at the same time. Like in a gossip circle, there's no leader: just a friendly community of peers that live by two principles:
 
 - they promise to share any new information they receive
 - they promise to update themselves with the information they receive from their peers

@@ -1,10 +1,10 @@
 ---
 title: Filter documents
-description: The filter object allow you to specify criterias for selecting documents. Filter on single fields, a combination of fields, relationship sub-objects.
+description: The filter object allow you to specify criteria for selecting documents. Filter on single fields, a combination of fields, relationship sub-objects.
 ---
 
 It's fantastic to be able to store thousands of documents, but all this would be a silly business if you couldn't filter through them, wouldn't it?
-The `filter` object allow you to specify criterias for selecting documents. You can filter on:
+The `filter` object allow you to specify criteria for selecting documents. You can filter on:
 - [Single fields](#fields-single)
 - [A combination of fields](#fields-multiple)
 - [Relationship sub-objects](#rel-sub-objects)
@@ -448,7 +448,7 @@ If the return fields include the sub-object you filter on, the same filter is **
 ```
 
 You can override this behavior by specifying a different filter on the sub-object in the result fields.
-When specified explicitly, root-level and sub-objects filters are evaluated indipendently: the root filter is applied first and the sub-object filter is applied on the given field, per each returned document.
+When specified explicitly, root-level and sub-objects filters are evaluated independently: the root filter is applied first and the sub-object filter is applied on the given field, per each returned document.
 
 ```graphql title="Return all fiction books from George Orwell"
 {

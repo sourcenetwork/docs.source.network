@@ -28,7 +28,7 @@ An online node responds with `"Healthy"`.
 
 ## Interact with the database {/* #interact */}
 
-You can interact with DefraBD in a few different ways. Most actions can be run with all tools, but some are not available on all options.
+You can interact with DefraDB in a few ways. Most actions can be run with all tools, but some are not available on all options.
 
 <Tabs groupId="defra">
   <TabItem value="cli" label="CLI" default>
@@ -287,7 +287,7 @@ The basic skeleton of a query is made of the collection you want to fetch from (
   </TabItem>
 </Tabs>
 
-The DefraDB Query Language (DQL) is a rich GraphQL-based language supporting relationships between documents, filtering, limiting, sorting, and grouping.
+The DefraDB Query Language (DQL) is a rich GraphQL-based language supporting relationships, filtering, limiting, sorting, and grouping.
 
 ```graphql title="Example query – Filter books by genre and author's name; return 3 ordered by title"
 {
