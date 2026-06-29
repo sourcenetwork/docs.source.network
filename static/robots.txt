@@ -1,0 +1,6 @@
+User-Agent: *
+Allow: /
+
+Disallow: /defradb/0.20.0/*
+
+Sitemap: https://docs.source.network/sitemap.xml
