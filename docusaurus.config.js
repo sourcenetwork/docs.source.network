@@ -205,6 +205,16 @@ const config = {
       },
     ],
     [
+      require.resolve("./src/plugins/umami"),
+      {
+        enabled: process.env.UMAMI_ENABLED === "true",
+        websiteID: process.env.UMAMI_WEBSITE_ID,
+        analyticsDomain: process.env.UMAMI_DOMAIN,
+        scriptName: "script.js",
+        trackOutboundLinks: true,
+      },
+    ],
+    [
       "docusaurus-plugin-sass",
       {
         sassOptions: {
@@ -333,7 +343,7 @@ const config = {
           return reverseSidebarChangelog(sidebarItems);
         },
       },
-    ],
+    ]
   ],
   customFields: {
     docsData: {},
