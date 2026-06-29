@@ -10,11 +10,16 @@ const config = {
   url: "https://docs.source.network",
   baseUrl: "/",
   onBrokenLinks: "warn",
-  onBrokenMarkdownLinks: "warn",
   favicon: "img/favicon.ico",
   trailingSlash: true,
   organizationName: "source-developer", // Usually your GitHub org/user name.
   projectName: "source-developer", // Usually your repo name.
+  markdown:{
+    hooks: {
+      onBrokenMarkdownLinks: "warn",
+      onBrokenMarkdownImages: "warn",
+    }
+  },
   presets: [
     [
       "docusaurus-preset-openapi",
