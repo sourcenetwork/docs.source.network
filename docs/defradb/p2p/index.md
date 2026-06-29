@@ -8,7 +8,7 @@ One database is great, but it quickly becomes useless if hamsters eat its disks 
 DefraDB uses peer-to-peer (P2P) networking for data exchange, synchronization, and replication of documents and commits. P2P communication does not require a central authority.
 There's two types of peer-to-peer relationships:
 
-- [Publisher-Subscriber](pub-sub.md) - Whena a node receives an update for documents on a selected collection, it broadcasts it to listening peers. The state of the collection is shared across peers.
+- [Publisher-Subscriber](pub-sub.md) - When a node receives an update for documents on a selected collection, it broadcasts it to listening peers. The state of the collection is shared across peers.
 - [Replicator](replicator.md) - One node unilaterally pushes updates on a specific collection to a target peer.
 
 ## Setup {/* #setup */}

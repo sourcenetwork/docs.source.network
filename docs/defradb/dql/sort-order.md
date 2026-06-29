@@ -1,5 +1,6 @@
 ---
 title: Sort and order results
+description: The `order` object allows you to specify a different sorting for documents returned by a query.
 ---
 
 By default, results are sorted by [`_docID`](/dql/mutation-create.md#docid).

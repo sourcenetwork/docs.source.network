@@ -6,7 +6,7 @@ description: Set up Document Access Control to restrict who is allowed to do wha
 Document Access Control describes _who_ is allowed to do _what_ on the documents of a collection.
 At a high level, these are the steps to set it up:
 
-- [Create a policy](#create-policy) &ndash; Describe the set of rules that will apply to some documents.
+- [Create a policy](#create-policy) &ndash; Describe the set of rules that will apply to private documents.
 - [Register a policy](#register-policy) &ndash; Upload the policy into DefraDB.
 - [Create a permissioned collection](#permissioned-collections) &ndash; Attach the policy to a collection.
 - [Grant permissions to other actors](#grant-permissions) &ndash; Create relations between an [identity](identity.md) and a document.

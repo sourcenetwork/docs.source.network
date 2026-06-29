@@ -1,6 +1,6 @@
 ---
 title: Authentication
-description: How to authenticate CLI and HTTP requests when Document or Node Access Control is enabled.
+description: How to authenticate CLI and HTTP requests (JWT tokens) when Document or Node Access Control is enabled.
 ---
 
 Nobody should mess around with your private jewelry. When [Document Access Control](document-access-control.md) or [Node Access Control](node-access-control.md) is enabled on an instance, all requests acting on restricted resources must be authenticated with an [identity's private key](identity.md). The authentication looks different depending on the tool originating the request.
