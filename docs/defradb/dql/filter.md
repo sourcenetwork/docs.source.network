@@ -50,21 +50,21 @@ The `filter` object allow you to specify criteria for selecting documents. You c
       plot: "A masterpiece of rebellion and imprisonment where war is peace, freedom is slavery, and Big Brother is watching.",
       rating: 4.20,
       ratings: [3.8, 4.91, 3.1, 2.8],
-      _authorID: "bae-f630242e-3faf-525e-864c-422e09b00667"
+      _authorID: "bae-bc532931-4843-50bc-bbdd-3e31549c8cc6"
     }) { _docID title }
     b12:add_Book(input: {
       title: "Down and Out in Paris and London",
       genre: "Biography",
       plot: "The adventures of a penniless British writer among the down-and-outs of two great cities.",
       rating: 4.09,
-      _authorID: "bae-f630242e-3faf-525e-864c-422e09b00667"
+      _authorID: "bae-bc532931-4843-50bc-bbdd-3e31549c8cc6"
     }) { _docID title }
     b21:add_Book(input: {
       title: "Lord of the Flies",
       genre: "Fiction",
       plot: "At the dawn of the next world war, a plane crashes on an uncharted island, stranding a group of schoolboys.",
       rating: 3.70,
-      _authorID: "bae-78e9c7be-10b9-5673-bad2-da3341367d4b"
+      _authorID: "bae-6025af65-e57e-5db5-84dd-d349b130c6d9"
     }) { _docID title }
     b31:add_Book(input: {
       title: "Infinite Jest",
@@ -72,14 +72,14 @@ The `filter` object allow you to specify criteria for selecting documents. You c
       plot: "A gargantuan, mind-altering tragi-comedy about the Pursuit of Happiness in America.",
       rating: 4.25,
       ratings: [3.1, 4.1, 4.5],
-      _authorID: "bae-b59928dc-fd05-5fb7-aea2-9b24af5ebcea"
+      _authorID: "bae-26c791a7-fa81-5d86-95c5-4119e2fef915"
     }) { _docID title }
     b32:add_Book(input: {
       title: "Consider the Lobster and Other Essays",
       genre: "Nonfiction",
       plot: "Do lobsters feel pain? Did Franz Kafka have a funny bone? What is John Updike's deal, anyway? And what happens when adult video starlets meet their fans in person? Essays that are also enthralling narrative adventures.",
       rating: 4.18,
-      _authorID: "bae-b59928dc-fd05-5fb7-aea2-9b24af5ebcea"
+      _authorID: "bae-26c791a7-fa81-5d86-95c5-4119e2fef915"
     }) { _docID title }
     b41:add_Book(input: {
       title: "Les Misérables",
@@ -87,7 +87,7 @@ The `filter` object allow you to specify criteria for selecting documents. You c
       plot: "Victor Hugo's tale of injustice, heroism and love follows the fortunes of Jean Valjean, an escaped convict determined to put his criminal past behind him.",
       rating: 4.21,
       ratings: [3.9, 4.1],
-      _authorID: "bae-c169e917-df52-5603-9224-39c1757f1b04"
+      _authorID: "bae-4bfe5f4c-d668-5dc3-9de2-eb598af3da7d"
     }) { _docID title }
   }
   ```
