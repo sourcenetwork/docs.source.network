@@ -3,7 +3,7 @@ title: Update existing documents
 description: How to use the update_<type> GraphQL mutation to update documents in DefraDB.
 ---
 
-The only constant is change. Even if the [*history*](/commits.md) of data in DefraDB is permanent, you can still alter stored documents. 
+The only constant is change. Even if the [*history*](/time-travel.md) of data in DefraDB is permanent, you can still alter stored documents.
 
 ## Syntax  {/* #syntax */}
 

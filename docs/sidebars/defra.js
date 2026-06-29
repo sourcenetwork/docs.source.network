@@ -67,7 +67,7 @@ export default {
     'transactions',
     'schema/migrate',
     'backup-restore',
-    'commits',
+    'time-travel',
     {
       type: 'category',
       label: 'Reference',
