@@ -673,7 +673,7 @@
     "paths": {
         "/acp/document/policy": {
             "post": {
-                "description": "Add a policy using document access control system",
+                "description": "Add a policy using document acp system",
                 "operationId": "dac policy add",
                 "requestBody": {
                     "content": {
@@ -1482,7 +1482,17 @@
                 },
                 "responses": {
                     "200": {
-                        "$ref": "#/components/responses/success"
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "items": {
+                                        "type": "string"
+                                    },
+                                    "type": "array"
+                                }
+                            }
+                        },
+                        "description": "The IDs of the added documents"
                     },
                     "400": {
                         "$ref": "#/components/responses/error"
