@@ -46,7 +46,7 @@ mutation {
 
 <Tabs groupId="defra">
   <TabItem value="cli" label="CLI" default>
-    To create a document of a given `<type>`, use the mutation `add_<type>` via the CLI command [`defradb client query`](/references/cli/defradb_client_query.md). For example, to create a document in the `Book` collection, use `add_Book`.
+    To create a document of a given `<type>`, use the mutation `add_<type>` via the CLI command [`defradb client query`](/references/cli/defradb_client_query.md). For example, use `add_Book` to create a document in the `Book` collection.
 
     Every `add_<type>` mutation must return some of the inserted information. Because GraphQL queries only return the exact fields requested, you have to provide a list of return fields (there is no equivalent of the SQL `SELECT *` syntax).
 

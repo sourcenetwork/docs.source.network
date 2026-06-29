@@ -9,8 +9,6 @@ import TabItem from '@theme/TabItem';
 
 DefraDB is the database for local-first applications that prioritizes data ownership, personal privacy, and P2P synchronization. It features data encryption and verification, the ability to travel in time through the history of documents, and a multi-write-master architecture. The [DefraDB Query Language (DQL)](/dql/index.md) is based on GraphQL.
 
-For more background on the local-first paradigm, see [The Edge-First Awakening: Redefining the Foundations of Modern Computing](https://source.network/blog/the-edge-first-awakening-redefining-the-foundations-of-modern-computing).
-
 ## Install {/* #install */}
 
 Get `defradb` by [downloading the executable](https://github.com/sourcenetwork/defradb/releases) appropriate to your system.
@@ -41,13 +39,12 @@ You can interact with DefraBD in a few different ways. Most actions can be run w
   </TabItem>
   <TabItem value="http" label="HTTP API">
     The HTTP API is available at `http://localhost:9181/api/v1/`.  
-    A versionless endpoint is also available at `http://localhost:9181/api/` and points always to the latest version.
+    The versionless endpoint at `http://localhost:9181/api/` points to the latest version.
   </TabItem>
   <TabItem value="graphql" label="GraphQL">
     GraphQL clients (ex. [Altair](https://altairgraphql.dev/)) are a popular option to interact with the GraphQL API.  
-
     The GraphQL endpoint is available at `http://localhost:9181/api/v1/graphql`.  
-    A versionless endpoint is also available at  `http://localhost:9181/api/graphql` and points always to the latest version.
+    The versionless endpoint at `http://localhost:9181/api/graphql` points to the latest version.
   </TabItem>
   <TabItem value="explorer" label="Explorer">
     The DefraDB Explorer is a web application available at `http://localhost:9181`, and also hosted at https://explorer.source.network/. It provides a GraphQL client and an interface to the most common instance management operations.
@@ -57,13 +54,11 @@ You can interact with DefraBD in a few different ways. Most actions can be run w
 
 ## Add collections {/* #add-collections */}
 
-Collections are the _types_ into which documents fit, like tables in SQL. Because every document belongs to a collection, you need to create collections before you can insert any data. A collection has a name (ex. `Book`) and a number of typed fields (ex. `title: String`).
+Collections are the _types_ into which documents fit: they describe the database schema. You need to create collections before you can insert any data. A collection has a name and a number of typed fields.
 
 <Tabs groupId="defra">
   <TabItem value="cli" label="CLI" default>
-    You can create a collection with the CLI command [`defradb client collection add`](/references/cli/defradb_client_collection_add.md).
-
-    ```shell
+    ```shell title='Create a collection named "Book"'
     defradb client collection add '
       type Book {
         title: String!
@@ -74,9 +69,7 @@ Collections are the _types_ into which documents fit, like tables in SQL. Becaus
     ```
   </TabItem>
   <TabItem value="http" label="HTTP API">
-    You can create a collection via the HTTP API endpoint [`/collections`](/defradb/references/http/api/add-collection/).
-
-    ```http title="Request"
+    ```http title='Create a collection named "Book"'
     POST http://localhost:9181/api/v1/collections HTTP/2
     accept: application/json
     content-type: text/plain
@@ -94,13 +87,13 @@ Collections are the _types_ into which documents fit, like tables in SQL. Becaus
 
 ## Create documents {/* #create-documents */}
 
+DefraDB stores data in _documents_. You can think that a document is of a specific _type_, or that it belongs to a specific _collection_: they are two sides of the same coin.
+
 <Tabs groupId="defra">
   <TabItem value="cli" label="CLI" default>
-    To create documents of type `<type>`, use the mutation `add_<type>` via the CLI command [`defradb client query`](/references/cli/defradb_client_query.md). For example, to create a document in the `Book` collection, use `add_Book`.
+    Create documents of a given `<type>` with the function `add_<type>`. For example, use `add_Book` to create documents in the `Book` collection.
 
-    Every `add_<type>` mutation must return some of the inserted information. Because GraphQL queries only return the exact fields requested, you have to provide a list of return fields (there is no equivalent of the SQL `SELECT *` syntax).
-
-    ```shell title="Create a new document of type Book"
+    ```shell title='Create two new documents of type "Book", returning their title and unique ID'
     defradb client query '
       mutation {
         b1:add_Book(input: {
@@ -108,16 +101,16 @@ Collections are the _types_ into which documents fit, like tables in SQL. Becaus
           plot: "A masterpiece of rebellion and imprisonment where war is peace, freedom is slavery, and Big Brother is watching.",
           rating: 4.20
         }) {
-          _docID
           title
+          plot
         }
         b2:add_Book(input: {
           title: "Lord of the Flies",
           plot: "At the dawn of the next world war, a plane crashes on an uncharted island, stranding a group of schoolboys.",
           rating: 3.70
         }) {
-          _docID
           title
+          plot
         }
       }
     '
@@ -127,13 +120,13 @@ Collections are the _types_ into which documents fit, like tables in SQL. Becaus
       "data": {
         "b1": [
           {
-            "_docID": "bae-546ae840-77c7-51a5-ab0a-b5a893bfa546",
+            "plot": "A masterpiece of rebellion and imprisonment where war is peace, freedom is slavery, and Big Brother is watching.",
             "title": "1984"
           }
         ],
         "b2": [
           {
-            "_docID": "bae-6c91c35c-e548-58f8-86a6-d60ab5174072",
+            "plot": "At the dawn of the next world war, a plane crashes on an uncharted island, stranding a group of schoolboys.",
             "title": "Lord of the Flies"
           }
         ]
@@ -142,9 +135,9 @@ Collections are the _types_ into which documents fit, like tables in SQL. Becaus
     ```
   </TabItem>
   <TabItem value="http" label="HTTP API">
-    To create documents of type `<type>`, submit a POST request to the HTTP endpoint [`/api/v1/collections/<type>`](/defradb/references/http/api/add-document/). For example, submit a request to `/api/v1/collections/Book`. The request body should contain the documents information in JSON format.
+    Create documents of a given `<type>` via the HTTP endpoint [`/api/v1/collections/<type>`](/defradb/references/http/api/add-document/). For example, use `/api/v1/collections/Book` to create documents in the `Book` collection.
 
-    ```http title="Create two new documents of type Book"
+    ```http title='Create two new documents of type "Book"'
     POST http://localhost:9181/api/v1/collections/Book HTTP/2
     accept: application/json
     content-type: application/json
@@ -164,27 +157,25 @@ Collections are the _types_ into which documents fit, like tables in SQL. Becaus
     ```
   </TabItem>
   <TabItem value="graphql" label="GraphQL API">
-    To create documents of type `<type>`, use the mutation `add_<type>`. For example, to create a document in the `Book` collection, use `add_Book`.
+    Create documents of a given `<type>` with the function `add_<type>`. For example, use `add_Book` to create documents in the `Book` collection.
 
-    Every `add_<type>` mutation must return some of the inserted information. Because GraphQL queries only return the exact fields requested, you have to provide a list of return fields (there is no equivalent of the SQL `SELECT *` syntax).
-
-    ```graphql title="Create two new documents of type Book, returning their title and ID"
+    ```graphql title='Create two new documents of type "Book", returning their title and plot'
     mutation {
       b1:add_Book(input: {
         title: "1984",
         plot: "A masterpiece of rebellion and imprisonment where war is peace, freedom is slavery, and Big Brother is watching.",
         rating: 4.20
       }) {
-        _docID
         title
+        plot
       }
       b2:add_Book(input: {
         title: "Lord of the Flies",
         plot: "At the dawn of the next world war, a plane crashes on an uncharted island, stranding a group of schoolboys.",
         rating: 3.70
       }) {
-        _docID
         title
+        plot
       }
     }
     ```
@@ -193,13 +184,13 @@ Collections are the _types_ into which documents fit, like tables in SQL. Becaus
       "data": {
         "b1": [
           {
-            "_docID": "bae-546ae840-77c7-51a5-ab0a-b5a893bfa546",
+            "plot": "A masterpiece of rebellion and imprisonment where war is peace, freedom is slavery, and Big Brother is watching.",
             "title": "1984"
           }
         ],
         "b2": [
           {
-            "_docID": "bae-6c91c35c-e548-58f8-86a6-d60ab5174072",
+            "plot": "At the dawn of the next world war, a plane crashes on an uncharted island, stranding a group of schoolboys.",
             "title": "Lord of the Flies"
           }
         ]
@@ -213,17 +204,14 @@ Collections are the _types_ into which documents fit, like tables in SQL. Becaus
 
 ## Query documents {/* #query-documents */}
 
-The basic skeleton of a query is made of the collection you want to fetch from (ex. `Book`) and the fields you want to return (ex. `_docID`, `title`, `plot`).
+The basic skeleton of a query is made of the collection you want to fetch from (ex. `Book`) and the fields you want to return (ex. `title`, `plot`).
 
 <Tabs groupId="defra">
   <TabItem value="cli" label="CLI" default>
-    You can run a query via the CLI command [`defradb client query`](/references/cli/defradb_client_query.md).
-
-    ```shell title="Retrieve all documents of type Book, returning docID, title, plot"
+    ```shell title="Retrieve all documents of type Book, returning title and plot"
     defradb client query '
     {
       Book {
-        _docID
         title
         plot
       }
@@ -235,12 +223,10 @@ The basic skeleton of a query is made of the collection you want to fetch from (
       "data": {
         "Book": [
           {
-            "_docID": "bae-526a42c6-c147-57e4-89e0-875d27a1532d",
             "plot": "A masterpiece of rebellion and imprisonment where war is peace, freedom is slavery, and Big Brother is watching.",
             "title": "1984"
           },
           {
-            "_docID": "bae-9579541e-f15d-506e-a74a-63d00cb3ab56",
             "plot": "At the dawn of the next world war, a plane crashes on an uncharted island, stranding a group of schoolboys.",
             "title": "Lord of the Flies"
           }
@@ -250,15 +236,13 @@ The basic skeleton of a query is made of the collection you want to fetch from (
     ```
   </TabItem>
   <TabItem value="http" label="HTTP API">
-    You can run a query by submitting a `POST` request to the HTTP endpoint [`/api/v1/graphql`](/references/http/api/post-graphql/). The body must be a JSON object, with the GraphQL query under the `query` key. Newlines are not supported within the `query` string field.
-
-    ```http title="Retrieve all documents of type Book, returning docID, title, plot"
+    ```http title="Retrieve all documents of type Book, returning title and plot"
     POST http://localhost:9181/api/v1/graphql HTTP/2
     accept: application/json
     content-type: application/json
     
     {
-      "query": "{ Book { _docID title plot } }"
+      "query": "{ Book { title plot } }"
     }
     ```
     ```json title="Result"
@@ -266,12 +250,10 @@ The basic skeleton of a query is made of the collection you want to fetch from (
       "data": {
         "Book": [
           {
-            "_docID": "bae-526a42c6-c147-57e4-89e0-875d27a1532d",
             "plot": "A masterpiece of rebellion and imprisonment where war is peace, freedom is slavery, and Big Brother is watching.",
             "title": "1984"
           },
           {
-            "_docID": "bae-9579541e-f15d-506e-a74a-63d00cb3ab56",
             "plot": "At the dawn of the next world war, a plane crashes on an uncharted island, stranding a group of schoolboys.",
             "title": "Lord of the Flies"
           }
@@ -281,10 +263,9 @@ The basic skeleton of a query is made of the collection you want to fetch from (
     ```
   </TabItem>
   <TabItem value="graphql" label="GraphQL API">
-    ```graphql title="Retrieve all documents of type Book, returning docID, title, plot"
+    ```graphql title="Retrieve all documents of type Book, returning title and plot"
     {
       Book {
-        _docID
         title
         plot
       }
@@ -295,12 +276,10 @@ The basic skeleton of a query is made of the collection you want to fetch from (
       "data": {
         "Book": [
           {
-            "_docID": "bae-526a42c6-c147-57e4-89e0-875d27a1532d",
             "plot": "A masterpiece of rebellion and imprisonment where war is peace, freedom is slavery, and Big Brother is watching.",
             "title": "1984"
           },
           {
-            "_docID": "bae-9579541e-f15d-506e-a74a-63d00cb3ab56",
             "plot": "At the dawn of the next world war, a plane crashes on an uncharted island, stranding a group of schoolboys.",
             "title": "Lord of the Flies"
           }
@@ -311,11 +290,31 @@ The basic skeleton of a query is made of the collection you want to fetch from (
   </TabItem>
 </Tabs>
 
+The DefraDB Query Language (DQL) is a rich GraphQL-based language supporting relationships between documents, filtering, limiting, sorting, and grouping.
+
+```graphql title="Example query – Filter books by genre and author's name; return 3 ordered by title"
+{
+  Book(
+    filter: {
+      genre: { _eq: "Fiction" },
+      author: { name: { _eq: "George Orwell" } }
+    },
+    limit: 3,
+    order: { "title": ASC }
+  ) {
+    title
+    plot
+    author {
+      name
+    }
+  }
+}
+```
+
 [-> More information on querying documents](/dql/mutation-query.md)
 
-{/* 
-## Next steps  #next-steps 
+## Next steps {/* #next-steps */}
 
-- [Set up data synchronization across nodes -> Peer-to-peer setup](/p2p/index.md)
-- [Explore the graph of commits](/commits.md)
-*/}
+- [Learn how to use the DefraDB Query Language](/dql/index.md)
+- [Set up data synchronization across nodes](/p2p/index.md)
+- [Restrict documents access](/security/document-access-control.md)
