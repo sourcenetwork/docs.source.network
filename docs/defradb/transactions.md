@@ -1,5 +1,6 @@
 ---
 title: Transactions
+description: Transactions allow you to group together a number of database operations that must either succeed together or not at all.
 ---
 
 import Tabs from '@theme/Tabs';

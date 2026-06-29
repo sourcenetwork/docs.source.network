@@ -1,5 +1,6 @@
 ---
 title: Deployment & Configuration
+description: Information and steps to deploy and configure a DefraDB instance.
 ---
 
 :::tip

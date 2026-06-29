@@ -1,5 +1,6 @@
 ---
 title: Query variables
+description: How and why to use variables in GraphQL queries in DefraDB.
 ---
 
 For simplicity, most examples have hardcoded values in queries. Although that is fine for understanding and prototyping, it is **not** fine for production applications. For *oh god so many* reasons:

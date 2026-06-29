@@ -1,5 +1,6 @@
 ---
 title: Peer-to-peer setup
+description: DefraDB uses peer-to-peer (P2P) networking for data exchange, synchronization, and replication of documents and commits. P2P does not require a central authority.
 ---
 
 One database is great, but it quickly becomes useless if hamsters eat its disks or a tsunami floods its fans. Humanity has been adding redundancy to its setups ever since poligamy was a thing.

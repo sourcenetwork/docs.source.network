@@ -1,5 +1,6 @@
 ---
 title: Indexes
+description: The `@index` directive allows you to create indexes on selected properties to speed up data lookup.
 ---
 
 Indexes allow queries to quickly locate data without having to look through each document in a collection.

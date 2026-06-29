@@ -1,5 +1,6 @@
 ---
 title: Identities
+description: Identity keys are hex-encoded and identify actors. The keys authenticate all CLI/HTTP requests when Document/Node Access Control is enabled.
 ---
 
 Identities keys are the digital IDs that identify _actors_. You can think of actors identity keys as users authentication credentials. But hey, DefraDB is a discrimination-free database &ndash; who says that _users_ are the only entities acting on the database? Whales act too.

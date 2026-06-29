@@ -1,6 +1,7 @@
 ---
 title: Quickstart
 slug: /
+description: DefraDB is the database for local-first applications centered around data privacy, time-traveling queries, multi-write architecture, and P2P synchronization.
 ---
 
 import Tabs from '@theme/Tabs';

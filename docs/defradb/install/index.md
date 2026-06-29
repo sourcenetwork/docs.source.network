@@ -1,5 +1,6 @@
 ---
 title: Install
+description: How to download, compile, install, and start a DefraDB instance.
 ---
 
 To get a running instance of DefraDB, you need to source the `defradb` executable and start a node. The process is similar to that of any other software, except it's _much nicer_ because it's a binary you really want, and because it was built with utmost care.

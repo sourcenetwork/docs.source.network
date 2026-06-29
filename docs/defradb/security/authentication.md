@@ -1,5 +1,6 @@
 ---
 title: Authentication
+description: How to authenticate CLI and HTTP requests when Document or Node Access Control is enabled.
 ---
 
 import Tabs from '@theme/Tabs';

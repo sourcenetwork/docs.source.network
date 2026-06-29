@@ -1,5 +1,6 @@
 ---
 title: DQL Query Language overview
+description: The DefraDB Query Language (DQL) allows you to store and query data in a DefraDB node with query and mutation blocks, based on GraphQL.
 ---
 
 import Tabs from '@theme/Tabs';

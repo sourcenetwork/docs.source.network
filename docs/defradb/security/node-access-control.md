@@ -1,5 +1,6 @@
 ---
 title: Restrict node management operations
+description: Set up Node Access Control to restrict who is allowed to perform administration operations on the instance.
 toc_max_heading_level: 2
 ---
 

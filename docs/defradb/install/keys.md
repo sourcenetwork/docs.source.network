@@ -1,5 +1,6 @@
 ---
 title: Keys setup
+description: Information on the private keys DefraDB uses to encrypt or sign data.
 ---
 
 DefraDB relies on a number of private keys to encrypt or sign data:

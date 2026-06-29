@@ -1,5 +1,6 @@
 ---
 title: Restrict documents access
+description: Set up Document Access Control to restrict who is allowed to do what on the documents of a collection.
 ---
 
 import Tabs from '@theme/Tabs';

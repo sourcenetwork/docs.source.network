@@ -1,5 +1,6 @@
 ---
 title: Configuration settings
+description: DefraDB list of configuration settings.
 ---
 
 - **Configuration file** &ndash; The config file is called `config.yaml` and located in the DefraDB root directory.

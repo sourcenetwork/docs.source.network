@@ -1,5 +1,6 @@
 ---
 title: Group results
+description: The groupBy argument allows you to group results into buckets basing on the value of one or more fields.
 ---
 
 The `groupBy` argument allows you to group results into buckets basing on the value of one or more fields. For example, books of different genre can be grouped together and separated from books of other genres.

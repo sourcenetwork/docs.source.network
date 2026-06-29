@@ -1,5 +1,6 @@
 ---
 title: Replicator
+description: How to configure a DefraDB node to replicate data onto another node.
 ---
 
 With a [publisher-subscriber setup](pub-sub.md), a node subscribes to updates broadcasted by other nodes. It is the recipients who decide to be part of the community and keep in sync with the collection's shared state. 

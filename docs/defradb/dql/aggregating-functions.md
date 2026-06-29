@@ -1,5 +1,6 @@
 ---
 title: Aggregating functions
+description: The aggregating functions `MIN`, `MAX`, `SUM`, `AVG`, and `COUNT` allow you to compute operations on groups of documents.
 ---
 
 import Tabs from '@theme/Tabs';

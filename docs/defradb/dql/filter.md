@@ -1,5 +1,6 @@
 ---
 title: Filter documents
+description: The filter object allow you to specify criterias for selecting documents. Filter on single fields, a combination of fields, relationship sub-objects.
 ---
 
 It's fantastic to be able to store thousands of documents, but all this would be a silly business if you couldn't filter through them, wouldn't it?

@@ -1,5 +1,6 @@
 ---
 title: Query the database
+description: How to retrieve documents from a DefraDB database.
 ---
 
 import Tabs from '@theme/Tabs';

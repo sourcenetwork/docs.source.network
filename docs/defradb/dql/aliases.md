@@ -1,5 +1,6 @@
 ---
 title: Rename result fields (aliases)
+description: Aliases allow you to rename fields and entire query results with identifiers of your choice.
 ---
 
 Sometimes, _Little Bobby Tables_ is the right name. Other times, you might want to change the default names that the database returns in results. Aliases allow you to rename fields and entire query results with identifiers of your choice.

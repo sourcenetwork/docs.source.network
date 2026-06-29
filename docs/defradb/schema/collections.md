@@ -1,5 +1,6 @@
 ---
 title: Collections
+description: How to create, list, truncate, delete collections. What data types and relationships are available.
 toc_max_heading_level: 5
 ---
 
