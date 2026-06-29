@@ -81,10 +81,10 @@ const HomepageReferenceLinks: FC<{}> = () => {
 
         <div className={clsx("row")}>
           <div className={clsx("col col-4", styles.linkList)}>
-            <Link to="/defradb/references/query-specification/query-language-overview">DefraDB Query Language Overview <IconThemeArrow className={styles.arrow} dir='right' /></Link>
-            <Link to="/defradb/references/cli/defradb">DefraDB CLI Reference <IconThemeArrow className={styles.arrow} dir='right' /></Link>
-            <Link to="/defradb/guides/peer-to-peer">DefraDB Peer-to-Peer Guide <IconThemeArrow className={styles.arrow} dir='right' /></Link>
-            <Link to="/defradb/guides/schema-migration">DefraDB Schema Migration Guide <IconThemeArrow className={styles.arrow} dir='right' /></Link>
+            <Link to="/defradb/">DefraDB Quickstart <IconThemeArrow className={styles.arrow} dir='right' /></Link>
+            <Link to="/defradb/dql/">DefraDB Query Language overview <IconThemeArrow className={styles.arrow} dir='right' /></Link>
+            <Link to="/defradb/p2p/">DefraDB Peer-to-Peer Setup <IconThemeArrow className={styles.arrow} dir='right' /></Link>
+            <Link to="/defradb/security/document-access-control">DefraDB Document Access Control setup <IconThemeArrow className={styles.arrow} dir='right' /></Link>
           </div>
           <div className={clsx("col col-4", styles.linkList)}>
             <Link to="sourcehub/getting-started/readme">SourceHub Getting Started <IconThemeArrow className={styles.arrow} dir='right' /></Link>
