@@ -3,10 +3,7 @@ title: Restrict documents access
 description: Set up Document Access Control to restrict who is allowed to do what on the documents of a collection.
 ---
 
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
-
-Document Access Control describes _who_ should be allowed to do _what_ on the documents in a collection.
+Document Access Control describes _who_ is allowed to do _what_ on the documents of a collection.
 At a high level, these are the steps to set it up:
 
 - [Create a policy](#create-policy) &ndash; Describe the set of rules that will apply to some documents.

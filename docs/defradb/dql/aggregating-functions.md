@@ -3,9 +3,6 @@ title: Aggregating functions
 description: The aggregating functions `MIN`, `MAX`, `SUM`, `AVG`, and `COUNT` allow you to compute operations on groups of documents.
 ---
 
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
-
 The aggregating functions `MIN`, `MAX`, `SUM`, `AVG`, and `COUNT` allow you to compute operations on groups of documents, such as the average rating of a group of books, or counting how many books are in each group. You can also use them at the root level and compute such operations on the whole result set.
 
 <details>

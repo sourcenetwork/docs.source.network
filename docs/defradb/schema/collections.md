@@ -4,9 +4,6 @@ description: How to create, list, truncate, delete collections. What data types 
 toc_max_heading_level: 5
 ---
 
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
-
 Collections represent groups of documents with similar structures, like tables for SQL databases. The world is chaos, but at least there's collections. Every document created in DefraDB belongs to a collection.
 
 A collection has a name (ex. `Book`) and a number of typed fields (ex. `title: String`).

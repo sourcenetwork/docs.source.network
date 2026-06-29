@@ -3,9 +3,6 @@ title: Query the database
 description: How to retrieve documents from a DefraDB database.
 ---
 
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
-
 Once you have [created some documents](mutation-create.md), you can query the database for them. Time to claim your stuff back.
 
 <details>

@@ -4,9 +4,6 @@ description: Set up Node Access Control to restrict who is allowed to perform ad
 toc_max_heading_level: 2
 ---
 
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
-
 Node operations are gated by Node Access Control (NAC). When NAC is enabled, all instance management requests must be [authenticated](authentication.md) and only allowed [actors](identity.md) will be able to perform administration operations on the instance.
 
 ## Enable NAC {/* #enable */}

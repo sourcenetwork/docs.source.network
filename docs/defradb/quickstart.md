@@ -4,9 +4,6 @@ slug: /
 description: DefraDB is the database for local-first applications centered around data privacy, time-traveling queries, multi-write architecture, and P2P synchronization.
 ---
 
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
-
 DefraDB is the database for local-first applications that prioritizes data ownership, personal privacy, and P2P synchronization. It features data encryption and verification, the ability to travel in time through the history of documents, and a multi-write-master architecture. The [DefraDB Query Language (DQL)](/dql/index.md) is based on GraphQL.
 
 ## Install {/* #install */}

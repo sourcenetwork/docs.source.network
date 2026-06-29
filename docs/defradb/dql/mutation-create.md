@@ -3,9 +3,6 @@ title: Create new documents
 description: How to use the add_<type> GraphQL mutation to insert new documents in DefraDB.
 ---
 
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
-
 Once you have [created collections](/schema/collections.md), you can start adding documents into them. 
 
 <details>
