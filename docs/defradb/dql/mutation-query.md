@@ -120,7 +120,7 @@ Once you have [created some documents](mutation-create.md), you can query the da
 ```
 - `TYPE` &ndash; Name of the [collection](schema/collections.md) to query.
 - `filter`, `docID` &ndash; Criteria for documents to select, see [Filter documents](filter.md).
-- `order` &ndash; Results sorting fields, see [Sort and order results](sort-order.md).
+- `order` &ndash; Results sorting fields, see [Sort results](order.md).
 - `limit`, `offset` &ndash; Number of results to return/skip, see [Limit and paginate results](limit-paginate.md).
 - `groupBy` &ndash; Fields to group results by, see [Group results](group.md).
 - `[field]` &ndash; List of fields to return for the selected documents. Queries return the exact fields requested (GraphQL has no equivalent of the SQL `SELECT *` syntax).
@@ -203,7 +203,7 @@ The basic skeleton of a query is made of the type/collection you want to fetch f
     ```
   </TabItem>
   <TabItem value="http" label="HTTP API">
-    Run a query by submitting a `POST` request to the HTTP endpoint [`/api/v1/graphql`](/references/http/api/post-graphql/). The body must be a JSON object, with the DQL query under the `query` key. Newlines are not supported within the `query` string field.
+    Run a query by submitting a `POST` request to the HTTP endpoint [`/api/v1/graphql`](/defradb/references/http/api/post-graphql/). The body must be a JSON object, with the DQL query under the `query` key. Newlines are not supported within the `query` string field.
 
     ```http title="Retrieve all documents of type Book, returning docID, title, plot"
     POST http://localhost:9181/api/v1/graphql HTTP/2

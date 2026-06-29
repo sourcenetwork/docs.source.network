@@ -102,7 +102,7 @@ A policy doesn't do anything until it's added into DefraDB. The request to regis
     ```
   </TabItem>
   <TabItem value="http" label="HTTP API">
-    Register a policy by submitting a `POST` request to the HTTP endpoint [`/api/v1/acp/document/policy`](/defradb/references/http/api/add-dac-policy/). The request body should contain the policy content in YAML format.
+    Register a policy by submitting a `POST` request to the HTTP endpoint [`/api/v1/acp/document/policy`](/defradb/references/http/api/dac-policy-add/). The request body should contain the policy content in YAML format.
 
     ```http 
     POST http://localhost:9181/api/v1/acp/document/policy HTTP/2
@@ -254,7 +254,7 @@ Private documents get synced to other nodes only if their identities have the ap
 
 To give another actor permission to access or alter a document, create a *relation* between the actor and the document ID. The relation defines what type of permission (according to the collection's policy) the actor will get. You can think that the relation assigns the identity a _role_ (ex. `reader`) with respect to a specific document. Target actors are identified by their `DID` key.
 
-The only actors allowed to grant permissions to others are the policy creator and the identities with the appropriate [manage relation](#manage-relation). The request to create a relation must be [authenticated](authentication.md).
+The only actors allowed to grant permissions to others are the policy creator and the identities with the appropriate [`manages` relation](#manages-relation). The request to create a relation must be [authenticated](authentication.md).
 
 :::important
 You can only create relations to private documents (i.e. documents created with an identity). Public documents are not registered in the DAC system and cannot be permissioned.
@@ -279,7 +279,7 @@ You can only create relations to private documents (i.e. documents created with 
     ```
   </TabItem>
   <TabItem value="http" label="HTTP API">
-    Give an actor permissions to a given document by submitting a `POST` request to the HTTP endpoint [`/api/v1/acp/document/relationship`](/defradb/references/http/api/add-dac-relationship/).
+    Give an actor permissions to a given document by submitting a `POST` request to the HTTP endpoint [`/api/v1/acp/document/relationship`](/defradb/references/http/api/dac-relationship-add/).
 
     ```http title='Grant another actor the "reader" relation on a specific "Book" document'
     POST http://localhost:9181/api/v1/acp/document/relationship HTTP/2
@@ -344,7 +344,7 @@ To grant a specific permission to any actor, use the wildcard `"*"` as value for
 
 To revoke an actor's document permissions, delete their relation with the given document ID. Revoking [relations granted to any actor with `"*"`](#wildcard-relations) only revokes that individual relation: it doesn't revoke _all_ relations registered for _any_ actor.
 
-The only actors allowed to revoke permissions are the policy creator and the identities with the appropriate [manage relation](#manage-reltion). The request to delete a relation must be [authenticated](authentication.md).
+The only actors allowed to revoke permissions are the policy creator and the identities with the appropriate [`manage` relation](#manages-relation). The request to delete a relation must be [authenticated](authentication.md).
 
 <Tabs groupId="defra">
   <TabItem value="cli" label="CLI" default>
@@ -365,7 +365,7 @@ The only actors allowed to revoke permissions are the policy creator and the ide
     ```
   </TabItem>
   <TabItem value="http" label="HTTP API">
-    Revoke an actor's permissions to a given document by submitting a `DELETE` request to the HTTP endpoint [`/api/v1/acp/document/relationship`](/defradb/references/http/api/add-dac-relationship/).
+    Revoke an actor's permissions to a given document by submitting a `DELETE` request to the HTTP endpoint [`/api/v1/acp/document/relationship`](/defradb/references/http/api/dac-relationship-delete/).
 
     ```http title='Revoke an actor "reader" relation for a specific "Book" document'
     DELETE http://localhost:9181/api/v1/acp/document/relationship HTTP/2

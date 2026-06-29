@@ -18,7 +18,7 @@ After the first time NAC is enabled, further attempts to enable it on startup (p
 
 ## Disable NAC {/* #disable */}
 
-You can temporarily disable NAC with either the CLI command [`defradb client acp node disable`](/references/cli/defradb_client_acp_node_disable.md) or the HTTP endpoint [`/acp/node/disable`](/defradb/references/http/api/disable-nac/). All NAC checks are suspended while NAC is disabled, so any actor will be able to perform any operation.
+You can temporarily disable NAC with either the CLI command [`defradb client acp node disable`](/references/cli/defradb_client_acp_node_disable.md) or the HTTP endpoint [`/acp/node/disable`](/defradb/references/http/api/nac-disable/). All NAC checks are suspended while NAC is disabled, so any actor will be able to perform any operation.
 
 <Tabs groupId="defra">
   <TabItem value="cli" label="CLI" default>
@@ -48,7 +48,7 @@ You can temporarily disable NAC with either the CLI command [`defradb client acp
 
 ## Show NAC status {/* #show-status */}
 
-You can show the current NAC status with either the CLI command [`defradb client acp node status`](/references/cli/defradb_client_acp_node_status.md) or the HTTP endpoint [`/acp/node/status`](/defradb/references/http/api/check-status-of-nac/).
+You can show the current NAC status with either the CLI command [`defradb client acp node status`](/references/cli/defradb_client_acp_node_status.md) or the HTTP endpoint [`/acp/node/status`](/defradb/references/http/api/nac-status/).
 
 <Tabs groupId="defra">
   <TabItem value="cli" label="CLI" default>
@@ -78,7 +78,7 @@ You can show the current NAC status with either the CLI command [`defradb client
 
 ## Re-enable NAC {/* #re-enable */}
 
-If NAC gets [disabled](#disable-nac) after it had been enabled, you can re-enable it with either the CLI command [`defradb client acp node re-enable`](/references/cli/defradb_client_acp_node_re-enable.md) or the HTTP endpoint [`/acp/node/re-enable`](/defradb/references/http/api/re-enable-nac/). Only admins are allowed to re-enable NAC.
+If NAC gets [disabled](#disable) after it had been enabled, you can re-enable it with either the CLI command [`defradb client acp node re-enable`](/references/cli/defradb_client_acp_node_re-enable.md) or the HTTP endpoint [`/acp/node/re-enable`](/defradb/references/http/api/nac-re-enable/). Only admins are allowed to re-enable NAC.
 
 <Tabs groupId="defra">
   <TabItem value="cli" label="CLI" default>
@@ -108,7 +108,7 @@ If NAC gets [disabled](#disable-nac) after it had been enabled, you can re-enabl
 
 ## Grant permissions {/* #grant-permissions */}
 
-You can make another actor an administrator on an instance with either the CLI command [`defradb client acp node relationship add`](/references/cli/defradb_client_acp_node_relationship_add.md) or the HTTP endpoint [`/api/v1/acp/node/relationship`](/defradb/references/http/api/add-nac-relationship/). Target actors are identified by their `DID` key.
+You can make another actor an administrator on an instance with either the CLI command [`defradb client acp node relationship add`](/references/cli/defradb_client_acp_node_relationship_add.md) or the HTTP endpoint [`/api/v1/acp/node/relationship`](/defradb/references/http/api/nac-relationship-add/). Target actors are identified by their `DID` key.
 
 <Tabs groupId="defra">
   <TabItem value="cli" label="CLI" default>
@@ -150,7 +150,7 @@ Adding an already-existing relation doesn't result in an error: the return value
 
 ## Revoke permissions {/* #revoke-permissions */}
 
-You can revoke another actor's admin privileges with either the CLI command [`defradb client acp node relationship delete`](/references/cli/defradb_client_acp_node_relationship_add.md) or the HTTP endpoint [`/api/v1/acp/node/relationship`](/defradb/references/http/api/delete-nac-relationship/). Target actors are identified by their `DID` key.
+You can revoke another actor's admin privileges with either the CLI command [`defradb client acp node relationship delete`](/references/cli/defradb_client_acp_node_relationship_add.md) or the HTTP endpoint [`/api/v1/acp/node/relationship`](/defradb/references/http/api/nac-relationship-delete/). Target actors are identified by their `DID` key.
 
 <Tabs groupId="defra">
   <TabItem value="cli" label="CLI" default>

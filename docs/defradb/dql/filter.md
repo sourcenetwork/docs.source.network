@@ -97,7 +97,7 @@ The `filter` object allow you to specify criteria for selecting documents. You c
 
 To filter on a single field, use the syntax `fieldName: { operator: Value }`, where:
 - `fieldName` &ndash; Name of the collection field to compare against.
-- `operator` &ndash; [Comparison operator](#operators) to use.
+- `operator` &ndash; [Comparison operator](#scalar-operators) to use.
 - `Value` &ndash; Value to compare against, of the same type of `fieldName`.
 
 ```graphql title='Return books with title "1984"'
@@ -212,7 +212,7 @@ filter: {
 }
 ```
 
-- `operator` &ndash; [Comparison operator](#operators) to use.
+- `operator` &ndash; [Comparison operator](#scalar-operators) to use.
 - `fieldName` &ndash; Name of the collection field to compare against.
 - `Value` &ndash; Value to compare against, of the same type of `fieldName`.
 
@@ -314,7 +314,7 @@ Filters can access fields within sub-objects, such as in relationships.
 The syntax to filter over sub-objects has one more level of nesting in field names: `relFieldName: { fieldName: { operator: Value } }`, where:
 
 - `relFieldName`, `fieldName` &ndash; Name of the collection field to compare against.
-- `operator` &ndash; [Comparison operator](#operators) to use.
+- `operator` &ndash; [Comparison operator](#scalar-operators) to use.
 - `Value` &ndash; Value to compare against, of the same type of `fieldName`.
 
 

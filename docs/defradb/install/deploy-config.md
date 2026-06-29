@@ -19,8 +19,8 @@ To restrict what different users are allowed to do, set up appropriate [document
 
 DefraDB uses two ports:
 
-1. **HTTP API port** (default `9181`). Customizable via the CLI option `--url` or the config setting [`api.address`](/references/config.md#apiaddress) when starting the instance.
-2. **P2P port** (default `9171`). Customizable via the CLI option `--p2paddr` or the config setting [`net.p2paddresses`](/references/config.md#netp2paddresses) when starting the instance.
+1. **HTTP API port** (default `9181`). Customizable via the CLI option `--url` or the config setting [`api.address`](/references/config.md#api-address) when starting the instance.
+2. **P2P port** (default `9171`). Customizable via the CLI option `--p2paddr` or the config setting [`net.p2paddresses`](/references/config.md#net-p2paddresses) when starting the instance.
 
 ```shell title="Start DefraDB listening on ports 9172 and 9182"
 defradb start --url localhost:9182 --p2paddr /ip4/127.0.0.1/tcp/9172

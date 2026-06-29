@@ -210,9 +210,9 @@ creation: DateTime @default(value: UTC_NOW)
 To create a relationship between two types, define a field having the other side of the relationship as type.
 The way in which you define relationships depends on their kind:
 
-- [One-to-one](#one-to-one) &ndash; Each document of type `A` is linked to one document of type `B`, and viceversa.
-- [One-to-many](#one-to-many) &ndash; Each document of type `A` is linked to one document of type `B`. Each document of type `B` is linked to one or more documents of type `A`.
-- [Many-to-many](#many-to-many) &ndash; Each document of type `A` is linked to one or more documents of type `B`, and viceversa.
+- [One-to-one](#relationships-one-to-one) &ndash; Each document of type `A` is linked to one document of type `B`, and viceversa.
+- [One-to-many](#relationships-one-to-many) &ndash; Each document of type `A` is linked to one document of type `B`. Each document of type `B` is linked to one or more documents of type `A`.
+- [Many-to-many](#relationships-many-to-many) &ndash; Each document of type `A` is linked to one or more documents of type `B`, and viceversa.
 
 This section shows how to create relationships. For information on how to populate and query them, see [Create documents with relationships](/dql/mutation-create.md#relationships) and [Query the database](/dql/mutation-query.md#relationships).
 
