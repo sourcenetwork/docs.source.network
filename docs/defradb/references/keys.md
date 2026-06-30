@@ -1,5 +1,5 @@
 ---
-title: Keys setup
+title: Private keys
 description: Information on the private keys DefraDB uses to encrypt or sign data.
 ---
 

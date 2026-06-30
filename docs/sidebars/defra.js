@@ -12,7 +12,6 @@ export default {
       label: 'Install & Deploy',
       items: [
         'install/index',
-        'install/keys',
         'install/deploy-config',
       ]
     },
