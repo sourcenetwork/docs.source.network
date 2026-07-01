@@ -140,7 +140,7 @@ const config = {
                 href: "https://source.network/discord",
               },
               {
-                label: "Twitter",
+                label: "X/Twitter",
                 href: "https://x.com/edgeofsource",
               },
             ],

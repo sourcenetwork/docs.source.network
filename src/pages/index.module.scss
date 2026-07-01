@@ -80,11 +80,13 @@
 
   p {
     font-size: rem(14px);
+    color: var(--color-text-muted);
   }
 
   img {
     width: rem(60px);
     margin-bottom: rem(10px);
+    padding: rem(10px);
   }
 
   &:hover {
@@ -104,8 +106,9 @@
     text-align: left;
 
     img {
-      width: rem(30px);
+      width: rem(35px);
       margin: auto 15px auto 0;
+      padding: rem(5px);
     }
     h3 {
       font-size: rem(16px);
