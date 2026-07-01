@@ -1,3 +1,5 @@
+// Component ejected from Docusaurus
+
 import React from 'react';
 
 export default function IconExternalLink({width = 13.5, height = 13.5}) {
