@@ -8,7 +8,7 @@ Once you have [created collections](/schema/collections.md), you can start addin
 <details>
   <summary>Display database setup</summary>
   
-  This page assumes your database contains `Book` and `Person` [collections](/schema/collections.md):
+  To reproduce the example results from this page, your database needs the following setup.
 
   ```graphql title="Database schema" test-setup-collection
   type Person {
@@ -67,7 +67,7 @@ mutation {
       "data": {
         "add_Book": [
           {
-            "_docID": "bae-ad13cbb3-0970-5e1d-8096-620f7bd27d26",
+            "_docID": "bae-db5131b2-2e79-5ae8-ab8b-df35c2b939e1",
             "title": "Infinite Jest"
           }
         ]
@@ -118,7 +118,7 @@ mutation {
       "data": {
         "add_Book": [
           {
-            "_docID": "bae-ad13cbb3-0970-5e1d-8096-620f7bd27d26",
+            "_docID": "bae-db5131b2-2e79-5ae8-ab8b-df35c2b939e1",
             "title": "Infinite Jest"
           }
         ]
@@ -279,13 +279,13 @@ mutation {
   "data": {
     "add_Book": [
       {
-        "_docID": "bae-e1dcefa0-46ca-5ae5-bc0a-859f2e7e1259",
+        "_docID": "bae-097c416c-bb66-5947-b241-c462464ea41d",
         "title": "Les Misérables"
       }
     ],
     "add_Person": [
       {
-        "_docID": "bae-c169e917-df52-5603-9224-39c1757f1b04",
+        "_docID": "bae-4bfe5f4c-d668-5dc3-9de2-eb598af3da7d",
         "name": "Victor Hugo"
       }
     ]
@@ -298,7 +298,7 @@ To link them, use an [update mutation](/dql/mutation-update.md) to set the field
 ```graphql title="Link book and author via Book._authorID"
 mutation {
   update_Book(
-    docID: "bae-e1dcefa0-46ca-5ae5-bc0a-859f2e7e1259",
+    docID: "bae-097c416c-bb66-5947-b241-c462464ea41d",
     input: {  # properties to be altered
       _authorID: "bae-c169e917-df52-5603-9224-39c1757f1b04"
     }
@@ -315,7 +315,7 @@ mutation {
     "update_Book": [
       {
         "_authorID": "bae-c169e917-df52-5603-9224-39c1757f1b04",
-        "_docID": "bae-e1dcefa0-46ca-5ae5-bc0a-859f2e7e1259",
+        "_docID": "bae-097c416c-bb66-5947-b241-c462464ea41d",
         "title": "Les Misérables"
       }
     ]
@@ -323,9 +323,17 @@ mutation {
 }
 ```
 
-## JSON fields
+## JSON fields {/* #json-fields */}
 
 JSON fields expect the value to be an unserialized object, not its string representation.
+
+{/*
+```graphql title='Schema for "jsonBlob" collection' test-setup-collection
+type jsonBlob {
+  jsonField: JSON @index
+}
+```
+*/}
 
 ```graphql title="Valid &ndash; JSON unserialized object"
 #valid

@@ -12,21 +12,27 @@ The `filter` object allow you to specify criteria for selecting documents. You c
 <details>
   <summary>Display database setup</summary>
   
-  This page assumes your database contains `Book` and `Person` [collections](/schema/collections.md) and some documents in them:
+  To reproduce the example results from this page, your database needs the following setup.
 
   ```graphql title="Database schema" test-setup-collection
-  type Person {
-    name: String!
-    authoredBooks: [Book]
-  }
-
   type Book {
     title: String!
     genre: String
     plot: String
     rating: Float
-    author: Person
     ratings: [Float]
+    author: Person
+    seller: Company
+  }
+  
+  type Person {
+    name: String!
+    authoredBooks: [Book]
+  }
+
+  type Company {
+    name: String!
+    sells: [Book]
   }
   ```
   ```graphql title="Documents setup" test-setup-data
@@ -43,6 +49,13 @@ The `filter` object allow you to specify criteria for selecting documents. You c
     a4:add_Person(input: {
       name: "Victor Hugo"
     }) { _docID name }
+
+    c1:add_Company(input: {
+      name: "The Independent Hipster Bookshop"
+    }) { _docID name }
+    c2:add_Company(input: {
+      name: "The World-Destroying Large Chain"
+    }) { _docID name }
   
     b11:add_Book(input: {
       title: "1984",
@@ -50,21 +63,24 @@ The `filter` object allow you to specify criteria for selecting documents. You c
       plot: "A masterpiece of rebellion and imprisonment where war is peace, freedom is slavery, and Big Brother is watching.",
       rating: 4.20,
       ratings: [3.8, 4.91, 3.1, 2.8],
-      _authorID: "bae-bc532931-4843-50bc-bbdd-3e31549c8cc6"
+      _authorID: "bae-bc532931-4843-50bc-bbdd-3e31549c8cc6",
+      _sellerID: "bae-a5300933-fb0a-5b8f-b38e-202565993ff0"
     }) { _docID title }
     b12:add_Book(input: {
       title: "Down and Out in Paris and London",
-      genre: "Biography",
+      genre: "Memoir",
       plot: "The adventures of a penniless British writer among the down-and-outs of two great cities.",
       rating: 4.09,
-      _authorID: "bae-bc532931-4843-50bc-bbdd-3e31549c8cc6"
+      _authorID: "bae-bc532931-4843-50bc-bbdd-3e31549c8cc6",
+      _sellerID: "bae-a5300933-fb0a-5b8f-b38e-202565993ff0"
     }) { _docID title }
     b21:add_Book(input: {
       title: "Lord of the Flies",
       genre: "Fiction",
       plot: "At the dawn of the next world war, a plane crashes on an uncharted island, stranding a group of schoolboys.",
       rating: 3.70,
-      _authorID: "bae-6025af65-e57e-5db5-84dd-d349b130c6d9"
+      _authorID: "bae-6025af65-e57e-5db5-84dd-d349b130c6d9",
+      _sellerID: "bae-a5300933-fb0a-5b8f-b38e-202565993ff0"
     }) { _docID title }
     b31:add_Book(input: {
       title: "Infinite Jest",
@@ -72,14 +88,24 @@ The `filter` object allow you to specify criteria for selecting documents. You c
       plot: "A gargantuan, mind-altering tragi-comedy about the Pursuit of Happiness in America.",
       rating: 4.25,
       ratings: [3.1, 4.1, 4.5],
-      _authorID: "bae-26c791a7-fa81-5d86-95c5-4119e2fef915"
+      _authorID: "bae-26c791a7-fa81-5d86-95c5-4119e2fef915",
+      _sellerID: "bae-81d5fadb-c2a3-5d95-b235-a220c220bf79"
     }) { _docID title }
     b32:add_Book(input: {
       title: "Consider the Lobster and Other Essays",
       genre: "Nonfiction",
       plot: "Do lobsters feel pain? Did Franz Kafka have a funny bone? What is John Updike's deal, anyway? And what happens when adult video starlets meet their fans in person? Essays that are also enthralling narrative adventures.",
       rating: 4.18,
-      _authorID: "bae-26c791a7-fa81-5d86-95c5-4119e2fef915"
+      _authorID: "bae-26c791a7-fa81-5d86-95c5-4119e2fef915",
+      _sellerID: "bae-81d5fadb-c2a3-5d95-b235-a220c220bf79"
+    }) { _docID title }
+    b33:add_Book(input: {
+      title: "Girl with Curious Hair",
+      genre: "Fiction",
+      plot: "Remarkable and unsettling reimaginations of reality.",
+      rating: 3.85,
+      _authorID: "bae-26c791a7-fa81-5d86-95c5-4119e2fef915",
+      _sellerID: "bae-81d5fadb-c2a3-5d95-b235-a220c220bf79"
     }) { _docID title }
     b41:add_Book(input: {
       title: "Les Misérables",
@@ -87,7 +113,8 @@ The `filter` object allow you to specify criteria for selecting documents. You c
       plot: "Victor Hugo's tale of injustice, heroism and love follows the fortunes of Jean Valjean, an escaped convict determined to put his criminal past behind him.",
       rating: 4.21,
       ratings: [3.9, 4.1],
-      _authorID: "bae-4bfe5f4c-d668-5dc3-9de2-eb598af3da7d"
+      _authorID: "bae-4bfe5f4c-d668-5dc3-9de2-eb598af3da7d",
+      _sellerID: "bae-81d5fadb-c2a3-5d95-b235-a220c220bf79"
     }) { _docID title }
   }
   ```
@@ -242,24 +269,14 @@ filter: {
   "data": {
     "Book": [
       {
-        "genre": "Biography",
+        "genre": "Fiction",
+        "rating": 4.2,
+        "title": "1984"
+      },
+      {
+        "genre": "Memoir",
         "rating": 4.09,
         "title": "Down and Out in Paris and London"
-      },
-      {
-        "genre": "Nonfiction",
-        "rating": 4.18,
-        "title": "Consider the Lobster and Other Essays"
-      },
-      {
-        "genre": "Fiction",
-        "rating": 4.25,
-        "title": "Infinite Jest"
-      },
-      {
-        "genre": "Fiction",
-        "rating": 4.21,
-        "title": "Les Misérables"
       },
       {
         "genre": "Fiction",
@@ -268,8 +285,23 @@ filter: {
       },
       {
         "genre": "Fiction",
-        "rating": 4.2,
-        "title": "1984"
+        "rating": 4.25,
+        "title": "Infinite Jest"
+      },
+      {
+        "genre": "Nonfiction",
+        "rating": 4.18,
+        "title": "Consider the Lobster and Other Essays"
+      },
+      {
+        "genre": "Fiction",
+        "rating": 3.85,
+        "title": "Girl with Curious Hair"
+      },
+      {
+        "genre": "Fiction",
+        "rating": 4.21,
+        "title": "Les Misérables"
       }
     ]
   }
@@ -295,7 +327,7 @@ The boolean operators `_and` and `_or` accept an array, whereas `_not` accepts a
   "data": {
     "Book": [
       {
-        "genre": "Biography",
+        "genre": "Memoir",
         "title": "Down and Out in Paris and London"
       },
       {
@@ -401,12 +433,12 @@ If the return fields include the sub-object you filter on, the same filter is **
       {
         "authoredBooks": [
           {
-            "genre": "Biography",
-            "title": "Down and Out in Paris and London"
-          },
-          {
             "genre": "Fiction",
             "title": "1984"
+          },
+          {
+            "genre": "Memoir",
+            "title": "Down and Out in Paris and London"
           }
         ],
         "name": "George Orwell"
@@ -423,12 +455,16 @@ If the return fields include the sub-object you filter on, the same filter is **
       {
         "authoredBooks": [
           {
+            "genre": "Fiction",
+            "title": "Infinite Jest"
+          },
+          {
             "genre": "Nonfiction",
             "title": "Consider the Lobster and Other Essays"
           },
           {
             "genre": "Fiction",
-            "title": "Infinite Jest"
+            "title": "Girl with Curious Hair"
           }
         ],
         "name": "David Foster Wallace"
@@ -613,20 +649,20 @@ The [list operators](#list-operators) `_any`, `_none`, `_all` evaluate a scalar 
     "Book": [
       {
         "ratings": [
-          3.1,
-          4.1,
-          4.5
-        ],
-        "title": "Infinite Jest"
-      },
-      {
-        "ratings": [
           3.8,
           4.91,
           3.1,
           2.8
         ],
         "title": "1984"
+      },
+      {
+        "ratings": [
+          3.1,
+          4.1,
+          4.5
+        ],
+        "title": "Infinite Jest"
       }
     ]
   }
