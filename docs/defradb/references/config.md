@@ -42,7 +42,7 @@ Maximum file size of the value log files. Default: `2^30`.
 
 Key type for `node-identity-key`: either `secp256k1` or `ed25519`. Default: `secp256k1`.
 
-See [Keys](/install/keys.md).
+See [Keys](/references/keys.md).
 
 ## `datastore.maxtxnretries` {/* #datastore-maxtxnretries */}
 

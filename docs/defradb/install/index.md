@@ -61,7 +61,7 @@ The Go compiler requires substantial memory during compilation. Builds with less
 ### Docker container {/* #docker */}
 
 To run DefraDB in a Docker container, use one of the [official images](https://ghcr.io/sourcenetwork/defradb).
-The environment variable `DEFRA_KEYRING_SECRET` is used to initialize [DefraDB's keys](keys.md), so set it to a value that you will later have access to.
+The environment variable `DEFRA_KEYRING_SECRET` is used to initialize [DefraDB's keys](/references/keys.md), so set it to a value that you will later have access to.
 
 ```shell
 docker run \
@@ -89,7 +89,7 @@ defradb start
 ```
 
 :::tip
-The keyring secret unlocks the identity and encryption keys for the local node, so you will need to provide it every time you start the node. For more information on keys, and on how to provide your own keys, see [Keys setup](./keys.md).
+The keyring secret unlocks the identity and encryption keys for the local node, so you will need to provide it every time you start the node. For more information on keys, and on how to provide your own keys, see [Keys setup](/references/keys.md).
 :::
 
 ## Verify connection {/* #verify-connection */}

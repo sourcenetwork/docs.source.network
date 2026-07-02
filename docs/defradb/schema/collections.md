@@ -273,7 +273,7 @@ There's no validation on the type when creating relationships across documents. 
 
 #### Many-to-many {/* #relationships-many-to-many */}
 
-Many-to-many relationships link multiple documents of one type to multiple documents of another type, allowing the same on the other side. To create many-to-many relationships, use two [one-to-many relationships](#one-to-many) and a join type.
+Many-to-many relationships link multiple documents of one type to multiple documents of another type, allowing the same on the other side. To create many-to-many relationships, use two [one-to-many relationships](#relationships-one-to-many) and a join type.
 
 For example: a student can enroll in many courses, and a course can have many students enrolled:
 
