@@ -8,11 +8,21 @@ Once you have [created some documents](mutation-create.md), you can query the da
 <details>
   <summary>Display database setup</summary>
   
-  This page assumes your database contains `Book` and `Person` [collections](/schema/collections.md) and some documents in them:
+  To reproduce the example results from this page, your database needs the following setup.
 
   ```graphql title="Database schema" test-setup-collection
+  type Book {
+    title: String!
+    genre: String
+    plot: String
+    rating: Float
+    ratings: [Float]
+    author: Person
+    seller: Company
+  }
+  
   type Person {
-    name: String
+    name: String!
     authoredBooks: [Book]
   }
 
@@ -20,25 +30,9 @@ Once you have [created some documents](mutation-create.md), you can query the da
     name: String!
     sells: [Book]
   }
-
-  type Book {
-    title: String!
-    genre: String
-    plot: String
-    rating: Float
-    author: Person
-    seller: Company
-  }
   ```
   ```graphql title="Documents setup" test-setup-data
   mutation {
-    c1:add_Company(input: {
-      name: "The Indipendent Hipster Bookshop"
-    }) { _docID name }
-    c2:add_Company(input: {
-      name: "The World-Destroying Large Chain"
-    }) { _docID name }
-  
     a1:add_Person(input: {
       name: "George Orwell"
     }) { _docID name }
@@ -52,53 +46,71 @@ Once you have [created some documents](mutation-create.md), you can query the da
       name: "Victor Hugo"
     }) { _docID name }
 
+    c1:add_Company(input: {
+      name: "The Independent Hipster Bookshop"
+    }) { _docID name }
+    c2:add_Company(input: {
+      name: "The World-Destroying Large Chain"
+    }) { _docID name }
+  
     b11:add_Book(input: {
       title: "1984",
       genre: "Fiction",
       plot: "A masterpiece of rebellion and imprisonment where war is peace, freedom is slavery, and Big Brother is watching.",
       rating: 4.20,
-      _authorID: "bae-3517d1eb-351b-5231-8387-870893ffb395",
-      _sellerID: "bae-dd31ceba-9ffd-57b6-b6b2-365081ef4b7a"
+      ratings: [3.8, 4.91, 3.1, 2.8],
+      _authorID: "bae-bc532931-4843-50bc-bbdd-3e31549c8cc6",
+      _sellerID: "bae-a5300933-fb0a-5b8f-b38e-202565993ff0"
     }) { _docID title }
     b12:add_Book(input: {
       title: "Down and Out in Paris and London",
-      genre: "Biography",
+      genre: "Memoir",
       plot: "The adventures of a penniless British writer among the down-and-outs of two great cities.",
       rating: 4.09,
-      _authorID: "bae-3517d1eb-351b-5231-8387-870893ffb395",
-      _sellerID: "bae-dd31ceba-9ffd-57b6-b6b2-365081ef4b7a"
+      _authorID: "bae-bc532931-4843-50bc-bbdd-3e31549c8cc6",
+      _sellerID: "bae-a5300933-fb0a-5b8f-b38e-202565993ff0"
     }) { _docID title }
     b21:add_Book(input: {
       title: "Lord of the Flies",
       genre: "Fiction",
       plot: "At the dawn of the next world war, a plane crashes on an uncharted island, stranding a group of schoolboys.",
       rating: 3.70,
-      _authorID: "bae-78e9c7be-10b9-5673-bad2-da3341367d4b",
-      _sellerID: "bae-e467e3b8-9ba5-52b4-ae6b-4499f2f0c483"
+      _authorID: "bae-6025af65-e57e-5db5-84dd-d349b130c6d9",
+      _sellerID: "bae-a5300933-fb0a-5b8f-b38e-202565993ff0"
     }) { _docID title }
     b31:add_Book(input: {
       title: "Infinite Jest",
       genre: "Fiction",
       plot: "A gargantuan, mind-altering tragi-comedy about the Pursuit of Happiness in America.",
-      rating: 4.25
-      _authorID: "bae-b59928dc-fd05-5fb7-aea2-9b24af5ebcea",
-      _sellerID: "bae-dd31ceba-9ffd-57b6-b6b2-365081ef4b7a"
+      rating: 4.25,
+      ratings: [3.1, 4.1, 4.5],
+      _authorID: "bae-26c791a7-fa81-5d86-95c5-4119e2fef915",
+      _sellerID: "bae-81d5fadb-c2a3-5d95-b235-a220c220bf79"
     }) { _docID title }
     b32:add_Book(input: {
       title: "Consider the Lobster and Other Essays",
       genre: "Nonfiction",
       plot: "Do lobsters feel pain? Did Franz Kafka have a funny bone? What is John Updike's deal, anyway? And what happens when adult video starlets meet their fans in person? Essays that are also enthralling narrative adventures.",
       rating: 4.18,
-      _authorID: "bae-b59928dc-fd05-5fb7-aea2-9b24af5ebcea",
-      _sellerID: "bae-e467e3b8-9ba5-52b4-ae6b-4499f2f0c483"
+      _authorID: "bae-26c791a7-fa81-5d86-95c5-4119e2fef915",
+      _sellerID: "bae-81d5fadb-c2a3-5d95-b235-a220c220bf79"
+    }) { _docID title }
+    b33:add_Book(input: {
+      title: "Girl with Curious Hair",
+      genre: "Fiction",
+      plot: "Remarkable and unsettling reimaginations of reality.",
+      rating: 3.85,
+      _authorID: "bae-26c791a7-fa81-5d86-95c5-4119e2fef915",
+      _sellerID: "bae-81d5fadb-c2a3-5d95-b235-a220c220bf79"
     }) { _docID title }
     b41:add_Book(input: {
       title: "Les Misérables",
       genre: "Fiction",
       plot: "Victor Hugo's tale of injustice, heroism and love follows the fortunes of Jean Valjean, an escaped convict determined to put his criminal past behind him.",
       rating: 4.21,
-      _authorID: "bae-c169e917-df52-5603-9224-39c1757f1b04",
-      _sellerID: "bae-e467e3b8-9ba5-52b4-ae6b-4499f2f0c483"
+      ratings: [3.9, 4.1],
+      _authorID: "bae-4bfe5f4c-d668-5dc3-9de2-eb598af3da7d",
+      _sellerID: "bae-81d5fadb-c2a3-5d95-b235-a220c220bf79"
     }) { _docID title }
   }
   ```
@@ -133,7 +145,7 @@ Once you have [created some documents](mutation-create.md), you can query the da
       author: { name: { _eq: "George Orwell" } }
     },
     limit: 3,
-    order: { "title": ASC }
+    order: { title: ASC }
   ) {
     title
     plot
@@ -268,34 +280,39 @@ The basic skeleton of a query is made of the type/collection you want to fetch f
       "data": {
         "Book": [
           {
-            "_docID": "bae-526a42c6-c147-57e4-89e0-875d27a1532d",
+            "_docID": "bae-97eeb5cb-04cf-5575-ab00-3e3285ce79b5",
             "plot": "A masterpiece of rebellion and imprisonment where war is peace, freedom is slavery, and Big Brother is watching.",
             "title": "1984"
           },
           {
-            "_docID": "bae-8a6c163a-29cd-5607-a965-199487e58b00",
-            "plot": "Victor Hugo's tale of injustice, heroism and love follows the fortunes of Jean Valjean, an escaped convict determined to put his criminal past behind him.",
-            "title": "Les Misérables"
-          },
-          {
-            "_docID": "bae-92465255-4869-5994-9898-83576ee9ff60",
+            "_docID": "bae-e9acc047-5a1f-5f81-847e-15744fea66a3",
             "plot": "The adventures of a penniless British writer among the down-and-outs of two great cities.",
             "title": "Down and Out in Paris and London"
           },
           {
-            "_docID": "bae-9579541e-f15d-506e-a74a-63d00cb3ab56",
+            "_docID": "bae-7da5622a-8e4f-5ac8-9140-d412a81011be",
             "plot": "At the dawn of the next world war, a plane crashes on an uncharted island, stranding a group of schoolboys.",
             "title": "Lord of the Flies"
           },
           {
-            "_docID": "bae-a3dad950-43cc-5f03-9b33-b61ebc936ac4",
+            "_docID": "bae-d1460b1a-8f78-5791-b0ec-869997260c20",
+            "plot": "A gargantuan, mind-altering tragi-comedy about the Pursuit of Happiness in America.",
+            "title": "Infinite Jest"
+          },
+          {
+            "_docID": "bae-6aaffb28-ddad-57c9-b0c9-0db40a3e3456",
             "plot": "Do lobsters feel pain? Did Franz Kafka have a funny bone? What is John Updike's deal, anyway? And what happens when adult video starlets meet their fans in person? Essays that are also enthralling narrative adventures.",
             "title": "Consider the Lobster and Other Essays"
           },
           {
-            "_docID": "bae-c26135f1-59d6-5f32-a7c0-16dbec525abe",
-            "plot": "A gargantuan, mind-altering tragi-comedy about the Pursuit of Happiness in America.",
-            "title": "Infinite Jest"
+            "_docID": "bae-b4966436-f962-506a-aaca-57f55a61e079",
+            "plot": "Remarkable and unsettling reimaginations of reality.",
+            "title": "Girl with Curious Hair"
+          },
+          {
+            "_docID": "bae-a93f55aa-c7e1-50ae-9056-6871b0c9da8e",
+            "plot": "Victor Hugo's tale of injustice, heroism and love follows the fortunes of Jean Valjean, an escaped convict determined to put his criminal past behind him.",
+            "title": "Les Misérables"
           }
         ]
       }
@@ -344,10 +361,13 @@ If a document contains a relationship to another document, the return fields can
       {
         "authoredBooks": [
           {
+            "title": "Infinite Jest"
+          },
+          {
             "title": "Consider the Lobster and Other Essays"
           },
           {
-            "title": "Infinite Jest"
+            "title": "Girl with Curious Hair"
           }
         ],
         "name": "David Foster Wallace"
@@ -367,7 +387,7 @@ If a document contains a relationship to another document, the return fields can
 
 You can walk connected types without boundaries: if type `Person` has a relationships with type `Book`, which has a relationship with type `Company`, you can query `Person` and return `Person.Book.Company.<field>`. The result will reflect the nested structure of the documents.
 
-```graphql title="Retrieve all persons and the titles of their authored books"
+```graphql title="Retrieve all persons, their authored books, and the related sellers"
 {
   Person {
     authoredBooks {
@@ -388,13 +408,13 @@ You can walk connected types without boundaries: if type `Person` has a relation
         "authoredBooks": [
           {
             "seller": {
-              "name": "The Indipendent Hipster Bookshop"
+              "name": "The Independent Hipster Bookshop"
             },
             "title": "1984"
           },
           {
             "seller": {
-              "name": "The Indipendent Hipster Bookshop"
+              "name": "The Independent Hipster Bookshop"
             },
             "title": "Down and Out in Paris and London"
           }
@@ -405,7 +425,7 @@ You can walk connected types without boundaries: if type `Person` has a relation
         "authoredBooks": [
           {
             "seller": {
-              "name": "The World-Destroying Large Chain"
+              "name": "The Independent Hipster Bookshop"
             },
             "title": "Lord of the Flies"
           }
@@ -418,13 +438,19 @@ You can walk connected types without boundaries: if type `Person` has a relation
             "seller": {
               "name": "The World-Destroying Large Chain"
             },
+            "title": "Infinite Jest"
+          },
+          {
+            "seller": {
+              "name": "The World-Destroying Large Chain"
+            },
             "title": "Consider the Lobster and Other Essays"
           },
           {
             "seller": {
-              "name": "The Indipendent Hipster Bookshop"
+              "name": "The World-Destroying Large Chain"
             },
-            "title": "Infinite Jest"
+            "title": "Girl with Curious Hair"
           }
         ],
         "name": "David Foster Wallace"
@@ -452,7 +478,7 @@ Query the database for a specific document ID via the `docID` argument in the ty
 ```graphql title="Get one author by ID and return his books"
 {
   # highlight-next-line
-  Person(docID: "bae-3517d1eb-351b-5231-8387-870893ffb395") {
+  Person(docID: "bae-bc532931-4843-50bc-bbdd-3e31549c8cc6") {
     name
     authoredBooks { title }
   }
@@ -483,8 +509,8 @@ Query the database for a specific document ID via the `docID` argument in the ty
   Person(
     # highlight-start
     docID: [
-      "bae-3517d1eb-351b-5231-8387-870893ffb395",
-      "bae-b59928dc-fd05-5fb7-aea2-9b24af5ebcea"
+      "bae-bc532931-4843-50bc-bbdd-3e31549c8cc6",
+      "bae-26c791a7-fa81-5d86-95c5-4119e2fef915"
     ]
     # highlight-end
   ) {
@@ -511,10 +537,13 @@ Query the database for a specific document ID via the `docID` argument in the ty
       {
         "authoredBooks": [
           {
+            "title": "Infinite Jest"
+          },
+          {
             "title": "Consider the Lobster and Other Essays"
           },
           {
-            "title": "Infinite Jest"
+            "title": "Girl with Curious Hair"
           }
         ],
         "name": "David Foster Wallace"

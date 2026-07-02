@@ -8,24 +8,30 @@ The aggregating functions `MIN`, `MAX`, `SUM`, `AVG`, and `COUNT` allow you to c
 <details>
   <summary>Display database setup</summary>
   
-  This page assumes your database contains `Book` and `Person` [collections](/schema/collections.md) and some documents in them:
+  To reproduce the example results from this page, your database needs the following setup.
 
   ```graphql title="Database schema" test-setup-collection
-  type Person {
-    name: String!
-    authoredBooks: [Book]
-  }
-
   type Book {
     title: String!
     genre: String
     plot: String
     rating: Float
-    author: Person
     ratings: [Float]
+    author: Person
+    seller: Company
+  }
+  
+  type Person {
+    name: String!
+    authoredBooks: [Book]
+  }
+
+  type Company {
+    name: String!
+    sells: [Book]
   }
   ```
-  ```graphql title="Person documents setup" test-setup-data
+  ```graphql title="Documents setup" test-setup-data
   mutation {
     a1:add_Person(input: {
       name: "George Orwell"
@@ -39,83 +45,73 @@ The aggregating functions `MIN`, `MAX`, `SUM`, `AVG`, and `COUNT` allow you to c
     a4:add_Person(input: {
       name: "Victor Hugo"
     }) { _docID name }
-  }
-  ```
-  ```graphql title="Book documents setup" test-setup-data
-  mutation {
+
+    c1:add_Company(input: {
+      name: "The Independent Hipster Bookshop"
+    }) { _docID name }
+    c2:add_Company(input: {
+      name: "The World-Destroying Large Chain"
+    }) { _docID name }
+  
     b11:add_Book(input: {
       title: "1984",
       genre: "Fiction",
       plot: "A masterpiece of rebellion and imprisonment where war is peace, freedom is slavery, and Big Brother is watching.",
       rating: 4.20,
       ratings: [3.8, 4.91, 3.1, 2.8],
-      _authorID: "bae-f630242e-3faf-525e-864c-422e09b00667"
-    }) {
-      _docID
-      title
-    }
+      _authorID: "bae-bc532931-4843-50bc-bbdd-3e31549c8cc6",
+      _sellerID: "bae-a5300933-fb0a-5b8f-b38e-202565993ff0"
+    }) { _docID title }
     b12:add_Book(input: {
       title: "Down and Out in Paris and London",
       genre: "Memoir",
       plot: "The adventures of a penniless British writer among the down-and-outs of two great cities.",
       rating: 4.09,
-      _authorID: "bae-f630242e-3faf-525e-864c-422e09b00667"
-    }) {
-      _docID
-      title
-    }
+      _authorID: "bae-bc532931-4843-50bc-bbdd-3e31549c8cc6",
+      _sellerID: "bae-a5300933-fb0a-5b8f-b38e-202565993ff0"
+    }) { _docID title }
     b21:add_Book(input: {
       title: "Lord of the Flies",
       genre: "Fiction",
       plot: "At the dawn of the next world war, a plane crashes on an uncharted island, stranding a group of schoolboys.",
       rating: 3.70,
-      _authorID: "bae-db573e8d-2466-55b9-8da0-39003f530d44"
-    }) {
-      _docID
-      title
-    }
+      _authorID: "bae-6025af65-e57e-5db5-84dd-d349b130c6d9",
+      _sellerID: "bae-a5300933-fb0a-5b8f-b38e-202565993ff0"
+    }) { _docID title }
     b31:add_Book(input: {
       title: "Infinite Jest",
       genre: "Fiction",
       plot: "A gargantuan, mind-altering tragi-comedy about the Pursuit of Happiness in America.",
       rating: 4.25,
       ratings: [3.1, 4.1, 4.5],
-      _authorID: "bae-40b16347-07e0-5e97-85e0-8742eaba786e"
-    }) {
-      _docID
-      title
-    }
+      _authorID: "bae-26c791a7-fa81-5d86-95c5-4119e2fef915",
+      _sellerID: "bae-81d5fadb-c2a3-5d95-b235-a220c220bf79"
+    }) { _docID title }
     b32:add_Book(input: {
       title: "Consider the Lobster and Other Essays",
       genre: "Nonfiction",
       plot: "Do lobsters feel pain? Did Franz Kafka have a funny bone? What is John Updike's deal, anyway? And what happens when adult video starlets meet their fans in person? Essays that are also enthralling narrative adventures.",
       rating: 4.18,
-      _authorID: "bae-40b16347-07e0-5e97-85e0-8742eaba786e"
-    }) {
-      _docID
-      title
-    }
+      _authorID: "bae-26c791a7-fa81-5d86-95c5-4119e2fef915",
+      _sellerID: "bae-81d5fadb-c2a3-5d95-b235-a220c220bf79"
+    }) { _docID title }
     b33:add_Book(input: {
       title: "Girl with Curious Hair",
       genre: "Fiction",
       plot: "Remarkable and unsettling reimaginations of reality.",
       rating: 3.85,
-      _authorID: "bae-40b16347-07e0-5e97-85e0-8742eaba786e"
-    }) {
-      _docID
-      title
-    }
+      _authorID: "bae-26c791a7-fa81-5d86-95c5-4119e2fef915",
+      _sellerID: "bae-81d5fadb-c2a3-5d95-b235-a220c220bf79"
+    }) { _docID title }
     b41:add_Book(input: {
       title: "Les Misérables",
       genre: "Fiction",
       plot: "Victor Hugo's tale of injustice, heroism and love follows the fortunes of Jean Valjean, an escaped convict determined to put his criminal past behind him.",
       rating: 4.21,
       ratings: [3.9, 4.1],
-      _authorID: "bae-7f9e6642-03e3-5f62-b684-3d5555f46f7d"
-    }) {
-      _docID
-      title
-    }
+      _authorID: "bae-4bfe5f4c-d668-5dc3-9de2-eb598af3da7d",
+      _sellerID: "bae-81d5fadb-c2a3-5d95-b235-a220c220bf79"
+    }) { _docID title }
   }
   ```
 </details>
@@ -124,7 +120,7 @@ The aggregating functions `MIN`, `MAX`, `SUM`, `AVG`, and `COUNT` allow you to c
 
 <Tabs groupId="aggregating-funcs">
   <TabItem value="MIN" label="MIN" default>
-    ```graphql title="Syntax &ndash; MIN"
+    ```graphql title="Syntax &ndash; MIN" test-skip
     MIN(GROUP: { 
       field: String, 
       filter: Object,
@@ -136,7 +132,7 @@ The aggregating functions `MIN`, `MAX`, `SUM`, `AVG`, and `COUNT` allow you to c
     - `limit, offset` &ndash; Restrict how many documents are included, see [Limit and paginate results](limit-paginate.md).
   </TabItem>
   <TabItem value="MAX" label="MAX" default>
-    ```graphql title="Syntax &ndash; MAX"
+    ```graphql title="Syntax &ndash; MAX" test-skip
     MAX(GROUP: { 
       field: String, 
       filter: Object,
@@ -148,7 +144,7 @@ The aggregating functions `MIN`, `MAX`, `SUM`, `AVG`, and `COUNT` allow you to c
     - `limit, offset` &ndash; Restrict how many documents are included, see [Limit and paginate results](limit-paginate.md).
   </TabItem>
   <TabItem value="SUM" label="SUM" default>
-    ```graphql title="Syntax &ndash; SUM"
+    ```graphql title="Syntax &ndash; SUM" test-skip
     SUM(GROUP: { 
       field: String, 
       filter: Object,
@@ -160,7 +156,7 @@ The aggregating functions `MIN`, `MAX`, `SUM`, `AVG`, and `COUNT` allow you to c
     - `limit, offset` &ndash; Restrict how many documents are included, see [Limit and paginate results](limit-paginate.md).
   </TabItem>
   <TabItem value="AVG" label="AVG" default>
-    ```graphql title="Syntax &ndash; AVG"
+    ```graphql title="Syntax &ndash; AVG" test-skip
     AVG(GROUP: { 
       field: String, 
       filter: Object,
@@ -172,7 +168,7 @@ The aggregating functions `MIN`, `MAX`, `SUM`, `AVG`, and `COUNT` allow you to c
     - `limit, offset` &ndash; Restrict how many documents are included, see [Limit and paginate results](limit-paginate.md).
   </TabItem>
   <TabItem value="COUNT" label="COUNT" default>
-    ```graphql title="Syntax &ndash; COUNT"
+    ```graphql title="Syntax &ndash; COUNT" test-skip
     COUNT(GROUP: { 
       filter: Object,
       limit: Int, offset: Int
@@ -208,14 +204,6 @@ When [grouping results](group.md), aggregating functions take as input the docum
         "AVG": 4.042,
         "GROUP": [
           {
-            "rating": 4.21,
-            "title": "Les Misérables"
-          },
-          {
-            "rating": 4.25,
-            "title": "Infinite Jest"
-          },
-          {
             "rating": 4.2,
             "title": "1984"
           },
@@ -224,22 +212,19 @@ When [grouping results](group.md), aggregating functions take as input the docum
             "title": "Lord of the Flies"
           },
           {
+            "rating": 4.25,
+            "title": "Infinite Jest"
+          },
+          {
             "rating": 3.85,
             "title": "Girl with Curious Hair"
+          },
+          {
+            "rating": 4.21,
+            "title": "Les Misérables"
           }
         ],
         "genre": "Fiction"
-      },
-      {
-        // highlight-next-line
-        "AVG": 4.18,
-        "GROUP": [
-          {
-            "rating": 4.18,
-            "title": "Consider the Lobster and Other Essays"
-          }
-        ],
-        "genre": "Nonfiction"
       },
       {
         // highlight-next-line
@@ -251,6 +236,17 @@ When [grouping results](group.md), aggregating functions take as input the docum
           }
         ],
         "genre": "Memoir"
+      },
+      {
+        // highlight-next-line
+        "AVG": 4.18,
+        "GROUP": [
+          {
+            "rating": 4.18,
+            "title": "Consider the Lobster and Other Essays"
+          }
+        ],
+        "genre": "Nonfiction"
       }
     ]
   }
@@ -277,32 +273,22 @@ When [grouping results](group.md), aggregating functions take as input the docum
         "COUNT": 5,
         "GROUP": [
           {
-            "title": "Les Misérables"
-          },
-          {
-            "title": "Infinite Jest"
-          },
-          {
             "title": "1984"
           },
           {
             "title": "Lord of the Flies"
           },
           {
+            "title": "Infinite Jest"
+          },
+          {
             "title": "Girl with Curious Hair"
+          },
+          {
+            "title": "Les Misérables"
           }
         ],
         "genre": "Fiction"
-      },
-      {
-        // highlight-next-line
-        "COUNT": 1,
-        "GROUP": [
-          {
-            "title": "Consider the Lobster and Other Essays"
-          }
-        ],
-        "genre": "Nonfiction"
       },
       {
         // highlight-next-line
@@ -313,6 +299,16 @@ When [grouping results](group.md), aggregating functions take as input the docum
           }
         ],
         "genre": "Memoir"
+      },
+      {
+        // highlight-next-line
+        "COUNT": 1,
+        "GROUP": [
+          {
+            "title": "Consider the Lobster and Other Essays"
+          }
+        ],
+        "genre": "Nonfiction"
       }
     ]
   }
@@ -346,14 +342,6 @@ Note how the following example result differs from the previous one only in the 
         "AVG": 4.22,
         "GROUP": [
           {
-            "rating": 4.21,
-            "title": "Les Misérables"
-          },
-          {
-            "rating": 4.25,
-            "title": "Infinite Jest"
-          },
-          {
             "rating": 4.2,
             "title": "1984"
           },
@@ -362,23 +350,22 @@ Note how the following example result differs from the previous one only in the 
             "title": "Lord of the Flies"
           },
           {
+            "rating": 4.25,
+            "title": "Infinite Jest"
+          },
+          {
             "rating": 3.85,
             "title": "Girl with Curious Hair"
+          },
+          {
+            "rating": 4.21,
+            "title": "Les Misérables"
           }
         ],
         "genre": "Fiction"
       },
       {
-        "AVG": 4.18,
-        "GROUP": [
-          {
-            "rating": 4.18,
-            "title": "Consider the Lobster and Other Essays"
-          }
-        ],
-        "genre": "Nonfiction"
-      },
-      {
+        // highlight-next-line
         "AVG": 4.09,
         "GROUP": [
           {
@@ -387,6 +374,17 @@ Note how the following example result differs from the previous one only in the 
           }
         ],
         "genre": "Memoir"
+      },
+      {
+        // highlight-next-line
+        "AVG": 4.18,
+        "GROUP": [
+          {
+            "rating": 4.18,
+            "title": "Consider the Lobster and Other Essays"
+          }
+        ],
+        "genre": "Nonfiction"
       }
     ]
   }
@@ -423,34 +421,6 @@ When [grouping on multiple fields](group.md#multiple-fields), you can run an agg
       {
         "GROUP": [
           {
-            "AVG": 4.21,
-            "GROUP": [
-              {
-                "rating": 4.21,
-                "title": "Les Misérables"
-              }
-            ],
-            "author": {
-              "name": "Victor Hugo"
-            }
-          },
-          {
-            "AVG": 4.05,
-            "GROUP": [
-              {
-                "rating": 4.25,
-                "title": "Infinite Jest"
-              },
-              {
-                "rating": 3.85,
-                "title": "Girl with Curious Hair"
-              }
-            ],
-            "author": {
-              "name": "David Foster Wallace"
-            }
-          },
-          {
             "AVG": 4.2,
             "GROUP": [
               {
@@ -473,36 +443,42 @@ When [grouping on multiple fields](group.md#multiple-fields), you can run an agg
             "author": {
               "name": "William Golding"
             }
-          }
-        ],
-        // highlight-next-line
-        "MAX": 4.21,
-        "author": {
-          "name": "David Foster Wallace"
-        },
-        "genre": "Fiction"
-      },
-      {
-        "GROUP": [
+          },
           {
-            "AVG": 4.18,
+            "AVG": 4.05,
             "GROUP": [
               {
-                "rating": 4.18,
-                "title": "Consider the Lobster and Other Essays"
+                "rating": 4.25,
+                "title": "Infinite Jest"
+              },
+              {
+                "rating": 3.85,
+                "title": "Girl with Curious Hair"
               }
             ],
             "author": {
               "name": "David Foster Wallace"
             }
+          },
+          {
+            "AVG": 4.21,
+            "GROUP": [
+              {
+                "rating": 4.21,
+                "title": "Les Misérables"
+              }
+            ],
+            "author": {
+              "name": "Victor Hugo"
+            }
           }
         ],
         // highlight-next-line
-        "MAX": 4.18,
+        "MAX": 4.21,
         "author": {
-          "name": "David Foster Wallace"
+          "name": "Victor Hugo"
         },
-        "genre": "Nonfiction"
+        "genre": "Fiction"
       },
       {
         "GROUP": [
@@ -525,6 +501,28 @@ When [grouping on multiple fields](group.md#multiple-fields), you can run an agg
           "name": "George Orwell"
         },
         "genre": "Memoir"
+      },
+      {
+        "GROUP": [
+          {
+            "AVG": 4.18,
+            "GROUP": [
+              {
+                "rating": 4.18,
+                "title": "Consider the Lobster and Other Essays"
+              }
+            ],
+            "author": {
+              "name": "David Foster Wallace"
+            }
+          }
+        ],
+        // highlight-next-line
+        "MAX": 4.18,
+        "author": {
+          "name": "David Foster Wallace"
+        },
+        "genre": "Nonfiction"
       }
     ]
   }

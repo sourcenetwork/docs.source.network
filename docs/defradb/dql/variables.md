@@ -14,9 +14,19 @@ The best practice is thus to use variables for all values that might change over
 <details>
   <summary>Display database setup</summary>
   
-  This page assumes your database contains `Book` and `Person` [collections](/schema/collections.md) and some documents in them:
+  To reproduce the example results from this page, your database needs the following setup.
 
   ```graphql title="Database schema" test-setup-collection
+  type Book {
+    title: String!
+    genre: String
+    plot: String
+    rating: Float
+    ratings: [Float]
+    author: Person
+    seller: Company
+  }
+  
   type Person {
     name: String!
     authoredBooks: [Book]
@@ -26,25 +36,9 @@ The best practice is thus to use variables for all values that might change over
     name: String!
     sells: [Book]
   }
-
-  type Book {
-    title: String!
-    genre: String
-    plot: String
-    rating: Float
-    author: Person
-    seller: Company
-  }
   ```
   ```graphql title="Documents setup" test-setup-data
   mutation {
-    c1:add_Company(input: {
-      name: "The Indipendent Hipster Bookshop"
-    }) { _docID name }
-    c2:add_Company(input: {
-      name: "The World-Destroying Large Chain"
-    }) { _docID name }
-
     a1:add_Person(input: {
       name: "George Orwell"
     }) { _docID name }
@@ -58,53 +52,71 @@ The best practice is thus to use variables for all values that might change over
       name: "Victor Hugo"
     }) { _docID name }
 
+    c1:add_Company(input: {
+      name: "The Independent Hipster Bookshop"
+    }) { _docID name }
+    c2:add_Company(input: {
+      name: "The World-Destroying Large Chain"
+    }) { _docID name }
+  
     b11:add_Book(input: {
       title: "1984",
       genre: "Fiction",
       plot: "A masterpiece of rebellion and imprisonment where war is peace, freedom is slavery, and Big Brother is watching.",
       rating: 4.20,
-      _authorID: "bae-f630242e-3faf-525e-864c-422e09b00667",
-      _sellerID: "bae-e2120437-8282-5e59-9e02-e98d82f73cc3"
+      ratings: [3.8, 4.91, 3.1, 2.8],
+      _authorID: "bae-bc532931-4843-50bc-bbdd-3e31549c8cc6",
+      _sellerID: "bae-a5300933-fb0a-5b8f-b38e-202565993ff0"
     }) { _docID title }
     b12:add_Book(input: {
       title: "Down and Out in Paris and London",
-      genre: "Biography",
+      genre: "Memoir",
       plot: "The adventures of a penniless British writer among the down-and-outs of two great cities.",
       rating: 4.09,
-      _authorID: "bae-f630242e-3faf-525e-864c-422e09b00667",
-      _sellerID: "bae-e2120437-8282-5e59-9e02-e98d82f73cc3"
+      _authorID: "bae-bc532931-4843-50bc-bbdd-3e31549c8cc6",
+      _sellerID: "bae-a5300933-fb0a-5b8f-b38e-202565993ff0"
     }) { _docID title }
     b21:add_Book(input: {
       title: "Lord of the Flies",
       genre: "Fiction",
       plot: "At the dawn of the next world war, a plane crashes on an uncharted island, stranding a group of schoolboys.",
       rating: 3.70,
-      _authorID: "bae-db573e8d-2466-55b9-8da0-39003f530d44",
-      _sellerID: "bae-f8755a60-c49f-510f-a435-c4ddfec82499"
+      _authorID: "bae-6025af65-e57e-5db5-84dd-d349b130c6d9",
+      _sellerID: "bae-a5300933-fb0a-5b8f-b38e-202565993ff0"
     }) { _docID title }
     b31:add_Book(input: {
       title: "Infinite Jest",
       genre: "Fiction",
       plot: "A gargantuan, mind-altering tragi-comedy about the Pursuit of Happiness in America.",
-      rating: 4.25
-      _authorID: "bae-40b16347-07e0-5e97-85e0-8742eaba786e",
-      _sellerID: "bae-e2120437-8282-5e59-9e02-e98d82f73cc3"
+      rating: 4.25,
+      ratings: [3.1, 4.1, 4.5],
+      _authorID: "bae-26c791a7-fa81-5d86-95c5-4119e2fef915",
+      _sellerID: "bae-81d5fadb-c2a3-5d95-b235-a220c220bf79"
     }) { _docID title }
     b32:add_Book(input: {
       title: "Consider the Lobster and Other Essays",
       genre: "Nonfiction",
       plot: "Do lobsters feel pain? Did Franz Kafka have a funny bone? What is John Updike's deal, anyway? And what happens when adult video starlets meet their fans in person? Essays that are also enthralling narrative adventures.",
       rating: 4.18,
-      _authorID: "bae-40b16347-07e0-5e97-85e0-8742eaba786e",
-      _sellerID: "bae-f8755a60-c49f-510f-a435-c4ddfec82499"
+      _authorID: "bae-26c791a7-fa81-5d86-95c5-4119e2fef915",
+      _sellerID: "bae-81d5fadb-c2a3-5d95-b235-a220c220bf79"
+    }) { _docID title }
+    b33:add_Book(input: {
+      title: "Girl with Curious Hair",
+      genre: "Fiction",
+      plot: "Remarkable and unsettling reimaginations of reality.",
+      rating: 3.85,
+      _authorID: "bae-26c791a7-fa81-5d86-95c5-4119e2fef915",
+      _sellerID: "bae-81d5fadb-c2a3-5d95-b235-a220c220bf79"
     }) { _docID title }
     b41:add_Book(input: {
       title: "Les Misérables",
       genre: "Fiction",
       plot: "Victor Hugo's tale of injustice, heroism and love follows the fortunes of Jean Valjean, an escaped convict determined to put his criminal past behind him.",
       rating: 4.21,
-      _authorID: "bae-7f9e6642-03e3-5f62-b684-3d5555f46f7d",
-      _sellerID: "bae-f8755a60-c49f-510f-a435-c4ddfec82499"
+      ratings: [3.9, 4.1],
+      _authorID: "bae-4bfe5f4c-d668-5dc3-9de2-eb598af3da7d",
+      _sellerID: "bae-81d5fadb-c2a3-5d95-b235-a220c220bf79"
     }) { _docID title }
   }
   ```
@@ -131,7 +143,7 @@ query ($bookID: [ID!]) {
 ```
 ```json title="Variables"
 {
-  "bookID": "bae-b99349d9-9419-52c3-9b53-7a9b28e0ea33"
+  "bookID": "bae-d1460b1a-8f78-5791-b0ec-869997260c20"
 }
 ```
 ```json title="Result"
@@ -139,7 +151,7 @@ query ($bookID: [ID!]) {
   "data": {
     "Book": [
       {
-        "_docID": "bae-b99349d9-9419-52c3-9b53-7a9b28e0ea33",
+        "_docID": "bae-d1460b1a-8f78-5791-b0ec-869997260c20",
         "author": {
           "name": "David Foster Wallace"
         },
@@ -212,9 +224,9 @@ query ($plot: String, $minRating: Float64) {
   "data": {
     "Book": [
       {
-        "plot": "Victor Hugo's tale of injustice, heroism and love follows the fortunes of Jean Valjean, an escaped convict determined to put his criminal past behind him.",
-        "rating": 4.21,
-        "title": "Les Misérables"
+        "plot": "A masterpiece of rebellion and imprisonment where war is peace, freedom is slavery, and Big Brother is watching.",
+        "rating": 4.2,
+        "title": "1984"
       },
       {
         "plot": "A gargantuan, mind-altering tragi-comedy about the Pursuit of Happiness in America.",
@@ -222,9 +234,9 @@ query ($plot: String, $minRating: Float64) {
         "title": "Infinite Jest"
       },
       {
-        "plot": "A masterpiece of rebellion and imprisonment where war is peace, freedom is slavery, and Big Brother is watching.",
-        "rating": 4.2,
-        "title": "1984"
+        "plot": "Victor Hugo's tale of injustice, heroism and love follows the fortunes of Jean Valjean, an escaped convict determined to put his criminal past behind him.",
+        "rating": 4.21,
+        "title": "Les Misérables"
       }
     ]
   }

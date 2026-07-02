@@ -8,24 +8,30 @@ The `groupBy` argument allows you to group results into buckets basing on the va
 <details>
   <summary>Display database setup</summary>
   
-  This page assumes your database contains `Book` and `Person` [collections](/schema/collections.md) and some documents in them:
+  To reproduce the example results from this page, your database needs the following setup.
 
   ```graphql title="Database schema" test-setup-collection
-  type Person {
-    name: String!
-    authoredBooks: [Book]
-  }
-
   type Book {
     title: String!
     genre: String
     plot: String
     rating: Float
-    author: Person
     ratings: [Float]
+    author: Person
+    seller: Company
+  }
+  
+  type Person {
+    name: String!
+    authoredBooks: [Book]
+  }
+
+  type Company {
+    name: String!
+    sells: [Book]
   }
   ```
-  ```graphql title="Person documents setup" test-setup-data
+  ```graphql title="Documents setup" test-setup-data
   mutation {
     a1:add_Person(input: {
       name: "George Orwell"
@@ -39,83 +45,73 @@ The `groupBy` argument allows you to group results into buckets basing on the va
     a4:add_Person(input: {
       name: "Victor Hugo"
     }) { _docID name }
-  }
-  ```
-  ```graphql title="Book documents setup" test-setup-data
-  mutation {
+
+    c1:add_Company(input: {
+      name: "The Independent Hipster Bookshop"
+    }) { _docID name }
+    c2:add_Company(input: {
+      name: "The World-Destroying Large Chain"
+    }) { _docID name }
+  
     b11:add_Book(input: {
       title: "1984",
       genre: "Fiction",
       plot: "A masterpiece of rebellion and imprisonment where war is peace, freedom is slavery, and Big Brother is watching.",
       rating: 4.20,
       ratings: [3.8, 4.91, 3.1, 2.8],
-      _authorID: "bae-f630242e-3faf-525e-864c-422e09b00667"
-    }) {
-      _docID
-      title
-    }
+      _authorID: "bae-bc532931-4843-50bc-bbdd-3e31549c8cc6",
+      _sellerID: "bae-a5300933-fb0a-5b8f-b38e-202565993ff0"
+    }) { _docID title }
     b12:add_Book(input: {
       title: "Down and Out in Paris and London",
       genre: "Memoir",
       plot: "The adventures of a penniless British writer among the down-and-outs of two great cities.",
       rating: 4.09,
-      _authorID: "bae-f630242e-3faf-525e-864c-422e09b00667"
-    }) {
-      _docID
-      title
-    }
+      _authorID: "bae-bc532931-4843-50bc-bbdd-3e31549c8cc6",
+      _sellerID: "bae-a5300933-fb0a-5b8f-b38e-202565993ff0"
+    }) { _docID title }
     b21:add_Book(input: {
       title: "Lord of the Flies",
       genre: "Fiction",
       plot: "At the dawn of the next world war, a plane crashes on an uncharted island, stranding a group of schoolboys.",
       rating: 3.70,
-      _authorID: "bae-db573e8d-2466-55b9-8da0-39003f530d44"
-    }) {
-      _docID
-      title
-    }
+      _authorID: "bae-6025af65-e57e-5db5-84dd-d349b130c6d9",
+      _sellerID: "bae-a5300933-fb0a-5b8f-b38e-202565993ff0"
+    }) { _docID title }
     b31:add_Book(input: {
       title: "Infinite Jest",
       genre: "Fiction",
       plot: "A gargantuan, mind-altering tragi-comedy about the Pursuit of Happiness in America.",
       rating: 4.25,
       ratings: [3.1, 4.1, 4.5],
-      _authorID: "bae-40b16347-07e0-5e97-85e0-8742eaba786e"
-    }) {
-      _docID
-      title
-    }
+      _authorID: "bae-26c791a7-fa81-5d86-95c5-4119e2fef915",
+      _sellerID: "bae-81d5fadb-c2a3-5d95-b235-a220c220bf79"
+    }) { _docID title }
     b32:add_Book(input: {
       title: "Consider the Lobster and Other Essays",
       genre: "Nonfiction",
       plot: "Do lobsters feel pain? Did Franz Kafka have a funny bone? What is John Updike's deal, anyway? And what happens when adult video starlets meet their fans in person? Essays that are also enthralling narrative adventures.",
       rating: 4.18,
-      _authorID: "bae-40b16347-07e0-5e97-85e0-8742eaba786e"
-    }) {
-      _docID
-      title
-    }
+      _authorID: "bae-26c791a7-fa81-5d86-95c5-4119e2fef915",
+      _sellerID: "bae-81d5fadb-c2a3-5d95-b235-a220c220bf79"
+    }) { _docID title }
     b33:add_Book(input: {
       title: "Girl with Curious Hair",
       genre: "Fiction",
       plot: "Remarkable and unsettling reimaginations of reality.",
       rating: 3.85,
-      _authorID: "bae-40b16347-07e0-5e97-85e0-8742eaba786e"
-    }) {
-      _docID
-      title
-    }
+      _authorID: "bae-26c791a7-fa81-5d86-95c5-4119e2fef915",
+      _sellerID: "bae-81d5fadb-c2a3-5d95-b235-a220c220bf79"
+    }) { _docID title }
     b41:add_Book(input: {
       title: "Les Misérables",
       genre: "Fiction",
       plot: "Victor Hugo's tale of injustice, heroism and love follows the fortunes of Jean Valjean, an escaped convict determined to put his criminal past behind him.",
       rating: 4.21,
       ratings: [3.9, 4.1],
-      _authorID: "bae-7f9e6642-03e3-5f62-b684-3d5555f46f7d"
-    }) {
-      _docID
-      title
-    }
+      _authorID: "bae-4bfe5f4c-d668-5dc3-9de2-eb598af3da7d",
+      _sellerID: "bae-81d5fadb-c2a3-5d95-b235-a220c220bf79"
+    }) { _docID title }
   }
   ```
 </details>
@@ -161,20 +157,6 @@ The return object can only include the grouped-by fields, the `GROUP` sub-object
         "GROUP": [
           {
             "author": {
-              "name": "Victor Hugo"
-            },
-            "plot": "Victor Hugo's tale of injustice, heroism and love follows the fortunes of Jean Valjean, an escaped convict determined to put his criminal past behind him.",
-            "title": "Les Misérables"
-          },
-          {
-            "author": {
-              "name": "David Foster Wallace"
-            },
-            "plot": "A gargantuan, mind-altering tragi-comedy about the Pursuit of Happiness in America.",
-            "title": "Infinite Jest"
-          },
-          {
-            "author": {
               "name": "George Orwell"
             },
             "plot": "A masterpiece of rebellion and imprisonment where war is peace, freedom is slavery, and Big Brother is watching.",
@@ -191,23 +173,25 @@ The return object can only include the grouped-by fields, the `GROUP` sub-object
             "author": {
               "name": "David Foster Wallace"
             },
-            "plot": "Remarkable and unsettling reimaginations of reality.",
-            "title": "Girl with Curious Hair"
-          }
-        ],
-        "genre": "Fiction"
-      },
-      {
-        "GROUP": [
+            "plot": "A gargantuan, mind-altering tragi-comedy about the Pursuit of Happiness in America.",
+            "title": "Infinite Jest"
+          },
           {
             "author": {
               "name": "David Foster Wallace"
             },
-            "plot": "Do lobsters feel pain? Did Franz Kafka have a funny bone? What is John Updike's deal, anyway? And what happens when adult video starlets meet their fans in person? Essays that are also enthralling narrative adventures.",
-            "title": "Consider the Lobster and Other Essays"
+            "plot": "Remarkable and unsettling reimaginations of reality.",
+            "title": "Girl with Curious Hair"
+          },
+          {
+            "author": {
+              "name": "Victor Hugo"
+            },
+            "plot": "Victor Hugo's tale of injustice, heroism and love follows the fortunes of Jean Valjean, an escaped convict determined to put his criminal past behind him.",
+            "title": "Les Misérables"
           }
         ],
-        "genre": "Nonfiction"
+        "genre": "Fiction"
       },
       {
         "GROUP": [
@@ -220,6 +204,18 @@ The return object can only include the grouped-by fields, the `GROUP` sub-object
           }
         ],
         "genre": "Memoir"
+      },
+      {
+        "GROUP": [
+          {
+            "author": {
+              "name": "David Foster Wallace"
+            },
+            "plot": "Do lobsters feel pain? Did Franz Kafka have a funny bone? What is John Updike's deal, anyway? And what happens when adult video starlets meet their fans in person? Essays that are also enthralling narrative adventures.",
+            "title": "Consider the Lobster and Other Essays"
+          }
+        ],
+        "genre": "Nonfiction"
       }
     ]
   }
@@ -272,12 +268,12 @@ You can group results by a relationship fields as well. You can only group by th
       {
         "GROUP": [
           {
-            "plot": "The adventures of a penniless British writer among the down-and-outs of two great cities.",
-            "title": "Down and Out in Paris and London"
-          },
-          {
             "plot": "A masterpiece of rebellion and imprisonment where war is peace, freedom is slavery, and Big Brother is watching.",
             "title": "1984"
+          },
+          {
+            "plot": "The adventures of a penniless British writer among the down-and-outs of two great cities.",
+            "title": "Down and Out in Paris and London"
           }
         ],
         "author": {
@@ -341,6 +337,16 @@ To create groups basing on the value of multiple fields, you have two options:
           {
             "GROUP": [
               {
+                "title": "1984"
+              }
+            ],
+            "author": {
+              "name": "George Orwell"
+            }
+          },
+          {
+            "GROUP": [
+              {
                 "title": "Lord of the Flies"
               }
             ],
@@ -351,14 +357,14 @@ To create groups basing on the value of multiple fields, you have two options:
           {
             "GROUP": [
               {
-                "title": "1985"
+                "title": "Infinite Jest"
               },
               {
-                "title": "1984"
+                "title": "Girl with Curious Hair"
               }
             ],
             "author": {
-              "name": "George Orwell"
+              "name": "David Foster Wallace"
             }
           },
           {
@@ -370,22 +376,30 @@ To create groups basing on the value of multiple fields, you have two options:
             "author": {
               "name": "Victor Hugo"
             }
-          },
+          }
+        ],
+        "author": {
+          "name": "Victor Hugo"
+        },
+        "genre": "Fiction"
+      },
+      {
+        "GROUP": [
           {
             "GROUP": [
               {
-                "title": "Infinite Jest"
+                "title": "Down and Out in Paris and London"
               }
             ],
             "author": {
-              "name": "David Foster Wallace"
+              "name": "George Orwell"
             }
           }
         ],
         "author": {
           "name": "George Orwell"
         },
-        "genre": "Fiction"
+        "genre": "Memoir"
       },
       {
         "GROUP": [
@@ -404,24 +418,6 @@ To create groups basing on the value of multiple fields, you have two options:
           "name": "David Foster Wallace"
         },
         "genre": "Nonfiction"
-      },
-      {
-        "GROUP": [
-          {
-            "GROUP": [
-              {
-                "title": "Down and Out in Paris and London"
-              }
-            ],
-            "author": {
-              "name": "George Orwell"
-            }
-          }
-        ],
-        "author": {
-          "name": "George Orwell"
-        },
-        "genre": "Biography"
       }
     ]
   }
@@ -446,11 +442,33 @@ To create groups basing on the value of multiple fields, you have two options:
       {
         "GROUP": [
           {
-            "title": "Les Misérables"
+            "title": "1984"
           }
         ],
         "author": {
-          "name": "Victor Hugo"
+          "name": "George Orwell"
+        },
+        "genre": "Fiction"
+      },
+      {
+        "GROUP": [
+          {
+            "title": "Down and Out in Paris and London"
+          }
+        ],
+        "author": {
+          "name": "George Orwell"
+        },
+        "genre": "Memoir"
+      },
+      {
+        "GROUP": [
+          {
+            "title": "Lord of the Flies"
+          }
+        ],
+        "author": {
+          "name": "William Golding"
         },
         "genre": "Fiction"
       },
@@ -482,33 +500,11 @@ To create groups basing on the value of multiple fields, you have two options:
       {
         "GROUP": [
           {
-            "title": "Down and Out in Paris and London"
+            "title": "Les Misérables"
           }
         ],
         "author": {
-          "name": "George Orwell"
-        },
-        "genre": "Memoir"
-      },
-      {
-        "GROUP": [
-          {
-            "title": "1984"
-          }
-        ],
-        "author": {
-          "name": "George Orwell"
-        },
-        "genre": "Fiction"
-      },
-      {
-        "GROUP": [
-          {
-            "title": "Lord of the Flies"
-          }
-        ],
-        "author": {
-          "name": "William Golding"
+          "name": "Victor Hugo"
         },
         "genre": "Fiction"
       }
@@ -577,19 +573,19 @@ The interplay between root and `GROUP` arguments can be subtle. When grouping re
       {
         "GROUP": [
           {
-            "title": "Les Misérables"
-          },
-          {
-            "title": "Infinite Jest"
-          },
-          {
             "title": "1984"
           },
           {
             "title": "Lord of the Flies"
           },
           {
+            "title": "Infinite Jest"
+          },
+          {
             "title": "Girl with Curious Hair"
+          },
+          {
+            "title": "Les Misérables"
           }
         ],
         "genre": "Fiction"
@@ -618,18 +614,10 @@ The interplay between root and `GROUP` arguments can be subtle. When grouping re
       {
         "GROUP": [
           {
-            "title": "Les Misérables"
+            "title": "1984"
           }
         ],
         "genre": "Fiction"
-      },
-      {
-        "GROUP": [
-          {
-            "title": "Consider the Lobster and Other Essays"
-          }
-        ],
-        "genre": "Nonfiction"
       },
       {
         "GROUP": [
@@ -638,6 +626,14 @@ The interplay between root and `GROUP` arguments can be subtle. When grouping re
           }
         ],
         "genre": "Memoir"
+      },
+      {
+        "GROUP": [
+          {
+            "title": "Consider the Lobster and Other Essays"
+          }
+        ],
+        "genre": "Nonfiction"
       }
     ]
   }
@@ -720,11 +716,11 @@ Filters at the `GROUP` level allow you to restrict the groups to get only some s
       },
       {
         "GROUP": [],
-        "genre": "Nonfiction"
+        "genre": "Memoir"
       },
       {
         "GROUP": [],
-        "genre": "Memoir"
+        "genre": "Nonfiction"
       }
     ]
   }
