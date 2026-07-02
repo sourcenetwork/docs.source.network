@@ -251,7 +251,7 @@ The field `_docID` contains the document's unique identifier. The document data 
 
 ## Relationships {/* #relationships */}
 
-To add documents with relationships to each other, you need two queries: one to create the documents, and another to link them together via their docIDs.
+To create a relationship between two documents, you need to store the docID of one document into the relationship field of the other. Each [relationship field](/schema/collections.md#relationships) results in a `_<fieldName>ID` field: for example, the type `Book` has a field `author: Person`, so a field `_authorID` is automatically available. Use this field to store the pointer to the docID of a `Person` document.
 
 For example, to create a book and link it to an author, first create the documents and return their docIDs:
 
@@ -293,7 +293,7 @@ mutation {
 }
 ```
 
-To link them, use an [update mutation](/dql/mutation-update.md) to set the field `_authorID` on `Book` with the docID from the desired `Person`:
+Then create a relationship between them via an [update mutation](/dql/mutation-update.md) to set the field `_authorID` on `Book` with the docID from the desired `Person`:
 
 ```graphql title="Link book and author via Book._authorID"
 mutation {

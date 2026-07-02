@@ -323,7 +323,7 @@ The basic skeleton of a query is made of the type/collection you want to fetch f
 
 ## Relationships {/* #relationships */}
 
-If a document contains a relationship to another document, the return fields can include the fields of the linked document. This applies both for one-to-one and to one-to-many relationships, and to both sides of the relationship.
+If a document has a [relationship](/schema/collections.md#relationships) to another document, the return fields can include the fields of the linked document. This applies both for one-to-one and to one-to-many relationships, and to both sides of the relationship.
 
 ```graphql title="Retrieve all persons and the titles of their authored books"
 {
