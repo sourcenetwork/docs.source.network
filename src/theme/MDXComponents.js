@@ -9,7 +9,7 @@ import UmamiEvent from '@site/src/components/UmamiEvent';
 export default {
   // Reusing and expanding the default mapping
   ...MDXComponents,
-  ScrollTracker,
+  UmamiEvent,
   Tabs,
   TabItem
 };
