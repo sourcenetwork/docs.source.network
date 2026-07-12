@@ -16,20 +16,16 @@ The selected collections synchronize their events on the pubsub network.
 ### Options inherited from parent commands
 
 ```
+      --audience string             Audience to set on minted auth tokens. Defaults to the host of --url
   -i, --identity string             Hex formatted private key used to authenticate with ACP
-      --keyring-backend string      Keyring backend to use. Options are file or system (default "file")
-      --keyring-namespace string    Service name to use when using the system backend (default "defradb")
-      --keyring-path string         Path to store encrypted keys when using the file backend (default "keys")
       --log-format string           Log format to use. Options are text or json (default "text")
       --log-level string            Log level to use. Options are debug, info, error, fatal (default "info")
       --log-output string           Log output path. Options are stderr or stdout. (default "stderr")
       --log-overrides string        Logger config overrides. Format <name>,<key>=<val>,...;<name>,...
       --log-source                  Include source location in logs
       --log-stacktrace              Include stacktrace in error and fatal logs
-      --no-keyring                  Disable the keyring and generate ephemeral keys
       --no-log-color                Disable colored log output
       --rootdir string              Directory for persistent data (default: $HOME/.defradb)
-      --secret-file string          Path to the file containing secrets (default ".env")
       --source-hub-address string   The SourceHub address authorized by the client to make SourceHub transactions on behalf of the actor
       --tx uint                     Transaction ID
       --url string                  URL of HTTP endpoint to listen on or connect to (default "127.0.0.1:9181")
@@ -39,7 +35,8 @@ The selected collections synchronize their events on the pubsub network.
 
 * [defradb client p2p](defradb_client_p2p.md)	 - Interact with the DefraDB P2P system
 * [defradb client p2p collection add](defradb_client_p2p_collection_add.md)	 - Add P2P collections
-* [defradb client p2p collection getall](defradb_client_p2p_collection_getall.md)	 - Get all P2P collections
-* [defradb client p2p collection remove](defradb_client_p2p_collection_remove.md)	 - Remove P2P collections
-* [defradb client p2p collection sync](defradb_client_p2p_collection_sync.md)	 - Synchronize specific collection versions from the network
+* [defradb client p2p collection delete](defradb_client_p2p_collection_delete.md)	 - Delete P2P collections
+* [defradb client p2p collection list](defradb_client_p2p_collection_list.md)	 - List P2P collections
+* [defradb client p2p collection sync-branchable](defradb_client_p2p_collection_sync-branchable.md)	 - Synchronize a branchable collection's DAG from the network
+* [defradb client p2p collection sync-versions](defradb_client_p2p_collection_sync-versions.md)	 - Synchronize specific collection versions from the network
 

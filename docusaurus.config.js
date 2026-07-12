@@ -5,31 +5,43 @@ const variableCodeTheme = require("./src/code-theme/code-theme");
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
-  title: "Source Developer Portal",
-  tagline: "The Home of Source Developers",
+  title: "Source Docs",
+  tagline: "The Source Stack Documentation",
   url: "https://docs.source.network",
   baseUrl: "/",
   onBrokenLinks: "warn",
-  onBrokenMarkdownLinks: "warn",
   favicon: "img/favicon.ico",
   trailingSlash: true,
   organizationName: "source-developer", // Usually your GitHub org/user name.
   projectName: "source-developer", // Usually your repo name.
+  markdown:{
+    hooks: {
+      onBrokenMarkdownLinks: "warn",
+      onBrokenMarkdownImages: "warn",
+    }
+  },
   presets: [
     [
       "docusaurus-preset-openapi",
       /** @type {import('docusaurus-preset-openapi').Options} */
-      ({
+      {
         api: {
-          path: "openapi.yml",
-          routeBasePath: "/sourcehub/api",
+          path: "docs/defradb/references/http/openapi.json",
+          routeBasePath: "/defradb/references/http/api",
         },
         docs: false, // Disable the default docs plugin
         proxy: false, // Disable the proxy plugin to avoid webpack-dev-server config errors
         theme: {
           customCss: require.resolve("./src/css/custom.scss"),
         },
-      }),
+        sitemap: {
+          lastmod: "date",
+          changefreq: "weekly",
+          priority: 0.5,
+          ignorePatterns: ['/defradb/0.20.0/**', '/blog*'],
+          filename: "sitemap.xml",
+        },
+      },
     ],
   ],
   themeConfig:
@@ -101,7 +113,7 @@ const config = {
       },
       footer: {
         logo: {
-          alt: "Facebook Open Source Logo",
+          alt: "Source Logo",
           src: "img/source-logo_v2.svg",
           srcDark: "img/source-logo-w_v2.svg",
           href: "https://source.network",
@@ -111,7 +123,7 @@ const config = {
             title: "Developers",
             items: [
               {
-                label: "Getting Started",
+                label: "Documentation",
                 to: "/",
               },
               {
@@ -128,7 +140,7 @@ const config = {
                 href: "https://source.network/discord",
               },
               {
-                label: "Twitter",
+                label: "X/Twitter",
                 href: "https://x.com/edgeofsource",
               },
             ],
@@ -151,14 +163,42 @@ const config = {
       },
       prism: {
         theme: variableCodeTheme,
+        additionalLanguages: ['http', 'yaml'],
+        magicComments: [
+          // The default highlight class name must be present too!
+          {
+            className: 'theme-code-block-highlighted-line',
+            line: 'highlight-next-line',
+            block: { start: 'highlight-start', end: 'highlight-end' },
+          },
+          {
+            className: 'code-block-invalid-line',
+            line: 'invalid',
+          },
+          {
+            className: 'code-block-valid-line',
+            line: 'valid',
+          },
+          {
+            className: 'code-block-collapse',
+            line: 'collapse',
+          },
+          {
+            className: 'code-block-no-collapse',
+            line: 'no-collapse',
+          },
+        ],
       },
       algolia: {
         appId: "N3M9YBYYQY",
         apiKey: "909584ed5214e2d24ae2a85a5cd8664a",
         indexName: "source-docs",
       },
+      image: 'img/source-logo.jpg',
     }),
-  clientModules: [],
+  clientModules: [
+    require.resolve('./src/plugins/code-blocks.js')
+  ],
   plugins: [
     [
       require.resolve("./src/plugins/plausible"),
@@ -166,6 +206,16 @@ const config = {
         domain: "docs.source.network",
         plausibleDomain: "plausible.source.network",
         scriptName: "script",
+        trackOutboundLinks: true,
+      },
+    ],
+    [
+      require.resolve("./src/plugins/umami"),
+      {
+        enabled: process.env.UMAMI_ENABLED === "true",
+        websiteID: process.env.UMAMI_WEBSITE_ID,
+        analyticsDomain: process.env.UMAMI_DOMAIN,
+        scriptName: "script.js",
         trackOutboundLinks: true,
       },
     ],
@@ -190,18 +240,16 @@ const config = {
         id: "defradb",
         path: "docs/defradb",
         routeBasePath: "defradb",
-        sidebarPath: require.resolve("./sidebars.js"),
+        sidebarPath: require.resolve("./docs/sidebars/defra.js"),
         editUrl:
           "https://github.com/sourcenetwork/docs.source.network/edit/master/",
-        lastVersion: "0.19.0",
+        lastVersion: "current",
         versions: {
-          "0.19.0": {
-            banner: "none",
+          "0.20.0": {
+            banner: "unmaintained",
           },
           current: {
-            label: "Next",
-            path: "next",
-            banner: "unreleased",
+            label: "1.0 (Latest)"
           },
         },
         // Reorder changelog sidebar
@@ -306,7 +354,7 @@ const config = {
           return reverseSidebarChangelog(sidebarItems);
         },
       },
-    ],
+    ]
   ],
   customFields: {
     docsData: {},

@@ -1,5 +1,6 @@
 import Head from '@docusaurus/Head';
 import Link from '@docusaurus/Link';
+import { useColorMode } from '@docusaurus/theme-common';
 import Layout from '@theme/Layout';
 import clsx from 'clsx';
 import React, { FC } from 'react';
@@ -24,28 +25,33 @@ const HomepageHeader: FC<{}> = () => {
 }
 
 const HomepageFeatures: FC<{}> = () => {
+  const { colorMode } = useColorMode();
   const features = [
     {
       link: "/defradb",
-      image: "./img/product/defradb.svg",
+      image: "./img/product/defradb-symbol-color.svg",
+      imageLight: "./img/product/defradb-symbol-black.svg",
       title: "DefraDB",
       subTitle: "Deploy decentralized databases",
     },
     {
       link: "/sourcehub",
-      image: "./img/product/sourcehub.svg",
+      image: "./img/product/sourcehub-symbol-color.svg",
+      imageLight: "./img/product/sourcehub-symbol-black.svg",
       title: "SourceHub",
       subTitle: "Build trust & interoperability",
     },
     {
       link: "/orbis",
-      image: "./img/product/orbis.svg",
+      image: "./img/product/orbis-symbol-color.svg",
+      imageLight: "./img/product/orbis-symbol-black.svg",
       title: "Orbis",
       subTitle: "Distributed secrets management",
     },
     {
       link: "/lensvm",
-      image: "./img/product/lensvm.svg",
+      image: "./img/product/lensvm-symbol-color.svg",
+      imageLight: "./img/product/lensvm-symbol-black.svg",
       title: "LensVM",
       subTitle: "Bidirectional data transformation",
     }
@@ -58,10 +64,10 @@ const HomepageFeatures: FC<{}> = () => {
           {features.map((feature, i) => {
             return <div key={i} className={clsx(`col col--${12 / features.length}`)}>
               <Link className={styles.card} to={feature.link}>
-                <img src={feature.image} />
+                <img src={colorMode === 'light' ? feature.imageLight : feature.image} />
                 <div>
                   <h3>{feature.title} <IconThemeArrow className={styles.arrow} dir='right' /></h3>
-                  <p>{feature.subTitle}</p>
+                  <p className={styles.subTitle}>{feature.subTitle}</p>
                 </div>
               </Link>
             </div>
@@ -81,16 +87,16 @@ const HomepageReferenceLinks: FC<{}> = () => {
 
         <div className={clsx("row")}>
           <div className={clsx("col col-4", styles.linkList)}>
-            <Link to="/defradb/references/query-specification/query-language-overview">DefraDB Query Language Overview <IconThemeArrow className={styles.arrow} dir='right' /></Link>
-            <Link to="/defradb/references/cli/defradb">DefraDB CLI Reference <IconThemeArrow className={styles.arrow} dir='right' /></Link>
-            <Link to="/defradb/guides/peer-to-peer">DefraDB Peer-to-Peer Guide <IconThemeArrow className={styles.arrow} dir='right' /></Link>
-            <Link to="/defradb/guides/schema-migration">DefraDB Schema Migration Guide <IconThemeArrow className={styles.arrow} dir='right' /></Link>
+            <Link to="/defradb/">DefraDB Quickstart </Link>
+            <Link to="/defradb/dql/">DefraDB Query Language overview </Link>
+            <Link to="/defradb/p2p/">DefraDB Peer-to-Peer Setup </Link>
+            <Link to="/defradb/security/document-access-control">DefraDB Document Access Control setup </Link>
           </div>
           <div className={clsx("col col-4", styles.linkList)}>
-            <Link to="sourcehub/getting-started/readme">SourceHub Getting Started <IconThemeArrow className={styles.arrow} dir='right' /></Link>
-            <Link to="sourcehub/api">SourceHub API <IconThemeArrow className={styles.arrow} dir='right' /></Link>
-            <Link to="/orbis/getting-started/install">Orbis Installation <IconThemeArrow className={styles.arrow} dir='right' /></Link>
-            <Link to="/orbis/getting-started/policy">Orbis Setup Authorization Policy <IconThemeArrow className={styles.arrow} dir='right' /></Link>
+            <Link to="sourcehub/getting-started/readme">SourceHub Getting Started </Link>
+            <Link to="sourcehub/api">SourceHub API </Link>
+            <Link to="/orbis/getting-started/install">Orbis Installation </Link>
+            <Link to="/orbis/getting-started/policy">Orbis Setup Authorization Policy </Link>
           </div>
           <div className={clsx("col col-4", styles.linkList)}>
           </div>
@@ -114,8 +120,8 @@ const HomepageCommunity: FC<{}> = () => {
     },
     {
       link: "https://x.com/edgeofsource",
-      title: "Twitter",
-      linkText: "Follow us on Twitter"
+      title: "X/Twitter",
+      linkText: "Follow us on X/Twitter"
     }
   ]
 

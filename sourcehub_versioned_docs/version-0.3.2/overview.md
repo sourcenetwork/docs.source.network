@@ -5,8 +5,6 @@ slug: /
 ---
 # SourceHub Overview
 
-![SourceHub Overview](/img/sourcehub-cover-copy.png)
-
 SourceHub is the Source Network's trust protocol, which facilitates trusted and authenticated sharing and collaboration of data across the network and beyond. It utilizes [CometBFT](https://cometbft.com/) consensus and is built on the [Cosmos SDK](link) to provide us with a solid technical foundation to enable our decentralized infrastructure and application-specific chain.
 
 The primary functions of SourceHub are:
@@ -19,5 +17,3 @@ The primary functions of SourceHub are:
 ---
 
 Although SourceHub is an independent system with self-contained functionality - like the rest of the Source Stack - it is designed to work in conjunction with [DefraDB](/defradb) nodes to help facilitate trust in its peer-to-peer architecture. 
-
-![SourceHub+DefraDB](/img/sourcehub/trust-protocol-defradb.png)

@@ -39,6 +39,8 @@ body {
   --code-token-number: hsl(var(--foreground-light) / 1);
   --code-token-property: rgb(105, 76, 156);
   --code-highlight-color: #1c1c1c;
+
+  --color-text-muted: #939598;
 }
 
 pre {
@@ -249,6 +251,19 @@ html[data-theme="dark"] {
 
     ul {
       font-weight: 400;
+    }
+
+    .menu__list-item__bottom-hr {
+      .menu__link {
+        border-bottom: 1px solid;
+        padding-bottom: calc(var(--ifm-menu-link-padding-vertical) + 0.25rem);
+        margin-bottom: calc(var(--ifm-menu-link-padding-vertical) + 0.25rem);
+      }
+    }
+
+    /* categories with a linked label produce a double collapsible arrow; this removes the bulkier one */
+    .menu__caret {
+      display: none;
     }
   }
 }
@@ -557,8 +572,139 @@ body .DocSearch {
   );
 }
 
-/* Markdown Actions Dropdown Styles */
+.alert {
+  --ifm-link-color: var(--ifm-color-primary);
+}
 
+/* Color for version selector */
+.navbar__item.dropdown {
+  .navbar__link {
+    color: var(--ifm-color-primary)
+  }
+}
+
+/* Visual indication of tabs length */
+.tabs-container {
+  .margin-top--md {
+    border-left: 3px var(--ifm-color-primary) solid;
+    padding-left: var(--ifm-tabs-padding-horizontal);
+  }
+}
+
+/* Color for highlighted lines in code blocks */
+.theme-code-block {
+  .theme-code-block-highlighted-line {
+    border-left: 3px var(--ifm-color-primary) solid;
+
+    [data-theme="dark"] & {
+      background-color: rgb(47 47 47);
+    }
+
+    [data-theme="light"] & {
+      background-color: rgb(230 230 230);
+    }
+  }
+}
+
+/* Squash together query and result code blocks, when one after another */
+div.language-graphql + div.language-json,
+div.language-http + div.language-json,
+div.language-shell + div.language-json,
+div.language-json + div.language-json {
+  margin-top: calc((var(--ifm-leading) * -1) + 2px);
+}
+
+/* Style for code blocks starting with `// invalid` */
+div.codeBlockContainer_Ckt0:has(.code-block-invalid-line),
+pre.prism-code:has(.code-block-invalid-line) {
+  [data-theme="dark"] & {
+    background: rgb(135, 0, 0);
+    border-color: rgb(135, 0, 0);
+  }
+  [data-theme="light"] & {
+    background: var(--ifm-color-danger);
+    border-color: var(--ifm-color-danger);
+  }
+}
+/* Style for code blocks starting with `// valid` */
+div.codeBlockContainer_Ckt0:has(.code-block-valid-line),
+pre.prism-code:has(.code-block-valid-line) {
+  [data-theme="dark"] & {
+    background: rgb(0, 90, 0);
+    border-color: rgb(0, 90, 0);
+  }
+  [data-theme="light"] & {
+    background: var(--ifm-color-success);
+    border-color: var(--ifm-color-success);
+  }
+}
+/* Remove border under title for valid/invalid code blocks */
+div.codeBlockTitle_OeMC:has(+ .codeBlockContent_QJqH > pre > code > .code-block-invalid-line),
+div.codeBlockTitle_OeMC:has(+ .codeBlockContent_QJqH > pre > code > .code-block-valid-line) {
+  border-bottom: 0px;
+}
+
+// External link icon indicator.
+.theme-doc-markdown a[target="_blank"]::after {
+  content: "";
+  display: inline-block;
+  width: 0.75em;
+  height: 0.609375em;
+  margin-left: 0.2em;
+  vertical-align: baseline;
+  transform: rotate(-45deg);
+  background-color: currentColor;
+  mask-image: url("data:image/svg+xml,%3Csvg width='16' height='13' viewBox='0 0 16 13' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M15.4609 6.79387C15.7808 6.47395 15.7808 5.95525 15.4609 5.63533L10.2475 0.421917C9.92756 0.101996 9.40887 0.101996 9.08895 0.421917C8.76903 0.741838 8.76903 1.26053 9.08895 1.58045L13.7231 6.2146L9.08895 10.8487C8.76903 11.1687 8.76903 11.6874 9.08895 12.0073C9.40887 12.3272 9.92756 12.3272 10.2475 12.0073L15.4609 6.79387ZM0.955078 7.03381H14.8816V5.39539H0.955078V7.03381Z'/%3E%3C/svg%3E");
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg width='16' height='13' viewBox='0 0 16 13' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M15.4609 6.79387C15.7808 6.47395 15.7808 5.95525 15.4609 5.63533L10.2475 0.421917C9.92756 0.101996 9.40887 0.101996 9.08895 0.421917C8.76903 0.741838 8.76903 1.26053 9.08895 1.58045L13.7231 6.2146L9.08895 10.8487C8.76903 11.1687 8.76903 11.6874 9.08895 12.0073C9.40887 12.3272 9.92756 12.3272 10.2475 12.0073L15.4609 6.79387ZM0.955078 7.03381H14.8816V5.39539H0.955078V7.03381Z'/%3E%3C/svg%3E");
+  -webkit-mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+}
+
+/* Override black background with green for :::info admonitions */
+.alert--info {
+  --ifm-alert-background-color: var(--ifm-color-success-contrast-background);
+}
+
+/* Override large margin bottom on code blocks within list elements */
+li div.theme-code-block {
+  margin-bottom: 0px;
+}
+
+/* Collapsible code blocks */
+.theme-code-block{
+  pre.collapsed {
+    max-height: 150px;
+    overflow: hidden;
+    cursor: pointer;
+    mask-image: linear-gradient(to bottom, black, transparent 150px);
+  }
+}
+.theme-code-block {
+  .display-all {
+    height: 2.5rem;
+    text-align: center;
+    cursor: pointer;
+    font-weight: 600;
+  }
+}
+
+@media (min-width: 800px) {
+  .sidebyside-left {
+    float: left;
+    width: 49%
+  }
+  .sidebyside-right {
+    float: right;
+    width: 49%
+  }
+  .sidebyside-clear {
+    clear: both;
+  }
+}
+
+/* Markdown Actions Dropdown Styles */
 /* Style the article header as flexbox */
 article .markdown header {
   display: flex;
@@ -649,3 +795,4 @@ article .markdown header h1 {
     right: auto;
   }
 }
+/* End Markdown Actions Dropdown Styles */
