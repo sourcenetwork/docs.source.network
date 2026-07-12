@@ -230,11 +230,25 @@ const config = {
     [
       "docusaurus-plugin-llms",
       {
-        docsDir: "content",
+        docsDir: "docs",
+        logLevel: "verbose",
         generateLLMsTxt: true,
-        generateLLMsFullTxt: true,
-        excludeImports: true,
+        generateLLMsFullTxt: false,
+        excludeImports: true,  // remove js import statements from MDX files
         removeDuplicateHeadings: true,
+        // Generate individual markdown files and link to them from llms.txt.
+        // This doesn't seem to properly generate md files, but 
+        generateMarkdownFiles: true,
+        ignoreFiles: ['BSL-License.md',],
+        customLLMFiles: [
+        {
+          filename: 'defradb/llms.txt',
+          title: 'DefraDB documentation',
+          description: 'Documentation for DefraDB',
+          includePatterns: ['docs/defradb/**/*.md'],
+          fullContent: false,
+        },
+      ]
       },
     ],
     // DefraDB instance
