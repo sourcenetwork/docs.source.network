@@ -34,18 +34,21 @@ export default function umamiPlugin(
   } = options;
 
   const dom = (options.analyticsDomain ?? "").replace(/\/$/, "");
+
+  if (!enabled || !websiteID || !dom) {
+    return { name: "umami-analytics" };
+  }
+
   // analyticsDomain may be a bare domain (assumed https) or a full URL
   // (e.g. http://localhost:3000 for local testing)
   const hasProtocol = dom.startsWith("http://") || dom.startsWith("https://");
-  const baseUrl = dom ? (hasProtocol ? dom : `https://${dom}`) : "";
-  const scriptSrc = baseUrl ? `${baseUrl}/${scriptName}` : "";
-  const recorderSrc = baseUrl ? `${baseUrl}/${recorderScriptName}` : "";
+  const baseUrl = hasProtocol ? dom : `https://${dom}`;
+  const scriptSrc = `${baseUrl}/${scriptName}`;
+  const recorderSrc = `${baseUrl}/${recorderScriptName}`;
 
   return {
     name: "umami-analytics",
     injectHtmlTags() {
-      if (!enabled || !websiteID || !dom) return {};
-
       const headTags: HtmlTagObject[] = [
         {
           tagName: "script",
