@@ -233,6 +233,54 @@ const config = {
         },
       },
     ],
+    [
+      "docusaurus-plugin-llms",
+      {
+        // Generate a site-wide file and one specific for each product
+        docsDir: "docs",
+        // logLevel: "verbose",
+        generateLLMsTxt: true,
+        generateLLMsFullTxt: false,
+        excludeImports: true,  // remove js import statements from MDX files
+        removeDuplicateHeadings: true,
+        // generateMarkdownFiles doesn't seem to properly generate md files, and another extension does it for us.
+        // However, the other extension doesn't generate md files with the same dir structure as
+        // plugin-llms expects, so we can't pair them and link to md files in llms.txt.
+        generateMarkdownFiles: false,
+        addMdExtension: false,
+        ignoreFiles: ['BSL-License.md',],
+        customLLMFiles: [
+          {
+            filename: 'defradb/llms.txt',
+            title: 'DefraDB documentation',
+            description: 'Documentation for DefraDB',
+            includePatterns: ['docs/defradb/**/*.md'],
+            fullContent: false,
+          },
+          {
+            filename: 'lensvm/llms.txt',
+            title: 'LensVM documentation',
+            description: 'Documentation for LensVM',
+            includePatterns: ['docs/lensvm/**/*.md'],
+            fullContent: false,
+          },
+          {
+            filename: 'orbis/llms.txt',
+            title: 'Orbis documentation',
+            description: 'Documentation for Orbis',
+            includePatterns: ['docs/orbis/**/*.md'],
+            fullContent: false,
+          },
+          {
+            filename: 'sourcehub/llms.txt',
+            title: 'Sourcehub documentation',
+            description: 'Documentation for Sourcehub',
+            includePatterns: ['docs/sourcehub/**/*.md'],
+            fullContent: false,
+          },
+        ]
+      },
+    ],
     // DefraDB instance
     [
       "@docusaurus/plugin-content-docs",
