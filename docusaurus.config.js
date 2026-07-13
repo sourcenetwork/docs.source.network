@@ -230,6 +230,7 @@ const config = {
     [
       "docusaurus-plugin-llms",
       {
+        // generate a site-wide file and one specific for each product
         docsDir: "docs",
         logLevel: "verbose",
         generateLLMsTxt: true,
@@ -246,6 +247,27 @@ const config = {
           title: 'DefraDB documentation',
           description: 'Documentation for DefraDB',
           includePatterns: ['docs/defradb/**/*.md'],
+          fullContent: false,
+        },
+        {
+          filename: 'lensvm/llms.txt',
+          title: 'LensVM documentation',
+          description: 'Documentation for LensVM',
+          includePatterns: ['docs/lensvm/**/*.md'],
+          fullContent: false,
+        },
+        {
+          filename: 'orbis/llms.txt',
+          title: 'Orbis documentation',
+          description: 'Documentation for Orbis',
+          includePatterns: ['docs/orbis/**/*.md'],
+          fullContent: false,
+        },
+        {
+          filename: 'sourcehub/llms.txt',
+          title: 'Sourcehub documentation',
+          description: 'Documentation for Sourcehub',
+          includePatterns: ['docs/sourcehub/**/*.md'],
           fullContent: false,
         },
       ]
