@@ -241,6 +241,7 @@ const config = {
         // However, the other extension doesn't generate md files with the same dir structure as
         // plugin-llms expects, so we can't pair them and link to md files in llms.txt.
         generateMarkdownFiles: false,
+        addMdExtension: false,
         ignoreFiles: ['BSL-License.md',],
         customLLMFiles: [
           {
