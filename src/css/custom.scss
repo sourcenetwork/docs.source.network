@@ -796,3 +796,32 @@ article .markdown header h1 {
   }
 }
 /* End Markdown Actions Dropdown Styles */
+
+/* Feedback button */
+:root {
+  --feedback-button-text-font-size: 1rem; /* same as text size */
+  --feedback-button-text-font-weight: 600;
+  --feedback-button-dark-bg-color: var(--feedback-background);
+  --feedback-button-dark-text-color: var(--feedback-primary-color);
+  --feedback-button-dark-icon-color: var(--feedback-primary-color);
+  --feedback-modal-button-submit-bg-color: var(--feedback-background);
+  --feedback-modal-button-submit-bg-color-hover: var(--feedback-background);
+  --feedback-modal-button-border-color-active: var(--feedback-background);
+  --feedback-modal-button-submit-border-color-hover: var(--feedback-primary-color);
+  --feedback-modal-button-submit-text-color: var(--feedback-primary-color);
+  --feedback-modal-button-submit-text-color-hover: var(--feedback-primary-color);
+  --feedback-modal-rating-button-selected-color: var(--feedback-primary-color);
+}
+html[data-theme=dark] {
+  --feedback-primary-color: var(--ifm-color-primary);
+  --feedback-background: var(--ifm-code-background);
+}
+html[data-theme=light] {
+  --feedback-primary-color: #000000;
+  --feedback-background: var(--ifm-code-background);
+}
+/* Shift scroll to top button further up to avoid clash with feedback button */
+button.theme-back-to-top-button {
+  bottom: 3.6rem;
+}
+/* End feedback button */

@@ -281,6 +281,14 @@ const config = {
         ]
       },
     ],
+    [
+      'docusaurus-pushfeedback',{
+        project: 'wnjqslayhj',
+        hideScreenshotButton: true,
+        messagePlaceholder: 'What is good, and what could be better?',
+        buttonStyle: 'dark',
+      }
+    ],
     // DefraDB instance
     [
       "@docusaurus/plugin-content-docs",
