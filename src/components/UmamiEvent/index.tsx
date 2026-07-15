@@ -1,18 +1,22 @@
 // src/components/UmamiEvent/index.tsx
-import React, { useEffect, useRef } from 'react';
-import { useLocation } from '@docusaurus/router';
-import ExecutionEnvironment from '@docusaurus/ExecutionEnvironment';
+import React, { useEffect, useRef } from "react";
+import { useLocation } from "@docusaurus/router";
+import { useActivePluginAndVersion } from "@docusaurus/plugin-content-docs/client";
+import ExecutionEnvironment from "@docusaurus/ExecutionEnvironment";
+
+declare global {
+  interface Window {
+    umami?: {
+      track: (eventName: string, data?: Record<string, unknown>) => void;
+    };
+  }
+}
 
 export interface UmamiEventProps {
   /** Umami event name (required). Passed in at the call site. */
   eventName: string;
   /** Extra key/value data to attach to the event. */
   eventData?: Record<string, string | number | boolean>;
-  /**
-   * Fraction of the sentinel that must be visible to count as "reached".
-   * 0 = as soon as any pixel is visible. Default 0.
-   */
-  threshold?: number;
 }
 
 /**
@@ -24,18 +28,18 @@ export interface UmamiEventProps {
  * the viewport, it means the reader reached the bottom of the page, and
  * we fire a single umami.track() call (once per page view).
  */
-export default function UmamiEvent({
-  eventName,
-  eventData,
-  threshold = 0,
-}: UmamiEventProps): JSX.Element {
+export default function UmamiEvent({ eventName, eventData }: UmamiEventProps) {
   const sentinelRef = useRef<HTMLDivElement>(null);
   const firedRef = useRef(false);
   const location = useLocation();
 
+  const active = useActivePluginAndVersion({ failfast: false });
+  const product = active?.activePlugin?.pluginId;
+  const version = active?.activeVersion?.label.replace(/\s*\(.*\)\s*$/, "");
+
   useEffect(() => {
     if (!ExecutionEnvironment.canUseDOM) return;
-    if (typeof IntersectionObserver === 'undefined') return;
+    if (typeof IntersectionObserver === "undefined") return;
 
     // Reset the "already fired" flag on every client-side navigation,
     // since Docusaurus is an SPA and this component instance may persist
@@ -51,8 +55,8 @@ export default function UmamiEvent({
           if (entry.isIntersecting && !firedRef.current) {
             firedRef.current = true;
             window.umami?.track(eventName, {
-              path: location.pathname,
-              title: document.title,
+              product,
+              version,
               ...eventData,
             });
             // Stop watching once fired — we only want it once per view.
@@ -60,7 +64,6 @@ export default function UmamiEvent({
           }
         }
       },
-      { threshold }
     );
 
     observer.observe(node);
@@ -72,7 +75,7 @@ export default function UmamiEvent({
     <div
       ref={sentinelRef}
       aria-hidden="true"
-      style={{ height: 1, width: '100%' }}
+      style={{ height: 1, width: "100%" }}
     />
   );
 }
