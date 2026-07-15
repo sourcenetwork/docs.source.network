@@ -615,28 +615,20 @@ div.language-json + div.language-json {
 }
 
 /* Style for code blocks starting with `// invalid` */
+html[data-theme="dark"] {
+  --ifm-color-danger: rgb(135, 0, 0);
+  --ifm-color-success: rgb(0, 90, 0);
+}
 div.codeBlockContainer_Ckt0:has(.code-block-invalid-line),
 pre.prism-code:has(.code-block-invalid-line) {
-  [data-theme="dark"] & {
-    background: rgb(135, 0, 0);
-    border-color: rgb(135, 0, 0);
-  }
-  [data-theme="light"] & {
-    background: var(--ifm-color-danger);
-    border-color: var(--ifm-color-danger);
-  }
+  background: var(--ifm-color-danger);
+  border-color: var(--ifm-color-danger);
 }
 /* Style for code blocks starting with `// valid` */
 div.codeBlockContainer_Ckt0:has(.code-block-valid-line),
 pre.prism-code:has(.code-block-valid-line) {
-  [data-theme="dark"] & {
-    background: rgb(0, 90, 0);
-    border-color: rgb(0, 90, 0);
-  }
-  [data-theme="light"] & {
-    background: var(--ifm-color-success);
-    border-color: var(--ifm-color-success);
-  }
+  background: var(--ifm-color-success);
+  border-color: var(--ifm-color-success);
 }
 /* Remove border under title for valid/invalid code blocks */
 div.codeBlockTitle_OeMC:has(+ .codeBlockContent_QJqH > pre > code > .code-block-invalid-line),
@@ -798,7 +790,7 @@ article .markdown header h1 {
 /* End Markdown Actions Dropdown Styles */
 
 /* Feedback button */
-:root {
+html[data-theme=dark], html[data-theme=light] {  /* needs to be more specific than :root */
   --feedback-button-text-font-size: 1rem; /* same as text size */
   --feedback-button-text-font-weight: 600;
   --feedback-button-dark-bg-color: var(--feedback-background);
@@ -814,14 +806,30 @@ article .markdown header h1 {
 }
 html[data-theme=dark] {
   --feedback-primary-color: var(--ifm-color-primary);
-  --feedback-background: var(--ifm-code-background);
+  --feedback-background: var(--code-background);
 }
 html[data-theme=light] {
   --feedback-primary-color: #000000;
-  --feedback-background: var(--ifm-code-background);
+  --feedback-background: var(--code-background);
 }
 /* Shift scroll to top button further up to avoid clash with feedback button */
 button.theme-back-to-top-button {
   bottom: 3.6rem;
+}
+
+// Footer widget
+.feedback-widget-negative button {
+  color: var(--ifm-color-danger);
+  border-color: var(--ifm-color-danger);
+}
+.feedback-widget-negative button:hover {
+  background-color: var(--ifm-color-danger);
+}
+.feedback-widget {
+  margin-top: 3.5rem;
+  text-align: center;
+}
+.feedback-widget-negative > .feedback-clicked {
+  background-color: var(--ifm-color-primary);
 }
 /* End feedback button */

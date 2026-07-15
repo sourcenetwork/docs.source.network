@@ -197,7 +197,8 @@ const config = {
       image: 'img/source-logo.jpg',
     }),
   clientModules: [
-    require.resolve('./src/plugins/code-blocks.js')
+    require.resolve('./src/plugins/code-blocks.js'),
+    require.resolve('./src/plugins/feedback.js')
   ],
   plugins: [
     [

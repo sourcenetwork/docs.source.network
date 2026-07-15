@@ -1,68 +1,49 @@
-import React from 'react';
-import clsx from 'clsx';
-import {ThemeClassNames} from '@docusaurus/theme-common';
-import {useDoc} from '@docusaurus/plugin-content-docs/client';
-import LastUpdated from '@theme/LastUpdated';
-import EditThisPage from '@theme/EditThisPage';
-import TagsListInline from '@theme/TagsListInline';
-import styles from './styles.module.css';
-function TagsRow(props) {
-  return (
-    <div
-      className={clsx(
-        ThemeClassNames.docs.docFooterTagsRow,
-        'row margin-bottom--sm',
-      )}>
-      <div className="col">
-        <TagsListInline {...props} />
-      </div>
-    </div>
-  );
-}
-function EditMetaRow({
-  editUrl,
-  lastUpdatedAt,
-  lastUpdatedBy,
-  formattedLastUpdatedAt,
-}) {
-  return (
-    <div className={clsx(ThemeClassNames.docs.docFooterEditMetaRow, 'row')}>
-      <div className="col">{editUrl && <EditThisPage editUrl={editUrl} />}</div>
+import React, {useEffect} from 'react';
+import Footer from '@theme-original/DocItem/Footer';
 
-      <div className={clsx('col', styles.lastUpdated)}>
-        {(lastUpdatedAt || lastUpdatedBy) && (
-          <LastUpdated
-            lastUpdatedAt={lastUpdatedAt}
-            formattedLastUpdatedAt={formattedLastUpdatedAt}
-            lastUpdatedBy={lastUpdatedBy}
-          />
-        )}
+import { FeedbackButton } from 'pushfeedback-react';
+import { defineCustomElements } from 'pushfeedback/loader';
+import 'pushfeedback/dist/pushfeedback/pushfeedback.css';
+
+function FeedbackWidget() {
+  const buttonThumbsUp = <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"></path></svg>;
+  const buttonThumbsDown = <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M10 15v4a3 3 0 0 0 3 3l4-9V2H5.72a2 2 0 0 0-2 1.7l-1.38 9a2 2 0 0 0 2 2.3zm7-13h2.67A2.31 2.31 0 0 1 22 4v7a2.31 2.31 0 0 1-2.33 2H17"></path></svg>;
+  const projectId = 'wnjqslayhj';
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      defineCustomElements(window);
+    }
+  }, []);
+
+  return(
+    <div className="feedback-widget">
+      <div className="margin-bottom--sm">
+        <b>Was this helpful?</b>
       </div>
+      <span className="feedback-widget-positive">
+        
+          <button className="button button--outline button--primary button--sm" title="Yes">
+            {buttonThumbsUp}
+          </button>
+        
+      </span>
+      <span className="feedback-widget-negative margin-left--sm">
+        
+          <button className="button button--outline button--primary button--sm" title="No">
+            {buttonThumbsDown}
+          </button>
+        
+      </span>
     </div>
   );
 }
-export default function DocItemFooter() {
-  const {metadata} = useDoc();
-  const {editUrl, lastUpdatedAt, formattedLastUpdatedAt, lastUpdatedBy, tags} =
-    metadata;
-  const canDisplayTagsRow = tags.length > 0;
-  const canDisplayEditMetaRow = !!(editUrl || lastUpdatedAt || lastUpdatedBy);
-  const canDisplayFooter = canDisplayTagsRow || canDisplayEditMetaRow;
-  if (!canDisplayFooter) {
-    return null;
-  }
+
+export default function FooterWrapper(props) {
   return (
-    <footer
-      className={clsx(ThemeClassNames.docs.docFooter, 'docusaurus-mt-lg')}>
-      {canDisplayTagsRow && <TagsRow tags={tags} />}
-      {canDisplayEditMetaRow && (
-        <EditMetaRow
-          editUrl={editUrl}
-          lastUpdatedAt={lastUpdatedAt}
-          lastUpdatedBy={lastUpdatedBy}
-          formattedLastUpdatedAt={formattedLastUpdatedAt}
-        />
-      )}
-    </footer>
+    <>
+    <FeedbackWidget/>
+    <Footer {...props} />
+    </>
   );
 }
