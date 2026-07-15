@@ -293,9 +293,6 @@ const config = {
           "https://github.com/sourcenetwork/docs.source.network/edit/master/",
         lastVersion: "current",
         versions: {
-          "0.20.0": {
-            banner: "unmaintained",
-          },
           current: {
             label: "1.0 (Latest)"
           },
