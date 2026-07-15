@@ -6,7 +6,7 @@ description: The `@index` directive allows you to create indexes on selected pro
 Indexes allow queries to quickly locate data without having to look through each document in a collection.
 
 By default, every collection has an index on the `_docID` property and on `@primary` relationship fields.
-The `@index` directive allows you to set up further indexes on selected properties.
+The `@index` directive allows you to set up further indexes on selected properties when creating a collection.
 
 ## Syntax {/* #syntax */}
 
@@ -105,6 +105,56 @@ Although there is a partial benefit to queries filtering only on `genre`, there 
 If a `JSON` field is indexed, queries can traverse the JSON structure and filter by its inner properties. See [Filter documents -> JSON fields](/dql/filter.md#json-fields).
 
 Scalar types (ex. integers) are normalized to DefraDB types (ex. int64).
+
+## Show indexes
+
+<Tabs groupId="defra">
+  <TabItem value="cli" label="CLI" default>
+    Display available indexes with the CLI command [`defradb client index list`](/references/cli/defradb_client_index_list.md). You can restrict the list to a specific collection with the optional flag `--collection <name>`.
+
+    ```shell title='List indexes for collection "Book"'
+    defradb client index list --collection Book
+    ```
+  </TabItem>
+  <TabItem value="http" label="HTTP API">
+    Display all available indexes by submitting a `GET` request to the HTTP endpoint [`/collections/indexes`](/defradb/references/http/api/list-all-indexes/).
+
+    ```http title='List all indexes'
+    POST http://localhost:9181/api/v1/collections/indexes HTTP/2
+    accept: application/json
+    content-type: text/plain
+    ```
+
+    To restrict the list to a specific collection, submit a `GET` request to the HTTP endpoint [`/collections/<name>/indexes`](/defradb/references/http/api/list-indexes/).
+
+    ```http title='List indexes for collection "Book"'
+    POST http://localhost:9181/api/v1/collections/Book/indexes HTTP/2
+    accept: application/json
+    content-type: text/plain
+    ```
+  </TabItem>
+</Tabs>
+
+## Delete indexes
+
+<Tabs groupId="defra">
+  <TabItem value="cli" label="CLI" default>
+    Delete an index with the CLI command [`defradb client index delete`](/references/cli/defradb_client_index_delete.md).
+
+    ```shell title='Delete index "book_plot" from collection "Book"'
+    defradb client index delete --name book_plot --collection Book
+    ```
+  </TabItem>
+  <TabItem value="http" label="HTTP API">
+    Delete an index by submitting a `DELETE` request to the HTTP endpoint [`/collections/<name>/indexes/<index>`](/defradb/references/http/api/delete-index/).
+
+    ```http title='Delete index "book_plot" from collection "Book"'
+    DELETE http://localhost:9181/api/v1/collections/Book/indexes/book_plot HTTP/2
+    accept: application/json
+    content-type: text/plain
+    ```
+  </TabItem>
+</Tabs>
 
 ## Performance considerations {/* #performance */}
 
