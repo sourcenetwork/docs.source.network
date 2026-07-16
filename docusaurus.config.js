@@ -211,13 +211,15 @@ const config = {
       },
     ],
     [
-      require.resolve("./src/plugins/umami"),
+      require.resolve("./src/plugins/umami.ts"),
       {
         enabled: process.env.UMAMI_ENABLED === "true",
         websiteID: process.env.UMAMI_WEBSITE_ID,
         analyticsDomain: process.env.UMAMI_DOMAIN,
         scriptName: "script.js",
         trackOutboundLinks: true,
+        recorder: process.env.UMAMI_RECORDER_ENABLED === "true",
+        recorderScriptName: "heatmap.js",
       },
     ],
     [
