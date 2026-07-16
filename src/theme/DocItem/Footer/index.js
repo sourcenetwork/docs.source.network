@@ -22,18 +22,18 @@ function FeedbackWidget() {
         <b>Was this helpful?</b>
       </div>
       <span className="feedback-widget-positive">
-        
+        <FeedbackButton project={projectId} submit="True" rating="1" custom-font="True" button-style="default" modal-position="center">
           <button className="button button--outline button--primary button--sm" title="Yes">
             {buttonThumbsUp}
           </button>
-        
+        </FeedbackButton>
       </span>
       <span className="feedback-widget-negative margin-left--sm">
-        
+        <FeedbackButton project={projectId} rating="0" custom-font="True" button-style="default" modal-position="center">
           <button className="button button--outline button--primary button--sm" title="No">
             {buttonThumbsDown}
           </button>
-        
+        </FeedbackButton>
       </span>
     </div>
   );

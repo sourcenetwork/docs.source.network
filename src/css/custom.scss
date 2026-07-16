@@ -614,27 +614,31 @@ div.language-json + div.language-json {
   margin-top: calc((var(--ifm-leading) * -1) + 2px);
 }
 
-/* Style for code blocks starting with `// invalid` */
-html[data-theme="dark"] {
-  --ifm-color-danger: rgb(135, 0, 0);
-  --ifm-color-success: rgb(0, 90, 0);
+/* Style for code blocks starting with `//invalid` or `//valid` */
+html[data-theme=dark] {
+  --code-invalid: rgb(135, 0, 0);
+  --code-valid: rgb(0, 90, 0);
 }
-div.codeBlockContainer_Ckt0:has(.code-block-invalid-line),
+html[data-theme=light] {
+  --code-invalid: var(--ifm-color-danger);
+  --code-valid: var(--ifm-color-success);
+}
+div.theme-code-block:has(.code-block-invalid-line),
 pre.prism-code:has(.code-block-invalid-line) {
-  background: var(--ifm-color-danger);
-  border-color: var(--ifm-color-danger);
+  background: var(--code-invalid);
+  border-color: var(--code-invalid);
 }
-/* Style for code blocks starting with `// valid` */
-div.codeBlockContainer_Ckt0:has(.code-block-valid-line),
+div.theme-code-block:has(.code-block-valid-line),
 pre.prism-code:has(.code-block-valid-line) {
-  background: var(--ifm-color-success);
-  border-color: var(--ifm-color-success);
+  background: var(--code-valid);
+  border-color: var(--code-valid);
 }
 /* Remove border under title for valid/invalid code blocks */
-div.codeBlockTitle_OeMC:has(+ .codeBlockContent_QJqH > pre > code > .code-block-invalid-line),
-div.codeBlockTitle_OeMC:has(+ .codeBlockContent_QJqH > pre > code > .code-block-valid-line) {
+div[class^="codeBlockTitle"]:has(+ div[class^="codeBlockContent"] > pre > code > .code-block-invalid-line),
+div[class^="codeBlockTitle"]:has(+ div[class^="codeBlockContent"] > pre > code > .code-block-valid-line) {
   border-bottom: 0px;
 }
+/* End style for code blocks starting with `//invalid` or `//valid` */
 
 // External link icon indicator.
 .theme-doc-markdown a[target="_blank"]::after {
@@ -665,7 +669,7 @@ li div.theme-code-block {
 }
 
 /* Collapsible code blocks */
-.theme-code-block{
+.theme-code-block {
   pre.collapsed {
     max-height: 150px;
     overflow: hidden;
@@ -682,6 +686,7 @@ li div.theme-code-block {
   }
 }
 
+// Side-by-side examples
 @media (min-width: 800px) {
   .sidebyside-left {
     float: left;
