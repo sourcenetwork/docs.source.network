@@ -1,0 +1,40 @@
+.collapsibleBlock {
+  position: relative;
+}
+
+/* 150px ≈ 8 lines; keep in sync with MAX_LINES in index.tsx.
+   The mask fades the code itself out at the bottom, so it works with any
+   code theme background. */
+.collapsed pre {
+  max-height: 150px;
+  overflow: hidden;
+  mask-image: linear-gradient(to bottom, black 0%, transparent 90%);
+}
+
+.toggleButton {
+  display: block;
+  width: 100%;
+  padding: 0.5rem 0 0.75rem;
+  border: none;
+  cursor: pointer;
+  font-family: var(--ifm-font-family-base);
+  font-size: var(--ifm-font-size-base);
+  color: var(--ifm-color-primary);
+  background: transparent;
+  transition: all 0.3s ease;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+/* When collapsed, the button overlays the whole block so clicking anywhere
+   expands it; flex keeps the label pinned to the bottom */
+.collapsed .toggleButton {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 0 0 0.75rem;
+}

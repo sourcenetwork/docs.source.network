@@ -673,22 +673,22 @@ li div.theme-code-block {
 }
 
 /* Collapsible code blocks */
-.theme-code-block{
-  pre.collapsed {
-    max-height: 150px;
-    overflow: hidden;
-    cursor: pointer;
-    mask-image: linear-gradient(to bottom, black, transparent 150px);
-  }
-}
-.theme-code-block {
-  .display-all {
-    height: 2.5rem;
-    text-align: center;
-    cursor: pointer;
-    font-weight: 600;
-  }
-}
+// .theme-code-block{
+//   pre.collapsed {
+//     max-height: 150px;
+//     overflow: hidden;
+//     cursor: pointer;
+//     mask-image: linear-gradient(to bottom, black, transparent 150px);
+//   }
+// }
+// .theme-code-block {
+//   .display-all {
+//     height: 2.5rem;
+//     text-align: center;
+//     cursor: pointer;
+//     font-weight: 600;
+//   }
+// }
 
 @media (min-width: 800px) {
   .sidebyside-left {
