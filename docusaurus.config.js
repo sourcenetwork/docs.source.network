@@ -288,7 +288,7 @@ const config = {
       'docusaurus-pushfeedback',{
         project: 'wnjqslayhj',
         hideScreenshotButton: true,
-        messagePlaceholder: 'What is good, and what could be better?',
+        messagePlaceholder: 'A place to praise and to rant.',
         buttonStyle: 'dark',
       }
     ],
