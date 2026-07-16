@@ -798,6 +798,7 @@ article .markdown header h1 {
 html[data-theme=dark], html[data-theme=light] {  /* needs to be more specific than :root */
   --feedback-button-text-font-size: 1rem; /* same as text size */
   --feedback-button-text-font-weight: 600;
+  --feedback-background: var(--code-background);
   --feedback-button-dark-bg-color: var(--feedback-background);
   --feedback-button-dark-text-color: var(--feedback-primary-color);
   --feedback-button-dark-icon-color: var(--feedback-primary-color);
@@ -811,30 +812,26 @@ html[data-theme=dark], html[data-theme=light] {  /* needs to be more specific th
 }
 html[data-theme=dark] {
   --feedback-primary-color: var(--ifm-color-primary);
-  --feedback-background: var(--code-background);
 }
 html[data-theme=light] {
   --feedback-primary-color: #000000;
-  --feedback-background: var(--code-background);
 }
 /* Shift scroll to top button further up to avoid clash with feedback button */
 button.theme-back-to-top-button {
   bottom: 3.6rem;
 }
 
-// Footer widget
-.feedback-widget-negative button {
-  color: var(--ifm-color-danger);
-  border-color: var(--ifm-color-danger);
-}
-.feedback-widget-negative button:hover {
-  background-color: var(--ifm-color-danger);
-}
+/* Footer widget */
 .feedback-widget {
   margin-top: 3.5rem;
   text-align: center;
 }
-.feedback-widget-negative > .feedback-clicked {
-  background-color: var(--ifm-color-primary);
+.feedback-widget-negative button {
+  color: var(--ifm-color-danger);
+  border-color: var(--ifm-color-danger);
+
+  &:hover {
+    background-color: var(--ifm-color-danger);
+  }
 }
 /* End feedback button */
