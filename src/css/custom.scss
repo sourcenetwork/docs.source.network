@@ -823,14 +823,22 @@ button.theme-back-to-top-button {
 
 /* Footer widget */
 .feedback-widget {
-  margin-top: 3.5rem;
+  margin-top: 2.5rem;
   text-align: center;
+}
+.feedback-widget-positive button {
+  color: var(--ifm-color-primary);
+  border-color: var(--ifm-color-primary);
+
+  &:hover, &:active {
+    background-color: var(--ifm-color-primary);
+  }
 }
 .feedback-widget-negative button {
   color: var(--ifm-color-danger);
   border-color: var(--ifm-color-danger);
 
-  &:hover {
+  &:hover, &:active {
     background-color: var(--ifm-color-danger);
   }
 }
