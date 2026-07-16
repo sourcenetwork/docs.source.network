@@ -809,6 +809,8 @@ html[data-theme=dark], html[data-theme=light] {  /* needs to be more specific th
   --feedback-modal-button-submit-text-color: var(--feedback-primary-color);
   --feedback-modal-button-submit-text-color-hover: var(--feedback-primary-color);
   --feedback-modal-rating-button-selected-color: var(--feedback-primary-color);
+  --feedback-modal-rating-button-positive-selected-color: var(--ifm-color-primary);
+  --feedback-modal-rating-button-negative-selected-color: var(--ifm-color-danger);
 }
 html[data-theme=dark] {
   --feedback-primary-color: var(--ifm-color-primary);
