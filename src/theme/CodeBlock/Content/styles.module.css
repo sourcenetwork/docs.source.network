@@ -18,7 +18,7 @@
   border: none;
   cursor: pointer;
   font-family: var(--ifm-font-family-base);
-  font-size: var(--ifm-font-size-base);
+  font-size: 0.875rem;
   color: var(--ifm-color-primary);
   background: transparent;
   transition: all 0.3s ease;

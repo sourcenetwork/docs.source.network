@@ -17,7 +17,7 @@ Transactions allow you to group together a number of database operations that mu
     ```shell title="Example &ndash; Open a new transaction"
     defradb client tx new
     ```
-    ```json title="Result"
+    ```json title="Result" result
     {"id":27}
     ```
 
@@ -32,7 +32,7 @@ Transactions allow you to group together a number of database operations that mu
     POST http://localhost:9181/api/v1/tx HTTP/2
     accept: application/json
     ```
-    ```json title="Result"
+    ```json title="Result" result
     {"id":27}
     ```
 

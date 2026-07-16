@@ -146,7 +146,7 @@ mutation {
   }
 }
 ```
-```json title="Result"
+```json title="Result" result
 {
   "data": {
     "delete_Person": [
@@ -170,7 +170,7 @@ It looks like *power* has eliminated the dystopians, as a regular query does not
   }
 }
 ```
-```json title="Result"
+```json title="Result" result
 {
   "data": {
     "Person": []
@@ -193,7 +193,7 @@ True dystopians are however never erased. Deleted documents show up if the query
   }
 }
 ```
-```json title="Result"
+```json title="Result" result
 {
   "data": {
     "Person": [

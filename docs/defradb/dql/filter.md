@@ -139,7 +139,7 @@ To filter on a single field, use the syntax `fieldName: { operator: Value }`, wh
   }
 }
 ```
-```json title="Result"
+```json title="Result" result
 {
   "data": {
     "Book": [
@@ -165,7 +165,7 @@ To filter on a single field, use the syntax `fieldName: { operator: Value }`, wh
   }
 }
 ```
-```json title="Result"
+```json title="Result" result
 {
   "data": {
     "Book": [
@@ -181,7 +181,7 @@ To filter on a single field, use the syntax `fieldName: { operator: Value }`, wh
 
 You need to explicitly specify the `_and` operator in case of two filters on the same field, because JSON objects cannot contain duplicate fields:
 
-```graphql title="Valid &ndash; Multiple filters on same field with explicit operator" test-skip
+```graphql title="Valid &ndash; Multiple filters on same field with explicit operator" test-skip valid
 # valid
 filter: {
   _and: [
@@ -190,7 +190,7 @@ filter: {
   ]
 }
 ```
-```graphql title="Invalid &ndash; Multiple filters on same field without operator" test-skip
+```graphql title="Invalid &ndash; Multiple filters on same field without operator" test-skip invalid
 # invalid
 filter: {
   rating: { _gte: 4 },
@@ -216,7 +216,7 @@ Additional fields listed in the `filter` object are implicitly combined with an 
   }
 }
 ```
-```json title="Result"
+```json title="Result" result
 {
   "data": {
     "Book": [
@@ -264,7 +264,7 @@ filter: {
   }
 }
 ```
-```json title="Result"
+```json title="Result" result
 {
   "data": {
     "Book": [
@@ -322,7 +322,7 @@ The boolean operators `_and` and `_or` accept an array, whereas `_not` accepts a
   }
 }
 ```
-```json title="Result"
+```json title="Result" result
 {
   "data": {
     "Book": [
@@ -362,7 +362,7 @@ The syntax to filter over sub-objects has one more level of nesting in field nam
   }
 }
 ```
-```json title="Result"
+```json title="Result" result
 {
   "data": {
     "Book": [
@@ -390,7 +390,7 @@ For example, when filtering over people that have authored books of genre `Ficti
   }
 }
 ```
-```json title="Result"
+```json title="Result" result
 {
   "data": {
     "Person": [
@@ -426,7 +426,7 @@ If the return fields include the sub-object you filter on, the same filter is **
   }
 }
 ```
-```json title="Result"
+```json title="Result" result
 {
   "data": {
     "Person": [
@@ -497,7 +497,7 @@ When specified explicitly, root-level and sub-objects filters are evaluated inde
   }
 }
 ```
-```json title="Result"
+```json title="Result" result
 {
   "data": {
     "Person": [
@@ -548,7 +548,7 @@ mutation {
   }) { jsonField }
 }
 ```
-```json title="Result"
+```json title="Result" result
 {
   "data": {
     "jsonBlob": [
@@ -567,7 +567,7 @@ mutation {
 :::important
 It is possible to _filter_ for a JSON field's inner properties, but it's not possible to return them.
 
-```graphql title="Invalid &ndash; Return JSON field inner properties" test-error
+```graphql title="Invalid &ndash; Return JSON field inner properties" test-error invalid
 # invalid
 {
   jsonBlob {
@@ -617,7 +617,7 @@ The [list operators](#list-operators) `_any`, `_none`, `_all` evaluate a scalar 
   }
 }
 ```
-```json title="Result"
+```json title="Result" result
 {
   "data": {
     "Book": [
@@ -643,7 +643,7 @@ The [list operators](#list-operators) `_any`, `_none`, `_all` evaluate a scalar 
   }
 }
 ```
-```json title="Result"
+```json title="Result" result
 {
   "data": {
     "Book": [
@@ -679,7 +679,7 @@ The [list operators](#list-operators) `_any`, `_none`, `_all` evaluate a scalar 
   }
 }
 ```
-```json title="Result"
+```json title="Result" result
 {
   "data": {
     "Book": [

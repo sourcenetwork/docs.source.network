@@ -195,7 +195,7 @@ When [grouping results](group.md), aggregating functions take as input the docum
   }
 }
 ```
-```json title="Result"
+```json title="Result" result
 {
   "data": {
     "Book": [
@@ -264,7 +264,7 @@ When [grouping results](group.md), aggregating functions take as input the docum
   }
 }
 ```
-```json title="Result"
+```json title="Result" result
 {
   "data": {
     "Book": [
@@ -333,7 +333,7 @@ Note how the following example result differs from the previous one only in the 
   }
 }
 ```
-```json title="Result"
+```json title="Result" result
 {
   "data": {
     "Book": [
@@ -414,7 +414,7 @@ When [grouping on multiple fields](group.md#multiple-fields), you can run an agg
   }
 }
 ```
-```json title="Result"
+```json title="Result" result
 {
   "data": {
     "Book": [
@@ -541,7 +541,7 @@ You can provide the whole result set to an aggregating functions, and have its r
   })
 }
 ```
-```json title="Result"
+```json title="Result" result
 {
   "data": {
     "AVG": 4.0685714285714285
@@ -556,7 +556,7 @@ You can provide the whole result set to an aggregating functions, and have its r
   })
 }
 ```
-```json title="Result"
+```json title="Result" result
 {
   "data": {
     "COUNT": 5

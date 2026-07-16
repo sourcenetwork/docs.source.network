@@ -1,25 +1,23 @@
 .valid,
 .invalid {
+  border: 1px solid var(--codeblock-state-border);
+
   pre {
     border: none;
   }
+
+  & [class*="codeBlockTitle"] {
+    color: var(--codeblock-state-text);
+    border-bottom-color: var(--codeblock-state-border);
+  }
 }
 
-.valid :global(.theme-code-block) {
-  border: 1px solid var(--codeblock-valid-border);
+.valid {
+  --codeblock-state-border: var(--codeblock-valid-border);
+  --codeblock-state-text: var(--codeblock-valid-text);
 }
 
-.invalid :global(.theme-code-block) {
-  border: 1px solid var(--codeblock-invalid-border);
-}
-
-/* Title bar tinting per state. Matches the theme's codeBlockTitle class by
-   its stem, so the CSS-module hash suffix can change freely across upgrades. */
-.valid :global(.theme-code-block) [class*="codeBlockTitle"] {
-  color: var(--codeblock-valid-text);
-  border-bottom-color: var(--codeblock-valid-border);
-}
-.invalid :global(.theme-code-block) [class*="codeBlockTitle"] {
-  color: var(--codeblock-invalid-text);
-  border-bottom-color: var(--codeblock-invalid-border);
+.invalid {
+  --codeblock-state-border: var(--codeblock-invalid-border);
+  --codeblock-state-text: var(--codeblock-invalid-text);
 }

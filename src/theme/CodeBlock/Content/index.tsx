@@ -7,7 +7,7 @@ import Content from "@theme-original/CodeBlock/Content";
 import type ContentType from "@theme/CodeBlock/Content";
 import clsx from "clsx";
 import { useContext, useId, useState, type ReactNode } from "react";
-import { CodeBlockCollapseContext } from "../collapseContext";
+import { CodeBlockFlagsContext } from "../flagsContext";
 import styles from "./styles.module.css";
 
 type Props = WrapperProps<typeof ContentType>;
@@ -30,7 +30,7 @@ export default function ContentWrapper(props: Props): ReactNode {
   const contentId = useId();
 
   const { metadata } = useCodeBlockContext();
-  const { collapsible, collapsed } = useContext(CodeBlockCollapseContext);
+  const { collapsible, collapsed } = useContext(CodeBlockFlagsContext);
   const [expanded, setExpanded] = useState(collapsed === false);
 
   const lineCount = getLineCount(metadata.code);

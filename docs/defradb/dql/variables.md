@@ -146,7 +146,7 @@ query ($bookID: [ID!]) {
   "bookID": "bae-d1460b1a-8f78-5791-b0ec-869997260c20"
 }
 ```
-```json title="Result"
+```json title="Result" result
 {
   "data": {
     "Book": [
@@ -182,7 +182,7 @@ query ($plot: String, $minRating: Float64) {
   "minRating": 3.8
 }
 ```
-```json title="Result"
+```json title="Result" result
 {
   "data": {
     "Book": [
@@ -219,7 +219,7 @@ query ($plot: String, $minRating: Float64) {
   "minRating": 4.2
 }
 ```
-```json title="Result"
+```json title="Result" result
 {
   "data": {
     "Book": [

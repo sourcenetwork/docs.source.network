@@ -149,7 +149,7 @@ mutation {
   }
 }
 ```
-```json title="Result"
+```json title="Result" result
 {
   "data": {
     "update_Book": [
@@ -172,7 +172,7 @@ mutation {
   }
 }
 ```
-```json title="Result"
+```json title="Result" result
 {
   "data": {
     "update_Book": [
@@ -198,7 +198,7 @@ mutation {
   }
 }
 ```
-```json title="Result"
+```json title="Result" result
 {
   "data": {
     "update_Book": [

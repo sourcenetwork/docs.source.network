@@ -62,7 +62,7 @@ mutation {
       }
     '
     ```
-    ```json title="Result"
+    ```json title="Result" result
     {
       "data": {
         "add_Book": [
@@ -113,7 +113,7 @@ mutation {
       }
     }
     ```
-    ```json title="Result"
+    ```json title="Result" result
     {
       "data": {
         "add_Book": [
@@ -163,7 +163,7 @@ The field `_docID` contains the document's unique identifier. The document data 
     }
     '
     ```
-    ```json title="Result"
+    ```json title="Result" result
     {
       "data": {
         "b1": [
@@ -230,7 +230,7 @@ The field `_docID` contains the document's unique identifier. The document data 
       }
     }
     ```
-    ```json title="Result"
+    ```json title="Result" result
     {
       "data": {
         "b1": [
@@ -274,7 +274,7 @@ mutation {
   }
 }
 ```
-```json title="Result"
+```json title="Result" result
 {
   "data": {
     "add_Book": [
@@ -309,7 +309,7 @@ mutation {
   }
 }
 ```
-```json title="Result"
+```json title="Result" result
 {
   "data": {
     "update_Book": [
@@ -335,7 +335,7 @@ type jsonBlob {
 ```
 */}
 
-```graphql title="Valid &ndash; JSON unserialized object"
+```graphql title="Valid &ndash; JSON unserialized object" valid
 #valid
 mutation {
   add_jsonBlob(input: {
@@ -347,7 +347,7 @@ mutation {
   }) { jsonField }
 }
 ```
-```graphql title="Invalid &ndash; JSON string representation"
+```graphql title="Invalid &ndash; JSON string representation" invalid
 #invalid
 mutation {
   add_jsonBlob(input: {

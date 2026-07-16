@@ -130,7 +130,7 @@ To order results, use the syntax `order: { fieldName: DIRECTION }`, where:
   }
 }
 ```
-```json title="Result"
+```json title="Result" result
 {
   "data": {
     "Book": [
@@ -172,7 +172,7 @@ You can specify a field for secondary order by providing a list of objects to th
   }
 }
 ```
-```json title="Result"
+```json title="Result" result
 {
   "data": {
     "Book": [
@@ -203,7 +203,7 @@ There's no limit on the number of ordering fields that can be specified. Their p
 
 Ordering by sub-objects from the root object is only allowed if the sub-object is not an array. If it is an array (such as the *many* side of one-to-many relationships), the order must be applied to the object field in the selection set.
 
-```graphql title="Valid &ndash; Order by relationship sub-object in the selection level"
+```graphql title="Valid &ndash; Order by relationship sub-object in the selection level" valid
 # valid
 {
   Person(order: { name: DESC }) {
@@ -216,7 +216,7 @@ Ordering by sub-objects from the root object is only allowed if the sub-object i
 }
 ```
 
-```graphql title="Invalid &ndash; Order by relationship sub-object at root level" test-error
+```graphql title="Invalid &ndash; Order by relationship sub-object at root level" test-error invalid
 # invalid
 {
   # highlight-next-line
