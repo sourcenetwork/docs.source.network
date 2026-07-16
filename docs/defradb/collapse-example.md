@@ -11,6 +11,8 @@ Behavior is controlled per fence with three flags:
 | `collapse` | Force the collapse UI on, regardless of length or title |
 | `noCollapse` | Force it off |
 | `expanded` | Start expanded (combine with `collapse`, or with a block the heuristic catches) |
+| `valid` | Frame the block with a green border (correct example) |
+| `invalid` | Frame the block with a red border (incorrect example) |
 
 ## Heuristic: short "Result" block stays open
 
@@ -214,5 +216,51 @@ is more than double the 12-line threshold and still renders in full.
       }
     ]
   }
+}
+```
+
+## `valid` / `invalid`: frame correct and incorrect examples
+
+Independent of the collapse flags — they wrap the block (title bar included)
+in a green or red border.
+
+````md
+```graphql title="Valid — explicit operator" valid
+````
+
+```graphql title="Valid — explicit operator" valid
+filter: {
+  _and: [
+    { rating: { _gte: 4 } },
+    { rating: { _lte: 5 } }
+  ]
+}
+```
+
+````md
+```graphql title="Invalid — duplicate fields" invalid
+````
+
+```graphql title="Invalid — duplicate fields" invalid
+filter: {
+  rating: { _gte: 4 },
+  rating: { _lte: 5 }
+}
+```
+
+The flags compose with the collapse ones, e.g. an incorrect long result:
+
+````md
+```json title="Result" invalid collapse
+````
+
+```json title="Result" invalid collapse
+{
+  "errors": [
+    {
+      "message": "Duplicate field \"rating\" in filter object",
+      "locations": [{ "line": 3, "column": 5 }]
+    }
+  ]
 }
 ```

@@ -585,7 +585,7 @@ It is possible to _filter_ for a JSON field's inner properties, but it's not pos
 
 You can filter over [renamed fields](aliases.md) via the `_alias` key. Alias names cannot be used directly in the `filter` object.
 
-```graphql title="Valid &ndash; Filter a renamed field with _alias"
+```graphql title="Valid &ndash; Filter a renamed field with _alias" valid
 # valid
 {
   Book(filter: { _alias: { bookTitle: { _eq: "1984" }}}) {
@@ -594,7 +594,7 @@ You can filter over [renamed fields](aliases.md) via the `_alias` key. Alias nam
 }
 ```
 
-```graphql title="Invalid &ndash; Filter a renamed field directly" test-error
+```graphql title="Invalid &ndash; Filter a renamed field directly" test-error invalid
 # invalid
 {
   Book(filter: { bookTitle: { _eq: "1984" }}) {
