@@ -13,13 +13,13 @@
   border: 1px solid var(--codeblock-invalid-border);
 }
 
-/* Title bar tinting per state. */
-/* Targets the first div that is not the only child - the title bar */
-.valid :global(.theme-code-block) > div:first-child:not(:only-child) {
+/* Title bar tinting per state. Matches the theme's codeBlockTitle class by
+   its stem, so the CSS-module hash suffix can change freely across upgrades. */
+.valid :global(.theme-code-block) [class*="codeBlockTitle"] {
   color: var(--codeblock-valid-text);
   border-bottom-color: var(--codeblock-valid-border);
 }
-.invalid :global(.theme-code-block) > div:first-child:not(:only-child) {
+.invalid :global(.theme-code-block) [class*="codeBlockTitle"] {
   color: var(--codeblock-invalid-text);
   border-bottom-color: var(--codeblock-invalid-border);
 }
