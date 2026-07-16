@@ -307,7 +307,7 @@ The DefraDB Query Language (DQL) is a rich GraphQL-based language supporting rel
   }
 }
 ```
-
+<UmamiEvent eventName="quickstart-complete" />
 [-> More information on querying documents](/dql/mutation-query.md)
 
 ## Next steps {/* #next-steps */}

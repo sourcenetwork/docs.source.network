@@ -17,3 +17,5 @@ The primary functions of SourceHub are:
 ---
 
 Although SourceHub is an independent system with self-contained functionality - like the rest of the Source Stack - it is designed to work in conjunction with [DefraDB](/defradb) nodes to help facilitate trust in its peer-to-peer architecture. 
+
+<UmamiEvent eventName="quickstart-complete" />

@@ -18,3 +18,4 @@ Once a Ring is fully configured and initialized users that want to store secrets
 The *Root Ring* is a special deployment Orbis Ring that is a public permissionless service provided by the same infrastructure nodes as the SourceHub publicly hosted service. This ensures there is a single public Source stack deployment that developers can use along side their DefraDB nodes.
 :::
 
+<UmamiEvent eventName="quickstart-complete" />
