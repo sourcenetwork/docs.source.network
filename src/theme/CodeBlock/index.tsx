@@ -11,7 +11,11 @@ type Props = WrapperProps<typeof CodeBlockType>;
 //   noCollapse  → force it off
 //   expanded    → start expanded (when collapsible)
 function hasFlag(metastring: string | undefined, flag: string): boolean {
-  return metastring ? new RegExp(`\\b${flag}\\b`).test(metastring) : false;
+  if (!metastring) return false;
+  // Strip key="value" / key='value' pairs (e.g. title="How to collapse")
+  // so flags only match as bare words on the fence
+  const bareWords = metastring.replace(/\w+=("[^"]*"|'[^']*')/g, "");
+  return new RegExp(`\\b${flag}\\b`).test(bareWords);
 }
 
 export default function CodeBlockWrapper(props: Props): ReactNode {

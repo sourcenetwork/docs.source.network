@@ -104,6 +104,49 @@ Same fence syntax as above — the collapse kicks in purely because the block is
 }
 ```
 
+## Heuristic: long block with no title stays open
+
+No flags, no title — the default for plain code blocks, however long. This one
+is more than double the 12-line threshold and still renders in full.
+
+````md
+```json
+````
+
+```json
+{
+  "data": {
+    "Book": [
+      {
+        "genre": "Fiction",
+        "plot": "A masterpiece of rebellion and imprisonment where war is peace, freedom is slavery, and Big Brother is watching.",
+        "title": "1984"
+      },
+      {
+        "genre": "Fiction",
+        "plot": "At the dawn of the next world war, a plane crashes on an uncharted island, stranding a group of schoolboys.",
+        "title": "Lord of the Flies"
+      },
+      {
+        "genre": "Fiction",
+        "plot": "A gargantuan, mind-altering tragi-comedy about the Pursuit of Happiness in America.",
+        "title": "Infinite Jest"
+      },
+      {
+        "genre": "Fiction",
+        "plot": "Victor Hugo's tale of injustice, heroism and love follows the fortunes of Jean Valjean, an escaped convict determined to put his criminal past behind him.",
+        "title": "Les Misérables"
+      },
+      {
+        "genre": "Memoir",
+        "plot": "The adventures of a penniless British writer among the down-and-outs of two great cities.",
+        "title": "Down and Out in Paris and London"
+      }
+    ]
+  }
+}
+```
+
 ## `collapse`: force collapse where the heuristic would not
 
 ````md
