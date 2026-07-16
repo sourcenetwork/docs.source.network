@@ -19,7 +19,7 @@ function removeFooterThumbs() {
 function registerFeedbackHandlers() {
   // The Yes button submits feedback immediately, while the No button sends to the modal,
   // so we don't need to remove thumbs on negative feedback.
-  document.querySelector('.feedback-widget button[title="Yes"]').addEventListener('click', (event) => {
+  document.querySelector('.feedback-widget button[title="Yes"]')?.addEventListener('click', (event) => {
     removeFooterThumbs();
   })
   
