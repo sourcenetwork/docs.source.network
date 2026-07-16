@@ -21,6 +21,7 @@ function collapseBlock(block) {
   // Link to expand
   let displayAll = document.createElement('div')
   displayAll.classList.add('display-all')
+  displayAll.addEventListener('click', expandBlock)
   pre.addEventListener('click', expandBlock)  // clicking anywhere on the code block expands it
   let displayAllLink = document.createElement('a')
   displayAllLink.innerHTML = `Expand (${blockLineCount(block)} lines)`
