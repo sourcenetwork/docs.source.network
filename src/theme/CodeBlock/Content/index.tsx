@@ -1,7 +1,4 @@
-import {
-  CodeBlockMetadata,
-  useCodeBlockContext,
-} from "@docusaurus/theme-common/internal";
+import { useCodeBlockContext } from "@docusaurus/theme-common/internal";
 import type { WrapperProps } from "@docusaurus/types";
 import Content from "@theme-original/CodeBlock/Content";
 import type ContentType from "@theme/CodeBlock/Content";
@@ -19,22 +16,21 @@ function getLineCount(code: string) {
   return code.split("\n").length;
 }
 
-// If the code block is less than 8 lines, we should not collapse it
-// If the code block has a title of "Result", we should collapse it by default
-function shouldCollapse(metadata: CodeBlockMetadata) {
-  if (getLineCount(metadata.code) < MAX_LINES + LINE_TOLERANCE) return false;
-  return metadata.title === "Result";
+// Blocks flagged `result` collapse by default once they exceed the threshold;
+// shorter blocks aren't worth collapsing
+function shouldCollapse(lineCount: number, isResult: boolean | undefined) {
+  return Boolean(isResult) && lineCount >= MAX_LINES + LINE_TOLERANCE;
 }
 
 export default function ContentWrapper(props: Props): ReactNode {
   const contentId = useId();
 
   const { metadata } = useCodeBlockContext();
-  const { collapsible, collapsed } = useContext(CodeBlockFlagsContext);
+  const { collapsible, collapsed, result } = useContext(CodeBlockFlagsContext);
   const [expanded, setExpanded] = useState(collapsed === false);
 
   const lineCount = getLineCount(metadata.code);
-  const canCollapse = collapsible ?? shouldCollapse(metadata);
+  const canCollapse = collapsible ?? shouldCollapse(lineCount, result);
 
   if (!canCollapse) return <Content {...props} />;
 
