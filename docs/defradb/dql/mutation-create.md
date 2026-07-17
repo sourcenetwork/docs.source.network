@@ -336,7 +336,6 @@ type jsonBlob {
 */}
 
 ```graphql title="Valid &ndash; JSON unserialized object" valid
-#valid
 mutation {
   add_jsonBlob(input: {
     jsonField: {
@@ -348,7 +347,6 @@ mutation {
 }
 ```
 ```graphql title="Invalid &ndash; JSON string representation" invalid
-#invalid
 mutation {
   add_jsonBlob(input: {
     jsonField: "{\"i\": {\"love\": \"eating my family and commas\"}}"

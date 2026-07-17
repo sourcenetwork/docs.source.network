@@ -182,7 +182,6 @@ To filter on a single field, use the syntax `fieldName: { operator: Value }`, wh
 You need to explicitly specify the `_and` operator in case of two filters on the same field, because JSON objects cannot contain duplicate fields:
 
 ```graphql title="Valid &ndash; Multiple filters on same field with explicit operator" test-skip valid
-# valid
 filter: {
   _and: [
     { rating: { _gte: 4 } },
@@ -191,7 +190,6 @@ filter: {
 }
 ```
 ```graphql title="Invalid &ndash; Multiple filters on same field without operator" test-skip invalid
-# invalid
 filter: {
   rating: { _gte: 4 },
   rating: { _lte: 5 }
@@ -568,7 +566,6 @@ mutation {
 It is possible to _filter_ for a JSON field's inner properties, but it's not possible to return them.
 
 ```graphql title="Invalid &ndash; Return JSON field inner properties" test-error invalid
-# invalid
 {
   jsonBlob {
     jsonField {
@@ -586,7 +583,6 @@ It is possible to _filter_ for a JSON field's inner properties, but it's not pos
 You can filter over [renamed fields](aliases.md) via the `_alias` key. Alias names cannot be used directly in the `filter` object.
 
 ```graphql title="Valid &ndash; Filter a renamed field with _alias" valid
-# valid
 {
   Book(filter: { _alias: { bookTitle: { _eq: "1984" }}}) {
     bookTitle: title
@@ -595,7 +591,6 @@ You can filter over [renamed fields](aliases.md) via the `_alias` key. Alias nam
 ```
 
 ```graphql title="Invalid &ndash; Filter a renamed field directly" test-error invalid
-# invalid
 {
   Book(filter: { bookTitle: { _eq: "1984" }}) {
     bookTitle: title

@@ -204,7 +204,6 @@ There's no limit on the number of ordering fields that can be specified. Their p
 Ordering by sub-objects from the root object is only allowed if the sub-object is not an array. If it is an array (such as the *many* side of one-to-many relationships), the order must be applied to the object field in the selection set.
 
 ```graphql title="Valid &ndash; Order by relationship sub-object in the selection level" valid
-# valid
 {
   Person(order: { name: DESC }) {
     name
@@ -217,7 +216,6 @@ Ordering by sub-objects from the root object is only allowed if the sub-object i
 ```
 
 ```graphql title="Invalid &ndash; Order by relationship sub-object at root level" test-error invalid
-# invalid
 {
   # highlight-next-line
   Person(order: [{ name: DESC }, { authoredBooks: { title: ASC } }]) {

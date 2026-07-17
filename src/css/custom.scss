@@ -23,6 +23,7 @@ body {
   // Source variables
   --src-primary: #06b250;
   --src-highlight: #39e265;
+  --src-red: #ff7777;
 
   --root-wrapper-width: 90rem;
   --menu-indicator-color: #ccc;
@@ -48,9 +49,7 @@ body {
   // Code block variables
   --codeblock-title-border: #d1d1d1;
   --codeblock-valid-border: var(--src-primary);
-  --codeblock-invalid-border: var(--ifm-color-danger);
-  --codeblock-valid-text: var(--src-primary);
-  --codeblock-invalid-text: var(--ifm-color-danger);
+  --codeblock-invalid-border: var(--src-red);
 }
 
 // Dark overrides
@@ -76,9 +75,7 @@ html[data-theme="dark"] {
   // Code block variables
   --codeblock-title-border: #323232;
   --codeblock-valid-border: var(--src-primary);
-  --codeblock-invalid-border: var(--ifm-color-danger);
-  --codeblock-valid-text: var(--src-highlight);
-  --codeblock-invalid-text: var(--ifm-color-danger);
+  --codeblock-invalid-border: var(--src-red);
 }
 
 //  Layout

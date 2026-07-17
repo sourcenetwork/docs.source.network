@@ -43,7 +43,7 @@ html[data-theme="dark"] {
   // Code
   --ifm-code-background: rgb(226, 226, 226);
   --ifm-code-font-size: 80%;
-  --ifm-code-border-radius: 0.5rem;
+  --ifm-code-border-radius: .375rem; // 6px
   --ifm-pre-padding: 1rem;
 
   --ifm-leading-desktop: 1.75;

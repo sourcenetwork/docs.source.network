@@ -301,7 +301,6 @@ type Enrollment {  # the join type
 A type defining multiple relationships to the same type requires extra directives to disambiguate their targets. For example, if a book has both an author and a reviewer, the following definitions would be ambiguous:
 
 ```graphql title="Invalid &ndash; Ambiguous definition of multiple relationships" test-fail invalid
-# invalid
 type Book {
   title: String
   author: Person
@@ -318,7 +317,6 @@ type Person {
 At query time, the database cannot infer whether `Person.authoredBooks` is linked to `Book.author` or `Book.reviewer`. To clarify which fields should get paired, use the `@relation(name: String)` directive, coupling each relationship together with the same name:
 
 ```graphql title="Valid &ndash; Unambiguous definition of multiple relationships" valid
-# valid
 type Book {
   title: String
   author: Person @relation(name: "author")
