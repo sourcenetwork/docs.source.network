@@ -556,6 +556,7 @@ body .DocSearch {
   --docsearch-hit-background-active: rgba(94, 100, 112, 0.7);
   /* Footer */
   --docsearch-footer-background: var(--ifm-color-white);
+  --docsearch-search-button-background: var(--ifm-background-color);
 }
 
 [data-theme="dark"] .DocSearch {
@@ -582,6 +583,7 @@ body .DocSearch {
     var(--ifm-color-emphasis-200) 0%,
     var(--ifm-color-emphasis-100) 100%
   );
+  --docsearch-search-button-background: var(--ifm-background-color);
 }
 
 .alert {
