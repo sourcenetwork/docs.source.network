@@ -23,6 +23,8 @@ body {
   --root-wrapper-width: 90rem;
   --menu-indicator-color: #ccc;
 
+  --src-red: #ff7777;
+
   // Light theme
   --code-foreground: #000000;
   --code-background: #f3f3f3;
@@ -579,7 +581,7 @@ body .DocSearch {
 /* Color for version selector */
 .navbar__item.dropdown {
   .navbar__link {
-    color: var(--ifm-color-primary)
+    color: var(--ifm-color-primary);
   }
 }
 
@@ -615,11 +617,11 @@ div.language-json + div.language-json {
 }
 
 /* Style for code blocks starting with `//invalid` or `//valid` */
-html[data-theme=dark] {
+html[data-theme="dark"] {
   --code-invalid: rgb(135, 0, 0);
   --code-valid: rgb(0, 90, 0);
 }
-html[data-theme=light] {
+html[data-theme="light"] {
   --code-invalid: var(--ifm-color-danger);
   --code-valid: var(--ifm-color-success);
 }
@@ -634,8 +636,12 @@ pre.prism-code:has(.code-block-valid-line) {
   border-color: var(--code-valid);
 }
 /* Remove border under title for valid/invalid code blocks */
-div[class^="codeBlockTitle"]:has(+ div[class^="codeBlockContent"] > pre > code > .code-block-invalid-line),
-div[class^="codeBlockTitle"]:has(+ div[class^="codeBlockContent"] > pre > code > .code-block-valid-line) {
+div[class^="codeBlockTitle"]:has(
+    + div[class^="codeBlockContent"] > pre > code > .code-block-invalid-line
+  ),
+div[class^="codeBlockTitle"]:has(
+    + div[class^="codeBlockContent"] > pre > code > .code-block-valid-line
+  ) {
   border-bottom: 0px;
 }
 /* End style for code blocks starting with `//invalid` or `//valid` */
@@ -690,11 +696,11 @@ li div.theme-code-block {
 @media (min-width: 800px) {
   .sidebyside-left {
     float: left;
-    width: 49%
+    width: 49%;
   }
   .sidebyside-right {
     float: right;
-    width: 49%
+    width: 49%;
   }
   .sidebyside-clear {
     clear: both;
@@ -795,7 +801,9 @@ article .markdown header h1 {
 /* End Markdown Actions Dropdown Styles */
 
 /* Feedback button */
-html[data-theme=dark], html[data-theme=light] {  /* needs to be more specific than :root */
+html[data-theme="dark"],
+html[data-theme="light"] {
+  /* needs to be more specific than :root */
   --feedback-button-text-font-size: 1rem; /* same as text size */
   --feedback-button-text-font-weight: 600;
   --feedback-background: var(--code-background);
@@ -805,17 +813,23 @@ html[data-theme=dark], html[data-theme=light] {  /* needs to be more specific th
   --feedback-modal-button-submit-bg-color: var(--feedback-background);
   --feedback-modal-button-submit-bg-color-hover: var(--feedback-background);
   --feedback-modal-button-border-color-active: var(--feedback-background);
-  --feedback-modal-button-submit-border-color-hover: var(--feedback-primary-color);
+  --feedback-modal-button-submit-border-color-hover: var(
+    --feedback-primary-color
+  );
   --feedback-modal-button-submit-text-color: var(--feedback-primary-color);
-  --feedback-modal-button-submit-text-color-hover: var(--feedback-primary-color);
+  --feedback-modal-button-submit-text-color-hover: var(
+    --feedback-primary-color
+  );
   --feedback-modal-rating-button-selected-color: var(--feedback-primary-color);
-  --feedback-modal-rating-button-positive-selected-color: var(--ifm-color-primary);
-  --feedback-modal-rating-button-negative-selected-color: var(--ifm-color-danger);
+  --feedback-modal-rating-button-positive-selected-color: var(
+    --ifm-color-primary
+  );
+  --feedback-modal-rating-button-negative-selected-color: var(--src-red);
 }
-html[data-theme=dark] {
+html[data-theme="dark"] {
   --feedback-primary-color: var(--ifm-color-primary);
 }
-html[data-theme=light] {
+html[data-theme="light"] {
   --feedback-primary-color: #000000;
 }
 /* Shift scroll to top button further up to avoid clash with feedback button */
@@ -825,26 +839,55 @@ button.theme-back-to-top-button {
 
 /* Footer widget */
 .feedback-widget {
-  margin-top: 2.5rem;
+  margin-top: 3rem;
   text-align: center;
 }
-.feedback-widget-positive button {
-  color: var(--ifm-color-primary);
-  border-color: var(--ifm-color-primary);
 
-  &:hover, &:active {
-    background-color: var(--ifm-color-primary);
+.feedback-widget-title {
+  margin-bottom: 0.5rem;
+  font-size: 1rem;
+  opacity: 80%;
+}
+
+.feedback-buttons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.feedback-thumb-button {
+  border: none;
+  background: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  color: var(--foreground);
+  opacity: 0.8;
+  transition: all 0.3s ease;
+  cursor: pointer;
+
+  &:hover {
+    opacity: 1;
+  }
+
+  svg {
+    display: block;
+    width: 18px;
+    height: 18px;
+  }
+
+  .feedback-widget-positive &:hover {
+    color: var(--ifm-color-primary);
+  }
+
+  .feedback-widget-negative &:hover {
+    color: var(--src-red);
   }
 }
-.feedback-widget-negative button {
-  color: var(--ifm-color-danger);
-  border-color: var(--ifm-color-danger);
-
-  &:hover, &:active {
-    background-color: var(--ifm-color-danger);
-  }
-}
-/* End feedback button */
 
 /* Edit this page is already shown under ToC */
 .theme-doc-footer-edit-meta-row {
