@@ -130,7 +130,7 @@ To order results, use the syntax `order: { fieldName: DIRECTION }`, where:
   }
 }
 ```
-```json title="Result" result
+```json result
 {
   "data": {
     "Book": [
@@ -172,7 +172,7 @@ You can specify a field for secondary order by providing a list of objects to th
   }
 }
 ```
-```json title="Result" result
+```json result
 {
   "data": {
     "Book": [

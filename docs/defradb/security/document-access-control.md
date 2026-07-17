@@ -95,7 +95,7 @@ A policy doesn't do anything until it's added into DefraDB. The request to regis
     defradb client acp document policy add -f policy.yml \
     --identity b17a7b973f629b900cf23654db9c4be935f90281707dd3e2cd7a56bdd2c1bf4f
     ```
-    ```json title="Result" result
+    ```json result
     {
       "PolicyID": "9528839e7dac8d2c236ced23d49dcfb1cc1ece86a1329c7c512755ba1f56ca37"
     }
@@ -126,7 +126,7 @@ A policy doesn't do anything until it's added into DefraDB. The request to regis
           - name: delete
             expr: deleter
     ```
-    ```json title="Result" result
+    ```json result
     {
       "PolicyID": "9528839e7dac8d2c236ced23d49dcfb1cc1ece86a1329c7c512755ba1f56ca37"
     }
@@ -148,7 +148,7 @@ type Book @policy(
   title: String
 }
 ```
-```json title="Result" result
+```json result
 [
   {
     "Name": "Book",
@@ -233,7 +233,7 @@ defradb client query '
 }
 '
 ```
-```json title="Result" result
+```json result
 {
   "data": {
     "Book": [
@@ -272,7 +272,7 @@ You can only create relations to private documents (i.e. documents created with 
       --actor did:key:z7r8osuVyok8SVnHH5tsyNDRGyniu9pQoqBt7misXTEJAon5vYCt72NmFpya4NUiLjPfyDvvayNMbYRrnqLMYjpD1cAgp \
       --identity b17a7b973f629b900cf23654db9c4be935f90281707dd3e2cd7a56bdd2c1bf4f
     ```
-    ```json title="Result" result
+    ```json result
     {
       "ExistedAlready": false
     }
@@ -294,7 +294,7 @@ You can only create relations to private documents (i.e. documents created with 
       "TargetActor": "did:key:z7r8osuVyok8SVnHH5tsyNDRGyniu9pQoqBt7misXTEJAon5vYCt72NmFpya4NUiLjPfyDvvayNMbYRrnqLMYjpD1cAgp"
     }
     ```
-    ```json title="Result" result
+    ```json result
     {
       "ExistedAlready": false
     }
@@ -358,7 +358,7 @@ The only actors allowed to revoke permissions are the policy creator and the ide
       --actor did:key:z7r8osuVyok8SVnHH5tsyNDRGyniu9pQoqBt7misXTEJAon5vYCt72NmFpya4NUiLjPfyDvvayNMbYRrnqLMYjpD1cAgp \
       --identity b17a7b973f629b900cf23654db9c4be935f90281707dd3e2cd7a56bdd2c1bf4f
     ```
-    ```json title="Result" result
+    ```json result
     {
       "RecordFound": true
     }
@@ -380,7 +380,7 @@ The only actors allowed to revoke permissions are the policy creator and the ide
       "TargetActor": "did:key:z7r8osuVyok8SVnHH5tsyNDRGyniu9pQoqBt7misXTEJAon5vYCt72NmFpya4NUiLjPfyDvvayNMbYRrnqLMYjpD1cAgp"
     }
     ```
-    ```json title="Result" result
+    ```json result
     {
       "RecordFound": true
     }

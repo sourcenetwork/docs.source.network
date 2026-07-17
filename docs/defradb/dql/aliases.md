@@ -130,7 +130,7 @@ To rename the return key for a query, prefix the custom name to the query and se
   }
 }
 ```
-```json title="Result" result
+```json result
 {
   "data": {
     // highlight-next-line
@@ -173,7 +173,7 @@ You must alias queries when one request contains multiple queries to the same ty
   }
 }
 ```
-```json title="Result" result
+```json result
 {
   "data": {
     // highlight-next-line
@@ -230,7 +230,7 @@ To rename the return key for a field, prefix the custom name to the field in the
   }
 }
 ```
-```json title="Result" result
+```json result
 {
   "data": {
     "Book": [

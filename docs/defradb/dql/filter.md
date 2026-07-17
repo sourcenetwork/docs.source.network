@@ -139,7 +139,7 @@ To filter on a single field, use the syntax `fieldName: { operator: Value }`, wh
   }
 }
 ```
-```json title="Result" result
+```json result
 {
   "data": {
     "Book": [
@@ -165,7 +165,7 @@ To filter on a single field, use the syntax `fieldName: { operator: Value }`, wh
   }
 }
 ```
-```json title="Result" result
+```json result
 {
   "data": {
     "Book": [
@@ -214,7 +214,7 @@ Additional fields listed in the `filter` object are implicitly combined with an 
   }
 }
 ```
-```json title="Result" result
+```json result
 {
   "data": {
     "Book": [
@@ -262,7 +262,7 @@ filter: {
   }
 }
 ```
-```json title="Result" result
+```json result
 {
   "data": {
     "Book": [
@@ -320,7 +320,7 @@ The boolean operators `_and` and `_or` accept an array, whereas `_not` accepts a
   }
 }
 ```
-```json title="Result" result
+```json result
 {
   "data": {
     "Book": [
@@ -360,7 +360,7 @@ The syntax to filter over sub-objects has one more level of nesting in field nam
   }
 }
 ```
-```json title="Result" result
+```json result
 {
   "data": {
     "Book": [
@@ -388,7 +388,7 @@ For example, when filtering over people that have authored books of genre `Ficti
   }
 }
 ```
-```json title="Result" result
+```json result
 {
   "data": {
     "Person": [
@@ -424,7 +424,7 @@ If the return fields include the sub-object you filter on, the same filter is **
   }
 }
 ```
-```json title="Result" result
+```json result
 {
   "data": {
     "Person": [
@@ -495,7 +495,7 @@ When specified explicitly, root-level and sub-objects filters are evaluated inde
   }
 }
 ```
-```json title="Result" result
+```json result
 {
   "data": {
     "Person": [
@@ -546,7 +546,7 @@ mutation {
   }) { jsonField }
 }
 ```
-```json title="Result" result
+```json result
 {
   "data": {
     "jsonBlob": [
@@ -612,7 +612,7 @@ The [list operators](#list-operators) `_any`, `_none`, `_all` evaluate a scalar 
   }
 }
 ```
-```json title="Result" result
+```json result
 {
   "data": {
     "Book": [
@@ -638,7 +638,7 @@ The [list operators](#list-operators) `_any`, `_none`, `_all` evaluate a scalar 
   }
 }
 ```
-```json title="Result" result
+```json result
 {
   "data": {
     "Book": [
@@ -674,7 +674,7 @@ The [list operators](#list-operators) `_any`, `_none`, `_all` evaluate a scalar 
   }
 }
 ```
-```json title="Result" result
+```json result
 {
   "data": {
     "Book": [

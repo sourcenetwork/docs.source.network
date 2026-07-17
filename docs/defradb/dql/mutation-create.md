@@ -62,7 +62,7 @@ mutation {
       }
     '
     ```
-    ```json title="Result" result
+    ```json result
     {
       "data": {
         "add_Book": [
@@ -113,7 +113,7 @@ mutation {
       }
     }
     ```
-    ```json title="Result" result
+    ```json result
     {
       "data": {
         "add_Book": [
@@ -163,7 +163,7 @@ The field `_docID` contains the document's unique identifier. The document data 
     }
     '
     ```
-    ```json title="Result" result
+    ```json result
     {
       "data": {
         "b1": [
@@ -230,7 +230,7 @@ The field `_docID` contains the document's unique identifier. The document data 
       }
     }
     ```
-    ```json title="Result" result
+    ```json result
     {
       "data": {
         "b1": [
@@ -274,7 +274,7 @@ mutation {
   }
 }
 ```
-```json title="Result" result
+```json result
 {
   "data": {
     "add_Book": [
@@ -309,7 +309,7 @@ mutation {
   }
 }
 ```
-```json title="Result" result
+```json result
 {
   "data": {
     "update_Book": [

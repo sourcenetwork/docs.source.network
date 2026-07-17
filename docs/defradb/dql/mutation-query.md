@@ -175,7 +175,7 @@ The basic skeleton of a query is made of the type/collection you want to fetch f
     }
     '
     ```
-    ```json title="Result" result
+    ```json result
     {
       "data": {
         "Book": [
@@ -226,7 +226,7 @@ The basic skeleton of a query is made of the type/collection you want to fetch f
       "query": "{ Book { _docID title plot } }"
     }
     ```
-    ```json title="Result" result
+    ```json result
     {
       "data": {
         "Book": [
@@ -275,7 +275,7 @@ The basic skeleton of a query is made of the type/collection you want to fetch f
       }
     }
     ```
-    ```json title="Result" result
+    ```json result
     {
       "data": {
         "Book": [
@@ -335,7 +335,7 @@ If a document has a [relationship](/schema/collections.md#relationships) to anot
   }
 }
 ```
-```json title="Result" result
+```json result
 {
   "data": {
     "Person": [
@@ -400,7 +400,7 @@ You can walk connected types without boundaries: if type `Person` has a relation
   }
 }
 ```
-```json title="Result" result
+```json result
 {
   "data": {
     "Person": [
@@ -484,7 +484,7 @@ Query the database for a specific document ID via the `docID` argument in the ty
   }
 }
 ```
-```json title="Result" result
+```json result
 {
   "data": {
     "Person": [
@@ -519,7 +519,7 @@ Query the database for a specific document ID via the `docID` argument in the ty
   }
 }
 ```
-```json title="Result" result
+```json result
 {
   "data": {
     "Person": [

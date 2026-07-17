@@ -61,7 +61,7 @@ creation: DateTime @default(value: UTC_NOW)
     }
     '
     ```
-    ```json title="Result" result
+    ```json result
     [
       {
         "Name": "Book",
@@ -139,7 +139,7 @@ creation: DateTime @default(value: UTC_NOW)
       rating: Float
     }
     ```
-    ```json title="Result" result
+    ```json result
     [
       {
         "Name": "Book",
@@ -356,7 +356,7 @@ type Person {
   </TabItem>
 </Tabs>
 
-```json title="Result" result
+```json result
 [
   {
     "Name": "Book",
