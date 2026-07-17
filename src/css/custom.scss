@@ -20,11 +20,12 @@ body {
 
 /* You can override the default Infima variables here. */
 :root {
-  --root-wrapper-width: 90rem;
-  --menu-indicator-color: #ccc;
-
+  // Source variables
   --src-primary: #06b250;
   --src-highlight: #39e265;
+
+  --root-wrapper-width: 90rem;
+  --menu-indicator-color: #ccc;
 
   // Light theme
   --code-foreground: #000000;
@@ -600,7 +601,7 @@ body .DocSearch {
 /* Visual indication of tabs length */
 .tabs-container {
   .margin-top--md {
-    border-left: 3px var(--ifm-color-primary) solid;
+    border-left: 2px var(--src-primary) solid;
     padding-left: var(--ifm-tabs-padding-horizontal);
   }
 }
@@ -627,6 +628,7 @@ body .DocSearch {
     margin-bottom: 0.313rem; // 5px
   }
 
+  // Override the title border
   & [class*="codeBlockTitle"] {
     border-bottom-color: var(--codeblock-title-border);
   }

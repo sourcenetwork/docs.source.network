@@ -14,11 +14,11 @@ const config = {
   trailingSlash: true,
   organizationName: "source-developer", // Usually your GitHub org/user name.
   projectName: "source-developer", // Usually your repo name.
-  markdown:{
+  markdown: {
     hooks: {
       onBrokenMarkdownLinks: "warn",
       onBrokenMarkdownImages: "warn",
-    }
+    },
   },
   presets: [
     [
@@ -38,7 +38,7 @@ const config = {
           lastmod: "date",
           changefreq: "weekly",
           priority: 0.5,
-          ignorePatterns: ['/defradb/0.20.0/**', '/blog*'],
+          ignorePatterns: ["/defradb/0.20.0/**", "/blog*"],
           filename: "sitemap.xml",
         },
       },
@@ -163,29 +163,13 @@ const config = {
       },
       prism: {
         theme: variableCodeTheme,
-        additionalLanguages: ['http', 'yaml'],
+        additionalLanguages: ["http", "yaml"],
         magicComments: [
           // The default highlight class name must be present too!
           {
-            className: 'theme-code-block-highlighted-line',
-            line: 'highlight-next-line',
-            block: { start: 'highlight-start', end: 'highlight-end' },
-          },
-          {
-            className: 'code-block-invalid-line',
-            line: 'invalid',
-          },
-          {
-            className: 'code-block-valid-line',
-            line: 'valid',
-          },
-          {
-            className: 'code-block-collapse',
-            line: 'collapse',
-          },
-          {
-            className: 'code-block-no-collapse',
-            line: 'no-collapse',
+            className: "theme-code-block-highlighted-line",
+            line: "highlight-next-line",
+            block: { start: "highlight-start", end: "highlight-end" },
           },
         ],
       },
@@ -194,11 +178,9 @@ const config = {
         apiKey: "909584ed5214e2d24ae2a85a5cd8664a",
         indexName: "source-docs",
       },
-      image: 'img/source-logo.jpg',
+      image: "img/source-logo.jpg",
     }),
-  clientModules: [
-    require.resolve('./src/plugins/code-blocks.js')
-  ],
+  clientModules: [],
   plugins: [
     [
       require.resolve("./src/plugins/plausible"),
@@ -224,8 +206,8 @@ const config = {
     [
       "docusaurus-markdown-source-plugin",
       {
-        docsPath: '/',  // Show dropdown on all pages
-      }
+        docsPath: "/", // Show dropdown on all pages
+      },
     ],
     [
       "docusaurus-plugin-sass",
@@ -243,44 +225,44 @@ const config = {
         // logLevel: "verbose",
         generateLLMsTxt: true,
         generateLLMsFullTxt: false,
-        excludeImports: true,  // remove js import statements from MDX files
+        excludeImports: true, // remove js import statements from MDX files
         removeDuplicateHeadings: true,
         // generateMarkdownFiles doesn't seem to properly generate md files, and another extension does it for us.
         // However, the other extension doesn't generate md files with the same dir structure as
         // plugin-llms expects, so we can't pair them and link to md files in llms.txt.
         generateMarkdownFiles: false,
         addMdExtension: false,
-        ignoreFiles: ['BSL-License.md',],
+        ignoreFiles: ["BSL-License.md"],
         customLLMFiles: [
           {
-            filename: 'defradb/llms.txt',
-            title: 'DefraDB documentation',
-            description: 'Documentation for DefraDB',
-            includePatterns: ['docs/defradb/**/*.md'],
+            filename: "defradb/llms.txt",
+            title: "DefraDB documentation",
+            description: "Documentation for DefraDB",
+            includePatterns: ["docs/defradb/**/*.md"],
             fullContent: false,
           },
           {
-            filename: 'lensvm/llms.txt',
-            title: 'LensVM documentation',
-            description: 'Documentation for LensVM',
-            includePatterns: ['docs/lensvm/**/*.md'],
+            filename: "lensvm/llms.txt",
+            title: "LensVM documentation",
+            description: "Documentation for LensVM",
+            includePatterns: ["docs/lensvm/**/*.md"],
             fullContent: false,
           },
           {
-            filename: 'orbis/llms.txt',
-            title: 'Orbis documentation',
-            description: 'Documentation for Orbis',
-            includePatterns: ['docs/orbis/**/*.md'],
+            filename: "orbis/llms.txt",
+            title: "Orbis documentation",
+            description: "Documentation for Orbis",
+            includePatterns: ["docs/orbis/**/*.md"],
             fullContent: false,
           },
           {
-            filename: 'sourcehub/llms.txt',
-            title: 'Sourcehub documentation',
-            description: 'Documentation for Sourcehub',
-            includePatterns: ['docs/sourcehub/**/*.md'],
+            filename: "sourcehub/llms.txt",
+            title: "Sourcehub documentation",
+            description: "Documentation for Sourcehub",
+            includePatterns: ["docs/sourcehub/**/*.md"],
             fullContent: false,
           },
-        ]
+        ],
       },
     ],
     // DefraDB instance
@@ -296,14 +278,11 @@ const config = {
         lastVersion: "current",
         versions: {
           current: {
-            label: "1.0 (Latest)"
+            label: "1.0 (Latest)",
           },
         },
         // Reorder changelog sidebar
-        async sidebarItemsGenerator({
-          defaultSidebarItemsGenerator,
-          ...args
-        }) {
+        async sidebarItemsGenerator({ defaultSidebarItemsGenerator, ...args }) {
           const sidebarItems = await defaultSidebarItemsGenerator(args);
           return reverseSidebarChangelog(sidebarItems);
         },
@@ -331,10 +310,7 @@ const config = {
           },
         },
         // Reorder changelog sidebar
-        async sidebarItemsGenerator({
-          defaultSidebarItemsGenerator,
-          ...args
-        }) {
+        async sidebarItemsGenerator({ defaultSidebarItemsGenerator, ...args }) {
           const sidebarItems = await defaultSidebarItemsGenerator(args);
           return reverseSidebarChangelog(sidebarItems);
         },
@@ -362,10 +338,7 @@ const config = {
           },
         },
         // Reorder changelog sidebar
-        async sidebarItemsGenerator({
-          defaultSidebarItemsGenerator,
-          ...args
-        }) {
+        async sidebarItemsGenerator({ defaultSidebarItemsGenerator, ...args }) {
           const sidebarItems = await defaultSidebarItemsGenerator(args);
           return reverseSidebarChangelog(sidebarItems);
         },
@@ -393,15 +366,12 @@ const config = {
           },
         },
         // Reorder changelog sidebar
-        async sidebarItemsGenerator({
-          defaultSidebarItemsGenerator,
-          ...args
-        }) {
+        async sidebarItemsGenerator({ defaultSidebarItemsGenerator, ...args }) {
           const sidebarItems = await defaultSidebarItemsGenerator(args);
           return reverseSidebarChangelog(sidebarItems);
         },
       },
-    ]
+    ],
   ],
   customFields: {
     docsData: {},

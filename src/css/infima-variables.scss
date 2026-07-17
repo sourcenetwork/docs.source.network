@@ -65,7 +65,7 @@ html[data-theme="dark"] {
   --docs-title-border: #e0e0e0;
 
   --ifm-alert-border-left-width: 2px;
-  --ifm-alert-border-radius: 0.5rem;
+  --ifm-alert-border-radius: 0rem;
 
   /* Horizontal Rules. */
   --ifm-breadcrumb-spacing: 0rem;
@@ -88,6 +88,7 @@ html[data-theme="dark"] {
   --ifm-toc-border-color: transparent;
   --ifm-menu-color: var(--ifm-color-emphasis-400);
 
+  --ifm-color-secondary-contrast-background: #222222;
   --ifm-color-info-contrast-background: rgb(0, 0, 0);
   --ifm-color-info-contrast-foreground: rgb(255, 255, 255);
   --ifm-scrollbar-thumb-background-color: var(--ifm-color-emphasis-200);
