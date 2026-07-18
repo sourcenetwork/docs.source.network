@@ -43,18 +43,23 @@ const ButtonThumbsDown = () => (
   </svg>
 );
 
+type FeedbackStatus = "idle" | "sent" | "failed";
+
 function FeedbackWidget(): ReactNode {
-  const [feedbackSent, setFeedbackSent] = useState(false);
+  const [status, setStatus] = useState<FeedbackStatus>("idle");
 
   useEffect(() => {
     defineCustomElements(window);
 
-    const handleSent = () => setFeedbackSent(true);
-    const handleError = (event: Event) =>
+    const handleSent = () => setStatus("sent");
+    // "failed" reverts the optimistic thanks: the buttons return for a retry
+    const handleError = (event: Event) => {
       console.error(
         "Feedback submission error:",
         (event as CustomEvent<{ error: unknown }>).detail.error,
       );
+      setStatus("failed");
+    };
 
     document.addEventListener("feedbackSent", handleSent);
     document.addEventListener("feedbackError", handleError);
@@ -69,45 +74,55 @@ function FeedbackWidget(): ReactNode {
     <div className="feedback-widget">
       <div className="feedback-widget-title">Was this helpful?</div>
 
-      {feedbackSent && (
+      {status === "sent" && (
         <div className="feedback-thanks">Thanks for your feedback!</div>
       )}
 
-      {!feedbackSent && (
-        <div className="feedback-buttons">
-          <span className="feedback-widget-positive">
-            <FeedbackButton
-              project={PROJECT_ID}
-              submit={true}
-              rating={1}
-              custom-font="True"
-              button-style="default"
-              modal-position="center"
+      {/* Hidden rather than unmounted: feedback events emit on the host
+          element after the fetch resolves, so it must stay connected for the
+          document listeners (esp. feedbackError) to hear them */}
+      <div
+        className="feedback-buttons"
+        style={status === "sent" ? { display: "none" } : undefined}
+      >
+        <span className="feedback-widget-positive">
+          <FeedbackButton
+            project={PROJECT_ID}
+            submit={true}
+            rating={1}
+            custom-font="True"
+            button-style="default"
+            modal-position="center"
+          >
+            <button
+              className="feedback-thumb-button"
+              title="Yes"
+              onClick={() => setStatus("sent")}
             >
-              <button
-                className="feedback-thumb-button"
-                title="Yes"
-                onClick={() => setFeedbackSent(true)}
-              >
-                <ButtonThumbsUp />
-              </button>
-            </FeedbackButton>
-          </span>
-          <span className="feedback-widget-negative">
-            <FeedbackButton
-              project={PROJECT_ID}
-              hide-screenshot-button="True"
-              message-placeholder="A place to praise and to rant."
-              rating={0}
-              custom-font="True"
-              button-style="default"
-              modal-position="center"
-            >
-              <button className="feedback-thumb-button" title="No">
-                <ButtonThumbsDown />
-              </button>
-            </FeedbackButton>
-          </span>
+              <ButtonThumbsUp />
+            </button>
+          </FeedbackButton>
+        </span>
+        <span className="feedback-widget-negative">
+          <FeedbackButton
+            project={PROJECT_ID}
+            hide-screenshot-button="True"
+            message-placeholder="A place to praise and to rant."
+            rating={0}
+            custom-font="True"
+            button-style="default"
+            modal-position="center"
+          >
+            <button className="feedback-thumb-button" title="No">
+              <ButtonThumbsDown />
+            </button>
+          </FeedbackButton>
+        </span>
+      </div>
+
+      {status === "failed" && (
+        <div className="feedback-widget-error">
+          Something went wrong. Please try again.
         </div>
       )}
     </div>

@@ -849,6 +849,12 @@ button.theme-back-to-top-button {
   opacity: 80%;
 }
 
+.feedback-widget-error {
+  margin-top: 0.5rem;
+  font-size: 0.875rem;
+  color: var(--src-red);
+}
+
 .feedback-buttons {
   display: flex;
   align-items: center;
