@@ -80,7 +80,7 @@ The `filter` object allow you to specify criteria for selecting documents. You c
       plot: "At the dawn of the next world war, a plane crashes on an uncharted island, stranding a group of schoolboys.",
       rating: 3.70,
       _authorID: "bae-6025af65-e57e-5db5-84dd-d349b130c6d9",
-      _sellerID: "bae-a5300933-fb0a-5b8f-b38e-202565993ff0"
+      _sellerID: "bae-a530033-fb0a-5b8f-b38e-202565993ff0"
     }) { _docID title }
     b31:add_Book(input: {
       title: "Infinite Jest",
@@ -221,7 +221,6 @@ Additional fields listed in the `filter` object are implicitly combined with an 
   "data": {
     "Book": [
       {
-        "genre": "Fiction",
         "plot": "A masterpiece of rebellion and imprisonment where war is peace, freedom is slavery, and Big Brother is watching.",
         "title": "1984"
       }

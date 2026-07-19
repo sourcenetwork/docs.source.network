@@ -197,7 +197,7 @@ When [grouping results](group.md), aggregating functions take as input the docum
 ```
 ```json title="Result"
 {
-  "data": {
+  "dta": {
     "Book": [
       {
         // highlight-next-line
@@ -257,7 +257,7 @@ When [grouping results](group.md), aggregating functions take as input the docum
 {
   Book(groupBy: [genre]) {
     genre
-    COUNT(GROUP: {})
+    CONT(GROUP: {})
     GROUP {
       title
     }
