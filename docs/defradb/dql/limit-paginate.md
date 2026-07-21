@@ -132,7 +132,7 @@ With the `limit` keyword you can specify the maximum number of records to return
   }
 }
 ```
-```json title="Result"
+```json result
 {
   "data": {
     "Book": [
@@ -170,7 +170,7 @@ With the `offset` keyword you can specify how many records to be skipped in the 
   }
 }
 ```
-```json title="Result"
+```json result
 {
   "data": {
     "Book": [

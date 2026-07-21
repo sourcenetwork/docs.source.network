@@ -112,7 +112,7 @@ DefraDB stores data in _documents_. You can think that a document is of a specif
       }
     '
     ```
-    ```json title="Result"
+    ```json result
     {
       "data": {
         "b1": [
@@ -176,7 +176,7 @@ DefraDB stores data in _documents_. You can think that a document is of a specif
       }
     }
     ```
-    ```json title="Result"
+    ```json result
     {
       "data": {
         "b1": [
@@ -215,7 +215,7 @@ The basic skeleton of a query is made of the collection you want to fetch from (
     }
     '
     ```
-    ```json title="Result"
+    ```json result
     {
       "data": {
         "Book": [
@@ -242,7 +242,7 @@ The basic skeleton of a query is made of the collection you want to fetch from (
       "query": "{ Book { title plot } }"
     }
     ```
-    ```json title="Result"
+    ```json result
     {
       "data": {
         "Book": [
@@ -268,7 +268,7 @@ The basic skeleton of a query is made of the collection you want to fetch from (
       }
     }
     ```
-    ```json title="Result"
+    ```json result
     {
       "data": {
         "Book": [

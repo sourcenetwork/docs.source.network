@@ -61,7 +61,7 @@ creation: DateTime @default(value: UTC_NOW)
     }
     '
     ```
-    ```json title="Result"
+    ```json result
     [
       {
         "Name": "Book",
@@ -139,7 +139,7 @@ creation: DateTime @default(value: UTC_NOW)
       rating: Float
     }
     ```
-    ```json title="Result"
+    ```json result
     [
       {
         "Name": "Book",
@@ -300,8 +300,7 @@ type Enrollment {  # the join type
 
 A type defining multiple relationships to the same type requires extra directives to disambiguate their targets. For example, if a book has both an author and a reviewer, the following definitions would be ambiguous:
 
-```graphql title="Invalid &ndash; Ambiguous definition of multiple relationships" test-fail
-# invalid
+```graphql title="Invalid &ndash; Ambiguous definition of multiple relationships" test-fail invalid
 type Book {
   title: String
   author: Person
@@ -317,8 +316,7 @@ type Person {
 
 At query time, the database cannot infer whether `Person.authoredBooks` is linked to `Book.author` or `Book.reviewer`. To clarify which fields should get paired, use the `@relation(name: String)` directive, coupling each relationship together with the same name:
 
-```graphql title="Valid &ndash; Unambiguous definition of multiple relationships"
-# valid
+```graphql title="Valid &ndash; Unambiguous definition of multiple relationships" valid
 type Book {
   title: String
   author: Person @relation(name: "author")
@@ -358,7 +356,7 @@ type Person {
   </TabItem>
 </Tabs>
 
-```json title="Result"
+```json result
 [
   {
     "Name": "Book",
