@@ -14,7 +14,7 @@ html[data-theme="dark"] {
 
 :root {
   // Colors
-  --ifm-color-primary: #06b250;
+  --ifm-color-primary: var(--src-primary);
   --ifm-color-primary-dark: #1554d8;
   --ifm-color-primary-darker: #144fcc;
   --ifm-color-primary-darkest: #1141a8;
@@ -43,7 +43,7 @@ html[data-theme="dark"] {
   // Code
   --ifm-code-background: rgb(226, 226, 226);
   --ifm-code-font-size: 80%;
-  --ifm-code-border-radius: .375rem; // 6px
+  --ifm-code-border-radius: 0.375rem; // 6px
   --ifm-pre-padding: 1rem;
 
   --ifm-leading-desktop: 1.75;
@@ -81,7 +81,7 @@ html[data-theme="dark"] {
 }
 
 html[data-theme="dark"] {
-  --ifm-color-primary: #39e265;
+  --ifm-color-primary: var(--src-highlight);
   --ifm-background-color: #000000;
   --ifm-background-surface-color: var(--ifm-background-color);
   --docs-title-border: #343434;
