@@ -267,7 +267,7 @@ const config = {
     ],
     [
       'docusaurus-pushfeedback',{
-        project: 'wnjqslayhj',
+        project: process.env.PUSHFEEDBACK_PROJECT_ID,
         hideScreenshotButton: true,
         messagePlaceholder: 'A place to praise and to rant.',
         buttonStyle: 'dark',
