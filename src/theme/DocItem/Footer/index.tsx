@@ -1,11 +1,13 @@
-import { useEffect, useState, type ReactNode } from "react";
+import type { WrapperProps } from "@docusaurus/types";
 import Footer from "@theme-original/DocItem/Footer";
 import type FooterType from "@theme/DocItem/Footer";
-import type { WrapperProps } from "@docusaurus/types";
-
 import { FeedbackButton } from "pushfeedback-react";
-import { defineCustomElements } from "pushfeedback/loader";
 import "pushfeedback/dist/pushfeedback/pushfeedback.css";
+import {
+  defineCustomElements,
+  FeedbackButtonCustomEvent,
+} from "pushfeedback/loader";
+import { useEffect, useState, type ReactNode } from "react";
 
 type Props = WrapperProps<typeof FooterType>;
 
@@ -56,8 +58,9 @@ function FeedbackWidget(): ReactNode {
     const handleError = (event: Event) => {
       console.error(
         "Feedback submission error:",
-        (event as CustomEvent<{ error: unknown }>).detail.error,
+        (event as FeedbackButtonCustomEvent<{ error: unknown }>).detail.error,
       );
+
       setStatus("failed");
     };
 
