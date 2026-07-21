@@ -26,24 +26,19 @@ function parseMetastringFlags(metastring = ""): CodeBlockFlags {
 
   // invalid wins if both flags are present on the same fence
   const invalid = has("invalid");
+  const valid = has("valid") && !invalid;
 
   return {
     collapsible: pick(["noCollapse", false], ["collapse", true]),
     collapsed: pick(["expanded", false]),
-    valid: has("valid") && !invalid,
-    invalid,
     result: has("result"),
+    valid,
+    invalid,
   };
 }
 
 export default function CodeBlockWrapper(props: Props): ReactNode {
   const flags = parseMetastringFlags(props.metastring);
-
-  const validity = flags.invalid
-    ? "invalid"
-    : flags.valid
-      ? "valid"
-      : undefined;
 
   // Flag classes ride along on the className prop, which the theme forwards
   // to the .theme-code-block container div — no wrapper element needed.
@@ -51,7 +46,8 @@ export default function CodeBlockWrapper(props: Props): ReactNode {
     props.className,
     // Hashed module class (carries the built-in styling) plus a stable
     // global class as a public styling hook
-    validity && [styles[validity], `codeblock-state-${validity}`],
+    flags.valid && [styles.valid, "codeblock-state-valid"],
+    flags.invalid && [styles.invalid, "codeblock-state-invalid"],
     flags.result && "codeblock-result",
   );
 
