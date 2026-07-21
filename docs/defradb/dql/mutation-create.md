@@ -270,7 +270,6 @@ mutation {
     rating: 4.21
   }) {
     _docID
-    title
   }
 }
 ```
