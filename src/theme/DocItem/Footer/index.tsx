@@ -11,8 +11,6 @@ import { useEffect, useState, type ReactNode } from "react";
 
 type Props = WrapperProps<typeof FooterType>;
 
-const PROJECT_ID = "wnjqslayhj";
-
 const ButtonThumbsUp = () => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -90,7 +88,7 @@ function FeedbackWidget(): ReactNode {
       >
         <span className="feedback-widget-positive">
           <FeedbackButton
-            project={PROJECT_ID}
+            project={process.env.PUSHFEEDBACK_PROJECT_ID}
             submit={true}
             rating={1}
             custom-font="True"
@@ -108,7 +106,7 @@ function FeedbackWidget(): ReactNode {
         </span>
         <span className="feedback-widget-negative">
           <FeedbackButton
-            project={PROJECT_ID}
+            project={process.env.PUSHFEEDBACK_PROJECT_ID}
             hide-screenshot-button="True"
             message-placeholder="A place to praise and to rant."
             rating={0}
