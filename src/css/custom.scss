@@ -20,6 +20,11 @@ body {
 
 /* You can override the default Infima variables here. */
 :root {
+  // Source Brand variables
+  --src-primary: #06b250;
+  --src-highlight: #39e265;
+  --src-red: #ff7777;
+
   --root-wrapper-width: 90rem;
   --menu-indicator-color: #ccc;
 
@@ -28,7 +33,6 @@ body {
   // Light theme
   --code-foreground: #000000;
   --code-background: #f3f3f3;
-  --code-border: #d1d1d1;
   --code-token-keyword: #5a2cbc;
   --code-token-constant: #1a7032;
   --code-token-string: #d18c0c;
@@ -43,10 +47,11 @@ body {
   --code-highlight-color: #1c1c1c;
 
   --color-text-muted: #939598;
-}
 
-pre {
-  border: 2px solid var(--code-border);
+  // Code block variables
+  --codeblock-title-border: #d1d1d1;
+  --codeblock-valid-border: var(--src-primary);
+  --codeblock-invalid-border: var(--src-red);
 }
 
 // Dark overrides
@@ -55,7 +60,6 @@ html[data-theme="dark"] {
   // Dark theme
   --code-foreground: #fffff;
   --code-background: #191919;
-  --code-border: #252525;
   --code-token-keyword: #aca4ff;
   --code-foreground: #ffffff;
   --code-token-constant: #3ecf6e;
@@ -69,6 +73,9 @@ html[data-theme="dark"] {
   --code-token-number: #ffffff;
   --code-token-property: rgb(180, 148, 234);
   --code-highlight-color: #232323;
+
+  // Code block variables
+  --codeblock-title-border: #323232;
 }
 
 //  Layout
@@ -209,6 +216,7 @@ html[data-theme="dark"] {
 
     &__link {
       font-size: rem(14px);
+      border-radius: 0;
 
       &--active {
         font-weight: 500;
@@ -257,7 +265,7 @@ html[data-theme="dark"] {
 
     .menu__list-item__bottom-hr {
       .menu__link {
-        border-bottom: 1px solid;
+        border-bottom: 1px solid var(--docs-title-border);
         padding-bottom: calc(var(--ifm-menu-link-padding-vertical) + 0.25rem);
         margin-bottom: calc(var(--ifm-menu-link-padding-vertical) + 0.25rem);
       }
@@ -546,6 +554,7 @@ body .DocSearch {
   --docsearch-hit-background-active: rgba(94, 100, 112, 0.7);
   /* Footer */
   --docsearch-footer-background: var(--ifm-color-white);
+  --docsearch-search-button-background: var(--ifm-background-color);
 }
 
 [data-theme="dark"] .DocSearch {
@@ -572,6 +581,7 @@ body .DocSearch {
     var(--ifm-color-emphasis-200) 0%,
     var(--ifm-color-emphasis-100) 100%
   );
+  --docsearch-search-button-background: var(--ifm-background-color);
 }
 
 .alert {
@@ -588,13 +598,16 @@ body .DocSearch {
 /* Visual indication of tabs length */
 .tabs-container {
   .margin-top--md {
-    border-left: 3px var(--ifm-color-primary) solid;
+    border-left: 2px var(--src-primary) solid;
     padding-left: var(--ifm-tabs-padding-horizontal);
   }
 }
 
-/* Color for highlighted lines in code blocks */
+/* THEME CODE BLOCK STYLES */
 .theme-code-block {
+  border: 1px solid var(--codeblock-title-border);
+
+  /* Color for highlighted lines in code blocks */
   .theme-code-block-highlighted-line {
     border-left: 3px var(--ifm-color-primary) solid;
 
@@ -606,43 +619,21 @@ body .DocSearch {
       background-color: rgb(230 230 230);
     }
   }
+
+  // Squash together query and result code blocks, when one is placed immediately after another
+  &:has(+ .codeblock-result) {
+    margin-bottom: 0.313rem; // 5px
+  }
+
+  // Override the title border
+  & [class*="codeBlockTitle"] {
+    border-bottom-color: var(--codeblock-title-border);
+  }
 }
 
-/* Squash together query and result code blocks, when one after another */
-div.language-graphql + div.language-json,
-div.language-http + div.language-json,
-div.language-shell + div.language-json,
-div.language-json + div.language-json {
-  margin-top: calc((var(--ifm-leading) * -1) + 2px);
-}
-
-/* Style for code blocks starting with `//invalid` or `//valid` */
-html[data-theme="dark"] {
-  --code-invalid: rgb(135, 0, 0);
-  --code-valid: rgb(0, 90, 0);
-}
-html[data-theme="light"] {
-  --code-invalid: var(--ifm-color-danger);
-  --code-valid: var(--ifm-color-success);
-}
-div.theme-code-block:has(.code-block-invalid-line),
-pre.prism-code:has(.code-block-invalid-line) {
-  background: var(--code-invalid);
-  border-color: var(--code-invalid);
-}
-div.theme-code-block:has(.code-block-valid-line),
-pre.prism-code:has(.code-block-valid-line) {
-  background: var(--code-valid);
-  border-color: var(--code-valid);
-}
-/* Remove border under title for valid/invalid code blocks */
-div[class^="codeBlockTitle"]:has(
-    + div[class^="codeBlockContent"] > pre > code > .code-block-invalid-line
-  ),
-div[class^="codeBlockTitle"]:has(
-    + div[class^="codeBlockContent"] > pre > code > .code-block-valid-line
-  ) {
-  border-bottom: 0px;
+.thin-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: var(--ifm-scrollbar-thumb-background-color) transparent;
 }
 /* End style for code blocks starting with `//invalid` or `//valid` */
 
@@ -674,25 +665,6 @@ li div.theme-code-block {
   margin-bottom: 0px;
 }
 
-/* Collapsible code blocks */
-.theme-code-block {
-  pre.collapsed {
-    max-height: 150px;
-    overflow: hidden;
-    cursor: pointer;
-    mask-image: linear-gradient(to bottom, black, transparent 150px);
-  }
-}
-.theme-code-block {
-  .display-all {
-    height: 2.5rem;
-    text-align: center;
-    cursor: pointer;
-    font-weight: 600;
-  }
-}
-
-// Side-by-side examples
 @media (min-width: 800px) {
   .sidebyside-left {
     float: left;
@@ -760,24 +732,10 @@ article .markdown header h1 {
   color: var(--ifm-link-color);
 }
 
-/* Responsive adjustments for mobile */
+/* Hide on mobile */
 @media (max-width: 768px) {
   .markdown-actions-container {
-    margin-right: clamp(0px, 0.5rem, 1rem);
-    margin-bottom: 1rem;
-  }
-
-  .markdown-actions-container .button {
-    padding: 0.375rem 0.75rem;
-  }
-
-  /* Right-align menu on mobile to prevent cutoff */
-  .markdown-actions-container .dropdown__menu {
-    right: 0;
-    left: auto;
-    min-width: min(220px, calc(100vw - 2rem));
-    max-width: calc(100vw - 2rem);
-    padding-bottom: 0.75rem;
+    display: none;
   }
 }
 

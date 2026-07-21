@@ -139,7 +139,7 @@ To filter on a single field, use the syntax `fieldName: { operator: Value }`, wh
   }
 }
 ```
-```json title="Result"
+```json result
 {
   "data": {
     "Book": [
@@ -165,7 +165,7 @@ To filter on a single field, use the syntax `fieldName: { operator: Value }`, wh
   }
 }
 ```
-```json title="Result"
+```json result
 {
   "data": {
     "Book": [
@@ -181,8 +181,7 @@ To filter on a single field, use the syntax `fieldName: { operator: Value }`, wh
 
 You need to explicitly specify the `_and` operator in case of two filters on the same field, because JSON objects cannot contain duplicate fields:
 
-```graphql title="Valid &ndash; Multiple filters on same field with explicit operator" test-skip
-# valid
+```graphql title="Valid &ndash; Multiple filters on same field with explicit operator" test-skip valid
 filter: {
   _and: [
     { rating: { _gte: 4 } },
@@ -190,8 +189,7 @@ filter: {
   ]
 }
 ```
-```graphql title="Invalid &ndash; Multiple filters on same field without operator" test-skip
-# invalid
+```graphql title="Invalid &ndash; Multiple filters on same field without operator" test-skip invalid
 filter: {
   rating: { _gte: 4 },
   rating: { _lte: 5 }
@@ -216,7 +214,7 @@ Additional fields listed in the `filter` object are implicitly combined with an 
   }
 }
 ```
-```json title="Result"
+```json result
 {
   "data": {
     "Book": [
@@ -264,7 +262,7 @@ filter: {
   }
 }
 ```
-```json title="Result"
+```json result
 {
   "data": {
     "Book": [
@@ -322,7 +320,7 @@ The boolean operators `_and` and `_or` accept an array, whereas `_not` accepts a
   }
 }
 ```
-```json title="Result"
+```json result
 {
   "data": {
     "Book": [
@@ -362,7 +360,7 @@ The syntax to filter over sub-objects has one more level of nesting in field nam
   }
 }
 ```
-```json title="Result"
+```json result
 {
   "data": {
     "Book": [
@@ -390,7 +388,7 @@ For example, when filtering over people that have authored books of genre `Ficti
   }
 }
 ```
-```json title="Result"
+```json result
 {
   "data": {
     "Person": [
@@ -426,7 +424,7 @@ If the return fields include the sub-object you filter on, the same filter is **
   }
 }
 ```
-```json title="Result"
+```json result
 {
   "data": {
     "Person": [
@@ -497,7 +495,7 @@ When specified explicitly, root-level and sub-objects filters are evaluated inde
   }
 }
 ```
-```json title="Result"
+```json result
 {
   "data": {
     "Person": [
@@ -548,7 +546,7 @@ mutation {
   }) { jsonField }
 }
 ```
-```json title="Result"
+```json result
 {
   "data": {
     "jsonBlob": [
@@ -567,8 +565,7 @@ mutation {
 :::important
 It is possible to _filter_ for a JSON field's inner properties, but it's not possible to return them.
 
-```graphql title="Invalid &ndash; Return JSON field inner properties" test-error
-# invalid
+```graphql title="Invalid &ndash; Return JSON field inner properties" test-error invalid
 {
   jsonBlob {
     jsonField {
@@ -585,8 +582,7 @@ It is possible to _filter_ for a JSON field's inner properties, but it's not pos
 
 You can filter over [renamed fields](aliases.md) via the `_alias` key. Alias names cannot be used directly in the `filter` object.
 
-```graphql title="Valid &ndash; Filter a renamed field with _alias"
-# valid
+```graphql title="Valid &ndash; Filter a renamed field with _alias" valid
 {
   Book(filter: { _alias: { bookTitle: { _eq: "1984" }}}) {
     bookTitle: title
@@ -594,8 +590,7 @@ You can filter over [renamed fields](aliases.md) via the `_alias` key. Alias nam
 }
 ```
 
-```graphql title="Invalid &ndash; Filter a renamed field directly" test-error
-# invalid
+```graphql title="Invalid &ndash; Filter a renamed field directly" test-error invalid
 {
   Book(filter: { bookTitle: { _eq: "1984" }}) {
     bookTitle: title
@@ -617,7 +612,7 @@ The [list operators](#list-operators) `_any`, `_none`, `_all` evaluate a scalar 
   }
 }
 ```
-```json title="Result"
+```json result
 {
   "data": {
     "Book": [
@@ -643,7 +638,7 @@ The [list operators](#list-operators) `_any`, `_none`, `_all` evaluate a scalar 
   }
 }
 ```
-```json title="Result"
+```json result
 {
   "data": {
     "Book": [
@@ -679,7 +674,7 @@ The [list operators](#list-operators) `_any`, `_none`, `_all` evaluate a scalar 
   }
 }
 ```
-```json title="Result"
+```json result
 {
   "data": {
     "Book": [

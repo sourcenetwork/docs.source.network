@@ -26,7 +26,7 @@ You can temporarily disable NAC with either the CLI command [`defradb client acp
     defradb client acp node disable \
       --identity b17a7b973f629b900cf23654db9c4be935f90281707dd3e2cd7a56bdd2c1bf4f
     ```
-    ```json title="Result"
+    ```json result
     {
       "success": true
     }
@@ -38,7 +38,7 @@ You can temporarily disable NAC with either the CLI command [`defradb client acp
     accept: application/json
     authorization: Bearer <jwtToken>
     ```
-    ```json title="Result"
+    ```json result
     {
       "success": true
     }
@@ -56,7 +56,7 @@ You can show the current NAC status with either the CLI command [`defradb client
     defradb client acp node status \
       --identity b17a7b973f629b900cf23654db9c4be935f90281707dd3e2cd7a56bdd2c1bf4f
     ```
-    ```json title="Result"
+    ```json result
     {
       "Status": "disabled temporarily"
     }
@@ -68,7 +68,7 @@ You can show the current NAC status with either the CLI command [`defradb client
     accept: application/json
     authorization: Bearer <jwtToken>
     ```
-    ```json title="Result"
+    ```json result
     {
       "Status": "disabled temporarily"
     }
@@ -86,7 +86,7 @@ If NAC gets [disabled](#disable) after it had been enabled, you can re-enable it
     defradb client acp node re-enable \
       --identity b17a7b973f629b900cf23654db9c4be935f90281707dd3e2cd7a56bdd2c1bf4f
     ```
-    ```json title="Result"
+    ```json result
     {
       "success": true
     }
@@ -98,7 +98,7 @@ If NAC gets [disabled](#disable) after it had been enabled, you can re-enable it
     accept: application/json
     authorization: Bearer <jwtToken>
     ```
-    ```json title="Result"
+    ```json result
     {
       "success": true
     }
@@ -118,7 +118,7 @@ You can make another actor an administrator on an instance with either the CLI c
       --actor did:key:z7r8osuVyok8SVnHH5tsyNDRGyniu9pQoqBt7misXTEJAon5vYCt72NmFpya4NUiLjPfyDvvayNMbYRrnqLMYjpD1cAgp \
       --identity b17a7b973f629b900cf23654db9c4be935f90281707dd3e2cd7a56bdd2c1bf4f
     ```
-    ```json title="Result"
+    ```json result
     {
       "ExistedAlready": false
     }
@@ -136,7 +136,7 @@ You can make another actor an administrator on an instance with either the CLI c
       "TargetActor": "did:key:z7r8osuVyok8SVnHH5tsyNDRGyniu9pQoqBt7misXTEJAon5vYCt72NmFpya4NUiLjPfyDvvayNMbYRrnqLMYjpD1cAgp"
     }
     ```
-    ```json title="Result"
+    ```json result
     {
       "ExistedAlready": false
     }
@@ -160,7 +160,7 @@ You can revoke another actor's admin privileges with either the CLI command [`de
       --actor did:key:z7r8osuVyok8SVnHH5tsyNDRGyniu9pQoqBt7misXTEJAon5vYCt72NmFpya4NUiLjPfyDvvayNMbYRrnqLMYjpD1cAgp \
       --identity b17a7b973f629b900cf23654db9c4be935f90281707dd3e2cd7a56bdd2c1bf4f
     ```
-    ```json title="Result"
+    ```json result
     {
       "RecordFound": true
     }
@@ -178,7 +178,7 @@ You can revoke another actor's admin privileges with either the CLI command [`de
       "TargetActor": "did:key:z7r8osuVyok8SVnHH5tsyNDRGyniu9pQoqBt7misXTEJAon5vYCt72NmFpya4NUiLjPfyDvvayNMbYRrnqLMYjpD1cAgp"
     }
     ```
-    ```json title="Result"
+    ```json result
     {
       "RecordFound": false
     }

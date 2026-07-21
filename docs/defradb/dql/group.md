@@ -149,7 +149,7 @@ The return object can only include the grouped-by fields, the `GROUP` sub-object
   }
 }
 ```
-```json title="Result"
+```json result
 {
   "data": {
     "Book": [
@@ -242,7 +242,7 @@ You can group results by a relationship fields as well. You can only group by th
   }
 }
 ```
-```json title="Result"
+```json result
 {
   "data": {
     "Book": [
@@ -328,7 +328,7 @@ To create groups basing on the value of multiple fields, you have two options:
   }
 }
 ```
-```json title="Result"
+```json result
 {
   "data": {
     "Book": [
@@ -435,7 +435,7 @@ To create groups basing on the value of multiple fields, you have two options:
   }
 }
 ```
-```json title="Result"
+```json result
 {
   "data": {
     "Book": [
@@ -529,7 +529,7 @@ You can specify filters and other [query arguments](mutation-query.md#syntax) bo
   }
 }
 ```
-```json title="Result"
+```json result
 {
   "data": {
     "Book": [
@@ -566,7 +566,7 @@ The interplay between root and `GROUP` arguments can be subtle. When grouping re
   }
 }
 ```
-```json title="Result"
+```json result
 {
   "data": {
     "Book": [
@@ -607,7 +607,7 @@ The interplay between root and `GROUP` arguments can be subtle. When grouping re
   }
 }
 ```
-```json title="Result"
+```json result
 {
   "data": {
     "Book": [
@@ -664,7 +664,7 @@ Filters at the `GROUP` level allow you to restrict the groups to get only some s
   }
 }
 ```
-```json title="Result"
+```json result
 {
   "data": {
     "Book": [
@@ -701,7 +701,7 @@ Filters at the `GROUP` level allow you to restrict the groups to get only some s
   }
 }
 ```
-```json title="Result"
+```json result
 {
   "data": {
     "Book": [

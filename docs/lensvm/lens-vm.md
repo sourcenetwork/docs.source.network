@@ -144,3 +144,6 @@ For practical examples of pipeline composition, explore the following:
 - [CLI integration tests](https://github.com/lens-vm/lens/tree/main/tests/integration/cli)
 
 These examples demonstrate how to build and extend Lens pipelines declaratively for various environments and workflows.
+
+<UmamiEvent eventName="quickstart-complete" />
+
