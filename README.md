@@ -21,6 +21,21 @@ This website is built using [Docusaurus 2](https://docusaurus.io/).
 
 Documentation is written using [common markdown syntax](https://commonmark.org/help/) or [MDX syntax](https://mdxjs.com/docs/what-is-mdx/#mdx-syntax) - the file extension will determine the syntax (.md for common markdown and .mdx for MDX).
 
+## Code blocks
+
+Custom flags on code blocks metastring:
+
+| Flag | Effect |
+|---|---|
+| `result` | Marks query/mutation output; auto-collapses when ≥ 12 lines, adds a stable `codeblock-result` class |
+| `collapse` | Force the collapse UI on |
+| `noCollapse` | Force it off |
+| `expanded` | Collapsible, but starts open |
+| `valid` / `invalid` | Green/red border + tinted title bar for correct/incorrect examples |
+
+Example: ```` ```json title="Result" result expanded ````
+
+
 ## Deployment
 
 The website is automatically deployed using Cloudfare Pages.
