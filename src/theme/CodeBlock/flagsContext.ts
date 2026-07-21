@@ -4,6 +4,7 @@ export type CodeBlockFlags = {
   collapsible?: boolean;
   collapsed?: boolean;
   valid?: boolean;
+  invalid?: boolean;
   result?: boolean;
 };
 

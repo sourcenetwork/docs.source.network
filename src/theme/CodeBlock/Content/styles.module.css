@@ -1,5 +1,13 @@
 .collapsibleBlock {
   position: relative;
+  /* Allow the block to animate height, doesn't work in Firefox */
+  /* @see https://developer.mozilla.org/en-US/docs/Web/CSS/interpolate-size */
+  interpolate-size: allow-keywords;
+}
+
+.collapsibleBlock pre {
+  max-height: max-content;
+  transition: max-height 0.15s ease;
 }
 
 /* 150px ≈ 8 lines; keep in sync with MAX_LINES in index.tsx.
@@ -21,7 +29,6 @@
   font-size: 0.875rem;
   color: var(--ifm-color-primary);
   background: transparent;
-  transition: all 0.3s ease;
 
   &:hover {
     text-decoration: underline;

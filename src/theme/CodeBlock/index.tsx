@@ -1,12 +1,9 @@
-import type { ReactNode } from "react";
+import type { WrapperProps } from "@docusaurus/types";
 import CodeBlock from "@theme-original/CodeBlock";
 import type CodeBlockType from "@theme/CodeBlock";
-import type { WrapperProps } from "@docusaurus/types";
 import clsx from "clsx";
-import {
-  CodeBlockFlagsContext,
-  type CodeBlockFlags,
-} from "./flagsContext";
+import type { ReactNode } from "react";
+import { CodeBlockFlagsContext, type CodeBlockFlags } from "./flagsContext";
 import styles from "./styles.module.css";
 
 type Props = WrapperProps<typeof CodeBlockType>;
@@ -27,18 +24,26 @@ function parseMetastringFlags(metastring = ""): CodeBlockFlags {
   const pick = (...cases: [flag: string, value: boolean][]) =>
     cases.find(([flag]) => has(flag))?.[1];
 
+  // invalid wins if both flags are present on the same fence
+  const invalid = has("invalid");
+
   return {
     collapsible: pick(["noCollapse", false], ["collapse", true]),
     collapsed: pick(["expanded", false]),
-    valid: pick(["invalid", false], ["valid", true]),
+    valid: has("valid") && !invalid,
+    invalid,
     result: has("result"),
   };
 }
 
 export default function CodeBlockWrapper(props: Props): ReactNode {
   const flags = parseMetastringFlags(props.metastring);
-  const validity =
-    flags.valid === undefined ? undefined : flags.valid ? "valid" : "invalid";
+
+  const validity = flags.invalid
+    ? "invalid"
+    : flags.valid
+      ? "valid"
+      : undefined;
 
   // Flag classes ride along on the className prop, which the theme forwards
   // to the .theme-code-block container div — no wrapper element needed.
