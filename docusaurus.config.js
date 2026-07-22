@@ -266,12 +266,12 @@ const config = {
       },
     ],
     [
-      'docusaurus-pushfeedback',
+      "docusaurus-pushfeedback",
       {
         project: process.env.PUSHFEEDBACK_PROJECT_ID,
         hideScreenshotButton: true,
-        messagePlaceholder: 'A place to praise and to rant.',
-        buttonStyle: 'dark',
+        messagePlaceholder: "A place to praise and to rant.",
+        buttonStyle: "dark",
       }
     ],
     // DefraDB instance
