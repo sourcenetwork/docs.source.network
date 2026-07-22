@@ -12,8 +12,8 @@ const config = {
   onBrokenLinks: "warn",
   favicon: "img/favicon.ico",
   trailingSlash: true,
-  organizationName: "source-developer", // Usually your GitHub org/user name.
-  projectName: "source-developer", // Usually your repo name.
+  organizationName: "sourcenetwork", // Usually your GitHub org/user name.
+  projectName: "docs.source.network", // Usually your repo name.
   markdown: {
     hooks: {
       onBrokenMarkdownLinks: "warn",
@@ -264,6 +264,15 @@ const config = {
           },
         ],
       },
+    ],
+    [
+      "docusaurus-pushfeedback",
+      {
+        project: process.env.PUSHFEEDBACK_PROJECT_ID,
+        hideScreenshotButton: true,
+        messagePlaceholder: "A place to praise and to rant.",
+        buttonStyle: "dark",
+      }
     ],
     // DefraDB instance
     [

@@ -28,6 +28,8 @@ body {
   --root-wrapper-width: 90rem;
   --menu-indicator-color: #ccc;
 
+  --src-red: #ff7777;
+
   // Light theme
   --code-foreground: #000000;
   --code-background: #f3f3f3;
@@ -633,6 +635,7 @@ body .DocSearch {
   scrollbar-width: thin;
   scrollbar-color: var(--ifm-scrollbar-thumb-background-color) transparent;
 }
+/* End style for code blocks starting with `//invalid` or `//valid` */
 
 // External link icon indicator.
 .theme-doc-markdown a[target="_blank"]::after {
@@ -754,3 +757,103 @@ article .markdown header h1 {
   }
 }
 /* End Markdown Actions Dropdown Styles */
+
+/* Feedback button */
+html[data-theme="dark"],
+html[data-theme="light"] {
+  /* needs to be more specific than :root */
+  --feedback-button-text-font-size: 1rem; /* same as text size */
+  --feedback-button-text-font-weight: 600;
+  --feedback-background: var(--code-background);
+  --feedback-button-dark-bg-color: var(--feedback-background);
+  --feedback-button-dark-text-color: var(--feedback-primary-color);
+  --feedback-button-dark-icon-color: var(--feedback-primary-color);
+  --feedback-modal-button-submit-bg-color: var(--feedback-background);
+  --feedback-modal-button-submit-bg-color-hover: var(--feedback-background);
+  --feedback-modal-button-border-color-active: var(--feedback-background);
+  --feedback-modal-button-submit-border-color-hover: var(
+    --feedback-primary-color
+  );
+  --feedback-modal-button-submit-text-color: var(--feedback-primary-color);
+  --feedback-modal-button-submit-text-color-hover: var(
+    --feedback-primary-color
+  );
+  --feedback-modal-rating-button-selected-color: var(--feedback-primary-color);
+  --feedback-modal-rating-button-positive-selected-color: var(
+    --ifm-color-primary
+  );
+  --feedback-modal-rating-button-negative-selected-color: var(--src-red);
+}
+html[data-theme="dark"] {
+  --feedback-primary-color: var(--ifm-color-primary);
+}
+html[data-theme="light"] {
+  --feedback-primary-color: #000000;
+}
+/* Shift scroll to top button further up to avoid clash with feedback button */
+button.theme-back-to-top-button {
+  bottom: 3.6rem;
+}
+
+/* Footer widget */
+.feedback-widget {
+  margin-top: 3rem;
+  text-align: center;
+}
+
+.feedback-widget-title {
+  margin-bottom: 0.5rem;
+  font-size: 1rem;
+  opacity: 80%;
+}
+
+.feedback-widget-error {
+  margin-top: 0.5rem;
+  font-size: 0.875rem;
+  color: var(--src-red);
+}
+
+.feedback-buttons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.feedback-thumb-button {
+  border: none;
+  background: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  opacity: 0.8;
+  transition: all 0.3s ease;
+  cursor: pointer;
+
+  &:hover {
+    opacity: 1;
+  }
+
+  svg {
+    display: block;
+    width: 18px;
+    height: 18px;
+  }
+
+  .feedback-widget-positive &:hover {
+    color: var(--ifm-color-primary);
+  }
+
+  .feedback-widget-negative &:hover {
+    color: var(--src-red);
+  }
+}
+/* END Feedback widget */
+
+/* Edit this page is already shown under ToC */
+.theme-doc-footer-edit-meta-row {
+  display: none;
+}
