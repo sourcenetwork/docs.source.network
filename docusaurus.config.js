@@ -12,8 +12,8 @@ const config = {
   onBrokenLinks: "warn",
   favicon: "img/favicon.ico",
   trailingSlash: true,
-  organizationName: "source-developer", // Usually your GitHub org/user name.
-  projectName: "source-developer", // Usually your repo name.
+  organizationName: "sourcenetwork", // Usually your GitHub org/user name.
+  projectName: "docs.source.network", // Usually your repo name.
   markdown: {
     hooks: {
       onBrokenMarkdownLinks: "warn",
