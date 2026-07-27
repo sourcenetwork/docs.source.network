@@ -1,0 +1,268 @@
+// All CSS custom properties (variables) for the site, grouped by concern.
+// Actual styling rules live in custom.scss / component stylesheets.
+//
+// Theme variables (ours) and Infima's own variables are kept in separate
+// :root / html[data-theme="dark"] blocks below, so it's always clear which
+// system a given variable belongs to.
+
+// =========================================================================
+// Theme variables
+// =========================================================================
+
+:root {
+  // Brand
+  --src-primary: #06b250;
+  --src-highlight: #39e265;
+  --src-red: #ff7777;
+
+  // Layout
+  --root-wrapper-width: 110rem;
+  --menu-indicator-color: #ccc;
+  --docs-title-border: #e0e0e0;
+  --doc-sidebar-width: 300px;
+  --doc-sidebar-hidden-width: 30px;
+
+  --h1-base-font-size: 2.25rem;
+
+  // Cards
+  --card-color: rgb(255, 255, 255, 0.9);
+  --card-border-color: #e8e8e8;
+  --card-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  --card-box-shadow-highlight: 0 2px 25px rgba(31, 96, 233, 0.05);
+
+  // Code blocks / syntax highlighting
+  --color-text-muted: #939598;
+  --code-foreground: #000000;
+  --code-background: #f3f3f3;
+  --code-token-keyword: #5a2cbc;
+  --code-token-constant: #1a7032;
+  --code-token-string: #d18c0c;
+  --code-token-comment: #7e7e7e;
+  --code-token-parameter: #000000;
+  --code-token-function: #1a7032;
+  --code-token-string-expression: #f1a10d;
+  --code-token-punctuation: #000000;
+  --code-token-link: #000000;
+  --code-token-number: #000000;
+  --code-token-property: rgb(105, 76, 156);
+  --code-highlight-color: #1c1c1c;
+  --codeblock-title-border: #d1d1d1;
+  --codeblock-valid-border: var(--src-primary);
+  --codeblock-invalid-border: var(--src-red);
+  --codeblock-highlighted-line-background: rgb(230 230 230);
+}
+
+html[data-theme="dark"] {
+  // Layout
+  --docs-title-border: #1a1a1a;
+
+  // Cards
+  --card-color: rgb(29, 29, 29, 0.4);
+  --card-border-color: #313131;
+  --card-box-shadow: 0 2px 25px rgba(238, 238, 238, 0.05);
+
+  // Code blocks / syntax highlighting
+  --code-foreground: #ffffff;
+  --code-background: #191919;
+  --code-token-keyword: #aca4ff;
+  --code-token-constant: #3ecf6e;
+  --code-token-string: #e7bb94;
+  --code-token-comment: #7e7e7e;
+  --code-token-parameter: #ffffff;
+  --code-token-function: #3ecf6e;
+  --code-token-string-expression: #ffcda1;
+  --code-token-punctuation: #ffffff;
+  --code-token-link: #ffffff;
+  --code-token-number: #ffffff;
+  --code-token-property: rgb(180, 148, 234);
+  --code-highlight-color: #232323;
+  --codeblock-title-border: #323232;
+  --codeblock-highlighted-line-background: rgb(47 47 47);
+}
+
+// Feedback widget (pushfeedback's own vars, not ours). Unlike every other
+// variable here, pushfeedback ships its own defaults for these same names
+// (see node_modules/pushfeedback/dist/pushfeedback/pushfeedback.css), using
+// `:root` for light and `[data-theme='dark']` for dark — both specificity
+// (0,1,0). A plain `:root` here would tie and depend on stylesheet load
+// order; `html[data-theme=...]` is (0,1,1), so ours always wins.
+html[data-theme="dark"],
+html[data-theme="light"] {
+  --feedback-button-text-font-size: 1rem; // same as text size
+  --feedback-button-text-font-weight: 600;
+  --feedback-background: var(--code-background);
+  --feedback-button-dark-bg-color: var(--feedback-background);
+  --feedback-button-dark-text-color: var(--feedback-primary-color);
+  --feedback-button-dark-icon-color: var(--feedback-primary-color);
+  --feedback-modal-button-submit-bg-color: var(--feedback-background);
+  --feedback-modal-button-submit-bg-color-hover: var(--feedback-background);
+  --feedback-modal-button-border-color-active: var(--feedback-background);
+  --feedback-modal-button-submit-border-color-hover: var(
+    --feedback-primary-color
+  );
+  --feedback-modal-button-submit-text-color: var(--feedback-primary-color);
+  --feedback-modal-button-submit-text-color-hover: var(
+    --feedback-primary-color
+  );
+  --feedback-modal-rating-button-selected-color: var(--feedback-primary-color);
+  --feedback-modal-rating-button-positive-selected-color: var(
+    --ifm-color-primary
+  );
+  --feedback-modal-rating-button-negative-selected-color: var(--src-red);
+}
+html[data-theme="dark"] {
+  --feedback-primary-color: var(--ifm-color-primary);
+}
+html[data-theme="light"] {
+  --feedback-primary-color: #000000;
+}
+
+// DocSearch theming (its own CSS custom properties, not ours)
+
+[data-theme="light"] .DocSearch {
+  --docsearch-muted-color: var(--ifm-color-secondary-darkest);
+  --docsearch-container-background: rgba(36, 36, 36, 0.8);
+  // Modal
+  --docsearch-modal-background: var(--ifm-color-secondary-lighter);
+  // Search box
+  --docsearch-searchbox-background: var(--ifm-color-secondary);
+  --docsearch-searchbox-focus-background: var(--ifm-color-white);
+  // Hit
+  --docsearch-hit-color: var(--ifm-font-color-base);
+  --docsearch-hit-active-color: var(--ifm-color-white);
+  --docsearch-hit-background: var(--ifm-color-white);
+  --docsearch-hit-background-active: rgba(94, 100, 112, 0.7);
+  // Footer
+  --docsearch-footer-background: var(--ifm-color-white);
+  --docsearch-search-button-background: var(--ifm-background-color);
+}
+
+[data-theme="dark"] .DocSearch {
+  --docsearch-text-color: var(--ifm-font-color-base);
+  --docsearch-muted-color: var(--ifm-color-secondary-darkest);
+  --docsearch-container-background: rgba(24, 24, 24, 0.7);
+  --docsearch-highlight-color: var(--ifm-color-primary);
+
+  // Modal
+  --docsearch-modal-background: var(--ifm-background-color);
+  // Search box
+  --docsearch-searchbox-background: var(--ifm-background-color);
+  --docsearch-searchbox-focus-background: var(--ifm-color-black);
+  // Hit
+  --docsearch-hit-color: var(--ifm-font-color-base);
+  --docsearch-hit-active-color: var(--ifm-color-white);
+  --docsearch-hit-background: var(--ifm-color-emphasis-100);
+  --docsearch-hit-background-active: rgba(124, 124, 124, 0.7);
+
+  // Footer
+  --docsearch-footer-background: var(--ifm-background-surface-color);
+  --docsearch-key-gradient: linear-gradient(
+    -26.5deg,
+    var(--ifm-color-emphasis-200) 0%,
+    var(--ifm-color-emphasis-100) 100%
+  );
+  --docsearch-search-button-background: var(--ifm-background-color);
+}
+
+// =========================================================================
+// Infima overrides
+// =========================================================================
+
+:root {
+  // Colors
+  --ifm-color-primary: var(--src-primary);
+  --ifm-color-primary-dark: #1554d8;
+  --ifm-color-primary-darker: #144fcc;
+  --ifm-color-primary-darkest: #1141a8;
+  --ifm-color-primary-light: #3771eb;
+  --ifm-color-primary-lighter: #437aed;
+  --ifm-color-primary-lightest: #6793f0;
+  --ifm-color-secondary-contrast-background: rgb(236, 236, 236);
+
+  --ifm-color-info-dark: rgb(0, 205, 80);
+  --ifm-color-info-darker: rgb(7, 160, 66);
+  --ifm-color-info-darkest: rgb(4, 146, 59);
+  --ifm-color-info-contrast-background: rgb(255, 255, 255);
+  --ifm-color-info-contrast-foreground: rgb(0, 0, 0);
+
+  --ifm-container-width-xl: 1400px;
+
+  // Fonts
+  --ifm-font-family-base:
+    "Inter", system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell,
+    Noto Sans, sans-serif, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial,
+    sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  --ifm-font-size-base: 1rem;
+  --ifm-font-weight-bold: 800;
+  --ifm-heading-font-family: "Funnel Display", sans-serif;
+  --ifm-heading-font-weight: 400;
+  --ifm-h1-font-size: var(--h1-base-font-size);
+
+  --ifm-leading-desktop: 1.75;
+  --ifm-leading: calc(var(--ifm-leading-desktop) * 1rem);
+
+  // Base
+  --ifm-global-radius: 0rem;
+
+  // Code
+  --ifm-code-background: rgb(226, 226, 226);
+  --ifm-code-font-size: 80%;
+  --ifm-code-border-radius: 0.375rem; // 6px
+  --ifm-pre-padding: 1rem;
+
+  // Table of contents
+  --ifm-toc-border-color: transparent;
+  --ifm-toc-padding-horizontal: 0.313rem;
+  --ifm-toc-padding-vertical: 0.5rem;
+  --ifm-toc-padding-horizontal: 1rem;
+
+  // Menu / sidebar
+  --ifm-menu-color: var(--ifm-color-emphasis-700);
+  --ifm-menu-color-active: var(--ifm-color-primary);
+  --ifm-menu-color-background-active: transparent;
+  --ifm-menu-link-padding-horizontal: 1rem;
+  --ifm-menu-link-padding-vertical: 0.5rem;
+
+  // Navbar
+  --ifm-navbar-height: 80px;
+  --ifm-navbar-padding-horizontal: calc(var(--ifm-spacing-horizontal) * 1);
+  --ifm-navbar-padding-vertical: calc(var(--ifm-spacing-vertical) * 0.5);
+
+  // Footer
+  --ifm-footer-background-color: var(--ifm-background-color);
+
+  // Alerts
+  --ifm-alert-border-left-width: 2px;
+  --ifm-alert-border-radius: 0rem;
+
+  // Breadcrumbs
+  --ifm-breadcrumb-spacing: 0rem;
+  --ifm-breadcrumb-color-active: inherit;
+  --ifm-breadcrumb-item-background-active: transparent;
+  --ifm-breadcrumb-separator: none;
+
+  // Scrollbar
+  --ifm-scrollbar-thumb-background-color: var(--ifm-color-emphasis-400);
+
+  --ifm-hr-background-color: var(--ifm-color-emphasis-300);
+}
+
+html[data-theme="dark"] {
+  --ifm-color-primary: var(--src-highlight);
+  --ifm-background-color: #000000;
+  --ifm-background-surface-color: var(--ifm-background-color);
+
+  --ifm-color-content-secondary: rgb(174 174 174);
+  --ifm-color-secondary-contrast-background: #222222;
+
+  --ifm-color-info-contrast-background: rgb(0, 0, 0);
+  --ifm-color-info-contrast-foreground: rgb(255, 255, 255);
+
+  --ifm-toc-border-color: transparent;
+  --ifm-menu-color: var(--ifm-color-emphasis-400);
+  --ifm-scrollbar-thumb-background-color: var(--ifm-color-emphasis-200);
+
+  --ifm-color-success-contrast-background: #011a0b;
+
+  --ifm-hr-background-color: var(--ifm-color-emphasis-200);
+}

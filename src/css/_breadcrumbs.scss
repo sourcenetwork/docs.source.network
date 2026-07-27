@@ -1,0 +1,55 @@
+@use "./utils" as *;
+
+.theme-doc-breadcrumbs .breadcrumbs {
+  margin: 0;
+  font-size: rem(12px);
+  opacity: 0.7;
+
+  &__item {
+    &:nth-child(2) {
+      .breadcrumbs__link {
+        padding-left: 0;
+      }
+    }
+
+    &:first-child {
+      display: none;
+    }
+
+    &:not(:last-child):after {
+      content: " /";
+      display: inline-block;
+      color: var(--ifm-color-emphasis-500);
+      opacity: 1;
+    }
+  }
+
+  // Items are display: inline-block (infima default) with no width limit, so
+  // a long segment just wraps the whole trail onto a second line instead of
+  // truncating. A vw-based max-width per link doesn't work reliably here:
+  // it's relative to the viewport, not this (narrower, padded) container, so
+  // multiple long segments can still sum past the real available width at
+  // very small sizes. Flex + min-width: 0 instead shrinks each item to
+  // whatever space is actually left in the container, however much that is.
+  @media (max-width: 996px) {
+    display: flex;
+    flex-wrap: nowrap;
+
+    &__item {
+      display: flex;
+      align-items: center;
+      min-width: 0;
+      flex-shrink: 1;
+
+      &--active {
+        flex-shrink: 0;
+      }
+    }
+
+    &__link {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
+}

@@ -73,20 +73,22 @@ function FeedbackWidget(): ReactNode {
 
   return (
     <div className="feedback-widget">
-      <div className="feedback-widget-title">Was this helpful?</div>
+      <div className="feedback-widget__title">Was this helpful?</div>
 
       {status === "sent" && (
-        <div className="feedback-thanks">Thanks for your feedback!</div>
+        <div className="feedback-widget__status feedback-widget__status--success">
+          Thanks for your feedback!
+        </div>
       )}
 
       {/* Hidden rather than unmounted: feedback events emit on the host
           element after the fetch resolves, so it must stay connected for the
           document listeners (esp. feedbackError) to hear them */}
       <div
-        className="feedback-buttons"
+        className="feedback-widget__buttons"
         style={status === "sent" ? { display: "none" } : undefined}
       >
-        <span className="feedback-widget-positive">
+        <span className="feedback-widget__vote feedback-widget__vote--positive">
           <FeedbackButton
             project={process.env.PUSHFEEDBACK_PROJECT_ID}
             submit={true}
@@ -96,7 +98,7 @@ function FeedbackWidget(): ReactNode {
             modal-position="center"
           >
             <button
-              className="feedback-thumb-button"
+              className="feedback-widget__button"
               title="Yes"
               onClick={() => setStatus("sent")}
             >
@@ -104,7 +106,7 @@ function FeedbackWidget(): ReactNode {
             </button>
           </FeedbackButton>
         </span>
-        <span className="feedback-widget-negative">
+        <span className="feedback-widget__vote feedback-widget__vote--negative">
           <FeedbackButton
             project={process.env.PUSHFEEDBACK_PROJECT_ID}
             hide-screenshot-button="True"
@@ -114,7 +116,7 @@ function FeedbackWidget(): ReactNode {
             button-style="default"
             modal-position="center"
           >
-            <button className="feedback-thumb-button" title="No">
+            <button className="feedback-widget__button" title="No">
               <ButtonThumbsDown />
             </button>
           </FeedbackButton>
@@ -122,7 +124,7 @@ function FeedbackWidget(): ReactNode {
       </div>
 
       {status === "failed" && (
-        <div className="feedback-widget-error">
+        <div className="feedback-widget__status feedback-widget__status--error">
           Something went wrong. Please try again.
         </div>
       )}
@@ -133,7 +135,11 @@ function FeedbackWidget(): ReactNode {
 export default function FooterWrapper(props: Props): ReactNode {
   return (
     <>
-      <FeedbackWidget />
+      {/* Skip mounting entirely without a project ID: the pushfeedback
+          custom element fetches project data as soon as it connects,
+          regardless of whether `project` is set, so mounting it with an
+          empty ID always 404s. */}
+      {process.env.PUSHFEEDBACK_PROJECT_ID && <FeedbackWidget />}
       <Footer {...props} />
     </>
   );

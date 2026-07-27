@@ -57,7 +57,7 @@ const config = {
         defaultMode: "dark",
       },
       navbar: {
-        title: null,
+        title: undefined,
         hideOnScroll: false,
         logo: {
           alt: "Source Network Documentation",
@@ -277,7 +277,8 @@ const config = {
     // DefraDB instance
     [
       "@docusaurus/plugin-content-docs",
-      {
+      /** @type {Partial<import('@docusaurus/plugin-content-docs').PluginOptions>} */
+      ({
         id: "defradb",
         path: "docs/defradb",
         routeBasePath: "defradb",
@@ -295,12 +296,13 @@ const config = {
           const sidebarItems = await defaultSidebarItemsGenerator(args);
           return reverseSidebarChangelog(sidebarItems);
         },
-      },
+      }),
     ],
     // SourceHub instance
     [
       "@docusaurus/plugin-content-docs",
-      {
+      /** @type {Partial<import('@docusaurus/plugin-content-docs').PluginOptions>} */
+      ({
         id: "sourcehub",
         path: "docs/sourcehub",
         routeBasePath: "sourcehub",
@@ -323,12 +325,13 @@ const config = {
           const sidebarItems = await defaultSidebarItemsGenerator(args);
           return reverseSidebarChangelog(sidebarItems);
         },
-      },
+      }),
     ],
     // Orbis instance
     [
       "@docusaurus/plugin-content-docs",
-      {
+      /** @type {Partial<import('@docusaurus/plugin-content-docs').PluginOptions>} */
+      ({
         id: "orbis",
         path: "docs/orbis",
         routeBasePath: "orbis",
@@ -351,12 +354,13 @@ const config = {
           const sidebarItems = await defaultSidebarItemsGenerator(args);
           return reverseSidebarChangelog(sidebarItems);
         },
-      },
+      }),
     ],
     // LensVM instance
     [
       "@docusaurus/plugin-content-docs",
-      {
+      /** @type {Partial<import('@docusaurus/plugin-content-docs').PluginOptions>} */
+      ({
         id: "lensvm",
         path: "docs/lensvm",
         routeBasePath: "lensvm",
@@ -379,7 +383,7 @@ const config = {
           const sidebarItems = await defaultSidebarItemsGenerator(args);
           return reverseSidebarChangelog(sidebarItems);
         },
-      },
+      }),
     ],
   ],
   customFields: {
@@ -389,12 +393,17 @@ const config = {
 
 module.exports = config;
 
+/**
+ * @typedef {{type?: string, label?: string, items?: SidebarItem[]}} SidebarItem
+ */
+
 // Reverse the sidebar items ordering (including nested category items)
+/** @param {SidebarItem[]} items */
 function reverseSidebarChangelog(items) {
   // Reverse items in categories
   const result = items.map((item) => {
     if (item.type === "category" && item.label == "Release Notes") {
-      return { ...item, items: item.items.reverse() };
+      return { ...item, items: (item.items ?? []).reverse() };
     }
     return item;
   });

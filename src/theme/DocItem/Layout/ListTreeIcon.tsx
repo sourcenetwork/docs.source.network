@@ -1,6 +1,6 @@
-import React, { FC } from "react";
+import React, { type FC, type SVGProps } from "react";
 
-const MoonIcon: FC<{ className: string }> = (props) => {
+const ListTreeIcon: FC<SVGProps<SVGSVGElement>> = (props) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -14,9 +14,11 @@ const MoonIcon: FC<{ className: string }> = (props) => {
       strokeLinejoin="round"
       {...props}
     >
-      <path d="M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401" />
+      <path d="M21 5H3" />
+      <path d="M15 12H3" />
+      <path d="M17 19H3" />
     </svg>
   );
 };
 
-export default MoonIcon;
+export default ListTreeIcon;

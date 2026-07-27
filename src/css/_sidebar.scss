@@ -1,0 +1,105 @@
+@use "./utils" as *;
+
+.main-wrapper {
+  .menu__list {
+    .menu__list {
+      position: relative;
+
+      &:before {
+        content: "";
+        display: block;
+        width: rem(1px);
+        background: var(--docs-title-border);
+        position: absolute;
+        left: rem(15px);
+        top: 0;
+        bottom: 0;
+      }
+
+      .menu__link--active:not(.menu__link--sublist) {
+        position: relative;
+
+        &:before {
+          content: "";
+          display: block;
+          width: rem(1px);
+          background: var(--ifm-color-primary);
+          position: absolute;
+          left: 0;
+          top: 0;
+          bottom: 0;
+        }
+      }
+    }
+  }
+
+  .menu {
+    $self: &;
+
+    padding: calc(var(--ifm-navbar-padding-vertical) * 7)
+      var(--ifm-navbar-padding-horizontal);
+
+    &__link {
+      font-size: rem(14px);
+      border-radius: 0;
+
+      &--active {
+        font-weight: 500;
+      }
+
+      &--sublist {
+        position: relative;
+
+        &.menu__link--active {
+          color: var(--ifm-menu-color);
+        }
+
+        &:after {
+          content: " ";
+          transition: all 0.3s ease;
+          display: inline-block;
+          width: 0px;
+          height: 0px;
+          position: absolute;
+          top: 50%;
+          right: rem(5px);
+          margin-top: rem(-4px);
+          background: none;
+          min-width: 0;
+          border: solid var(--menu-indicator-color);
+          border-width: 0 rem(2px) rem(2px) 0;
+          padding: rem(3px);
+          transform: rotate(-135deg);
+        }
+      }
+    }
+
+    &__list-item {
+      &--collapsed {
+        .menu__link--sublist {
+          &:after {
+            transform: rotate(45deg);
+          }
+        }
+      }
+    }
+
+    ul {
+      font-weight: 400;
+    }
+
+    .menu__list-item__bottom-hr {
+      .menu__link {
+        border-bottom: 1px solid var(--docs-title-border);
+        padding-bottom: calc(var(--ifm-menu-link-padding-vertical) + 0.25rem);
+        margin-bottom: calc(var(--ifm-menu-link-padding-vertical) + 0.25rem);
+      }
+    }
+
+    // Categories with a linked label produce a double collapsible arrow;
+    // this removes the bulkier one.
+    .menu__caret {
+      display: none;
+    }
+  }
+}

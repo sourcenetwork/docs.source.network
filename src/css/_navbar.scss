@@ -1,0 +1,86 @@
+@use "./utils" as *;
+
+.navbar {
+  box-shadow: none;
+  border-bottom: rem(1px) solid var(--docs-title-border);
+
+  &__brand {
+    margin-right: rem(40px);
+    flex-shrink: 0;
+  }
+
+  &__logo {
+    max-width: rem(230px);
+    margin-left: rem(30px);
+    @media (max-width: 996px) {
+      margin-left: rem(20px);
+    }
+  }
+
+  &__link {
+    font-size: rem(14px);
+    &--active {
+      color: var(--ifm-navbar-link-color);
+    }
+  }
+
+  &__list-item-icon {
+    display: inline-block;
+    width: rem(25px);
+    height: rem(25px);
+    vertical-align: middle;
+  }
+
+  // Color for the version selector
+  &__item.dropdown .navbar__link {
+    color: var(--ifm-navbar-link-color);
+  }
+
+  // Match the "Open Markdown" dropdown's card look (see .markdown-actions-container
+  // in _markdown.scss) for the version selector's own dropdown menu.
+  &__item.dropdown .dropdown__menu {
+    right: 0;
+    left: auto;
+    min-width: rem(160px);
+    border-radius: rem(8px);
+    border: rem(1px) solid var(--ifm-color-emphasis-200);
+    box-shadow: none;
+    padding: rem(8px);
+  }
+
+  &__item.dropdown .dropdown__link {
+    border-radius: rem(6px);
+    opacity: 0.7;
+    font-size: rem(14px);
+
+    &:hover {
+      opacity: 1;
+      background-color: var(--ifm-dropdown-hover-background-color);
+      color: var(--ifm-font-color-base);
+    }
+  }
+
+  .header-github-link {
+    &:hover {
+      opacity: 0.6;
+    }
+
+    &:before {
+      content: "";
+      background: url("/img/icon-github.svg") no-repeat center / contain;
+      display: flex;
+      height: rem(20px);
+      width: rem(20px);
+
+      [data-theme="dark"] & {
+        background: url("/img/icon-github-dark.svg") no-repeat center / contain;
+      }
+    }
+  }
+
+  .header-docs-link {
+    @media (min-width: 996px) {
+      display: none;
+    }
+  }
+}

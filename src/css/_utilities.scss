@@ -1,0 +1,45 @@
+@use "./utils" as *;
+
+.footer > .container,
+.navbar__inner,
+.main-wrapper {
+  width: 100%;
+  max-width: var(--root-wrapper-width);
+  margin: auto;
+}
+
+.spacing-horz {
+  padding: 0 var(--ifm-spacing-horizontal);
+}
+
+.block-section {
+  padding-top: rem(50px);
+  padding-bottom: rem(50px);
+  border-top: rem(1px) solid var(--docs-title-border);
+}
+
+.thin-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: var(--ifm-scrollbar-thumb-background-color) transparent;
+}
+
+// Shift the scroll-to-top button further up to avoid clashing with the feedback button
+button.theme-back-to-top-button {
+  bottom: 3.6rem;
+}
+
+.theme-edit-this-page {
+  color: var(--ifm-menu-color);
+  font-weight: 500;
+  font-size: rem(14px);
+
+  svg {
+    display: inline-block;
+    margin-right: 0.5rem;
+  }
+}
+
+// Edit this page is already shown under the ToC
+.theme-doc-footer-edit-meta-row {
+  display: none;
+}

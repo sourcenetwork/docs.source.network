@@ -1,4 +1,4 @@
-@import "../css/utils";
+@use "../css/utils" as *;
 
 .homeWrapper {
   margin: auto 0;
@@ -65,7 +65,7 @@
   display: block;
   background-color: var(--card-color);
   border: rem(1px) solid var(--card-border-color);
-  border-radius: rem(8px);
+  border-radius: rem(5x);
   padding: rem(32px);
   text-align: center;
   color: var(--ifm-font-color-base);

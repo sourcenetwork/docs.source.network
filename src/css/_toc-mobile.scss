@@ -1,0 +1,23 @@
+@use "./utils" as *;
+
+// .theme-doc-toc-mobile is a stable global class (ThemeClassNames.docs.docTocMobile),
+// not CSS-module-scoped, added specifically so it can be targeted here without swizzling.
+//
+// Ancestor-prefixed selector: infima's own TOCCollapsible module CSS sets a
+// `margin: 1rem 0` shorthand (margin-left/right: 0) on the same element, at
+// equal specificity, and it lands later in the bundle - so it wins the tie
+// against a plain single-class override. Prefixing with an ancestor bumps
+// our specificity just enough to beat it, without resorting to !important.
+.theme-layout-main .theme-doc-toc-mobile {
+  margin-left: calc(var(--ifm-spacing-horizontal) * -1);
+  margin-right: calc(var(--ifm-spacing-horizontal) * -1);
+
+  border-bottom: 1px solid var(--ifm-color-emphasis-100);
+
+  button {
+    &:after {
+      width: 0.7rem;
+      height: 0.7rem;
+    }
+  }
+}

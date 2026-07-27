@@ -1,0 +1,26 @@
+.admonition {
+  .admonition-icon {
+    display: none;
+  }
+}
+
+.alert {
+  --ifm-link-color: var(--ifm-color-primary);
+
+  a {
+    text-decoration-color: var(--ifm-color-primary);
+  }
+}
+
+// Override the black background with green for :::info admonitions
+.alert--info {
+  --ifm-alert-background-color: #011a0b;
+}
+
+// Visual indication of tabs length
+.tabs-container {
+  .margin-top--md {
+    border-left: 2px var(--src-primary) solid;
+    padding-left: var(--ifm-tabs-padding-horizontal);
+  }
+}
