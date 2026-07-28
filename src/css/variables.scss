@@ -1,11 +1,8 @@
 @use "./utils" as *;
 
-// All CSS custom properties (variables) for the site, grouped by concern.
-// Actual styling rules live in custom.scss / component stylesheets.
-//
-// Theme variables (ours) and Infima's own variables are kept in separate
-// :root / html[data-theme="dark"] blocks below, so it's always clear which
-// system a given variable belongs to.
+// All CSS custom properties for the site. Styling rules live in custom.scss
+// and the component partials. Ours and Infima's are kept in separate blocks
+// so it's clear which system a variable belongs to.
 
 // =========================================================================
 // Theme variables
@@ -118,12 +115,9 @@ html[data-theme="dark"] {
   --codeblock-highlighted-line-background: rgb(47 47 47);
 }
 
-// Feedback widget (pushfeedback's own vars, not ours). Unlike every other
-// variable here, pushfeedback ships its own defaults for these same names
-// (see node_modules/pushfeedback/dist/pushfeedback/pushfeedback.css), using
-// `:root` for light and `[data-theme='dark']` for dark — both specificity
-// (0,1,0). A plain `:root` here would tie and depend on stylesheet load
-// order; `html[data-theme=...]` is (0,1,1), so ours always wins.
+// pushfeedback's own vars. It ships defaults for these same names at (0,1,0),
+// so a plain :root would tie and depend on load order; html[data-theme=...]
+// is (0,1,1) and always wins.
 html[data-theme="dark"],
 html[data-theme="light"] {
   --feedback-button-text-font-size: 0.875rem; // same as text size
@@ -204,25 +198,17 @@ html[data-theme="light"] {
 :root {
   // Colors
   --ifm-color-primary: var(--src-primary);
-  // Shades of --src-primary, at the same +/-10/15/30% lightness steps
-  // Docusaurus' own colour generator uses. These were a leftover blue palette
-  // from a previous brand; Infima reaches for -dark and -darker on
-  // .button--primary hover and active, so the first primary button added would
-  // have rendered green and hovered blue.
+  // Shades of --src-primary at Docusaurus' own +/-10/15/30% lightness steps.
+  // Infima uses -dark and -darker for .button--primary hover and active.
   --ifm-color-primary-dark: #05a048;
   --ifm-color-primary-darker: #059744;
   --ifm-color-primary-darkest: #047d38;
   --ifm-color-primary-light: #07c458;
   --ifm-color-primary-lighter: #07cd5c;
   --ifm-color-primary-lightest: #08e768;
-  // The secondary family styles :::note admonitions — Infima maps
-  // .alert--secondary onto it. Its own values are hardcoded blue-grays rather
-  // than aliases onto --ifm-color-gray-*, so they were the one part of the
-  // note admonition the brand ramp didn't reach: the border, the icon stroke
-  // (which reads --ifm-alert-border-color), and the body text.
-  //
-  // -dark is theme-invariant in Infima, so it stays in :root; the values here
-  // match what it already resolved to, just sourced from the ramp.
+  // Infima maps .alert--secondary (:::note) onto this family, and hardcodes
+  // its values rather than aliasing the greys — so the ramp didn't reach it.
+  // -dark is theme-invariant upstream, so it stays in :root.
   --ifm-color-secondary-contrast-background: var(--src-gray-100);
   --ifm-color-secondary-dark: var(--src-gray-300);
   --ifm-color-secondary-contrast-foreground: var(--src-gray-800);
@@ -242,18 +228,12 @@ html[data-theme="light"] {
   );
   --ifm-color-info-contrast-foreground: var(--src-black);
 
-  // Grays — point Infima's ramp at the brand neutrals above, replacing its
-  // blue-tinted defaults (#ebedf0, #8d949e, #606770 …) with true neutrals.
-  //
-  // This ramp is the only thing that needs mapping: Infima's
-  // --ifm-color-emphasis-* tokens are aliases onto it, declared once in :root
-  // and again under [data-theme='dark'] with the order inverted. Redefining
-  // the grays here updates both themes and keeps the inversion intact.
-  //
-  // The brand's 100–900 steps line up with Infima's labels one for one, which
-  // puts the brand's border gray on emphasis-200 — the token this codebase
-  // leans on most for borders. The ends take White and Obsidian; the brand's
-  // gray-50 has no Infima slot and goes unused.
+  // Point Infima's ramp at the brand neutrals, replacing its blue-tinted
+  // defaults. This is the only mapping needed: --ifm-color-emphasis-* are
+  // aliases onto the ramp, declared in :root and again under
+  // [data-theme='dark'] inverted, so both themes follow. The brand's 100-900
+  // line up with Infima's labels; the ends take White and Obsidian, and the
+  // brand's gray-50 has no slot.
   --ifm-color-gray-0: var(--src-white);
   --ifm-color-gray-100: var(--src-gray-100);
   --ifm-color-gray-200: var(--src-gray-200);
@@ -325,9 +305,8 @@ html[data-theme="light"] {
   --ifm-footer-background-color: var(--ifm-background-color);
 
   // Alerts
-  // Infima defaults border-width to 0 and border-left-width to 5px, giving
-  // the left-rule look. Setting both to 1px turns it into a full box; they
-  // have to match or the rounded corners come out lopsided.
+  // Infima defaults these to 0 and 5px for the left-rule look. Both must be
+  // set, and must match, or the rounded corners come out lopsided.
   --ifm-alert-border-width: 1px;
   --ifm-alert-border-left-width: 1px;
   --ifm-alert-border-radius: var(--ifm-code-border-radius); // match code blocks

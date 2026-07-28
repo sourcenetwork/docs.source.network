@@ -1,20 +1,15 @@
 @use "./utils" as *;
 
-// Lay the icon out in its own column with the body indented beside it. The
-// default type label ("NOTE", "TIP", …) is dropped so the icon alone carries
-// the meaning, but a title the author wrote is kept — see the wrapper at
-// src/theme/Admonition/index.tsx, which tags those with .admonition--titled.
+// Icon in its own column, body indented beside it. The default type label is
+// dropped; authored titles survive via the wrapper at
+// src/theme/Admonition/index.tsx, which tags them .admonition--titled.
 //
-// The heading, icon, and content class names are all hashed CSS modules, so
-// they're matched by substring the same way _code-blocks.scss handles
-// codeBlockTitle. Only .theme-admonition is a stable class.
+// Heading/icon/content class names are hashed CSS modules, so they're matched
+// by substring. Only .theme-admonition is stable.
 .theme-admonition {
-  // Both layouts below indent the body by exactly one icon column plus one
-  // gap, so these two have to stay in lockstep — hence the local variables.
-  // The icon column is a definite width rather than `auto`: in the titled
-  // layout the heading spans both columns, which leaves nothing sizing an
-  // `auto` column, and it would collapse to zero and pull the body left of
-  // the title.
+  // Definite width, not `auto`: in the titled layout the heading spans both
+  // columns, so an auto column would have nothing sizing it and collapse,
+  // pulling the body left of the title. The flex gap below must match too.
   --admonition-icon-size: #{rem(18px)};
   --admonition-gap: #{rem(14px)};
 
@@ -23,22 +18,13 @@
   column-gap: var(--admonition-gap);
   align-items: start;
 
-  // Grid items are min-width: auto by default, so a child with a wide
-  // intrinsic minimum — a code block, a long unbroken path — stretches the
-  // column and pushes the content past the admonition's own box instead of
-  // scrolling inside it.
   [class*="admonitionContent"] {
-    min-width: 0;
-    font-size: rem(14px); // a step down from body copy; titles keep their size
-
-    // --ifm-alert-foreground-color is left alone deliberately: Infima also
-    // feeds it to the icon fill and the tab colours inside alerts.
+    min-width: 0; // else a code block stretches the column past the box
+    font-size: rem(14px);
     color: var(--admonition-text-color);
 
-    // Infima sizes pre and code as a percentage of their container
-    // (--ifm-code-font-size: 80%), so the reduction above would shrink code
-    // blocks along with the prose. Put the block back on the page's scale.
-    // Inline code is left alone — it should track the text around it.
+    // Infima sizes pre/code as a % of their container, so the reduction above
+    // would shrink code blocks too. Inline code is left to track its text.
     .theme-code-block {
       font-size: var(--ifm-font-size-base);
     }
@@ -47,7 +33,7 @@
   [class*="admonitionIcon"] {
     display: block;
     margin-right: 0;
-    margin-top: 0.15rem; // sit the icon on the first line of body text
+    margin-top: 0.15rem; // sit on the first line of body text
 
     svg {
       display: block;
@@ -55,44 +41,35 @@
       height: var(--admonition-icon-size);
     }
 
-    // The Lucide replacements in src/theme/Admonition/Icon/ are stroke-based,
-    // but Admonition's module CSS sets `fill: var(--ifm-alert-foreground-color)`
-    // on every icon svg — and a CSS declaration beats the `fill="none"`
-    // presentation attribute, which would flood them solid. Undo the fill and
-    // drive the stroke from the same token instead.
+    // Lucide icons are stroke-based, but the module CSS sets `fill` on every
+    // icon svg — and that beats the `fill="none"` attribute, flooding them
+    // solid. Per-variant overrides set --admonition-icon-color below.
     svg.admonition-icon--stroke {
       fill: none;
-      // The variant's accent at full strength. The border uses the same hue
-      // pulled halfway to the background (--admonition-border-color above),
-      // so the icon reads as the saturated version of the same colour.
-      // Per-variant overrides set --admonition-icon-color below.
       stroke: var(--admonition-icon-color, var(--ifm-alert-border-color));
     }
   }
 
-  // Untitled: the label is a bare text node sitting next to the icon span,
-  // with no element of its own to hide. Collapsing the heading's type is the
-  // only way to reach it — which is also why the icon is sized in rem above
-  // rather than the theme's em.
+  // The label is a bare text node beside the icon span with no element to
+  // hide, so collapsing the heading's type is the only way to reach it. Also
+  // why the icon is sized in rem rather than the theme's em.
   &:not(.admonition--titled) [class*="admonitionHeading"] {
     font-size: 0;
     line-height: 0;
     margin-bottom: 0;
   }
 
-  // Titled: icon and title share the first row, body indents beneath it.
+  // Titled: icon and title share row one, body indents beneath.
   &.admonition--titled {
     [class*="admonitionHeading"] {
       grid-column: 1 / -1;
       display: flex;
       align-items: center;
-      gap: var(--admonition-gap); // must match the grid's column-gap
+      gap: var(--admonition-gap); // must match column-gap
       margin-bottom: 0.5rem;
-      text-transform: none; // authored titles are sentence case
-      color: var(--admonition-text-color); // match the body copy
-      // Admonition's module CSS sets a `font` shorthand that pulls in
-      // --ifm-heading-font-family; a title here is a label, not a heading.
-      font-family: var(--ifm-font-family-base);
+      text-transform: none;
+      color: var(--admonition-text-color);
+      font-family: var(--ifm-font-family-base); // module CSS sets a heading font
     }
 
     [class*="admonitionIcon"] {
@@ -100,7 +77,7 @@
     }
 
     [class*="admonitionContent"] {
-      grid-column: 2; // line the body up with the title, past the icon
+      grid-column: 2;
     }
   }
 }
@@ -108,23 +85,18 @@
 .alert {
   --ifm-link-color: var(--ifm-color-primary);
 
-  // Infima points --ifm-alert-border-color at each variant's strong tone,
-  // which is loud now that it runs the whole way round rather than just down
-  // the left edge. Pull it halfway to the alert's own background. This is a
-  // separate name rather than a reassignment of --ifm-alert-border-color,
-  // which would be a self-reference and make the property invalid.
+  // Separate names, not reassignments of the --ifm-* they read: a custom
+  // property can't reference itself.
   --admonition-border-color: color-mix(
     in srgb,
     var(--ifm-alert-border-color) 50%,
     var(--ifm-alert-background-color)
   );
 
-  // Body copy and title tinted with the variant's accent, pulled back toward
-  // --ifm-alert-foreground-color far enough to stay legible. The accent alone
-  // fails WCAG AA badly in light mode, where the fills are near-white: `note`
-  // is the worst at 1.17:1. These ratios are the most accent each theme can
-  // carry with every variant still at 4.5:1 — dark is limited by `danger`,
-  // light by `note`.
+  // Text tinted with the variant accent, pulled toward the alert foreground
+  // to stay legible. 75%/10% are the most each theme can carry with every
+  // variant at 4.5:1 — dark is capped by danger, light by note (1.17:1 at
+  // full accent, since light fills are near-white).
   --admonition-text-accent: 75%;
   --admonition-text-color: color-mix(
     in srgb,
@@ -140,60 +112,38 @@
   }
 }
 
-// Override the black background with green for :::info admonitions
-// .alert--info {
-//   --ifm-alert-background-color: var(--ifm-color-success-contrast-background);
-// }
-
-// Both greens are too bright to register on the light green fill — info's icon
-// manages 1.90:1 and tip's 2.49:1, under the 3:1 WCAG minimum for non-text.
-// Infima's -darkest step clears it. Dark mode keeps the brighter values, which
-// read correctly against the deep fill there.
-html[data-theme="light"] {
-  .theme-admonition-info,
-  .theme-admonition-tip {
-    --admonition-icon-color: var(--ifm-color-info-darkest);
-  }
-}
-
-// Light-mode fills are near-white, so the tint has far less room before it
-// stops being readable — see the note on --admonition-text-accent above. This
-// sits well under the 25% ceiling AA allows, for darker text: Infima's
-// foreground is itself a deep variant-hued colour (rgb(0, 49, 0) for tip,
-// rgb(77, 56, 0) for warning), so leaning on it keeps the hue while going dark.
-html[data-theme="light"] .alert {
-  --admonition-text-accent: 10%;
-}
-
-// Tip maps to .alert--success, whose accent (--ifm-color-success-dark) is a
-// muted green that barely registers at icon size. Use the brand accent, so it
-// reads as strongly as the info icon does.
+// Per-variant icon accents. Each replaces an Infima default that failed
+// contrast: tip's success-dark barely registered at icon size, danger's held
+// dark mode to 4.53:1, note's light gray vanished on the light fill (1.18:1).
 .theme-admonition-tip {
   --admonition-icon-color: var(--ifm-color-primary);
 }
 
-// Danger was the one variant holding the dark-mode ratio down: Infima's
-// --ifm-color-danger-dark is a deep red that only reaches 4.53:1 on its own
-// dark red fill. The brand red is lighter and takes it to 7.14:1 — AAA —
-// without dulling the tint on the other four.
 .theme-admonition-danger {
   --admonition-icon-color: var(--src-red);
 }
 
-// Note's accent is --ifm-color-secondary-dark, a light gray that Infima keeps
-// the same in both themes — so the icon all but vanished on the light fill
-// (1.18:1). The emphasis scale is the one neutral ramp that inverts per theme,
-// so a single value here reads correctly against both backgrounds: 9.51:1 on
-// light, 10.73:1 on dark.
 .theme-admonition-note {
   --admonition-icon-color: var(--ifm-color-emphasis-700);
 }
 
-// Warning reads much brighter than the other variants at Infima's default of
-// rgb(77, 56, 0). Derived from --src-amber so the fill tracks the accent
-// rather than being a separate hand-picked brown. Only dark mode is darkened
-// here — the light-mode default is a pale rgb(255, 248, 230), where "darker"
-// would mean something different.
+html[data-theme="light"] {
+  // Both greens fall under the 3:1 non-text minimum on the light green fill
+  // (1.90:1 and 2.49:1). Dark keeps the brighter values.
+  .theme-admonition-info,
+  .theme-admonition-tip {
+    --admonition-icon-color: var(--ifm-color-info-darkest);
+  }
+
+  // Well under the 25% ceiling AA allows: Infima's foreground is itself a deep
+  // variant-hued colour, so leaning on it keeps the hue while going darker.
+  .alert {
+    --admonition-text-accent: 10%;
+  }
+}
+
+// Derived from the accent so the fill tracks it. Dark only — the light default
+// is a pale rgb(255, 248, 230), where "darker" would mean something else.
 html[data-theme="dark"] .alert--warning {
   --ifm-alert-background-color: color-mix(
     in srgb,
@@ -202,11 +152,10 @@ html[data-theme="dark"] .alert--warning {
   );
 }
 
-// Visual indication of tabs length
 .tabs-container {
+  // Visual indication of tabs length. Mixed toward black rather than the
+  // background, so it darkens in both themes.
   .margin-top--md {
-    // Mixed toward black rather than toward the background, so it darkens in
-    // both themes instead of washing out against white in light mode.
     border-left: 2px color-mix(in srgb, var(--src-primary) 65%, var(--src-black))
       solid;
     padding-left: var(--ifm-tabs-padding-horizontal);
@@ -217,9 +166,7 @@ html[data-theme="dark"] .alert--warning {
     font-size: rem(14px);
   }
 
-  // Infima's tab hover is --ifm-hover-overlay at 5% with no colour change.
-  // Match the sidebar instead: the shared overlay plus a brighter label. The
-  // active tab is excluded so it keeps its accent colour and underline.
+  // Infima's hover is a 5% overlay with no colour change; match the sidebar.
   .tabs__item:not(.tabs__item--active):hover {
     background-color: var(--src-hover-overlay);
     color: var(--ifm-font-color-base);
