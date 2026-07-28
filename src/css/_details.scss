@@ -24,6 +24,10 @@ details.alert {
   // the 50% color-mix that tones down the admonition borders.
   border-color: var(--details-border-color);
 
+  // alert--info now carries tip's green fill; details shouldn't. Transparent
+  // rather than a neutral colour, so these sit on whatever they're placed on.
+  background-color: transparent;
+
   // The divider above the expanded content. Its class is a hashed CSS module,
   // so it's matched by substring; this lands at (0,2,1) and outranks
   // theme-common's own .collapsibleContent rule at (0,1,0).

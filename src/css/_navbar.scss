@@ -34,6 +34,28 @@
   // Color for the version selector
   &__item.dropdown .navbar__link {
     color: var(--ifm-navbar-link-color);
+
+    // Infima draws the disclosure marker as a CSS-only triangle from borders.
+    // Swap it for the same masked chevron the "Open Markdown" dropdown uses
+    // (see .markdown-actions-container in _markdown.scss). The border
+    // properties all need clearing, or the triangle shows through the mask.
+    &:after {
+      border: none;
+      width: 0.875em;
+      height: 0.875em;
+      vertical-align: -0.15em;
+      top: 0;
+      transform: none; // Infima nudges the triangle with translateY(-50%)
+      background-color: currentColor;
+      mask: url("/img/icon-chevron-down.svg") no-repeat center / contain;
+      -webkit-mask: url("/img/icon-chevron-down.svg") no-repeat center / contain;
+      transition: transform 0.2s ease;
+    }
+  }
+
+  // Flip the chevron while the menu is open, matching the markdown dropdown.
+  &__item.dropdown.dropdown--show .navbar__link:after {
+    transform: rotate(180deg);
   }
 
   // Match the "Open Markdown" dropdown's card look (see .markdown-actions-container

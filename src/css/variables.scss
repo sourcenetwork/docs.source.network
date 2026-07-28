@@ -226,7 +226,11 @@ html[data-theme="light"] {
   --ifm-color-info-dark: rgb(0, 205, 80);
   --ifm-color-info-darker: rgb(7, 160, 66);
   --ifm-color-info-darkest: rgb(4, 146, 59);
-  --ifm-color-info-contrast-background: var(--src-white);
+  // Info shares tip's fill. Note this also reaches <details>, which Docusaurus
+  // renders with `alert alert--info` — _details.scss opts those back out.
+  --ifm-color-info-contrast-background: var(
+    --ifm-color-success-contrast-background
+  );
   --ifm-color-info-contrast-foreground: var(--src-black);
 
   // Grays — point Infima's ramp at the brand neutrals above, replacing its
@@ -343,7 +347,9 @@ html[data-theme="dark"] {
   --ifm-color-secondary-contrast-background: var(--src-ink);
   --ifm-color-secondary-contrast-foreground: var(--src-white);
 
-  --ifm-color-info-contrast-background: var(--src-black);
+  --ifm-color-info-contrast-background: var(
+    --ifm-color-success-contrast-background
+  );
   --ifm-color-info-contrast-foreground: var(--src-white);
 
   --ifm-toc-border-color: transparent;

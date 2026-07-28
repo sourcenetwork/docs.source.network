@@ -34,6 +34,14 @@
     // --ifm-alert-foreground-color is left alone deliberately: Infima also
     // feeds it to the icon fill and the tab colours inside alerts.
     color: var(--admonition-text-color);
+
+    // Infima sizes pre and code as a percentage of their container
+    // (--ifm-code-font-size: 80%), so the reduction above would shrink code
+    // blocks along with the prose. Put the block back on the page's scale.
+    // Inline code is left alone — it should track the text around it.
+    .theme-code-block {
+      font-size: var(--ifm-font-size-base);
+    }
   }
 
   [class*="admonitionIcon"] {
@@ -136,6 +144,17 @@
 // .alert--info {
 //   --ifm-alert-background-color: var(--ifm-color-success-contrast-background);
 // }
+
+// Both greens are too bright to register on the light green fill — info's icon
+// manages 1.90:1 and tip's 2.49:1, under the 3:1 WCAG minimum for non-text.
+// Infima's -darkest step clears it. Dark mode keeps the brighter values, which
+// read correctly against the deep fill there.
+html[data-theme="light"] {
+  .theme-admonition-info,
+  .theme-admonition-tip {
+    --admonition-icon-color: var(--ifm-color-info-darkest);
+  }
+}
 
 // Light-mode fills are near-white, so the tint has far less room before it
 // stops being readable — see the note on --admonition-text-accent above. This
