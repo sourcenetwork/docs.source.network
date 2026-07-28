@@ -97,9 +97,8 @@ article .markdown header {
       color: var(--ifm-font-color-base);
     }
 
-    // Replace the plugin's own inline triangle <svg> with a real chevron.
-    // It's unclassed, so hide it by position (last child) and draw the
-    // replacement as a masked pseudo-element instead of touching node_modules.
+    // The plugin's inline triangle <svg> is unclassed, so it's hidden by
+    // position and replaced with a masked pseudo-element.
     svg:last-child {
       display: none;
     }

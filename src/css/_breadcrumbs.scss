@@ -1,10 +1,8 @@
 @use "./utils" as *;
 
-// The trail always starts with a Home item, which is hidden below. When that
-// item is followed by exactly one more, the single visible crumb is the
-// current page — the same text as the h1 directly beneath it — so drop the
-// whole nav rather than repeat the title. Hiding it in CSS leaves
-// DocBreadcrumbs' structured data intact for search engines.
+// A hidden Home item starts every trail, so two items means one visible crumb
+// — the page title, already the h1 below. Hiding in CSS rather than swizzling
+// leaves the structured data intact.
 .theme-doc-breadcrumbs:has(.breadcrumbs__item:nth-child(2):last-child) {
   display: none;
 }
@@ -33,13 +31,9 @@
     }
   }
 
-  // Items are display: inline-block (infima default) with no width limit, so
-  // a long segment just wraps the whole trail onto a second line instead of
-  // truncating. A vw-based max-width per link doesn't work reliably here:
-  // it's relative to the viewport, not this (narrower, padded) container, so
-  // multiple long segments can still sum past the real available width at
-  // very small sizes. Flex + min-width: 0 instead shrinks each item to
-  // whatever space is actually left in the container, however much that is.
+  // Infima's inline-block items wrap the trail rather than truncating. A vw
+  // max-width can't fix it — that's viewport-relative, not container-relative.
+  // Flex + min-width: 0 shrinks each item to the space actually left.
   @media (max-width: 996px) {
     display: flex;
     flex-wrap: nowrap;

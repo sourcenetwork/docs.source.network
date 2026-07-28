@@ -63,11 +63,9 @@
   }
 }
 
-// pushfeedback's floating button. It renders in a shadow root, so plain class
-// selectors can't reach it — theme it with the --feedback-* custom properties
-// in variables.scss, and use ::part() for anything they don't expose.
-// Available parts: `button` and `icon` here, plus `modal`, `header`, `form`,
-// `submit-button`, `rating-button`, `close-button` etc. on <feedback-modal>.
+// pushfeedback's floating button renders in a shadow root, so class selectors
+// can't reach it: theme via the --feedback-* vars in variables.scss, and
+// ::part() for the rest. Parts here are `button` and `icon`.
 
 feedback-button::part(button) {
   box-shadow: none;

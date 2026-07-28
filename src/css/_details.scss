@@ -1,27 +1,23 @@
 @use "./utils" as *;
 
-// Docusaurus hardcodes `alert alert--info` onto every <details>, so they
-// inherit admonition styling. `details.alert` is (0,1,1) and outranks the
-// .alert--info rules without touching real :::info admonitions.
+// Docusaurus hardcodes `alert alert--info` onto every <details>. details.alert
+// is (0,1,1) and outranks .alert--info without touching :::info admonitions.
 details.alert {
   --details-caret-size: #{rem(16px)};
   --details-border-color: var(--ifm-color-emphasis-300);
-  // emphasis-1000 inverts per theme: --src-white on dark, --src-obsidian on
-  // light. Drives the caret only; the divider follows the border below.
+  // Inverts per theme. Caret only; the divider follows the border.
   --docusaurus-details-decoration-color: var(--ifm-color-emphasis-1000);
 
   // Set directly to opt out of the 50% color-mix on admonition borders.
   border-color: var(--details-border-color);
   background-color: transparent; // don't inherit tip's fill via alert--info
 
-  // Divider above the expanded content. Hashed module class, matched by
-  // substring; (0,2,1) beats theme-common's .collapsibleContent at (0,1,0).
+  // Divider above the expanded content. (0,2,1) beats theme-common's (0,1,0).
   [class*="collapsibleContent"] {
     border-top-color: var(--details-border-color);
   }
 
-  // [class] is a no-op that lifts this to (0,2,2), enough to beat
-  // theme-common's `padding-left: 1rem` at (0,1,2) without relying on order.
+  // [class] is a no-op lifting this to (0,2,2), beating theme-common's (0,1,2).
   &[class] > summary {
     padding-left: #{rem(26px)};
   }
@@ -32,9 +28,8 @@ details.alert {
   }
 
   // Replaces theme-common's border-drawn triangle. The asset points right so
-  // no rotation is needed at rest — its open-state `rotate(90deg)` is (0,3,2)
-  // and would outrank anything sane here, so the chevron is authored to be
-  // correct both before and after that rotation applies.
+  // no rotation is needed at rest — its open-state rotate(90deg) at (0,3,2)
+  // outranks anything sane here, so it must read correctly after that too.
   > summary::before {
     border: none;
     width: var(--details-caret-size);

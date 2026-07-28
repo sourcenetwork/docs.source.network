@@ -1,8 +1,7 @@
 @use "./utils" as *;
 
-// All CSS custom properties for the site. Styling rules live in custom.scss
-// and the component partials. Ours and Infima's are kept in separate blocks
-// so it's clear which system a variable belongs to.
+// All CSS custom properties for the site; rules live in the partials. Ours
+// and Infima's are kept in separate blocks.
 
 // =========================================================================
 // Theme variables
@@ -14,14 +13,12 @@
   --src-highlight: #39e265;
   --src-red: #ff7777;
 
-  // Amber is the LensVM product accent. The brand system asks that product
-  // accents stay isolated to their own contexts, so using it as the semantic
-  // warning colour below is a deliberate departure.
+  // The LensVM product accent, reused below as the semantic warning colour —
+  // a deliberate departure from the brand's "keep accents isolated" guidance.
   --src-amber: #ffa011;
 
-  // Brand neutrals, mirroring the scale in the Source brand system. Kept on
-  // the brand's own step labels rather than Infima's; the mapping onto
-  // --ifm-color-gray-* happens in the Infima overrides below.
+  // Brand neutrals on the brand's own step labels; mapped onto
+  // --ifm-color-gray-* in the Infima overrides below.
   --src-white: #ffffff;
   --src-black: #000000;
   --src-obsidian: #0b0b0b;
@@ -37,8 +34,8 @@
   --src-gray-800: #262626;
   --src-gray-900: #171717;
 
-  // Named text roles from the brand system's dark-mode guidance. Secondary
-  // maps onto --src-gray-600, so it isn't repeated here.
+  // Named text roles from the brand's dark-mode guidance (secondary is
+  // --src-gray-600 already).
   --src-text-muted: #939598; // muted/tertiary on dark
   --src-text-subtitle: #adadad; // subtitle on dark
 
@@ -50,9 +47,8 @@
 
   --h1-base-font-size: 2.25rem;
 
-  // Interaction overlays, shared by the sidebar menu and the tab bar. Kept
-  // separate from Infima's --ifm-hover-overlay, which it also uses for
-  // breadcrumbs, dropdowns, pagination and pills at a lighter 5%.
+  // Shared by the sidebar menu and tab bar. Separate from Infima's
+  // --ifm-hover-overlay, which stays at 5% for breadcrumbs, dropdowns etc.
   --src-hover-overlay: rgba(0, 0, 0, 0.08);
   --src-active-overlay: rgba(0, 0, 0, 0.05);
 
@@ -115,9 +111,8 @@ html[data-theme="dark"] {
   --codeblock-highlighted-line-background: rgb(47 47 47);
 }
 
-// pushfeedback's own vars. It ships defaults for these same names at (0,1,0),
-// so a plain :root would tie and depend on load order; html[data-theme=...]
-// is (0,1,1) and always wins.
+// pushfeedback's own vars. It ships defaults at (0,1,0), so a plain :root
+// would tie on load order; html[data-theme=...] is (0,1,1) and always wins.
 html[data-theme="dark"],
 html[data-theme="light"] {
   --feedback-button-text-font-size: 0.875rem; // same as text size
@@ -198,42 +193,35 @@ html[data-theme="light"] {
 :root {
   // Colors
   --ifm-color-primary: var(--src-primary);
-  // Shades of --src-primary at Docusaurus' own +/-10/15/30% lightness steps.
-  // Infima uses -dark and -darker for .button--primary hover and active.
+  // Shades of --src-primary at Docusaurus' +/-10/15/30% lightness steps.
   --ifm-color-primary-dark: #05a048;
   --ifm-color-primary-darker: #059744;
   --ifm-color-primary-darkest: #047d38;
   --ifm-color-primary-light: #07c458;
   --ifm-color-primary-lighter: #07cd5c;
   --ifm-color-primary-lightest: #08e768;
-  // Infima maps .alert--secondary (:::note) onto this family, and hardcodes
-  // its values rather than aliasing the greys — so the ramp didn't reach it.
-  // -dark is theme-invariant upstream, so it stays in :root.
+  // .alert--secondary (:::note) maps onto this family, which Infima hardcodes
+  // rather than aliasing the greys. -dark is theme-invariant upstream.
   --ifm-color-secondary-contrast-background: var(--src-gray-100);
   --ifm-color-secondary-dark: var(--src-gray-300);
   --ifm-color-secondary-contrast-foreground: var(--src-gray-800);
 
-  // Warning: -dark is what .alert--warning maps --ifm-alert-border-color to,
-  // so this drives both the admonition border and its icon stroke.
+  // -dark is what .alert--warning maps --ifm-alert-border-color to.
   --ifm-color-warning: var(--src-amber);
   --ifm-color-warning-dark: var(--src-amber);
 
   --ifm-color-info-dark: rgb(0, 205, 80);
   --ifm-color-info-darker: rgb(7, 160, 66);
   --ifm-color-info-darkest: rgb(4, 146, 59);
-  // Info shares tip's fill. Note this also reaches <details>, which Docusaurus
-  // renders with `alert alert--info` — _details.scss opts those back out.
+  // Info shares tip's fill. Also reaches <details>; _details.scss opts out.
   --ifm-color-info-contrast-background: var(
     --ifm-color-success-contrast-background
   );
   --ifm-color-info-contrast-foreground: var(--src-black);
 
-  // Point Infima's ramp at the brand neutrals, replacing its blue-tinted
-  // defaults. This is the only mapping needed: --ifm-color-emphasis-* are
-  // aliases onto the ramp, declared in :root and again under
-  // [data-theme='dark'] inverted, so both themes follow. The brand's 100-900
-  // line up with Infima's labels; the ends take White and Obsidian, and the
-  // brand's gray-50 has no slot.
+  // The only mapping needed: --ifm-color-emphasis-* alias onto this ramp,
+  // declared in :root and again inverted under [data-theme='dark'], so both
+  // themes follow. The brand's 100-900 line up with Infima's labels.
   --ifm-color-gray-0: var(--src-white);
   --ifm-color-gray-100: var(--src-gray-100);
   --ifm-color-gray-200: var(--src-gray-200);
@@ -276,8 +264,7 @@ html[data-theme="light"] {
   --ifm-table-cell-padding: 0.75rem 1rem;
   --ifm-table-border-color: var(--ifm-color-emphasis-200);
   --ifm-table-stripe-background: transparent; // flat, no zebra striping
-  // Decoupled from --ifm-font-weight-bold, which is 800 here — too heavy
-  // for column headers.
+  // Decoupled from --ifm-font-weight-bold, 800 here and too heavy.
   --ifm-table-head-font-weight: 600;
 
   // Table of contents
@@ -288,9 +275,7 @@ html[data-theme="light"] {
   // Menu / sidebar
   --ifm-menu-color: var(--ifm-color-emphasis-700);
   --ifm-menu-color-active: var(--ifm-color-primary);
-  // Set per-menu rather than via --ifm-hover-overlay, which Infima also uses
-  // for breadcrumbs, dropdowns, pagination and pills. The overlay flips from
-  // black to white between themes, so these are re-declared in the dark block.
+  // Per-menu, not via --ifm-hover-overlay which Infima shares more widely.
   --ifm-menu-color-background-hover: var(--src-hover-overlay);
   --ifm-menu-color-background-active: var(--src-active-overlay);
   --ifm-menu-link-padding-horizontal: 1rem;
@@ -305,8 +290,8 @@ html[data-theme="light"] {
   --ifm-footer-background-color: var(--ifm-background-color);
 
   // Alerts
-  // Infima defaults these to 0 and 5px for the left-rule look. Both must be
-  // set, and must match, or the rounded corners come out lopsided.
+  // Infima defaults these to 0 and 5px. Both must be set and must match, or
+  // the rounded corners come out lopsided.
   --ifm-alert-border-width: 1px;
   --ifm-alert-border-left-width: 1px;
   --ifm-alert-border-radius: var(--ifm-code-border-radius); // match code blocks
@@ -332,7 +317,8 @@ html[data-theme="dark"] {
   --ifm-background-surface-color: var(--ifm-background-color);
 
   --ifm-color-content-secondary: rgb(174 174 174);
-  --ifm-color-secondary-contrast-background: var(--src-ink);
+  // Ascending elevation: page #000 < admonition #0b0b0b < code --src-gray-900.
+  --ifm-color-secondary-contrast-background: var(--src-obsidian);
   --ifm-color-secondary-contrast-foreground: var(--src-white);
 
   --ifm-color-info-contrast-background: var(
@@ -341,14 +327,12 @@ html[data-theme="dark"] {
   --ifm-color-info-contrast-foreground: var(--src-white);
 
   --ifm-toc-border-color: transparent;
-  // Two steps up from where this sat under Infima's ramp. Its old value
-  // resolved to #8d949e; emphasis-400 now lands on #525252, which is too dark
-  // to read against the black background.
+  // Two steps up: on the brand ramp, emphasis-400 lands on #525252 — too dark
+  // against black.
   --ifm-menu-color: var(--ifm-color-emphasis-600);
   --ifm-scrollbar-thumb-background-color: var(--ifm-color-emphasis-300);
 
-  // Infima re-declares this under [data-theme='dark'] at the same specificity
-  // as our :root, so it has to be repeated here to stay off.
+  // Infima re-declares this under dark at our specificity, so repeat it.
   --ifm-table-stripe-background: transparent;
 
   --ifm-color-success-contrast-background: #011a0b;

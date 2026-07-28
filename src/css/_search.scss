@@ -10,10 +10,8 @@ body .DocSearch {
       content: " ...";
     }
 
-    // Between ~996px and 1200px, shrink the search bar so the logo
-    // (and other navbar items) keep their natural width. We start at
-    // 996px (rather than 997px) to avoid a sub-pixel gap where neither
-    // the mobile navbar rules nor this rule apply.
+    // Shrink the search bar so the navbar items keep their natural width.
+    // 996px not 997px, else a sub-pixel gap falls through both rules.
     @media (min-width: 996px) and (max-width: 1200px) {
       padding-right: 2rem;
     }

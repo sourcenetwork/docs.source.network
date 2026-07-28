@@ -37,6 +37,18 @@
   }
 }
 
+/* An expanded block can run well past the viewport, leaving the control
+   somewhere off-screen. Sticky keeps it at the bottom edge until the end of
+   the block scrolls into view, then it settles into place. Needs an opaque
+   background, since it now sits over the code rather than below it. */
+.collapsibleBlock:not(.collapsed) .toggleButton {
+  position: sticky;
+  bottom: 0;
+  z-index: 1;
+  background: var(--prism-background-color);
+  border-top: 1px solid var(--codeblock-title-border);
+}
+
 /* When collapsed, the button overlays the whole block so clicking anywhere
    expands it; flex keeps the label pinned to the bottom */
 .collapsed .toggleButton {
