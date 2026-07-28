@@ -5,15 +5,8 @@
    an already-sticky, already-clipped ancestor with the same offset, breaks
    layout instead of being a no-op. */
 
-/* Hidden below 1200px rather than Docusaurus' 996px: three columns don't fit
-   comfortably at ~1000px, and dropping this one gives the content real room
-   instead of shaving gutters. There's no mobile fallback — DocItem/TOC/Mobile
-   renders null — so nothing on-page navigates below this width. */
-@media (max-width: 1199px) {
-  .tableOfContents {
-    display: none;
-  }
-}
+/* Nothing hides this here: DocItem/Layout drops the entire .sidebar column
+   below 1200px, which takes the ToC with it. */
 
 .tableOfContents {
   padding: 0;

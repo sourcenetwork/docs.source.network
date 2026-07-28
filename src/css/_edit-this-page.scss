@@ -8,7 +8,10 @@
   align-items: center;
 }
 
-// Already shown under the ToC.
-.theme-doc-footer-edit-meta-row {
-  display: none;
+// Redundant with the copy under the ToC — but only where that column exists.
+// DocItem/Layout hides it below 1200px, so the footer row takes over there.
+@media (min-width: 1200px) {
+  .theme-doc-footer-edit-meta-row {
+    display: none;
+  }
 }

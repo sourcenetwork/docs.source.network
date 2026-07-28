@@ -6,10 +6,17 @@
     padding-left: rem(40px);
   }
 
-  // The ToC column only renders from 1200px up (see TOC/styles.module.css), so
-  // this gutter never applies to a squeezed three-column layout.
   .sidebar {
     padding-left: rem(55px);
+  }
+}
+
+// The whole column goes, not just the ToC list inside it: .sidebar is a
+// col--4, so it holds a third of the row either way, and it also carries the
+// ToC icon and the edit link.
+@media (max-width: 1199px) {
+  .sidebar {
+    display: none;
   }
 }
 

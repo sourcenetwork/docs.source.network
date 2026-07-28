@@ -40,7 +40,7 @@
   --src-text-subtitle: #adadad; // subtitle on dark
 
   // Layout
-  --root-wrapper-width: 110rem;
+  // --root-wrapper-width is set on body below, with --doc-sidebar-width.
   --menu-indicator-color: var(--src-gray-300);
   --docs-title-border: var(--src-gray-200);
   // --doc-sidebar-width is set on body below, not here.
@@ -83,8 +83,17 @@
 // lands later in the bundle — so a :root declaration here loses the tie and is
 // silently ignored. On body it wins by inheritance instead, no specificity
 // games.
+//
+// --root-wrapper-width sits here rather than in :root so its calc resolves
+// against the sidebar width above, not Docusaurus'. It's derived so the navbar,
+// footer and doc content share one right edge: the content column is capped by
+// Infima's .container, and anything wider up here only leaves it centred in
+// slack it can't use.
 body {
   --doc-sidebar-width: #{rem(300px)};
+  --root-wrapper-width: calc(
+    var(--ifm-container-width-xl) + var(--doc-sidebar-width)
+  );
 }
 
 html[data-theme="dark"] {
