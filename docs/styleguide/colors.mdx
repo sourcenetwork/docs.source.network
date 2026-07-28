@@ -41,9 +41,10 @@ export const Swatches = ({ names }) => (
   </div>
 );
 
-Every custom property from `src/css/variables.scss`, resolved live — so toggling
-the theme switch shows both palettes. Swatch styling is inline on purpose, to
-keep this page from adding anything to the production stylesheet.
+Every colour-valued custom property from `src/css/variables.scss`, resolved
+live — so toggling the theme switch shows both palettes. Spacing, type and
+sizing tokens are in the table at the end. Swatch styling is inline on purpose,
+to keep this page from adding anything to the production stylesheet.
 
 Where an Infima token is an alias onto a brand variable, the target is noted
 beneath it with a `↳`. Some resolve differently per theme, which is written as
@@ -97,9 +98,10 @@ and pills.
 
 ## Infima primary
 
-`--ifm-color-primary` maps to `--src-primary`. The `-dark` through `-lightest`
-variants are a leftover blue palette; Infima uses `-dark` and `-darker` for
-`.button--primary` hover and active states.
+`--ifm-color-primary` maps to `--src-primary` in light and `--src-highlight` in
+dark. The `-dark` through `-lightest` variants are shades of `--src-primary` at
+Docusaurus' own ±10/15/30% lightness steps; Infima uses `-dark` and `-darker`
+for `.button--primary` hover and active.
 
 <Swatches names={[
   ["--ifm-color-primary", "--src-primary / --src-highlight"],
@@ -119,6 +121,9 @@ variants are a leftover blue palette; Infima uses `-dark` and `-darker` for
   "--ifm-font-color-base",
   "--ifm-color-content-secondary",
   "--ifm-menu-color",
+  "--ifm-menu-color-active",
+  "--ifm-footer-background-color",
+  "--ifm-table-border-color",
   "--src-text-muted",
   "--src-text-subtitle",
   "--docs-title-border",
@@ -176,13 +181,22 @@ apply to the homepage rather than to docs.
 
 ## Alerts and admonitions
 
+Infima maps `.alert--secondary` to `:::note`, `--success` to `:::tip` and
+`--warning` to `:::warning`, so the families below are what the admonition
+variants actually resolve through. Info shares tip's fill.
+
 <Swatches names={[
   "--ifm-color-info-dark",
   "--ifm-color-info-darker",
   "--ifm-color-info-darkest",
-  ["--ifm-color-info-contrast-background", "--src-white / --src-black"],
+  ["--ifm-color-info-contrast-background", "--ifm-color-success-contrast-background"],
   ["--ifm-color-info-contrast-foreground", "--src-black / --src-white"],
   "--ifm-color-success-contrast-background",
+  ["--ifm-color-secondary-dark", "--src-gray-300"],
+  ["--ifm-color-secondary-contrast-background", "--src-gray-100 / --src-obsidian"],
+  ["--ifm-color-secondary-contrast-foreground", "--src-gray-800 / --src-white"],
+  ["--ifm-color-warning", "--src-amber"],
+  ["--ifm-color-warning-dark", "--src-amber"],
   "--ifm-alert-border-color",
 ]} />
 
@@ -232,7 +246,7 @@ pushfeedback's own variables, overridden in `variables.scss`. See
 | Token | Value | Used for |
 | --- | --- | --- |
 | `--root-wrapper-width` | `110rem` | Max width of navbar, footer, and main wrapper |
-| `--doc-sidebar-width` | `300px` | Doc sidebar width |
+| `--doc-sidebar-width` | `18.75rem` | Doc sidebar width |
 | `--h1-base-font-size` | `2.25rem` | Shared `h1` size token |
 | `--ifm-h4-font-size` | `1.313rem` | Heading level 4 |
 | `--ifm-font-size-base` | `1rem` | Body copy |
@@ -240,8 +254,8 @@ pushfeedback's own variables, overridden in `variables.scss`. See
 | `--ifm-leading-desktop` | `1.75` | Line height multiplier |
 | `--ifm-navbar-height` | `80px` | Navbar height |
 | `--ifm-global-radius` | `0rem` | Global corner radius |
-| `--ifm-code-border-radius` | `0.375rem` | Inline code corners |
-| `--ifm-alert-border-left-width` | `2px` | Admonition left rule |
+| `--ifm-code-border-radius` | `0.375rem` | Inline code, code blocks, admonitions |
+| `--ifm-alert-border-left-width` | `1px` | Admonition border (matches the other sides) |
 | `--ifm-container-width-xl` | `1400px` | Wide container breakpoint |
 
 ## Fonts
