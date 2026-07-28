@@ -10,8 +10,10 @@ description: Admonitions, details, tabs, and every code block variant.
 
 ## Admonitions
 
-All five Infima variants. Styled by `_admonitions.scss`, which hides the default
-icon and repoints `.alert--info` at `--ifm-color-success-contrast-background`.
+All five Infima variants. Styled by `_admonitions.scss`, which lays the icon out
+in its own column, drops the default type label, and gives each variant a full
+rounded border toned halfway to its background with `color-mix`. The icons are
+Lucide replacements from `src/theme/Admonition/Icon/`.
 
 :::note
 A note admonition. Contains **bold text**, `inline code`, and a
@@ -24,8 +26,8 @@ A tip admonition.
 :::
 
 :::info
-An info admonition. This is the variant `_admonitions.scss` overrides, and the
-same one Docusaurus reuses for `<details>` — see below.
+An info admonition. This is the variant Docusaurus reuses for `<details>` — see
+below, where `_details.scss` neutralises the inherited green accent.
 :::
 
 :::warning
@@ -49,8 +51,9 @@ onto every block — so these inherit admonition styling. The stable selector is
 <details>
 <summary>A collapsed details block</summary>
 
-Content revealed on expand. The divider above this text and the triangle in the
-summary are both colored by `--docusaurus-details-decoration-color`.
+Content revealed on expand. The chevron in the summary is a masked SVG colored
+by `--docusaurus-details-decoration-color`; the divider above this text follows
+`--details-border-color` instead, so it matches the box.
 
 - A list inside details
 - To check nested spacing

@@ -8,7 +8,7 @@ description: Every custom property declared in variables.scss, rendered as swatc
   <meta name="robots" content="noindex, nofollow" />
 </head>
 
-export const Swatch = ({ name }) => (
+export const Swatch = ({ name, from }) => (
   <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", padding: "0.3rem 0", minWidth: 0 }}>
     <span
       aria-hidden="true"
@@ -21,13 +21,23 @@ export const Swatch = ({ name }) => (
         border: "1px solid var(--ifm-color-emphasis-300)",
       }}
     />
-    <code style={{ fontSize: "0.75rem", wordBreak: "break-all" }}>{name}</code>
+    <div style={{ minWidth: 0 }}>
+      <code style={{ fontSize: "0.75rem", wordBreak: "break-all" }}>{name}</code>
+      {from && (
+        <div style={{ fontSize: "0.7rem", opacity: 0.6, marginTop: "0.15rem", wordBreak: "break-all" }}>
+          ↳ {from}
+        </div>
+      )}
+    </div>
   </div>
 );
 
 export const Swatches = ({ names }) => (
   <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(240px, 1fr))", gap: "0.25rem 1.5rem", marginBottom: "1.5rem" }}>
-    {names.map((n) => <Swatch key={n} name={n} />)}
+    {names.map((n) => {
+      const [name, from] = Array.isArray(n) ? n : [n, null];
+      return <Swatch key={name} name={name} from={from} />;
+    })}
   </div>
 );
 
@@ -35,9 +45,55 @@ Every custom property from `src/css/variables.scss`, resolved live — so toggli
 the theme switch shows both palettes. Swatch styling is inline on purpose, to
 keep this page from adding anything to the production stylesheet.
 
+Where an Infima token is an alias onto a brand variable, the target is noted
+beneath it with a `↳`. Some resolve differently per theme, which is written as
+`light / dark`.
+
 ## Brand
 
-<Swatches names={["--src-primary", "--src-highlight", "--src-red"]} />
+`--src-amber` is the LensVM product accent, reused as the semantic warning
+colour — a deliberate departure from the brand's "keep accents isolated to
+their contexts" guidance.
+
+<Swatches names={[
+  "--src-primary",
+  "--src-highlight",
+  "--src-red",
+  "--src-amber",
+]} />
+
+## Brand neutrals
+
+The neutral ramp from the Source brand system, on the brand's own step labels.
+Everything grey in the site resolves back to these — the mapping onto Infima's
+`--ifm-color-gray-*` happens in `variables.scss`. `--src-gray-50` has no Infima
+slot and is currently unused.
+
+<Swatches names={[
+  "--src-white",
+  "--src-gray-50",
+  "--src-gray-100",
+  "--src-gray-200",
+  "--src-gray-300",
+  "--src-gray-400",
+  "--src-gray-500",
+  "--src-gray-600",
+  "--src-gray-700",
+  "--src-gray-800",
+  "--src-gray-900",
+  "--src-ink",
+  "--src-obsidian",
+  "--src-black",
+]} />
+
+## Interaction overlays
+
+Translucent, so these swatches show the page background through them. Shared by
+the sidebar menu and the tab bar; kept separate from Infima's
+`--ifm-hover-overlay`, which stays at 5% for breadcrumbs, dropdowns, pagination
+and pills.
+
+<Swatches names={["--src-hover-overlay", "--src-active-overlay"]} />
 
 ## Infima primary
 
@@ -46,7 +102,7 @@ variants are a leftover blue palette; Infima uses `-dark` and `-darker` for
 `.button--primary` hover and active states.
 
 <Swatches names={[
-  "--ifm-color-primary",
+  ["--ifm-color-primary", "--src-primary / --src-highlight"],
   "--ifm-color-primary-dark",
   "--ifm-color-primary-darker",
   "--ifm-color-primary-darkest",
@@ -58,7 +114,7 @@ variants are a leftover blue palette; Infima uses `-dark` and `-darker` for
 ## Surfaces and text
 
 <Swatches names={[
-  "--ifm-background-color",
+  ["--ifm-background-color", "— / --src-black"],
   "--ifm-background-surface-color",
   "--ifm-font-color-base",
   "--ifm-color-content-secondary",
@@ -70,9 +126,31 @@ variants are a leftover blue palette; Infima uses `-dark` and `-darker` for
   "--ifm-scrollbar-thumb-background-color",
 ]} />
 
+## Infima gray ramp
+
+A straight alias onto the brand neutrals, identical in both themes — this is
+the single mapping that the emphasis scale below is built from.
+
+<Swatches names={[
+  ["--ifm-color-gray-0", "--src-white"],
+  ["--ifm-color-gray-100", "--src-gray-100"],
+  ["--ifm-color-gray-200", "--src-gray-200"],
+  ["--ifm-color-gray-300", "--src-gray-300"],
+  ["--ifm-color-gray-400", "--src-gray-400"],
+  ["--ifm-color-gray-500", "--src-gray-500"],
+  ["--ifm-color-gray-600", "--src-gray-600"],
+  ["--ifm-color-gray-700", "--src-gray-700"],
+  ["--ifm-color-gray-800", "--src-gray-800"],
+  ["--ifm-color-gray-900", "--src-gray-900"],
+  ["--ifm-color-gray-1000", "--src-obsidian"],
+]} />
+
 ## Emphasis scale
 
-Infima's neutral ramp, used throughout the partials for borders and subtle fills.
+The borders-and-fills ramp, aliased onto the gray ramp above. It's **inverted**
+in dark mode — `emphasis-0` is `gray-0` in light and `gray-1000` in dark — so
+toggling the theme reverses this row. That inversion is why these carry no
+fixed `↳` target. `emphasis-200` is the one the partials lean on most.
 
 <Swatches names={[
   "--ifm-color-emphasis-0",
@@ -101,8 +179,8 @@ apply to the homepage rather than to docs.
   "--ifm-color-info-dark",
   "--ifm-color-info-darker",
   "--ifm-color-info-darkest",
-  "--ifm-color-info-contrast-background",
-  "--ifm-color-info-contrast-foreground",
+  ["--ifm-color-info-contrast-background", "--src-white / --src-black"],
+  ["--ifm-color-info-contrast-foreground", "--src-black / --src-white"],
   "--ifm-color-success-contrast-background",
   "--ifm-alert-border-color",
 ]} />
@@ -154,7 +232,6 @@ pushfeedback's own variables, overridden in `variables.scss`. See
 | --- | --- | --- |
 | `--root-wrapper-width` | `110rem` | Max width of navbar, footer, and main wrapper |
 | `--doc-sidebar-width` | `300px` | Doc sidebar width |
-| `--doc-sidebar-hidden-width` | `30px` | Collapsed doc sidebar width |
 | `--h1-base-font-size` | `2.25rem` | Shared `h1` size token |
 | `--ifm-h4-font-size` | `1.313rem` | Heading level 4 |
 | `--ifm-font-size-base` | `1rem` | Body copy |

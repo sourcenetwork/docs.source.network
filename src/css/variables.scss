@@ -17,25 +17,53 @@
   --src-highlight: #39e265;
   --src-red: #ff7777;
 
+  // Amber is the LensVM product accent. The brand system asks that product
+  // accents stay isolated to their own contexts, so using it as the semantic
+  // warning colour below is a deliberate departure.
+  --src-amber: #ffa011;
+
+  // Brand neutrals, mirroring the scale in the Source brand system. Kept on
+  // the brand's own step labels rather than Infima's; the mapping onto
+  // --ifm-color-gray-* happens in the Infima overrides below.
+  --src-white: #ffffff;
+  --src-black: #000000;
+  --src-obsidian: #0b0b0b;
+  --src-ink: #222222;
+  --src-gray-50: #fafafa;
+  --src-gray-100: #f5f5f5;
+  --src-gray-200: #e5e5e5; // the brand's designated border gray
+  --src-gray-300: #d4d4d4;
+  --src-gray-400: #a3a3a3;
+  --src-gray-500: #737373;
+  --src-gray-600: #525252;
+  --src-gray-700: #404040;
+  --src-gray-800: #262626;
+  --src-gray-900: #171717;
+
   // Layout
   --root-wrapper-width: 110rem;
-  --menu-indicator-color: #ccc;
-  --docs-title-border: #e0e0e0;
+  --menu-indicator-color: var(--src-gray-300);
+  --docs-title-border: var(--src-gray-200);
   --doc-sidebar-width: 18.75rem;
-  --doc-sidebar-hidden-width: 30px;
 
   --h1-base-font-size: 2.25rem;
 
+  // Interaction overlays, shared by the sidebar menu and the tab bar. Kept
+  // separate from Infima's --ifm-hover-overlay, which it also uses for
+  // breadcrumbs, dropdowns, pagination and pills at a lighter 5%.
+  --src-hover-overlay: rgba(0, 0, 0, 0.08);
+  --src-active-overlay: rgba(0, 0, 0, 0.05);
+
   // Cards
   --card-color: rgb(255, 255, 255, 0.9);
-  --card-border-color: #e8e8e8;
+  --card-border-color: var(--src-gray-200);
   --card-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   --card-box-shadow-highlight: 0 2px 25px rgba(31, 96, 233, 0.05);
 
   // Code blocks / syntax highlighting
   --color-text-muted: #939598;
   --code-foreground: #000000;
-  --code-background: #f3f3f3;
+  --code-background: var(--src-gray-100);
   --code-token-keyword: #5a2cbc;
   --code-token-constant: #1a7032;
   --code-token-string: #d18c0c;
@@ -48,15 +76,19 @@
   --code-token-number: #000000;
   --code-token-property: rgb(105, 76, 156);
   --code-highlight-color: #1c1c1c;
-  --codeblock-title-border: #d1d1d1;
+  --codeblock-title-border: var(--src-gray-300);
   --codeblock-valid-border: var(--src-primary);
   --codeblock-invalid-border: var(--src-red);
-  --codeblock-highlighted-line-background: rgb(230 230 230);
+  --codeblock-highlighted-line-background: var(--src-gray-200);
 }
 
 html[data-theme="dark"] {
   // Layout
-  --docs-title-border: #1a1a1a;
+  --docs-title-border: var(--src-gray-900);
+
+  // Interaction overlays — same alphas, lifted off black instead of white
+  --src-hover-overlay: rgba(255, 255, 255, 0.08);
+  --src-active-overlay: rgba(255, 255, 255, 0.05);
 
   // Cards
   --card-color: rgb(29, 29, 29, 0.4);
@@ -65,7 +97,7 @@ html[data-theme="dark"] {
 
   // Code blocks / syntax highlighting
   --code-foreground: #ffffff;
-  --code-background: #191919;
+  --code-background: var(--src-gray-900);
   --code-token-keyword: #aca4ff;
   --code-token-constant: #3ecf6e;
   --code-token-string: #e7bb94;
@@ -77,7 +109,7 @@ html[data-theme="dark"] {
   --code-token-link: #ffffff;
   --code-token-number: #ffffff;
   --code-token-property: rgb(180, 148, 234);
-  --code-highlight-color: #232323;
+  --code-highlight-color: var(--src-ink);
   --codeblock-title-border: #323232;
   --codeblock-highlighted-line-background: rgb(47 47 47);
 }
@@ -113,7 +145,7 @@ html[data-theme="dark"] {
 }
 
 html[data-theme="light"] {
-  --feedback-primary-color: #000000;
+  --feedback-primary-color: var(--src-black);
 }
 
 // DocSearch theming (its own CSS custom properties, not ours)
@@ -174,13 +206,52 @@ html[data-theme="light"] {
   --ifm-color-primary-light: #3771eb;
   --ifm-color-primary-lighter: #437aed;
   --ifm-color-primary-lightest: #6793f0;
-  --ifm-color-secondary-contrast-background: rgb(236, 236, 236);
+  // The secondary family styles :::note admonitions — Infima maps
+  // .alert--secondary onto it. Its own values are hardcoded blue-grays rather
+  // than aliases onto --ifm-color-gray-*, so they were the one part of the
+  // note admonition the brand ramp didn't reach: the border, the icon stroke
+  // (which reads --ifm-alert-border-color), and the body text.
+  //
+  // -dark is theme-invariant in Infima, so it stays in :root; the values here
+  // match what it already resolved to, just sourced from the ramp.
+  --ifm-color-secondary-contrast-background: var(--src-gray-100);
+  --ifm-color-secondary-dark: var(--src-gray-300);
+  --ifm-color-secondary-contrast-foreground: var(--src-gray-800);
+
+  // Warning: -dark is what .alert--warning maps --ifm-alert-border-color to,
+  // so this drives both the admonition border and its icon stroke.
+  --ifm-color-warning: var(--src-amber);
+  --ifm-color-warning-dark: var(--src-amber);
 
   --ifm-color-info-dark: rgb(0, 205, 80);
   --ifm-color-info-darker: rgb(7, 160, 66);
   --ifm-color-info-darkest: rgb(4, 146, 59);
-  --ifm-color-info-contrast-background: rgb(255, 255, 255);
-  --ifm-color-info-contrast-foreground: rgb(0, 0, 0);
+  --ifm-color-info-contrast-background: var(--src-white);
+  --ifm-color-info-contrast-foreground: var(--src-black);
+
+  // Grays — point Infima's ramp at the brand neutrals above, replacing its
+  // blue-tinted defaults (#ebedf0, #8d949e, #606770 …) with true neutrals.
+  //
+  // This ramp is the only thing that needs mapping: Infima's
+  // --ifm-color-emphasis-* tokens are aliases onto it, declared once in :root
+  // and again under [data-theme='dark'] with the order inverted. Redefining
+  // the grays here updates both themes and keeps the inversion intact.
+  //
+  // The brand's 100–900 steps line up with Infima's labels one for one, which
+  // puts the brand's border gray on emphasis-200 — the token this codebase
+  // leans on most for borders. The ends take White and Obsidian; the brand's
+  // gray-50 has no Infima slot and goes unused.
+  --ifm-color-gray-0: var(--src-white);
+  --ifm-color-gray-100: var(--src-gray-100);
+  --ifm-color-gray-200: var(--src-gray-200);
+  --ifm-color-gray-300: var(--src-gray-300);
+  --ifm-color-gray-400: var(--src-gray-400);
+  --ifm-color-gray-500: var(--src-gray-500);
+  --ifm-color-gray-600: var(--src-gray-600);
+  --ifm-color-gray-700: var(--src-gray-700);
+  --ifm-color-gray-800: var(--src-gray-800);
+  --ifm-color-gray-900: var(--src-gray-900);
+  --ifm-color-gray-1000: var(--src-obsidian);
 
   --ifm-container-width-xl: 1400px;
 
@@ -203,7 +274,7 @@ html[data-theme="light"] {
   --ifm-global-radius: 0rem;
 
   // Code
-  --ifm-code-background: rgb(226, 226, 226);
+  --ifm-code-background: var(--src-gray-200);
   --ifm-code-font-size: 80%;
   --ifm-code-border-radius: 0.375rem; // 6px
   --ifm-pre-padding: 1rem;
@@ -224,7 +295,11 @@ html[data-theme="light"] {
   // Menu / sidebar
   --ifm-menu-color: var(--ifm-color-emphasis-700);
   --ifm-menu-color-active: var(--ifm-color-primary);
-  --ifm-menu-color-background-active: transparent;
+  // Set per-menu rather than via --ifm-hover-overlay, which Infima also uses
+  // for breadcrumbs, dropdowns, pagination and pills. The overlay flips from
+  // black to white between themes, so these are re-declared in the dark block.
+  --ifm-menu-color-background-hover: var(--src-hover-overlay);
+  --ifm-menu-color-background-active: var(--src-active-overlay);
   --ifm-menu-link-padding-horizontal: 1rem;
   --ifm-menu-link-padding-vertical: 0.5rem;
 
@@ -261,18 +336,22 @@ html[data-theme="light"] {
 
 html[data-theme="dark"] {
   --ifm-color-primary: var(--src-highlight);
-  --ifm-background-color: #000000;
+  --ifm-background-color: var(--src-black);
   --ifm-background-surface-color: var(--ifm-background-color);
 
   --ifm-color-content-secondary: rgb(174 174 174);
-  --ifm-color-secondary-contrast-background: #222222;
+  --ifm-color-secondary-contrast-background: var(--src-ink);
+  --ifm-color-secondary-contrast-foreground: var(--src-white);
 
-  --ifm-color-info-contrast-background: rgb(0, 0, 0);
-  --ifm-color-info-contrast-foreground: rgb(255, 255, 255);
+  --ifm-color-info-contrast-background: var(--src-black);
+  --ifm-color-info-contrast-foreground: var(--src-white);
 
   --ifm-toc-border-color: transparent;
-  --ifm-menu-color: var(--ifm-color-emphasis-400);
-  --ifm-scrollbar-thumb-background-color: var(--ifm-color-emphasis-200);
+  // Two steps up from where this sat under Infima's ramp. Its old value
+  // resolved to #8d949e; emphasis-400 now lands on #525252, which is too dark
+  // to read against the black background.
+  --ifm-menu-color: var(--ifm-color-emphasis-600);
+  --ifm-scrollbar-thumb-background-color: var(--ifm-color-emphasis-300);
 
   // Infima re-declares this under [data-theme='dark'] at the same specificity
   // as our :root, so it has to be repeated here to stay off.

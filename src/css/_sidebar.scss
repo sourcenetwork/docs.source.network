@@ -43,6 +43,14 @@
       font-size: rem(14px);
       border-radius: 0;
 
+      // Infima's hover only swaps the background — there's no
+      // --ifm-menu-color-hover — so the label would otherwise stay at the
+      // muted --ifm-menu-color. Excluding the active item keeps it on the
+      // primary accent rather than flipping it to plain text on hover.
+      &:not(.menu__link--active):hover {
+        color: var(--ifm-font-color-base);
+      }
+
       &--active {
         font-weight: 500;
       }
@@ -52,6 +60,12 @@
 
         &.menu__link--active {
           color: var(--ifm-menu-color);
+
+          // An active category is styled muted rather than accented, so it
+          // should still brighten on hover like every other item.
+          &:hover {
+            color: var(--ifm-font-color-base);
+          }
         }
 
         &:after {

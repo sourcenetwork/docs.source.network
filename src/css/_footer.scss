@@ -14,6 +14,18 @@
     max-width: rem(160px);
     margin: 0;
   }
+
+  // Infima styles these with a `font` shorthand —
+  // `bold var(--ifm-h4-font-size)/… var(--ifm-font-family-base)` — which puts
+  // them in Inter at bold. Longhands are needed to override the two parts
+  // individually without restating the size and line-height.
+  &__title {
+    font-family: var(--ifm-heading-font-family);
+    font-weight: var(--ifm-heading-font-weight);
+    // Down from the shorthand's --ifm-h4-font-size (1.313rem), which is
+    // heading scale rather than footer scale.
+    font-size: rem(18px);
+  }
 }
 
 .footer__copyright {

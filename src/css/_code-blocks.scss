@@ -23,6 +23,14 @@
     margin-bottom: 0.313rem; // 5px
   }
 
+  // Docusaurus puts margin-bottom: var(--ifm-leading) on every code block.
+  // As the last thing in a container — a details block, an admonition, a
+  // table cell — that stacks on top of the container's own padding and
+  // leaves a gap. (0,2,0) beats the theme's codeBlockContainer at (0,1,0).
+  &:last-child {
+    margin-bottom: 0;
+  }
+
   // Override the title border
   & [class*="codeBlockTitle"] {
     border-bottom-color: var(--codeblock-title-border);

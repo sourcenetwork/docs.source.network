@@ -8,13 +8,17 @@
 //
 // See _admonitions.scss for the shared .alert rules these build on.
 details.alert {
-  --details-caret-size: #{rem(14px)};
+  --details-caret-size: #{rem(16px)};
   --details-border-color: var(--ifm-color-emphasis-300);
 
   // Drives the caret. theme-common uses this for the content divider too,
   // but that's repointed at --details-border-color below so the divider can
-  // match the box while the caret stays a step darker and legible.
-  --docusaurus-details-decoration-color: var(--ifm-color-emphasis-500);
+  // match the box while the caret stays darker and legible.
+  //
+  // emphasis-1000 is the top of the ramp, which inverts per theme: it resolves
+  // to --src-white on dark and --src-obsidian on light. Full white where you
+  // want it, without going invisible on the light fill.
+  --docusaurus-details-decoration-color: var(--ifm-color-emphasis-1000);
 
   // Set directly rather than through --ifm-alert-border-color, to opt out of
   // the 50% color-mix that tones down the admonition borders.
@@ -41,6 +45,13 @@ details.alert {
   // rule at (0,1,2) outright, rather than relying on stylesheet order.
   &[class] > summary {
     padding-left: #{rem(26px)};
+  }
+
+  // summary is a block, so this underlines the label text rather than the
+  // full row. Offset matched to the global `a` rule in custom.scss.
+  > summary:hover {
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
   }
 
   > summary::before {
