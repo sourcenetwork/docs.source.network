@@ -1,0 +1,22 @@
+@use "./functions" as *;
+
+.tabs-container {
+  // Tab length indicator. Toward black, not the background, so it darkens in
+  // both themes.
+  .margin-top--md {
+    border-left: 2px color-mix(in srgb, var(--src-primary) 65%, var(--src-black))
+      solid;
+    padding-left: var(--ifm-tabs-padding-horizontal);
+  }
+
+  .tabs {
+    font-weight: 500;
+    font-size: rem(14px);
+  }
+
+  // Infima's hover is a 5% overlay with no colour change; match the sidebar.
+  .tabs__item:not(.tabs__item--active):hover {
+    background-color: var(--src-hover-overlay);
+    color: var(--ifm-font-color-base);
+  }
+}

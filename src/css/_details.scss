@@ -1,4 +1,4 @@
-@use "./utils" as *;
+@use "./functions" as *;
 
 // Docusaurus hardcodes `alert alert--info` onto every <details>. details.alert
 // is (0,1,1) and outranks .alert--info without touching :::info admonitions.

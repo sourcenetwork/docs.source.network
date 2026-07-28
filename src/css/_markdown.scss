@@ -1,4 +1,4 @@
-@use "./utils" as *;
+@use "./functions" as *;
 
 .markdown h1:first-child {
   --ifm-h1-font-size: var(--h1-base-font-size);

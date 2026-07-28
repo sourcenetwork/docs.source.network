@@ -1,4 +1,4 @@
-@use "./utils" as *;
+@use "./functions" as *;
 
 // All CSS custom properties for the site; rules live in the partials. Ours
 // and Infima's are kept in separate blocks.
@@ -202,13 +202,9 @@ html[data-theme="light"] {
   --ifm-color-primary-lightest: #08e768;
   // .alert--secondary (:::note) maps onto this family, which Infima hardcodes
   // rather than aliasing the greys. -dark is theme-invariant upstream.
-  --ifm-color-secondary-contrast-background: var(--src-gray-100);
   --ifm-color-secondary-dark: var(--src-gray-300);
+  --ifm-color-secondary-contrast-background: var(--src-gray-100);
   --ifm-color-secondary-contrast-foreground: var(--src-gray-800);
-
-  // -dark is what .alert--warning maps --ifm-alert-border-color to.
-  --ifm-color-warning: var(--src-amber);
-  --ifm-color-warning-dark: var(--src-amber);
 
   --ifm-color-info-dark: rgb(0, 205, 80);
   --ifm-color-info-darker: rgb(7, 160, 66);
@@ -218,6 +214,10 @@ html[data-theme="light"] {
     --ifm-color-success-contrast-background
   );
   --ifm-color-info-contrast-foreground: var(--src-black);
+
+  // -dark is what .alert--warning maps --ifm-alert-border-color to.
+  --ifm-color-warning: var(--src-amber);
+  --ifm-color-warning-dark: var(--src-amber);
 
   // The only mapping needed: --ifm-color-emphasis-* alias onto this ramp,
   // declared in :root and again inverted under [data-theme='dark'], so both
@@ -234,6 +234,7 @@ html[data-theme="light"] {
   --ifm-color-gray-900: var(--src-gray-900);
   --ifm-color-gray-1000: var(--src-obsidian);
 
+  // Layout
   --ifm-container-width-xl: 1400px;
 
   // Fonts
@@ -256,14 +257,14 @@ html[data-theme="light"] {
 
   // Code
   --ifm-code-background: var(--src-gray-200);
-  --ifm-code-font-size: 80%;
   --ifm-code-border-radius: #{rem(6px)};
+  --ifm-code-font-size: 80%;
   --ifm-pre-padding: 1rem;
 
   // Tables (structure lives in _tables.scss)
   --ifm-table-cell-padding: 0.75rem 1rem;
-  --ifm-table-border-color: var(--ifm-color-emphasis-200);
   --ifm-table-stripe-background: transparent; // flat, no zebra striping
+  --ifm-table-border-color: var(--ifm-color-emphasis-200);
   // Decoupled from --ifm-font-weight-bold, 800 here and too heavy.
   --ifm-table-head-font-weight: 600;
 
@@ -276,8 +277,8 @@ html[data-theme="light"] {
   --ifm-menu-color: var(--ifm-color-emphasis-700);
   --ifm-menu-color-active: var(--ifm-color-primary);
   // Per-menu, not via --ifm-hover-overlay which Infima shares more widely.
-  --ifm-menu-color-background-hover: var(--src-hover-overlay);
   --ifm-menu-color-background-active: var(--src-active-overlay);
+  --ifm-menu-color-background-hover: var(--src-hover-overlay);
   --ifm-menu-link-padding-horizontal: 1rem;
   --ifm-menu-link-padding-vertical: 0.5rem;
 
@@ -292,9 +293,9 @@ html[data-theme="light"] {
   // Alerts
   // Infima defaults these to 0 and 5px. Both must be set and must match, or
   // the rounded corners come out lopsided.
+  --ifm-alert-border-radius: var(--ifm-code-border-radius); // match code blocks
   --ifm-alert-border-width: 1px;
   --ifm-alert-border-left-width: 1px;
-  --ifm-alert-border-radius: var(--ifm-code-border-radius); // match code blocks
 
   // Breadcrumbs
   --ifm-breadcrumb-spacing: 0rem;
@@ -307,8 +308,8 @@ html[data-theme="light"] {
 
   --ifm-hr-background-color: var(--ifm-color-emphasis-300);
 
-  --ifm-tabs-padding-vertical: 0.75rem;
   --ifm-tabs-padding-horizontal: 1rem;
+  --ifm-tabs-padding-vertical: 0.75rem;
 }
 
 html[data-theme="dark"] {

@@ -1,0 +1,14 @@
+.theme-edit-this-page {
+  color: var(--ifm-menu-color);
+  font-weight: 500;
+  // Matches Infima's .table-of-contents, which this sits beneath. A literal
+  // there too, so there's no token to alias.
+  font-size: 0.8rem;
+  display: flex;
+  align-items: center;
+}
+
+// Already shown under the ToC.
+.theme-doc-footer-edit-meta-row {
+  display: none;
+}

@@ -3,18 +3,23 @@
 // content-centric websites.
 @use "./variables";
 @use "./utilities";
+
+// Components, roughly outermost-in.
 @use "./navbar";
 @use "./sidebar";
-@use "./breadcrumbs";
 @use "./footer";
+@use "./breadcrumbs";
 @use "./pagination";
+@use "./search";
+@use "./markdown";
 @use "./admonitions";
 @use "./details";
-@use "./search";
+@use "./tabs";
 @use "./code-blocks";
-@use "./markdown";
 @use "./tables";
 @use "./feedback";
+@use "./back-to-top";
+@use "./edit-this-page";
 
 // Fonts
 

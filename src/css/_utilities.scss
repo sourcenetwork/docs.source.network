@@ -1,4 +1,4 @@
-@use "./utils" as *;
+@use "./functions" as *;
 
 .footer>.container,
 .navbar__inner,
@@ -18,13 +18,10 @@
   border-top: rem(1px) solid var(--docs-title-border);
 }
 
-// Docusaurus puts this on the doc sidebar and the table of contents.
-//
-// Declaring scrollbar-color at all opts the element out of the OS overlay
-// scrollbar, which is why these read as permanently drawn. Hiding the thumb
-// until hover gets that back. There's no CSS equivalent of "while scrolling" —
-// no :scrolling pseudo-class exists — so this is hover only; matching the OS
-// fade-on-idle would need a JS scroll listener.
+// Docusaurus puts this on the doc sidebar, the ToC and code blocks. Declaring
+// scrollbar-color at all opts out of the OS overlay scrollbar, which is why
+// these read as permanently drawn; hiding the thumb until hover gets that
+// back. There's no CSS equivalent of "while scrolling", so hover only.
 .thin-scrollbar {
   scrollbar-width: thin;
   scrollbar-color: transparent transparent;
@@ -36,7 +33,7 @@
     scrollbar-color: var(--ifm-scrollbar-thumb-background-color) transparent;
   }
 
-  // Safari only shipped scrollbar-color in 18.2; this covers older WebKit.
+  // Safari only shipped scrollbar-color in 18.2; covers older WebKit.
   &::-webkit-scrollbar-thumb {
     background-color: transparent;
     border-radius: rem(4px);
@@ -46,25 +43,4 @@
   &:focus-within::-webkit-scrollbar-thumb {
     background-color: var(--ifm-scrollbar-thumb-background-color);
   }
-}
-
-// Shift the scroll-to-top button further up to avoid clashing with the feedback button
-button.theme-back-to-top-button {
-  bottom: 3.6rem;
-  background-color: var(--ifm-background-color);
-}
-
-.theme-edit-this-page {
-  color: var(--ifm-menu-color);
-  font-weight: 500;
-  // Matches Infima's .table-of-contents, which this link sits directly
-  // beneath. That's a literal there too, so there's no token to alias.
-  font-size: 0.8rem;
-  display: flex;
-  align-items: center;
-}
-
-// Edit this page is already shown under the ToC
-.theme-doc-footer-edit-meta-row {
-  display: none;
 }

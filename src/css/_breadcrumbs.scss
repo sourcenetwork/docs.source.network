@@ -1,4 +1,4 @@
-@use "./utils" as *;
+@use "./functions" as *;
 
 // A hidden Home item starts every trail, so two items means one visible crumb
 // — the page title, already the h1 below. Hiding in CSS rather than swizzling
