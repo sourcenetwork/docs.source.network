@@ -40,6 +40,11 @@
   --src-gray-800: #262626;
   --src-gray-900: #171717;
 
+  // Named text roles from the brand system's dark-mode guidance. Secondary
+  // maps onto --src-gray-600, so it isn't repeated here.
+  --src-text-muted: #939598; // muted/tertiary on dark
+  --src-text-subtitle: #adadad; // subtitle on dark
+
   // Layout
   --root-wrapper-width: 110rem;
   --menu-indicator-color: var(--src-gray-300);
@@ -61,7 +66,6 @@
   --card-box-shadow-highlight: 0 2px 25px rgba(31, 96, 233, 0.05);
 
   // Code blocks / syntax highlighting
-  --color-text-muted: #939598;
   --code-foreground: #000000;
   --code-background: var(--src-gray-100);
   --code-token-keyword: #5a2cbc;
@@ -200,12 +204,17 @@ html[data-theme="light"] {
 :root {
   // Colors
   --ifm-color-primary: var(--src-primary);
-  --ifm-color-primary-dark: #1554d8;
-  --ifm-color-primary-darker: #144fcc;
-  --ifm-color-primary-darkest: #1141a8;
-  --ifm-color-primary-light: #3771eb;
-  --ifm-color-primary-lighter: #437aed;
-  --ifm-color-primary-lightest: #6793f0;
+  // Shades of --src-primary, at the same +/-10/15/30% lightness steps
+  // Docusaurus' own colour generator uses. These were a leftover blue palette
+  // from a previous brand; Infima reaches for -dark and -darker on
+  // .button--primary hover and active, so the first primary button added would
+  // have rendered green and hovered blue.
+  --ifm-color-primary-dark: #05a048;
+  --ifm-color-primary-darker: #059744;
+  --ifm-color-primary-darkest: #047d38;
+  --ifm-color-primary-light: #07c458;
+  --ifm-color-primary-lighter: #07cd5c;
+  --ifm-color-primary-lightest: #08e768;
   // The secondary family styles :::note admonitions — Infima maps
   // .alert--secondary onto it. Its own values are hardcoded blue-grays rather
   // than aliases onto --ifm-color-gray-*, so they were the one part of the
@@ -280,7 +289,7 @@ html[data-theme="light"] {
   // Code
   --ifm-code-background: var(--src-gray-200);
   --ifm-code-font-size: 80%;
-  --ifm-code-border-radius: 0.375rem; // 6px
+  --ifm-code-border-radius: #{rem(6px)};
   --ifm-pre-padding: 1rem;
 
   // Tables (structure lives in _tables.scss)
