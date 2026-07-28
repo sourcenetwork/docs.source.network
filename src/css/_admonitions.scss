@@ -1,11 +1,112 @@
-.admonition {
-  .admonition-icon {
-    display: none;
+@use "./utils" as *;
+
+// Lay the icon out in its own column with the body indented beside it. The
+// default type label ("NOTE", "TIP", …) is dropped so the icon alone carries
+// the meaning, but a title the author wrote is kept — see the wrapper at
+// src/theme/Admonition/index.tsx, which tags those with .admonition--titled.
+//
+// The heading, icon, and content class names are all hashed CSS modules, so
+// they're matched by substring the same way _code-blocks.scss handles
+// codeBlockTitle. Only .theme-admonition is a stable class.
+.theme-admonition {
+  // Both layouts below indent the body by exactly one icon column plus one
+  // gap, so these two have to stay in lockstep — hence the local variables.
+  // The icon column is a definite width rather than `auto`: in the titled
+  // layout the heading spans both columns, which leaves nothing sizing an
+  // `auto` column, and it would collapse to zero and pull the body left of
+  // the title.
+  --admonition-icon-size: #{rem(18px)};
+  --admonition-gap: #{rem(14px)};
+
+  display: grid;
+  grid-template-columns: var(--admonition-icon-size) 1fr;
+  column-gap: var(--admonition-gap);
+  align-items: start;
+
+  // Grid items are min-width: auto by default, so a child with a wide
+  // intrinsic minimum — a code block, a long unbroken path — stretches the
+  // column and pushes the content past the admonition's own box instead of
+  // scrolling inside it.
+  [class*="admonitionContent"] {
+    min-width: 0;
+    font-size: rem(14px); // a step down from body copy; titles keep their size
+  }
+
+  [class*="admonitionIcon"] {
+    display: block;
+    margin-right: 0;
+    margin-top: 0.15rem; // sit the icon on the first line of body text
+
+    svg {
+      display: block;
+      width: var(--admonition-icon-size);
+      height: var(--admonition-icon-size);
+    }
+
+    // The Lucide replacements in src/theme/Admonition/Icon/ are stroke-based,
+    // but Admonition's module CSS sets `fill: var(--ifm-alert-foreground-color)`
+    // on every icon svg — and a CSS declaration beats the `fill="none"`
+    // presentation attribute, which would flood them solid. Undo the fill and
+    // drive the stroke from the same token instead.
+    svg.admonition-icon--stroke {
+      fill: none;
+      // The variant's accent at full strength. The border uses the same hue
+      // pulled halfway to the background (--admonition-border-color above),
+      // so the icon reads as the saturated version of the same colour.
+      // Per-variant overrides set --admonition-icon-color below.
+      stroke: var(--admonition-icon-color, var(--ifm-alert-border-color));
+    }
+  }
+
+  // Untitled: the label is a bare text node sitting next to the icon span,
+  // with no element of its own to hide. Collapsing the heading's type is the
+  // only way to reach it — which is also why the icon is sized in rem above
+  // rather than the theme's em.
+  &:not(.admonition--titled) [class*="admonitionHeading"] {
+    font-size: 0;
+    line-height: 0;
+    margin-bottom: 0;
+  }
+
+  // Titled: icon and title share the first row, body indents beneath it.
+  &.admonition--titled {
+    [class*="admonitionHeading"] {
+      grid-column: 1 / -1;
+      display: flex;
+      align-items: center;
+      gap: var(--admonition-gap); // must match the grid's column-gap
+      margin-bottom: 0.5rem;
+      text-transform: none; // authored titles are sentence case
+      // Admonition's module CSS sets a `font` shorthand that pulls in
+      // --ifm-heading-font-family; a title here is a label, not a heading.
+      font-family: var(--ifm-font-family-base);
+    }
+
+    [class*="admonitionIcon"] {
+      margin-top: 0;
+    }
+
+    [class*="admonitionContent"] {
+      grid-column: 2; // line the body up with the title, past the icon
+    }
   }
 }
 
 .alert {
   --ifm-link-color: var(--ifm-color-primary);
+
+  // Infima points --ifm-alert-border-color at each variant's strong tone,
+  // which is loud now that it runs the whole way round rather than just down
+  // the left edge. Pull it halfway to the alert's own background. This is a
+  // separate name rather than a reassignment of --ifm-alert-border-color,
+  // which would be a self-reference and make the property invalid.
+  --admonition-border-color: color-mix(
+    in srgb,
+    var(--ifm-alert-border-color) 50%,
+    var(--ifm-alert-background-color)
+  );
+
+  border-color: var(--admonition-border-color);
 
   a {
     text-decoration-color: var(--ifm-color-primary);
@@ -13,8 +114,22 @@
 }
 
 // Override the black background with green for :::info admonitions
-.alert--info {
-  --ifm-alert-background-color: #011a0b;
+// .alert--info {
+//   --ifm-alert-background-color: var(--ifm-color-success-contrast-background);
+// }
+
+// Tip maps to .alert--success, whose accent (--ifm-color-success-dark) is a
+// muted green that barely registers at icon size. Use the brand accent, so it
+// reads as strongly as the info icon does.
+.theme-admonition-tip {
+  --admonition-icon-color: var(--ifm-color-primary);
+}
+
+// Warning reads much brighter than the other variants at Infima's default of
+// rgb(77, 56, 0). Only dark mode is darkened here — the light-mode default is
+// a pale rgb(255, 248, 230), where "darker" would mean something different.
+html[data-theme="dark"] .alert--warning {
+  --ifm-alert-background-color: rgb(46, 34, 0);
 }
 
 // Visual indication of tabs length
@@ -22,5 +137,10 @@
   .margin-top--md {
     border-left: 2px var(--src-primary) solid;
     padding-left: var(--ifm-tabs-padding-horizontal);
+  }
+
+  .tabs {
+    font-weight: 500;
+    font-size: rem(14px);
   }
 }

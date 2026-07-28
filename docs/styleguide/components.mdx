@@ -1,0 +1,282 @@
+---
+title: Components
+sidebar_position: 2
+description: Admonitions, details, tabs, and every code block variant.
+---
+
+<head>
+  <meta name="robots" content="noindex, nofollow" />
+</head>
+
+## Admonitions
+
+All five Infima variants. Styled by `_admonitions.scss`, which hides the default
+icon and repoints `.alert--info` at `--ifm-color-success-contrast-background`.
+
+:::note
+A note admonition. Contains **bold text**, `inline code`, and a
+[link](https://github.com/sourcenetwork) to check inherited colors — `.alert`
+sets its own `--ifm-link-color`.
+:::
+
+:::tip
+A tip admonition.
+:::
+
+:::info
+An info admonition. This is the variant `_admonitions.scss` overrides, and the
+same one Docusaurus reuses for `<details>` — see below.
+:::
+
+:::warning
+A warning admonition.
+:::
+
+:::danger
+A danger admonition.
+:::
+
+:::note[Custom title]
+An admonition with a custom title instead of the variant name.
+:::
+
+## Details / accordion
+
+Rendered by the `Details` theme component, which hardcodes `alert alert--info`
+onto every block — so these inherit admonition styling. The stable selector is
+`details.alert`; both classes in the DOM are hashed CSS modules.
+
+<details>
+<summary>A collapsed details block</summary>
+
+Content revealed on expand. The divider above this text and the triangle in the
+summary are both colored by `--docusaurus-details-decoration-color`.
+
+- A list inside details
+- To check nested spacing
+
+</details>
+
+<details open>
+<summary>A details block that starts open</summary>
+
+This one carries the `open` attribute, so it renders expanded. Note the arrow
+rotation, driven by `--docusaurus-details-transition`.
+
+```graphql
+query {
+  Book {
+    title
+  }
+}
+```
+
+</details>
+
+## Tabs
+
+Registered globally in `src/theme/MDXComponents.tsx`. The left border and label
+weight come from the `.tabs-container` rule in `_admonitions.scss`.
+
+<Tabs>
+<TabItem value="cli" label="CLI">
+
+```bash
+defradb client collection create --name Book
+```
+
+</TabItem>
+<TabItem value="http" label="HTTP">
+
+```bash
+curl -X POST http://localhost:9181/api/v0/collections
+```
+
+</TabItem>
+<TabItem value="graphql" label="GraphQL">
+
+```graphql
+mutation {
+  create_Book(input: { title: "Dune" }) {
+    _docID
+  }
+}
+```
+
+</TabItem>
+</Tabs>
+
+## Code blocks
+
+The wrapper at `src/theme/CodeBlock/index.tsx` parses bare-word flags off the
+fence metastring. Each variant below is labeled with the fence that produced it.
+
+### Plain
+
+```go
+func main() {
+	fmt.Println("hello")
+}
+```
+
+### With a title
+
+````
+```go title="main.go"
+````
+
+```go title="main.go"
+func main() {
+	fmt.Println("hello")
+}
+```
+
+### Highlighted lines
+
+````
+```go {2-3}
+````
+
+```go {2-3}
+func main() {
+	client := NewClient()
+	defer client.Close()
+	fmt.Println("hello")
+}
+```
+
+### Valid example
+
+````
+```graphql title="Correct" valid
+````
+
+```graphql title="Correct" valid
+mutation {
+  create_Book(input: { title: "Dune" }) {
+    _docID
+  }
+}
+```
+
+### Invalid example
+
+````
+```graphql title="Incorrect" invalid
+````
+
+```graphql title="Incorrect" invalid
+mutation {
+  create_Book(title: "Dune") {
+    _docID
+  }
+}
+```
+
+### Query followed by a result
+
+The `.theme-code-block:has(+ .codeblock-result)` rule squashes the gap between
+the pair.
+
+````
+```graphql
+```json title="Result" result
+````
+
+```graphql
+query {
+  Book {
+    title
+  }
+}
+```
+
+```json title="Result" result
+{
+  "data": {
+    "Book": [{ "title": "Dune" }]
+  }
+}
+```
+
+### Collapsible
+
+````
+```json title="A long response" collapse
+````
+
+```json title="A long response" collapse
+{
+  "data": {
+    "Book": [
+      { "title": "Dune", "author": "Frank Herbert", "year": 1965 },
+      { "title": "Neuromancer", "author": "William Gibson", "year": 1984 },
+      { "title": "Snow Crash", "author": "Neal Stephenson", "year": 1992 },
+      { "title": "Hyperion", "author": "Dan Simmons", "year": 1989 },
+      { "title": "Blindsight", "author": "Peter Watts", "year": 2006 }
+    ]
+  }
+}
+```
+
+### Collapsible, starting expanded
+
+````
+```json title="Expanded by default" collapse expanded
+````
+
+```json title="Expanded by default" collapse expanded
+{
+  "data": {
+    "Book": [{ "title": "Dune" }]
+  }
+}
+```
+
+### Syntax highlighting per language
+
+Token colors come from the `--code-token-*` variables and
+`src/code-theme/code-theme.js`.
+
+```javascript
+// A comment
+const greeting = "hello";
+export function greet(name = "world") {
+  return `${greeting}, ${name}! ${1 + 2}`;
+}
+```
+
+```python
+# A comment
+def greet(name: str = "world") -> str:
+    return f"hello, {name}"
+```
+
+```yaml
+# A comment
+service:
+  name: defradb
+  port: 9181
+  enabled: true
+```
+
+```sql
+SELECT title, author FROM books WHERE year > 1980 ORDER BY year;
+```
+
+```diff
+- const old = true;
++ const new = false;
+```
+
+## Buttons
+
+Infima button classes. Note that `.button--primary` isn't used anywhere in the
+site today, and its hover state resolves through `--ifm-color-primary-dark`.
+
+<div style={{ display: "flex", gap: "0.75rem", flexWrap: "wrap" }}>
+  <button className="button button--primary">Primary</button>
+  <button className="button button--secondary">Secondary</button>
+  <button className="button button--outline button--primary">Outline</button>
+  <button className="button button--link">Link</button>
+</div>

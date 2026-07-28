@@ -1,3 +1,7 @@
+@use "./utils" as *;
+
+// Our own "Was this helpful?" widget in the doc footer.
+
 .feedback-widget {
   margin-top: 3rem;
   text-align: center;
@@ -57,4 +61,22 @@
       height: 18px;
     }
   }
+}
+
+// pushfeedback's floating button. It renders in a shadow root, so plain class
+// selectors can't reach it — theme it with the --feedback-* custom properties
+// in variables.scss, and use ::part() for anything they don't expose.
+// Available parts: `button` and `icon` here, plus `modal`, `header`, `form`,
+// `submit-button`, `rating-button`, `close-button` etc. on <feedback-modal>.
+
+feedback-button::part(button) {
+  box-shadow: none;
+  border: 1px solid var(--ifm-color-emphasis-200);
+  padding: rem(5px) rem(10px);
+  right: 15px;
+  bottom: 15px;
+}
+
+feedback-button::part(icon) {
+  opacity: 0.4;
 }

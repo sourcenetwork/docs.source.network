@@ -38,7 +38,7 @@ const config = {
           lastmod: "date",
           changefreq: "weekly",
           priority: 0.5,
-          ignorePatterns: ["/defradb/0.20.0/**", "/blog*"],
+          ignorePatterns: ["/defradb/0.20.0/**", "/blog*", "/styleguide/**"],
           filename: "sitemap.xml",
         },
       },
@@ -232,7 +232,9 @@ const config = {
         // plugin-llms expects, so we can't pair them and link to md files in llms.txt.
         generateMarkdownFiles: false,
         addMdExtension: false,
-        ignoreFiles: ["BSL-License.md"],
+        // The internal styleguide is not public documentation; keep it out of
+        // the site-wide llms.txt, which otherwise sweeps all of docsDir.
+        ignoreFiles: ["BSL-License.md", "styleguide/**"],
         customLLMFiles: [
           {
             filename: "defradb/llms.txt",
@@ -383,6 +385,23 @@ const config = {
           const sidebarItems = await defaultSidebarItemsGenerator(args);
           return reverseSidebarChangelog(sidebarItems);
         },
+      }),
+    ],
+    // Internal styleguide. Deliberately not linked from the navbar or any
+    // product sidebar — visit /styleguide directly. Kept as its own docs
+    // instance so it renders in the real doc layout without appearing in a
+    // product's sidebar. Excluded from the sitemap below; each page also
+    // carries a robots noindex tag.
+    [
+      "@docusaurus/plugin-content-docs",
+      /** @type {Partial<import('@docusaurus/plugin-content-docs').PluginOptions>} */
+      ({
+        id: "styleguide",
+        path: "docs/styleguide",
+        routeBasePath: "styleguide",
+        sidebarPath: require.resolve("./docs/sidebars/styleguide.js"),
+        editUrl:
+          "https://github.com/sourcenetwork/docs.source.network/edit/master/",
       }),
     ],
   ],

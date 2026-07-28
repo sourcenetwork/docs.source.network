@@ -1,3 +1,5 @@
+@use "./utils" as *;
+
 // All CSS custom properties (variables) for the site, grouped by concern.
 // Actual styling rules live in custom.scss / component stylesheets.
 //
@@ -19,7 +21,7 @@
   --root-wrapper-width: 110rem;
   --menu-indicator-color: #ccc;
   --docs-title-border: #e0e0e0;
-  --doc-sidebar-width: 300px;
+  --doc-sidebar-width: 18.75rem;
   --doc-sidebar-hidden-width: 30px;
 
   --h1-base-font-size: 2.25rem;
@@ -88,8 +90,8 @@ html[data-theme="dark"] {
 // order; `html[data-theme=...]` is (0,1,1), so ours always wins.
 html[data-theme="dark"],
 html[data-theme="light"] {
-  --feedback-button-text-font-size: 1rem; // same as text size
-  --feedback-button-text-font-weight: 600;
+  --feedback-button-text-font-size: 0.875rem; // same as text size
+  --feedback-button-text-font-weight: 400;
   --feedback-background: var(--code-background);
   --feedback-button-dark-bg-color: var(--feedback-background);
   --feedback-button-dark-text-color: var(--feedback-primary-color);
@@ -97,22 +99,19 @@ html[data-theme="light"] {
   --feedback-modal-button-submit-bg-color: var(--feedback-background);
   --feedback-modal-button-submit-bg-color-hover: var(--feedback-background);
   --feedback-modal-button-border-color-active: var(--feedback-background);
-  --feedback-modal-button-submit-border-color-hover: var(
-    --feedback-primary-color
-  );
+  --feedback-modal-button-submit-border-color-hover: var(--feedback-primary-color);
   --feedback-modal-button-submit-text-color: var(--feedback-primary-color);
-  --feedback-modal-button-submit-text-color-hover: var(
-    --feedback-primary-color
-  );
+  --feedback-modal-button-submit-text-color-hover: var(--feedback-primary-color);
   --feedback-modal-rating-button-selected-color: var(--feedback-primary-color);
-  --feedback-modal-rating-button-positive-selected-color: var(
-    --ifm-color-primary
-  );
+  --feedback-modal-rating-button-positive-selected-color: var(--ifm-color-primary);
   --feedback-modal-rating-button-negative-selected-color: var(--src-red);
+  --feedback-button-border-radius: 0.5rem;
 }
+
 html[data-theme="dark"] {
-  --feedback-primary-color: var(--ifm-color-primary);
+  --feedback-primary-color: var(--ifm-font-color-base);
 }
+
 html[data-theme="light"] {
   --feedback-primary-color: #000000;
 }
@@ -156,11 +155,9 @@ html[data-theme="light"] {
 
   // Footer
   --docsearch-footer-background: var(--ifm-background-surface-color);
-  --docsearch-key-gradient: linear-gradient(
-    -26.5deg,
-    var(--ifm-color-emphasis-200) 0%,
-    var(--ifm-color-emphasis-100) 100%
-  );
+  --docsearch-key-gradient: linear-gradient(-26.5deg,
+      var(--ifm-color-emphasis-200) 0%,
+      var(--ifm-color-emphasis-100) 100%);
   --docsearch-search-button-background: var(--ifm-background-color);
 }
 
@@ -198,7 +195,7 @@ html[data-theme="light"] {
   --ifm-heading-font-weight: 400;
   --ifm-h1-font-size: var(--h1-base-font-size);
   --ifm-h4-font-size: 1.313rem;
-  
+
   --ifm-leading-desktop: 1.75;
   --ifm-leading: calc(var(--ifm-leading-desktop) * 1rem);
 
@@ -211,9 +208,16 @@ html[data-theme="light"] {
   --ifm-code-border-radius: 0.375rem; // 6px
   --ifm-pre-padding: 1rem;
 
+  // Tables (structure lives in _tables.scss)
+  --ifm-table-cell-padding: 0.75rem 1rem;
+  --ifm-table-border-color: var(--ifm-color-emphasis-200);
+  --ifm-table-stripe-background: transparent; // flat, no zebra striping
+  // Decoupled from --ifm-font-weight-bold, which is 800 here — too heavy
+  // for column headers.
+  --ifm-table-head-font-weight: 600;
+
   // Table of contents
   --ifm-toc-border-color: transparent;
-  --ifm-toc-padding-horizontal: 0.313rem;
   --ifm-toc-padding-vertical: 0.5rem;
   --ifm-toc-padding-horizontal: 1rem;
 
@@ -233,8 +237,12 @@ html[data-theme="light"] {
   --ifm-footer-background-color: var(--ifm-background-color);
 
   // Alerts
-  --ifm-alert-border-left-width: 2px;
-  --ifm-alert-border-radius: 0rem;
+  // Infima defaults border-width to 0 and border-left-width to 5px, giving
+  // the left-rule look. Setting both to 1px turns it into a full box; they
+  // have to match or the rounded corners come out lopsided.
+  --ifm-alert-border-width: 1px;
+  --ifm-alert-border-left-width: 1px;
+  --ifm-alert-border-radius: var(--ifm-code-border-radius); // match code blocks
 
   // Breadcrumbs
   --ifm-breadcrumb-spacing: 0rem;
@@ -246,6 +254,9 @@ html[data-theme="light"] {
   --ifm-scrollbar-thumb-background-color: var(--ifm-color-emphasis-400);
 
   --ifm-hr-background-color: var(--ifm-color-emphasis-300);
+
+  --ifm-tabs-padding-vertical: 0.75rem;
+  --ifm-tabs-padding-horizontal: 1rem;
 }
 
 html[data-theme="dark"] {
@@ -262,6 +273,10 @@ html[data-theme="dark"] {
   --ifm-toc-border-color: transparent;
   --ifm-menu-color: var(--ifm-color-emphasis-400);
   --ifm-scrollbar-thumb-background-color: var(--ifm-color-emphasis-200);
+
+  // Infima re-declares this under [data-theme='dark'] at the same specificity
+  // as our :root, so it has to be repeated here to stay off.
+  --ifm-table-stripe-background: transparent;
 
   --ifm-color-success-contrast-background: #011a0b;
 

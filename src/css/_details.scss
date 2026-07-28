@@ -1,0 +1,56 @@
+@use "./utils" as *;
+
+// Docusaurus renders every <details> with `alert alert--info` hardcoded in
+// theme-classic/Details, so they inherit admonition styling — including the
+// green --ifm-color-info-dark accent. Neutralise that here; `details.alert`
+// is (0,1,1), so it outranks the .alert--info rule at (0,1,0) without
+// touching real :::info admonitions.
+//
+// See _admonitions.scss for the shared .alert rules these build on.
+details.alert {
+  --details-caret-size: #{rem(14px)};
+  --details-border-color: var(--ifm-color-emphasis-300);
+
+  // Drives the caret. theme-common uses this for the content divider too,
+  // but that's repointed at --details-border-color below so the divider can
+  // match the box while the caret stays a step darker and legible.
+  --docusaurus-details-decoration-color: var(--ifm-color-emphasis-500);
+
+  // Set directly rather than through --ifm-alert-border-color, to opt out of
+  // the 50% color-mix that tones down the admonition borders.
+  border-color: var(--details-border-color);
+
+  // The divider above the expanded content. Its class is a hashed CSS module,
+  // so it's matched by substring; this lands at (0,2,1) and outranks
+  // theme-common's own .collapsibleContent rule at (0,1,0).
+  [class*="collapsibleContent"] {
+    border-top-color: var(--details-border-color);
+  }
+
+  // theme-common draws the disclosure marker as a CSS-only triangle built
+  // from borders. Drop the borders and mask in a chevron instead, the same
+  // way _markdown.scss replaces the dropdown's arrow.
+  //
+  // The asset points right so that no rotation is needed when collapsed:
+  // theme-common's open-state rule sets `transform: rotate(90deg)` at (0,3,2),
+  // which outranks anything reasonable written here, so the chevron is
+  // authored to be correct both at rest and once that rotation applies.
+  // theme-common gives the summary `padding-left: 1rem`, which leaves only a
+  // couple of pixels between a 14px caret at left: 0 and the label. The
+  // otherwise redundant [class] lifts this to (0,2,2) — enough to beat that
+  // rule at (0,1,2) outright, rather than relying on stylesheet order.
+  &[class] > summary {
+    padding-left: #{rem(26px)};
+  }
+
+  > summary::before {
+    border: none;
+    width: var(--details-caret-size);
+    height: var(--details-caret-size);
+    top: #{rem(7px)}; // centred on the first line of the summary
+    background-color: var(--docusaurus-details-decoration-color);
+    transform-origin: center; // theme-common offsets this for the triangle
+    mask: url("/img/icon-chevron-right.svg") no-repeat center / contain;
+    -webkit-mask: url("/img/icon-chevron-right.svg") no-repeat center / contain;
+  }
+}

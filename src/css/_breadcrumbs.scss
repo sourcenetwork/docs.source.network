@@ -1,5 +1,14 @@
 @use "./utils" as *;
 
+// The trail always starts with a Home item, which is hidden below. When that
+// item is followed by exactly one more, the single visible crumb is the
+// current page — the same text as the h1 directly beneath it — so drop the
+// whole nav rather than repeat the title. Hiding it in CSS leaves
+// DocBreadcrumbs' structured data intact for search engines.
+.theme-doc-breadcrumbs:has(.breadcrumbs__item:nth-child(2):last-child) {
+  display: none;
+}
+
 .theme-doc-breadcrumbs .breadcrumbs {
   margin: 0;
   font-size: rem(12px);

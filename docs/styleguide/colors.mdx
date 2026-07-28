@@ -1,0 +1,190 @@
+---
+title: Design tokens
+sidebar_position: 3
+description: Every custom property declared in variables.scss, rendered as swatches.
+---
+
+<head>
+  <meta name="robots" content="noindex, nofollow" />
+</head>
+
+export const Swatch = ({ name }) => (
+  <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", padding: "0.3rem 0", minWidth: 0 }}>
+    <span
+      aria-hidden="true"
+      style={{
+        width: "2.25rem",
+        height: "2.25rem",
+        flexShrink: 0,
+        borderRadius: "6px",
+        background: `var(${name})`,
+        border: "1px solid var(--ifm-color-emphasis-300)",
+      }}
+    />
+    <code style={{ fontSize: "0.75rem", wordBreak: "break-all" }}>{name}</code>
+  </div>
+);
+
+export const Swatches = ({ names }) => (
+  <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(240px, 1fr))", gap: "0.25rem 1.5rem", marginBottom: "1.5rem" }}>
+    {names.map((n) => <Swatch key={n} name={n} />)}
+  </div>
+);
+
+Every custom property from `src/css/variables.scss`, resolved live — so toggling
+the theme switch shows both palettes. Swatch styling is inline on purpose, to
+keep this page from adding anything to the production stylesheet.
+
+## Brand
+
+<Swatches names={["--src-primary", "--src-highlight", "--src-red"]} />
+
+## Infima primary
+
+`--ifm-color-primary` maps to `--src-primary`. The `-dark` through `-lightest`
+variants are a leftover blue palette; Infima uses `-dark` and `-darker` for
+`.button--primary` hover and active states.
+
+<Swatches names={[
+  "--ifm-color-primary",
+  "--ifm-color-primary-dark",
+  "--ifm-color-primary-darker",
+  "--ifm-color-primary-darkest",
+  "--ifm-color-primary-light",
+  "--ifm-color-primary-lighter",
+  "--ifm-color-primary-lightest",
+]} />
+
+## Surfaces and text
+
+<Swatches names={[
+  "--ifm-background-color",
+  "--ifm-background-surface-color",
+  "--ifm-font-color-base",
+  "--ifm-color-content-secondary",
+  "--ifm-menu-color",
+  "--color-text-muted",
+  "--docs-title-border",
+  "--ifm-hr-background-color",
+  "--menu-indicator-color",
+  "--ifm-scrollbar-thumb-background-color",
+]} />
+
+## Emphasis scale
+
+Infima's neutral ramp, used throughout the partials for borders and subtle fills.
+
+<Swatches names={[
+  "--ifm-color-emphasis-0",
+  "--ifm-color-emphasis-100",
+  "--ifm-color-emphasis-200",
+  "--ifm-color-emphasis-300",
+  "--ifm-color-emphasis-400",
+  "--ifm-color-emphasis-500",
+  "--ifm-color-emphasis-600",
+  "--ifm-color-emphasis-700",
+  "--ifm-color-emphasis-800",
+  "--ifm-color-emphasis-900",
+  "--ifm-color-emphasis-1000",
+]} />
+
+## Cards
+
+Declared globally but only consumed by `src/pages/index.module.scss`, so these
+apply to the homepage rather than to docs.
+
+<Swatches names={["--card-color", "--card-border-color"]} />
+
+## Alerts and admonitions
+
+<Swatches names={[
+  "--ifm-color-info-dark",
+  "--ifm-color-info-darker",
+  "--ifm-color-info-darkest",
+  "--ifm-color-info-contrast-background",
+  "--ifm-color-info-contrast-foreground",
+  "--ifm-color-success-contrast-background",
+  "--ifm-alert-border-color",
+]} />
+
+## Code blocks
+
+<Swatches names={[
+  "--code-foreground",
+  "--code-background",
+  "--ifm-code-background",
+  "--code-highlight-color",
+  "--codeblock-title-border",
+  "--codeblock-valid-border",
+  "--codeblock-invalid-border",
+  "--codeblock-highlighted-line-background",
+]} />
+
+## Syntax tokens
+
+<Swatches names={[
+  "--code-token-keyword",
+  "--code-token-constant",
+  "--code-token-string",
+  "--code-token-comment",
+  "--code-token-parameter",
+  "--code-token-function",
+  "--code-token-string-expression",
+  "--code-token-punctuation",
+  "--code-token-link",
+  "--code-token-number",
+  "--code-token-property",
+]} />
+
+## Feedback widget
+
+pushfeedback's own variables, overridden in `variables.scss`. See
+`src/css/_feedback.scss` for the `::part()` rules that reach into its shadow DOM.
+
+<Swatches names={[
+  "--feedback-background",
+  "--feedback-primary-color",
+  "--feedback-button-dark-bg-color",
+  "--feedback-button-dark-text-color",
+]} />
+
+## Non-color tokens
+
+| Token | Value | Used for |
+| --- | --- | --- |
+| `--root-wrapper-width` | `110rem` | Max width of navbar, footer, and main wrapper |
+| `--doc-sidebar-width` | `300px` | Doc sidebar width |
+| `--doc-sidebar-hidden-width` | `30px` | Collapsed doc sidebar width |
+| `--h1-base-font-size` | `2.25rem` | Shared `h1` size token |
+| `--ifm-h4-font-size` | `1.313rem` | Heading level 4 |
+| `--ifm-font-size-base` | `1rem` | Body copy |
+| `--ifm-font-weight-bold` | `800` | Bold text |
+| `--ifm-leading-desktop` | `1.75` | Line height multiplier |
+| `--ifm-navbar-height` | `80px` | Navbar height |
+| `--ifm-global-radius` | `0rem` | Global corner radius |
+| `--ifm-code-border-radius` | `0.375rem` | Inline code corners |
+| `--ifm-alert-border-left-width` | `2px` | Admonition left rule |
+| `--ifm-container-width-xl` | `1400px` | Wide container breakpoint |
+
+## Fonts
+
+<div style={{ marginBottom: "1.5rem" }}>
+  <p style={{ fontFamily: "var(--ifm-heading-font-family)", fontSize: "2rem", margin: "0 0 0.25rem" }}>
+    Funnel Display — headings
+  </p>
+  <code style={{ fontSize: "0.75rem" }}>--ifm-heading-font-family</code>
+</div>
+
+<div style={{ marginBottom: "1.5rem" }}>
+  <p style={{ fontFamily: "var(--ifm-font-family-base)", fontSize: "1.25rem", margin: "0 0 0.25rem" }}>
+    Inter — body copy
+  </p>
+  <code style={{ fontSize: "0.75rem" }}>--ifm-font-family-base</code>
+</div>
+
+<div>
+  <p style={{ fontFamily: "var(--ifm-font-family-monospace)", fontSize: "1.25rem", margin: "0 0 0.25rem" }}>
+    Monospace — code
+  </p>
+  <code style={{ fontSize: "0.75rem" }}>--ifm-font-family-monospace</code>
+</div>

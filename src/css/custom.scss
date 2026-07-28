@@ -10,10 +10,12 @@
 @use "./pagination";
 @use "./toc-mobile";
 @use "./admonitions";
+@use "./details";
 @use "./search";
 @use "./code-blocks";
 @use "./markdown";
-@use "./feedback-widget";
+@use "./tables";
+@use "./feedback";
 
 // Fonts
 
@@ -31,3 +33,9 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+// Lift underlines off the baseline. Set in em so it tracks the font size —
+// admonition body copy runs smaller than prose. A no-op wherever links aren't
+// underlined, so it's safe to apply globally.
+a {
+  text-underline-offset: 0.2em;
+}

@@ -1,6 +1,6 @@
 @use "./utils" as *;
 
-.footer > .container,
+.footer>.container,
 .navbar__inner,
 .main-wrapper {
   width: 100%;
@@ -26,17 +26,15 @@
 // Shift the scroll-to-top button further up to avoid clashing with the feedback button
 button.theme-back-to-top-button {
   bottom: 3.6rem;
+  background-color: var(--ifm-background-color);
 }
 
 .theme-edit-this-page {
   color: var(--ifm-menu-color);
   font-weight: 500;
   font-size: rem(14px);
-
-  svg {
-    display: inline-block;
-    margin-right: 0.5rem;
-  }
+  display: flex;
+  align-items: center;
 }
 
 // Edit this page is already shown under the ToC
