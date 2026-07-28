@@ -43,7 +43,7 @@
   --root-wrapper-width: 110rem;
   --menu-indicator-color: var(--src-gray-300);
   --docs-title-border: var(--src-gray-200);
-  --doc-sidebar-width: 18.75rem;
+  // --doc-sidebar-width is set on body below, not here.
 
   --h1-base-font-size: 2.25rem;
 
@@ -77,6 +77,14 @@
   --codeblock-valid-border: var(--src-primary);
   --codeblock-invalid-border: var(--src-red);
   --codeblock-highlighted-line-background: var(--src-gray-200);
+}
+
+// Docusaurus declares --doc-sidebar-width in :root as well, and its module CSS
+// lands later in the bundle — so a :root declaration here loses the tie and is
+// silently ignored. On body it wins by inheritance instead, no specificity
+// games.
+body {
+  --doc-sidebar-width: #{rem(300px)};
 }
 
 html[data-theme="dark"] {

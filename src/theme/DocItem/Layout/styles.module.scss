@@ -6,6 +6,8 @@
     padding-left: rem(40px);
   }
 
+  // The ToC column only renders from 1200px up (see TOC/styles.module.css), so
+  // this gutter never applies to a squeezed three-column layout.
   .sidebar {
     padding-left: rem(55px);
   }
