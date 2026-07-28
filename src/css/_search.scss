@@ -1,3 +1,5 @@
+@use "./utils" as *;
+
 body .DocSearch {
   --docsearch-modal-width: 800px;
 

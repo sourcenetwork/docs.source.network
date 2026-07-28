@@ -1,3 +1,5 @@
+@use "./utils" as *;
+
 // Flat, borderless, full-width tables.
 //
 // Infima styles tables with bare element selectors at (0,0,1)–(0,0,2), so

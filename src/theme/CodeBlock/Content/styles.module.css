@@ -14,7 +14,9 @@
    The mask fades the code itself out at the bottom, so it works with any
    code theme background. */
 .collapsed pre {
-  max-height: 150px;
+  /* rem so the collapsed height tracks the code's font size. Plain CSS module,
+     so no rem() helper here. */
+  max-height: 9.375rem;
   overflow: hidden;
   mask-image: linear-gradient(to bottom, black 0%, transparent 90%);
 }

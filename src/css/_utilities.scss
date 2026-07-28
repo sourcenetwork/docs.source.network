@@ -39,7 +39,7 @@
   // Safari only shipped scrollbar-color in 18.2; this covers older WebKit.
   &::-webkit-scrollbar-thumb {
     background-color: transparent;
-    border-radius: 4px;
+    border-radius: rem(4px);
   }
 
   &:hover::-webkit-scrollbar-thumb,

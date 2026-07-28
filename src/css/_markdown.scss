@@ -1,3 +1,5 @@
+@use "./utils" as *;
+
 .markdown h1:first-child {
   --ifm-h1-font-size: var(--h1-base-font-size);
 }
@@ -62,7 +64,7 @@ article .markdown header {
 
   .dropdown__menu {
     z-index: 1000;
-    min-width: 220px;
+    min-width: rem(220px);
     right: 0;
     left: auto;
     border-radius: 0.5rem;
@@ -107,7 +109,7 @@ article .markdown header {
       display: inline-block;
       width: 0.875em;
       height: 0.875em;
-      margin-left: 6px;
+      margin-left: rem(6px);
       vertical-align: -0.15em;
       background-color: currentColor;
       mask-image: url("/img/icon-chevron-down.svg");

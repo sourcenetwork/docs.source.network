@@ -1,10 +1,12 @@
+@use "../../css/utils" as *;
+
 .footerMenu {
   @media (min-width: 997px) {
     display: flex;
   }
 
   .footerMenuLogo {
-    margin-bottom: 40px;
+    margin-bottom: rem(40px);
     @media (min-width: 997px) {
       width: var(--doc-sidebar-width);
     }
