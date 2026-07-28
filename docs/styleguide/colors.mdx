@@ -46,9 +46,10 @@ live — so toggling the theme switch shows both palettes. Spacing, type and
 sizing tokens are in the table at the end. Swatch styling is inline on purpose,
 to keep this page from adding anything to the production stylesheet.
 
-Where an Infima token is an alias onto a brand variable, the target is noted
-beneath it with a `↳`. Some resolve differently per theme, which is written as
-`light / dark`.
+Where a token is an alias onto a brand variable, the target is noted beneath
+it with a `↳`. Some resolve differently per theme, written as `light / dark`;
+a side written `—` isn't aliased there — it's either an Infima default we
+never touched, or a one-off literal with no brand variable behind it.
 
 ## Brand
 
@@ -63,12 +64,27 @@ their contexts" guidance.
   "--src-amber",
 ]} />
 
-## Brand neutrals
+## Brand color scales
 
-The neutral ramp from the Source brand system, on the brand's own step labels.
-Everything grey in the site resolves back to these — the mapping onto Infima's
-`--ifm-color-gray-*` happens in `variables.scss`. `--src-gray-50` has no Infima
-slot and is currently unused.
+The green and grey ramps from the Source brand system, on the brand's own
+step labels. `--src-green-400` is the same value as
+`--src-primary`; `--ifm-color-primary` and its shades resolve through
+`--src-green-*` in light mode. Everything grey in the site resolves back to
+the grey ramp — the mapping onto Infima's `--ifm-color-gray-*` happens in
+`variables.scss`. `--src-gray-50` has no Infima slot and is currently unused.
+
+<Swatches names={[
+  "--src-green-50",
+  "--src-green-100",
+  "--src-green-200",
+  "--src-green-300",
+  "--src-green-400",
+  "--src-green-500",
+  "--src-green-600",
+  "--src-green-700",
+  "--src-green-800",
+  "--src-green-900",
+]} />
 
 <Swatches names={[
   "--src-white",
@@ -98,38 +114,40 @@ and pills.
 
 ## Infima primary
 
-`--ifm-color-primary` maps to `--src-primary` in light and `--src-highlight` in
-dark. The `-dark` through `-lightest` variants are shades of `--src-primary` at
-Docusaurus' own ±10/15/30% lightness steps; Infima uses `-dark` and `-darker`
+`--ifm-color-primary` maps to `--src-green-500` in light and `--src-highlight`
+in dark — `--src-primary` (`--src-green-400`) only hits 2.8:1 on white, short
+of the 4.5:1 text needs, so light mode anchors one step darker on the brand's
+own green scale instead. The `-dark` through `-lightest` variants are also
+`--src-green-*` steps, not a generated ramp; Infima uses `-dark` and `-darker`
 for `.button--primary` hover and active.
 
 <Swatches names={[
-  ["--ifm-color-primary", "--src-primary / --src-highlight"],
-  "--ifm-color-primary-dark",
-  "--ifm-color-primary-darker",
-  "--ifm-color-primary-darkest",
-  "--ifm-color-primary-light",
-  "--ifm-color-primary-lighter",
-  "--ifm-color-primary-lightest",
+  ["--ifm-color-primary", "--src-green-500 / --src-highlight"],
+  ["--ifm-color-primary-dark", "--src-green-600"],
+  ["--ifm-color-primary-darker", "--src-green-700"],
+  ["--ifm-color-primary-darkest", "--src-green-800"],
+  ["--ifm-color-primary-light", "--src-green-400"],
+  ["--ifm-color-primary-lighter", "--src-green-300"],
+  ["--ifm-color-primary-lightest", "--src-green-200"],
 ]} />
 
 ## Surfaces and text
 
 <Swatches names={[
   ["--ifm-background-color", "— / --src-black"],
-  "--ifm-background-surface-color",
-  "--ifm-font-color-base",
+  ["--ifm-background-surface-color", "— / --src-black"],
+  ["--ifm-font-color-base", "--ifm-color-emphasis-900"],
   "--ifm-color-content-secondary",
-  "--ifm-menu-color",
-  "--ifm-menu-color-active",
-  "--ifm-footer-background-color",
-  "--ifm-table-border-color",
-  "--src-text-muted",
-  "--src-text-subtitle",
-  "--docs-title-border",
-  "--ifm-hr-background-color",
-  "--menu-indicator-color",
-  "--ifm-scrollbar-thumb-background-color",
+  ["--ifm-menu-color", "--ifm-color-emphasis-700 / --ifm-color-emphasis-600"],
+  ["--ifm-menu-color-active", "--ifm-color-primary"],
+  ["--ifm-footer-background-color", "— / --src-black"],
+  ["--ifm-table-border-color", "--ifm-color-emphasis-200"],
+  ["--src-text-muted", "--src-gray-500 / —"],
+  ["--src-text-subtitle", "--src-gray-600 / —"],
+  ["--docs-title-border", "--src-gray-200 / --src-gray-900"],
+  ["--ifm-hr-background-color", "--ifm-color-emphasis-300 / --ifm-color-emphasis-200"],
+  ["--menu-indicator-color", "--src-gray-300"],
+  ["--ifm-scrollbar-thumb-background-color", "--ifm-color-emphasis-400 / --ifm-color-emphasis-300"],
 ]} />
 
 ## Infima gray ramp
@@ -177,7 +195,7 @@ fixed `↳` target. `emphasis-200` is the one the partials lean on most.
 Declared globally but only consumed by `src/pages/index.module.scss`, so these
 apply to the homepage rather than to docs.
 
-<Swatches names={["--card-color", "--card-border-color"]} />
+<Swatches names={["--card-color", ["--card-border-color", "--src-gray-200 / —"]]} />
 
 ## Alerts and admonitions
 
@@ -197,6 +215,8 @@ variants actually resolve through. Info shares tip's fill.
   ["--ifm-color-secondary-contrast-foreground", "--src-gray-800 / --src-white"],
   ["--ifm-color-warning", "--src-amber"],
   ["--ifm-color-warning-dark", "--src-amber"],
+  "--ifm-color-warning-contrast-background",
+  "--ifm-color-warning-contrast-foreground",
   "--ifm-alert-border-color",
 ]} />
 
@@ -204,13 +224,13 @@ variants actually resolve through. Info shares tip's fill.
 
 <Swatches names={[
   "--code-foreground",
-  "--code-background",
-  "--ifm-code-background",
-  "--code-highlight-color",
-  "--codeblock-title-border",
-  "--codeblock-valid-border",
-  "--codeblock-invalid-border",
-  "--codeblock-highlighted-line-background",
+  ["--code-background", "--src-gray-100 / --src-gray-900"],
+  ["--ifm-code-background", "--src-gray-200"],
+  ["--code-highlight-color", "— / --src-ink"],
+  ["--codeblock-title-border", "--src-gray-300 / —"],
+  ["--codeblock-valid-border", "--src-primary"],
+  ["--codeblock-invalid-border", "--src-red"],
+  ["--codeblock-highlighted-line-background", "--src-gray-200 / —"],
 ]} />
 
 ## Syntax tokens
@@ -235,10 +255,10 @@ pushfeedback's own variables, overridden in `variables.scss`. See
 `src/css/_feedback.scss` for the `::part()` rules that reach into its shadow DOM.
 
 <Swatches names={[
-  "--feedback-background",
-  "--feedback-primary-color",
-  "--feedback-button-dark-bg-color",
-  "--feedback-button-dark-text-color",
+  ["--feedback-background", "--code-background"],
+  ["--feedback-primary-color", "--src-black / --ifm-font-color-base"],
+  ["--feedback-button-dark-bg-color", "--feedback-background"],
+  ["--feedback-button-dark-text-color", "--feedback-primary-color"],
 ]} />
 
 ## Non-color tokens

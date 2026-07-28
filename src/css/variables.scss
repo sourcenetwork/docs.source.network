@@ -12,17 +12,26 @@
   --src-primary: #06b250;
   --src-highlight: #39e265;
   --src-red: #ff7777;
-
   // The LensVM product accent, reused below as the semantic warning colour —
   // a deliberate departure from the brand's "keep accents isolated" guidance.
   --src-amber: #ffa011;
-
-  // Brand neutrals on the brand's own step labels; mapped onto
-  // --ifm-color-gray-* in the Infima overrides below.
   --src-white: #ffffff;
   --src-black: #000000;
   --src-obsidian: #0b0b0b;
   --src-ink: #222222;
+
+  // Brand color scales, on the brand's own step labels; --src-gray-* is
+  // mapped onto --ifm-color-gray-* in the Infima overrides below.
+  --src-green-50: #e6f9ef;
+  --src-green-100: #adedca;
+  --src-green-200: #6ddb9b;
+  --src-green-300: #2dc96e;
+  --src-green-400: #06b250;
+  --src-green-500: #058041;
+  --src-green-600: #046634;
+  --src-green-700: #034d26;
+  --src-green-800: #023319;
+  --src-green-900: #011a0b;
   --src-gray-50: #fafafa;
   --src-gray-100: #f5f5f5;
   --src-gray-200: #e5e5e5; // the brand's designated border gray
@@ -34,10 +43,8 @@
   --src-gray-800: #262626;
   --src-gray-900: #171717;
 
-  // Named text roles from the brand's dark-mode guidance (secondary is
-  // --src-gray-600 already).
-  --src-text-muted: #939598; // muted/tertiary on dark
-  --src-text-subtitle: #adadad; // subtitle on dark
+  --src-text-muted: var(--src-gray-500);
+  --src-text-subtitle: var(--src-gray-600);
 
   // Layout
   // --root-wrapper-width is set on body below, with --doc-sidebar-width.
@@ -209,14 +216,13 @@ html[data-theme="light"] {
 
 :root {
   // Colors
-  --ifm-color-primary: var(--src-primary);
-  // Shades of --src-primary at Docusaurus' +/-10/15/30% lightness steps.
-  --ifm-color-primary-dark: #05a048;
-  --ifm-color-primary-darker: #059744;
-  --ifm-color-primary-darkest: #047d38;
-  --ifm-color-primary-light: #07c458;
-  --ifm-color-primary-lighter: #07cd5c;
-  --ifm-color-primary-lightest: #08e768;
+  --ifm-color-primary: var(--src-green-500);
+  --ifm-color-primary-dark: var(--src-green-600);
+  --ifm-color-primary-darker: var(--src-green-700);
+  --ifm-color-primary-darkest: var(--src-green-800);
+  --ifm-color-primary-light: var(--src-green-400);
+  --ifm-color-primary-lighter: var(--src-green-300);
+  --ifm-color-primary-lightest: var(--src-green-200);
   // .alert--secondary (:::note) maps onto this family, which Infima hardcodes
   // rather than aliasing the greys. -dark is theme-invariant upstream.
   --ifm-color-secondary-dark: var(--src-gray-300);
@@ -235,6 +241,8 @@ html[data-theme="light"] {
   // -dark is what .alert--warning maps --ifm-alert-border-color to.
   --ifm-color-warning: var(--src-amber);
   --ifm-color-warning-dark: var(--src-amber);
+  --ifm-color-warning-contrast-background: #fbf6ef;
+  --ifm-color-warning-contrast-foreground: #5c3700;
 
   // The only mapping needed: --ifm-color-emphasis-* alias onto this ramp,
   // declared in :root and again inverted under [data-theme='dark'], so both
@@ -331,6 +339,8 @@ html[data-theme="light"] {
 
 html[data-theme="dark"] {
   --ifm-color-primary: var(--src-highlight);
+  --src-text-muted: #939598;
+  --src-text-subtitle: #adadad;
   --ifm-background-color: var(--src-black);
   --ifm-background-surface-color: var(--ifm-background-color);
 
