@@ -3,6 +3,14 @@
 .navbar {
   box-shadow: none;
   border-bottom: rem(1px) solid var(--docs-title-border);
+  &__inner {
+    padding: 0 var(--site-gutter-horizontal);
+  }
+
+  &-sidebar__brand {
+    padding-left: var(--ifm-spacing-horizontal);
+    padding-right: var(--ifm-spacing-horizontal);
+  }
 
   &__brand {
     margin-right: rem(40px);
@@ -11,10 +19,6 @@
 
   &__logo {
     max-width: rem(230px);
-    margin-left: rem(30px);
-    @media (max-width: 996px) {
-      margin-left: rem(20px);
-    }
   }
 
   &__link {

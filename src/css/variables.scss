@@ -170,6 +170,13 @@ html[data-theme="light"] {
 [data-theme="light"] .DocSearch {
   --docsearch-muted-color: var(--ifm-color-secondary-darkest);
   --docsearch-container-background: rgba(36, 36, 36, 0.8);
+  --docsearch-primary-color: var(--ifm-color-primary);
+  --docsearch-highlight-color: var(--ifm-color-primary);
+  --docsearch-hit-highlight-color: color-mix(
+    in srgb,
+    var(--ifm-color-primary) 12%,
+    transparent
+  );
   // Modal
   --docsearch-modal-background: var(--ifm-color-secondary-lighter);
   // Search box
@@ -189,7 +196,13 @@ html[data-theme="light"] {
   --docsearch-text-color: var(--ifm-font-color-base);
   --docsearch-muted-color: var(--ifm-color-secondary-darkest);
   --docsearch-container-background: rgba(24, 24, 24, 0.7);
+  --docsearch-primary-color: var(--ifm-color-primary);
   --docsearch-highlight-color: var(--ifm-color-primary);
+  --docsearch-hit-highlight-color: color-mix(
+    in srgb,
+    var(--ifm-color-primary) 18%,
+    transparent
+  );
 
   // Modal
   --docsearch-modal-background: var(--ifm-background-color);
@@ -261,6 +274,10 @@ html[data-theme="light"] {
 
   // Layout
   --ifm-container-width-xl: 1400px;
+  // Shared gutter for the navbar, footer and .spacing-horz (homepage), so
+  // they stay flush with each other instead of drifting via separate
+  // per-component overrides. Doubles on desktop below.
+  --site-gutter-horizontal: var(--ifm-spacing-horizontal);
 
   // Fonts
   --ifm-font-family-base:
@@ -309,11 +326,12 @@ html[data-theme="light"] {
 
   // Navbar
   --ifm-navbar-height: 80px;
-  --ifm-navbar-padding-horizontal: calc(var(--ifm-spacing-horizontal) * 1);
+  --ifm-navbar-padding-horizontal: 0;
   --ifm-navbar-padding-vertical: calc(var(--ifm-spacing-vertical) * 0.5);
 
   // Footer
   --ifm-footer-background-color: var(--ifm-background-color);
+  --ifm-footer-padding-horizontal: 0;
 
   // Alerts
   // Infima defaults these to 0 and 5px. Both must be set and must match, or
@@ -335,6 +353,12 @@ html[data-theme="light"] {
 
   --ifm-tabs-padding-horizontal: 1rem;
   --ifm-tabs-padding-vertical: 0.75rem;
+}
+
+@media (min-width: 997px) {
+  :root {
+    --site-gutter-horizontal: calc(var(--ifm-spacing-horizontal) * 2);
+  }
 }
 
 html[data-theme="dark"] {

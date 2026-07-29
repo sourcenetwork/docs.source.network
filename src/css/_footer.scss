@@ -3,6 +3,10 @@
 .footer {
   margin-top: rem(40px);
 
+  > .container {
+    padding: 0 var(--site-gutter-horizontal);
+  }
+
   &__links {
     @media (min-width: 997px) {
       margin-bottom: rem(100px);

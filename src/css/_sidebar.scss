@@ -2,6 +2,8 @@
 
 .main-wrapper {
   .menu__list {
+    transition-duration: var(--ifm-transition-fast) !important;
+
     .menu__list {
       position: relative;
 
@@ -37,7 +39,7 @@
     $self: &;
 
     padding: calc(var(--ifm-navbar-padding-vertical) * 7)
-      var(--ifm-navbar-padding-horizontal);
+      calc(var(--site-gutter-horizontal) / 2);
 
     &__link {
       font-size: rem(14px);
@@ -55,6 +57,7 @@
 
       &--sublist {
         position: relative;
+        padding-right: 20px;
 
         &.menu__link--active {
           color: var(--ifm-menu-color);
@@ -107,10 +110,17 @@
       }
     }
 
-    // Categories with a linked label produce a double collapsible arrow;
-    // this removes the bulkier one.
     .menu__caret {
-      display: none;
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      width: rem(40px);
+      padding: 0;
+
+      &:before {
+        display: none;
+      }
     }
   }
 }

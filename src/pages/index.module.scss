@@ -2,6 +2,7 @@
 
 .homeWrapper {
   margin: auto 0;
+  padding: 0 var(--site-gutter-horizontal);
 
   .container {
     max-width: var(--root-wrapper-width);
@@ -56,21 +57,38 @@
   }
 }
 
+.featuresGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: rem(20px);
+
+  // Matches the breakpoint DocItem/Layout uses for the ToC column.
+  @media screen and (max-width: 1199px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media screen and (max-width: 996px) {
+    grid-template-columns: 1fr;
+    gap: rem(10px);
+  }
+}
+
 .arrow {
   margin-left: rem(5px);
   transition: all 0.3s ease;
 }
 
 .card {
+  // A grid item, so the container's default `align-items: stretch` sizes
+  // this box to the row's tallest card directly — no height: 100% needed.
   display: block;
   background-color: var(--card-color);
   border: rem(1px) solid var(--card-border-color);
-  border-radius: rem(5x);
+  border-radius: rem(5px);
   padding: rem(32px);
   text-align: center;
   color: var(--ifm-font-color-base);
   box-shadow: var(--card-box-shadow);
-  margin-bottom: rem(10px);
   transition: all 0.3s ease;
 
   h3,
@@ -101,7 +119,7 @@
     }
   }
 
-  @media screen and (max-width: 996px) {
+  @media screen and (max-width: 1199px) {
     display: flex;
     text-align: left;
 

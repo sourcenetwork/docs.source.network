@@ -45,7 +45,7 @@ body .DocSearch {
   &-Hit {
     &-source {
       font-family: "Funnel Display", sans-serif;
-      color: white;
+      color: var(--ifm-font-color-base);
     }
     &[aria-selected="true"] a {
       background-color: var(--docsearch-hit-background-active);

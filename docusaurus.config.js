@@ -20,6 +20,28 @@ const config = {
       onBrokenMarkdownImages: "warn",
     },
   },
+  // Discoverable from the initial HTML parse, unlike a CSS `@import` (which
+  // only starts fetching once the bundle that contains it has downloaded).
+  stylesheets: [
+    {
+      href: "https://fonts.googleapis.com/css2?family=Funnel+Display:wght@300..800&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap",
+      type: "text/css",
+    },
+  ],
+  headTags: [
+    {
+      tagName: "link",
+      attributes: { rel: "preconnect", href: "https://fonts.googleapis.com" },
+    },
+    {
+      tagName: "link",
+      attributes: {
+        rel: "preconnect",
+        href: "https://fonts.gstatic.com",
+        crossorigin: "anonymous",
+      },
+    },
+  ],
   presets: [
     [
       "docusaurus-preset-openapi",
