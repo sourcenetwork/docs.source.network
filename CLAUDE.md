@@ -57,13 +57,9 @@ Each product section typically contains:
 
 ### Sidebar Configuration
 
-Sidebars are defined in `sidebars.js` with four main sections:
-- `defraSidebar` - Auto-generated from `docs/defradb/`
-- `sourcehubSidebar` - Auto-generated from `docs/sourcehub/` + API link
-- `orbisSidebar` - Auto-generated from `docs/orbis/`
-- `lensvmSidebar` - Auto-generated from `docs/lensvm/`
-
-The changelog/release notes sidebar items are automatically reversed (newest first) via the `reverseSidebarChangelog()` function in `docusaurus.config.js:185-194`.
+Sidebars come from two files:
+- `docs/sidebars/defra.js` - `defraSidebar`, written by hand, with one auto-generated block for `docs/defradb/references/`
+- `sidebars.js` - `sourcehubSidebar` (auto-generated + API link), `orbisSidebar` and `lensvmSidebar` (auto-generated)
 
 ### API Documentation
 
