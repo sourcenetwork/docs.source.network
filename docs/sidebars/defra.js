@@ -23,6 +23,7 @@ export default {
       items: [
         'schema/collections',
         'schema/indexes',
+        'schema/embeddings',
       ]
     },
     {
