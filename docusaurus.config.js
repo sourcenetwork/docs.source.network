@@ -76,14 +76,6 @@ const config = {
           {
             type: "docSidebar",
             position: "left",
-            docsPluginId: "sourcehub",
-            sidebarId: "sourcehubSidebar",
-            label: "SourceHub",
-            className: "header-docs-link-sourcehub",
-          },
-          {
-            type: "docSidebar",
-            position: "left",
             docsPluginId: "orbis",
             sidebarId: "orbisSidebar",
             label: "Orbis",
@@ -255,13 +247,6 @@ const config = {
             includePatterns: ["docs/orbis/**/*.md"],
             fullContent: false,
           },
-          {
-            filename: "sourcehub/llms.txt",
-            title: "Sourcehub documentation",
-            description: "Documentation for Sourcehub",
-            includePatterns: ["docs/sourcehub/**/*.md"],
-            fullContent: false,
-          },
         ],
       },
     ],
@@ -288,34 +273,6 @@ const config = {
         versions: {
           current: {
             label: "1.0 (Latest)",
-          },
-        },
-        // Reorder changelog sidebar
-        async sidebarItemsGenerator({ defaultSidebarItemsGenerator, ...args }) {
-          const sidebarItems = await defaultSidebarItemsGenerator(args);
-          return reverseSidebarChangelog(sidebarItems);
-        },
-      },
-    ],
-    // SourceHub instance
-    [
-      "@docusaurus/plugin-content-docs",
-      {
-        id: "sourcehub",
-        path: "docs/sourcehub",
-        routeBasePath: "sourcehub",
-        sidebarPath: require.resolve("./sidebars.js"),
-        editUrl:
-          "https://github.com/sourcenetwork/docs.source.network/edit/master/",
-        lastVersion: "0.3.2",
-        versions: {
-          "0.3.2": {
-            banner: "none",
-          },
-          current: {
-            label: "Next",
-            path: "next",
-            banner: "unreleased",
           },
         },
         // Reorder changelog sidebar
