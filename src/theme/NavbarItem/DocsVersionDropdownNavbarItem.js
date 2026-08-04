@@ -7,7 +7,7 @@ export default function DocsVersionDropdownNavbarItemWrapper(props) {
 
   // Render all dropdowns stacked on top of each other
   // Use opacity and pointer-events to show/hide without layout shift
-  const pluginIds = ['defradb', 'sourcehub', 'orbis', 'lensvm'];
+  const pluginIds = ['defradb', 'orbis', 'lensvm'];
 
   return (
     <div style={{

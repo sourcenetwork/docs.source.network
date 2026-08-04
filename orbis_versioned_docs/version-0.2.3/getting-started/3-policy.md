@@ -1,11 +1,11 @@
 # Setup Authorization Policy 
 Before we can start storing secrets into the newly created Secret Ring, we must define our access policy. This access policy will determine the resources and permissions that users will need to authorize with to recover secrets.
 
-This section will assume you are using the `Zanzi` Authorization GRPC Service that is included in the example `docker-compose.yaml` file from the previous step. If you are using the `SourceHub ACP` module instead, you can reference the [Create a SourceHub ACP Policy](/sourcehub/getting-started/create-a-policy) doc.
+This section will assume you are using the `Zanzi` Authorization GRPC Service that is included in the example `docker-compose.yaml` file from the previous step. The `SourceHub ACP` module can be used instead.
 
 ## Create a Policy
 
-The `Zanzi` Authorization GRPC Service is a [Zanzibar](/sourcehub/concepts/zanzibar) based global decentralized authorization system. Developers write policies using our Relation-Based Access Control (RelBAC) DSL, which allows you to define resources, relations, and permissions.
+The `Zanzi` Authorization GRPC Service is a [Zanzibar](https://research.google/pubs/zanzibar-googles-consistent-global-authorization-system/) based global decentralized authorization system. Developers write policies using our Relation-Based Access Control (RelBAC) DSL, which allows you to define resources, relations, and permissions.
 
 - **Resources**: Generic container for some kind of "thing" you wish to gate access to or provide authorization for. It can be anything from a secret on [Orbis](/orbis), a document on [DefraDB](/defradb), or any other resource.
 
