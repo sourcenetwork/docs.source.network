@@ -142,7 +142,7 @@ const config = {
             items: [
               {
                 label: "About Us",
-                href: "https://source.network/about",
+                href: "https://source.network/our-story",
               },
               {
                 label: "Privacy Policy",
