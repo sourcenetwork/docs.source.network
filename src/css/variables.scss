@@ -284,13 +284,15 @@ html[data-theme="light"] {
   --site-gutter-horizontal: var(--ifm-spacing-horizontal);
 
   // Fonts
+  // "… Variable" is what the Fontsource packages declare; the plain names
+  // would silently fall through to system-ui.
   --ifm-font-family-base:
-    "Inter", system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell,
+    "Inter Variable", system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell,
     Noto Sans, sans-serif, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial,
     sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
   --ifm-font-size-base: 1rem;
   --ifm-font-weight-bold: 800;
-  --ifm-heading-font-family: "Funnel Display", sans-serif;
+  --ifm-heading-font-family: "Funnel Display Variable", sans-serif;
   --ifm-heading-font-weight: 400;
   --ifm-h1-font-size: var(--h1-base-font-size);
   --ifm-h4-font-size: 1.313rem;
