@@ -59,15 +59,10 @@
 
 .featuresGrid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
   gap: rem(20px);
 
-  // Matches the breakpoint DocItem/Layout uses for the ToC column.
-  @media screen and (max-width: 1199px) {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  @media screen and (max-width: 996px) {
+  @media (max-width: 1199px) {
     grid-template-columns: 1fr;
     gap: rem(10px);
   }
