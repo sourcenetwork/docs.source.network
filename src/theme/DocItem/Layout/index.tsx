@@ -56,12 +56,14 @@ export default function DocItemLayout({ children }: Props): ReactNode {
   return (
     <div className={styles.docItemContainer}>
       <DocVersionBanner />
-      <DocBreadcrumbs />
+      <div className={styles.breadcrumbsRow}>
+        <DocBreadcrumbs />
+        {docTOC.mobile}
+      </div>
       <div className={"row"}>
         <div className={clsx("col", styles.docBody)}>
           <article>
             <DocVersionBadge className={styles.versionBadge} />
-            {docTOC.mobile}
             <DocItemContent>{children}</DocItemContent>
             <DocItemFooter />
           </article>

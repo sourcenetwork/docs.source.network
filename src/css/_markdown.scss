@@ -58,6 +58,10 @@ article .markdown header {
   vertical-align: top;
   align-self: start;
 
+  @media (max-width: 996px) {
+    display: none;
+  }
+
   .dropdown {
     position: relative;
   }

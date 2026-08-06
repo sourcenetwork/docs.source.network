@@ -20,6 +20,22 @@
   }
 }
 
+.breadcrumbsRow {
+  display: flex;
+  align-items: center;
+  gap: rem(16px);
+  min-width: 0;
+
+  > nav {
+    min-width: 0;
+  }
+
+  @media (max-width: 1199px) {
+    padding-right: rem(50px);
+    min-height: rem(44px);
+  }
+}
+
 .docBody {
   min-width: 0;
 }

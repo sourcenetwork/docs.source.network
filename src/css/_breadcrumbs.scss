@@ -33,8 +33,7 @@
 
   // Infima's inline-block items wrap the trail rather than truncating. A vw
   // max-width can't fix it — that's viewport-relative, not container-relative.
-  // Flex + min-width: 0 shrinks each item to the space actually left.
-  @media (max-width: 996px) {
+  @media (max-width: 1199px) {
     display: flex;
     flex-wrap: nowrap;
 
