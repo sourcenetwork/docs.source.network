@@ -10,15 +10,10 @@ description: Admonitions, details, tabs, and every code block variant.
 
 ## Admonitions
 
-All five Infima variants. Styled by `_admonitions.scss`, which lays the icon out
-in its own column, drops the default type label, and gives each variant a full
-rounded border toned halfway to its background with `color-mix`. The icons are
-Lucide replacements from `src/theme/Admonition/Icon/`.
+All five Infima variants. Styled by `_admonitions.scss`, which lays the icon out in its own column, drops the default type label, and gives each variant a full rounded border toned halfway to its background with `color-mix`. The icons are Lucide replacements from `src/theme/Admonition/Icon/`.
 
 :::note
-A note admonition. Contains **bold text**, `inline code`, and a
-[link](https://github.com/sourcenetwork) to check inherited colors — `.alert`
-sets its own `--ifm-link-color`.
+A note admonition. Contains **bold text**, `inline code`, and a [link](https://github.com/sourcenetwork) to check inherited colors — `.alert` sets its own `--ifm-link-color`.
 :::
 
 :::tip
@@ -26,8 +21,7 @@ A tip admonition.
 :::
 
 :::info
-An info admonition. This is the variant Docusaurus reuses for `<details>` — see
-below, where `_details.scss` neutralises the inherited green accent.
+An info admonition. This is the variant Docusaurus reuses for `<details>` — see below, where `_details.scss` neutralises the inherited green accent.
 :::
 
 :::warning
@@ -44,16 +38,12 @@ An admonition with a custom title instead of the variant name.
 
 ## Details / accordion
 
-Rendered by the `Details` theme component, which hardcodes `alert alert--info`
-onto every block — so these inherit admonition styling. The stable selector is
-`details.alert`; both classes in the DOM are hashed CSS modules.
+Rendered by the `Details` theme component, which hardcodes `alert alert--info` onto every block — so these inherit admonition styling. The stable selector is `details.alert`; both classes in the DOM are hashed CSS modules.
 
 <details>
 <summary>A collapsed details block</summary>
 
-Content revealed on expand. The chevron in the summary is a masked SVG colored
-by `--docusaurus-details-decoration-color`; the divider above this text follows
-`--details-border-color` instead, so it matches the box.
+Content revealed on expand. The chevron in the summary is a masked SVG colored by `--docusaurus-details-decoration-color`; the divider above this text follows `--details-border-color` instead, so it matches the box.
 
 - A list inside details
 - To check nested spacing
@@ -63,8 +53,7 @@ by `--docusaurus-details-decoration-color`; the divider above this text follows
 <details open>
 <summary>A details block that starts open</summary>
 
-This one carries the `open` attribute, so it renders expanded. Note the arrow
-rotation, driven by `--docusaurus-details-transition`.
+This one carries the `open` attribute, so it renders expanded. Note the arrow rotation, driven by `--docusaurus-details-transition`.
 
 ```graphql
 query {
@@ -78,8 +67,7 @@ query {
 
 ## Tabs
 
-Registered globally in `src/theme/MDXComponents.tsx`. The left border and label
-weight come from the `.tabs-container` rule in `_admonitions.scss`.
+Registered globally in `src/theme/MDXComponents.tsx`. The left border and label weight come from the `.tabs-container` rule in `_admonitions.scss`.
 
 <Tabs>
 <TabItem value="cli" label="CLI">
@@ -111,8 +99,7 @@ mutation {
 
 ## Code blocks
 
-The wrapper at `src/theme/CodeBlock/index.tsx` parses bare-word flags off the
-fence metastring. Each variant below is labeled with the fence that produced it.
+The wrapper at `src/theme/CodeBlock/index.tsx` parses bare-word flags off the fence metastring. Each variant below is labeled with the fence that produced it.
 
 ### Plain
 
@@ -178,8 +165,7 @@ mutation {
 
 ### Query followed by a result
 
-The `.theme-code-block:has(+ .codeblock-result)` rule squashes the gap between
-the pair.
+The `.theme-code-block:has(+ .codeblock-result)` rule squashes the gap between the pair.
 
 ````
 ```graphql
@@ -238,8 +224,7 @@ query {
 
 ### Syntax highlighting per language
 
-Token colors come from the `--code-token-*` variables and
-`src/code-theme/code-theme.js`.
+Token colors come from the `--code-token-*` variables and `src/code-theme/code-theme.js`.
 
 ```javascript
 // A comment
@@ -274,8 +259,7 @@ SELECT title, author FROM books WHERE year > 1980 ORDER BY year;
 
 ## Buttons
 
-Infima button classes. Note that `.button--primary` isn't used anywhere in the
-site today, and its hover state resolves through `--ifm-color-primary-dark`.
+Infima button classes. Note that `.button--primary` isn't used anywhere in the site today, and its hover state resolves through `--ifm-color-primary-dark`.
 
 <div style={{ display: "flex", gap: "0.75rem", flexWrap: "wrap" }}>
   <button className="button button--primary">Primary</button>

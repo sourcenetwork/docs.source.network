@@ -41,21 +41,13 @@ export const Swatches = ({ names }) => (
   </div>
 );
 
-Every colour-valued custom property from `src/css/variables.scss`, resolved
-live — so toggling the theme switch shows both palettes. Spacing, type and
-sizing tokens are in the table at the end. Swatch styling is inline on purpose,
-to keep this page from adding anything to the production stylesheet.
+Every colour-valued custom property from `src/css/variables.scss`, resolved live — so toggling the theme switch shows both palettes. Spacing, type and sizing tokens are in the table at the end. Swatch styling is inline on purpose, to keep this page from adding anything to the production stylesheet.
 
-Where a token is an alias onto a brand variable, the target is noted beneath
-it with a `↳`. Some resolve differently per theme, written as `light / dark`;
-a side written `—` isn't aliased there — it's either an Infima default we
-never touched, or a one-off literal with no brand variable behind it.
+Where a token is an alias onto a brand variable, the target is noted beneath it with a `↳`. Some resolve differently per theme, written as `light / dark`; a side written `—` isn't aliased there — it's either an Infima default we never touched, or a one-off literal with no brand variable behind it.
 
 ## Brand
 
-`--src-amber` is the LensVM product accent, reused as the semantic warning
-colour — a deliberate departure from the brand's "keep accents isolated to
-their contexts" guidance.
+`--src-amber` is the LensVM product accent, reused as the semantic warning colour — a deliberate departure from the brand's "keep accents isolated to their contexts" guidance.
 
 <Swatches names={[
   "--src-primary",
@@ -66,12 +58,7 @@ their contexts" guidance.
 
 ## Brand color scales
 
-The green and grey ramps from the Source brand system, on the brand's own
-step labels. `--src-green-400` is the same value as
-`--src-primary`; `--ifm-color-primary` and its shades resolve through
-`--src-green-*` in light mode. Everything grey in the site resolves back to
-the grey ramp — the mapping onto Infima's `--ifm-color-gray-*` happens in
-`variables.scss`. `--src-gray-50` has no Infima slot and is currently unused.
+The green and grey ramps from the Source brand system, on the brand's own step labels. `--src-green-400` is the same value as `--src-primary`; `--ifm-color-primary` and its shades resolve through `--src-green-*` in light mode. Everything grey in the site resolves back to the grey ramp — the mapping onto Infima's `--ifm-color-gray-*` happens in `variables.scss`. `--src-gray-50` has no Infima slot and is currently unused.
 
 <Swatches names={[
   "--src-green-50",
@@ -105,21 +92,13 @@ the grey ramp — the mapping onto Infima's `--ifm-color-gray-*` happens in
 
 ## Interaction overlays
 
-Translucent, so these swatches show the page background through them. Shared by
-the sidebar menu and the tab bar; kept separate from Infima's
-`--ifm-hover-overlay`, which stays at 5% for breadcrumbs, dropdowns, pagination
-and pills.
+Translucent, so these swatches show the page background through them. Shared by the sidebar menu and the tab bar; kept separate from Infima's `--ifm-hover-overlay`, which stays at 5% for breadcrumbs, dropdowns, pagination and pills.
 
 <Swatches names={["--src-hover-overlay", "--src-active-overlay"]} />
 
 ## Infima primary
 
-`--ifm-color-primary` maps to `--src-green-500` in light and `--src-highlight`
-in dark — `--src-primary` (`--src-green-400`) only hits 2.8:1 on white, short
-of the 4.5:1 text needs, so light mode anchors one step darker on the brand's
-own green scale instead. The `-dark` through `-lightest` variants are also
-`--src-green-*` steps, not a generated ramp; Infima uses `-dark` and `-darker`
-for `.button--primary` hover and active.
+`--ifm-color-primary` maps to `--src-green-500` in light and `--src-highlight` in dark — `--src-primary` (`--src-green-400`) only hits 2.8:1 on white, short of the 4.5:1 text needs, so light mode anchors one step darker on the brand's own green scale instead. The `-dark` through `-lightest` variants are also `--src-green-*` steps, not a generated ramp; Infima uses `-dark` and `-darker` for `.button--primary` hover and active.
 
 <Swatches names={[
   ["--ifm-color-primary", "--src-green-500 / --src-highlight"],
@@ -152,8 +131,7 @@ for `.button--primary` hover and active.
 
 ## Infima gray ramp
 
-A straight alias onto the brand neutrals, identical in both themes — this is
-the single mapping that the emphasis scale below is built from.
+A straight alias onto the brand neutrals, identical in both themes — this is the single mapping that the emphasis scale below is built from.
 
 <Swatches names={[
   ["--ifm-color-gray-0", "--src-white"],
@@ -171,10 +149,7 @@ the single mapping that the emphasis scale below is built from.
 
 ## Emphasis scale
 
-The borders-and-fills ramp, aliased onto the gray ramp above. It's **inverted**
-in dark mode — `emphasis-0` is `gray-0` in light and `gray-1000` in dark — so
-toggling the theme reverses this row. That inversion is why these carry no
-fixed `↳` target. `emphasis-200` is the one the partials lean on most.
+The borders-and-fills ramp, aliased onto the gray ramp above. It's **inverted** in dark mode — `emphasis-0` is `gray-0` in light and `gray-1000` in dark — so toggling the theme reverses this row. That inversion is why these carry no fixed `↳` target. `emphasis-200` is the one the partials lean on most.
 
 <Swatches names={[
   "--ifm-color-emphasis-0",
@@ -192,16 +167,13 @@ fixed `↳` target. `emphasis-200` is the one the partials lean on most.
 
 ## Cards
 
-Declared globally but only consumed by `src/pages/index.module.scss`, so these
-apply to the homepage rather than to docs.
+Declared globally but only consumed by `src/pages/index.module.scss`, so these apply to the homepage rather than to docs.
 
 <Swatches names={["--card-color", ["--card-border-color", "--src-gray-200 / —"]]} />
 
 ## Alerts and admonitions
 
-Infima maps `.alert--secondary` to `:::note`, `--success` to `:::tip` and
-`--warning` to `:::warning`, so the families below are what the admonition
-variants actually resolve through. Info shares tip's fill.
+Infima maps `.alert--secondary` to `:::note`, `--success` to `:::tip` and `--warning` to `:::warning`, so the families below are what the admonition variants actually resolve through. Info shares tip's fill.
 
 <Swatches names={[
   "--ifm-color-info-dark",
@@ -251,8 +223,7 @@ variants actually resolve through. Info shares tip's fill.
 
 ## Feedback widget
 
-pushfeedback's own variables, overridden in `variables.scss`. See
-`src/css/_feedback.scss` for the `::part()` rules that reach into its shadow DOM.
+pushfeedback's own variables, overridden in `variables.scss`. See `src/css/_feedback.scss` for the `::part()` rules that reach into its shadow DOM.
 
 <Swatches names={[
   ["--feedback-background", "--code-background"],

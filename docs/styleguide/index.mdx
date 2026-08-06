@@ -9,16 +9,11 @@ description: Every text element the docs theme renders, in one place.
   <meta name="robots" content="noindex, nofollow" />
 </head>
 
-An unlisted page for reviewing site styles. It isn't linked from the navbar or
-any product sidebar — reach it at `/styleguide`. Everything below is rendered by
-the real doc layout, so the surrounding chrome (navbar, sidebar, breadcrumbs,
-table of contents, pagination, "Edit this page", feedback widget) is on display
-here too.
+An unlisted page for reviewing site styles. It isn't linked from the navbar or any product sidebar — reach it at `/styleguide`. Everything below is rendered by the real doc layout, so the surrounding chrome (navbar, sidebar, breadcrumbs, table of contents, pagination, "Edit this page", feedback widget) is on display here too.
 
 ## Headings
 
-Sized by `--ifm-h1-font-size` … `--ifm-h4-font-size` in `variables.scss`, with
-`--h1-base-font-size` as the shared h1 token. The page title above is the `h1`.
+Sized by `--ifm-h1-font-size` … `--ifm-h4-font-size` in `variables.scss`, with `--h1-base-font-size` as the shared h1 token. The page title above is the `h1`.
 
 ## Heading level 2
 
@@ -32,35 +27,22 @@ Sized by `--ifm-h1-font-size` … `--ifm-h4-font-size` in `variables.scss`, with
 
 ## Body copy
 
-Body text uses `--ifm-font-family-base` (Inter) at `--ifm-font-size-base`, with
-line height from `--ifm-leading-desktop`. This paragraph exists to show how a
-longer run of prose sets, wraps, and breathes between block elements — long
-enough to wrap onto several lines at the site's content width so leading and
-measure are both visible.
+Body text uses `--ifm-font-family-base` (Inter) at `--ifm-font-size-base`, with line height from `--ifm-leading-desktop`. This paragraph exists to show how a longer run of prose sets, wraps, and breathes between block elements — long enough to wrap onto several lines at the site's content width so leading and measure are both visible.
 
-Text can be **bold** (`--ifm-font-weight-bold`), *italic*, ***both at once***,
-~~struck through~~, or marked as `inline code`, which picks up
-`--ifm-code-background`, `--ifm-code-font-size`, and
-`--ifm-code-border-radius`.
+Text can be **bold** (`--ifm-font-weight-bold`), *italic*, ***both at once***, ~~struck through~~, or marked as `inline code`, which picks up `--ifm-code-background`, `--ifm-code-font-size`, and `--ifm-code-border-radius`.
 
-You can also use <kbd>Cmd</kbd> + <kbd>K</kbd> for keyboard keys, H<sub>2</sub>O
-for subscript, and x<sup>2</sup> for superscript.
+You can also use <kbd>Cmd</kbd> + <kbd>K</kbd> for keyboard keys, H<sub>2</sub>O for subscript, and x<sup>2</sup> for superscript.
 
 ## Links
 
-An [internal link to another styleguide page](./components.mdx) sits inline in a
-sentence. An [external link](https://github.com/sourcenetwork) gets the arrow
-icon appended by the `.theme-doc-markdown a[target="_blank"]::after` rule in
-`_markdown.scss`, which masks `/img/icon-external-link.svg` and tints it with
-`currentColor`.
+An [internal link to another styleguide page](./components.mdx) sits inline in a sentence. An [external link](https://github.com/sourcenetwork) gets the arrow icon appended by the `.theme-doc-markdown a[target="_blank"]::after` rule in `_markdown.scss`, which masks `/img/icon-external-link.svg` and tints it with `currentColor`.
 
 ## Lists
 
 Unordered:
 
 - First item
-- Second item, with enough text that it wraps to a second line and shows how the
-  hanging indent behaves against the marker
+- Second item, with enough text that it wraps to a second line and shows how the hanging indent behaves against the marker
 - Third item
   - Nested item
   - Another nested item
@@ -81,14 +63,11 @@ Task list:
 
 Definition-style list:
 
-Term
-: The definition of that term.
+Term : The definition of that term.
 
-Another term
-: Its definition.
+Another term : Its definition.
 
-A list containing a code block, which the `li div.theme-code-block` rule in
-`_code-blocks.scss` reins in:
+A list containing a code block, which the `li div.theme-code-block` rule in `_code-blocks.scss` reins in:
 
 1. Run the command:
 
@@ -100,8 +79,7 @@ A list containing a code block, which the `li div.theme-code-block` rule in
 
 ## Blockquote
 
-> A blockquote holds a pulled-out passage. It can run to several sentences, and
-> should show its left border, padding, and background treatment clearly.
+> A blockquote holds a pulled-out passage. It can run to several sentences, and should show its left border, padding, and background treatment clearly.
 >
 > — Attribution line
 
@@ -137,8 +115,7 @@ The `.sidebyside-*` classes in `_markdown.scss` only engage above 800px.
 
 <div className="sidebyside-left">
 
-**Left column.** This content floats left at 49% width on wide viewports and
-stacks on narrow ones.
+**Left column.** This content floats left at 49% width on wide viewports and stacks on narrow ones.
 
 </div>
 
