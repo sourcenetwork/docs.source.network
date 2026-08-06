@@ -60,7 +60,7 @@ The `defradb` CLI commands don't support connection to instances with TLS enable
 
 By default, DefraDB starts with its P2P features active. For information on how to set up P2P, see [Synchronize documents across multiple nodes](/p2p/index.md).
 
-:::note Disable p2p
+:::note Disable P2P
 Disable P2P on an instance by starting it with the `--no-p2p` flag.
 
 ```bash

@@ -173,7 +173,7 @@ Declared globally but only consumed by `src/pages/index.module.scss`, so these a
 
 ## Alerts and admonitions
 
-Infima maps `.alert--secondary` to `:::note`, `--success` to `:::tip` and `--warning` to `:::warning`, so the families below are what the admonition variants actually resolve through. Info shares tip's fill.
+Infima maps `.alert--secondary` to `:::note`, `--success` to `:::tip`, `--info` to `:::info`, `--warning` to `:::warning` (and its `:::caution` alias) and `--danger` to `:::danger`, so the families below are what the admonition variants actually resolve through. Info shares tip's fill. Warning and danger alias their accent onto a brand colour but keep Infima's contrast pairs, which vary per theme.
 
 <Swatches names={[
   "--ifm-color-info-dark",
@@ -189,6 +189,10 @@ Infima maps `.alert--secondary` to `:::note`, `--success` to `:::tip` and `--war
   ["--ifm-color-warning-dark", "--src-amber"],
   "--ifm-color-warning-contrast-background",
   "--ifm-color-warning-contrast-foreground",
+  ["--ifm-color-danger", "--src-red"],
+  ["--ifm-color-danger-dark", "--src-red"],
+  "--ifm-color-danger-contrast-background",
+  "--ifm-color-danger-contrast-foreground",
   "--ifm-alert-border-color",
 ]} />
 

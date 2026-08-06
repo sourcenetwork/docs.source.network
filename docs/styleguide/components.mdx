@@ -116,21 +116,32 @@ func main() {
 ````
 
 ```go title="main.go"
-func main() {
-	fmt.Println("hello")
+func main() { fmt.Println("hello")
 }
 ```
 
 ### Highlighted lines
 
-````
-```go {2-3}
-````
+Magic comments, configured under `prism.magicComments` in `docusaurus.config.js` — preferred over the `{2-3}` range metastring, whose line numbers go stale as soon as the example is edited. The marker follows the block's own language: `//` here, `#` for GraphQL and shell. Markers are stripped from the rendered output, so unlike the variants above they can't be shown in a literal fence.
 
-```go {2-3}
+`// highlight-next-line` marks the line below it:
+
+```go
 func main() {
+	// highlight-next-line
+	client := NewClient()
+	fmt.Println("hello")
+}
+```
+
+`// highlight-start` and `// highlight-end` mark a chunk:
+
+```go
+func main() {
+	// highlight-start
 	client := NewClient()
 	defer client.Close()
+	// highlight-end
 	fmt.Println("hello")
 }
 ```
