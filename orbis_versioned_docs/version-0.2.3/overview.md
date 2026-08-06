@@ -14,7 +14,3 @@ Once the manifest is created, Secret Ring nodes will start their initial DKG cer
 
 Once a Ring is fully configured and initialized users that want to store secrets will encrypt their secret *`S`* to the rings aggregate public key *`Pk`*, *`Se = Enc(S, Pk)`*. They then send *`Se`* to any of the Orbis nodes along with the *Authorization Context* that determines how the configured authorization system processes requests (which is dependant on the `authz` parameter of the Manifest), as a `StoreSecret` request. Finally the receiving node will broadcast the request to the Rings' bulletin protocol to sync with the rest of the nodes.
 
-:::info
-The *Root Ring* is a special deployment Orbis Ring that is a public permissionless service provided by the same infrastructure nodes as the SourceHub publicly hosted service. This ensures there is a single public Source stack deployment that developers can use along side their DefraDB nodes.
-:::
-

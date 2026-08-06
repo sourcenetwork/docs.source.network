@@ -8,7 +8,7 @@ BLUE := \033[0;34m
 NC := \033[0m # No Color
 
 # Valid project names
-VALID_PROJECTS := defradb sourcehub orbis lensvm
+VALID_PROJECTS := defradb orbis lensvm
 
 help:
 	@echo "$(BLUE)Docusaurus Version Management$(NC)"
@@ -20,7 +20,7 @@ help:
 	@echo "  Regenerates and replaces Docusaurus versioned docs for a specific version"
 	@echo ""
 	@echo "$(GREEN)Arguments:$(NC)"
-	@echo "  PROJECT  - Project name (defradb, sourcehub, orbis, lensvm)"
+	@echo "  PROJECT  - Project name (defradb, orbis, lensvm)"
 	@echo "  VERSION  - Version identifier (must exist in <project>_versions.json)"
 	@echo ""
 	@echo "$(GREEN)Example:$(NC)"

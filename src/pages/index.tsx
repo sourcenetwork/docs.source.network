@@ -33,13 +33,6 @@ const HomepageFeatures: FC<{}> = () => {
       subTitle: "Deploy decentralized databases",
     },
     {
-      link: "/sourcehub",
-      image: "./img/product/sourcehub-symbol-color.svg",
-      imageLight: "./img/product/sourcehub-symbol-black.svg",
-      title: "SourceHub",
-      subTitle: "Build trust & interoperability",
-    },
-    {
       link: "/orbis",
       image: "./img/product/orbis-symbol-color.svg",
       imageLight: "./img/product/orbis-symbol-black.svg",
@@ -86,8 +79,6 @@ const HomepageReferenceLinks: FC<{}> = () => {
           <Link to="/defradb/security/document-access-control">DefraDB Document Access Control setup </Link>
         </div>
         <div className={clsx("col col-4", styles.linkList)}>
-          <Link to="sourcehub/getting-started/readme">SourceHub Getting Started </Link>
-          <Link to="sourcehub/api">SourceHub API </Link>
           <Link to="/orbis/getting-started/install">Orbis Installation </Link>
           <Link to="/orbis/getting-started/policy">Orbis Setup Authorization Policy </Link>
         </div>

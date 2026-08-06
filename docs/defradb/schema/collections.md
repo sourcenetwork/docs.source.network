@@ -46,6 +46,132 @@ active: Boolean @default(value: true)
 creation: DateTime @default(value: UTC_NOW)
 ```
 
+### Relationships {/* #relationships */}
+
+To create a relationship between two types, define a field having the other side of the relationship as type.
+The way in which you define relationships depends on their kind:
+
+- [One-to-one](#relationships-one-to-one) &ndash; Each document of type `A` is linked to one document of type `B`, and viceversa.
+- [One-to-many](#relationships-one-to-many) &ndash; Each document of type `A` is linked to one document of type `B`. Each document of type `B` is linked to one or more documents of type `A`.
+- [Many-to-many](#relationships-many-to-many) &ndash; Each document of type `A` is linked to one or more documents of type `B`, and viceversa.
+
+This section shows how to create relationships. For information on how to populate and query them, see [Create documents with relationships](/dql/mutation-create.md#relationships) and [Query the database](/dql/mutation-query.md#relationships).
+
+:::note
+As all other fields, relationship fields can be null. For example, defining a one-to-one relationship doesn't guarantee that each document of type `A` will be linked to a document of type `B`: a document can leave the relationship undefined.
+:::
+
+#### One-to-one {/* #relationships-one-to-one */}
+
+One-to-one relationships are such that each document of type `A` is linked to one and only one document of type `B`.
+In practice, type `A` defines a field of type `B`, and type `B` defines a field of type `A`.
+
+For example, each `Husband` is married to one `Wife` and viceversa. At least disregarding avant-garde polyamorous relationships.
+
+```graphql title='Type "Husband" with 1:1 relationship with "Wife"'
+type Husband {
+  name: String
+  wife: Wife
+}
+
+type Wife {
+  name: String
+  husband: Husband @primary
+}
+```
+
+The type holding the `@primary` directive stores a direct pointer to the other end of the relationship, resulting in faster queries. `@primary` fields also get automatically [indexed](indexes.md). In the example above, `Wife` contains a (implicit) field `_husbandID`, so retrieving a _wife's husband_ is quick. On the other hand, documents of type `Husband` do not contain any pointer to the relative `Wife`, so a collection scan is needed to retrieve a _husband's wife_. Wifes are just harder to find. Which side should have the `@primary` directive depends on your query patterns.
+
+:::note
+One-to-one relationships are enforced via [unique indexes](indexes.md#unique) under the hood. The index must not be dropped, or the 1:1 nature of the relationship will not be fulfilled anymore.
+:::
+
+:::warning
+There's no validation on the type when creating relationships across documents. It is the client's responsibility to validate that the `Wife.husbandID` is populated with the docID of a `Husband` document. It's up to you to marry humans.
+:::
+
+#### One-to-many {/* #relationships-one-to-many */}
+
+One-to-many relationships link one document of type `A` with one document of type `B`, but allows documents of type `B` to be linked to multiple documents of type `A`. In practice, type `A` defines a field of type `B`, whereas type `B` defines a field of type `[A]` (_list_ of `A`).
+
+For example: each book has one author, whereas one person can author multiple books:
+
+```graphql title='Type "Book" with 1:many relationship with "Person"'
+type Book {
+  title: String!
+  author: Person
+}
+
+type Person {
+  name: String!
+  authoredBooks: [Book]
+}
+```
+
+:::warning
+There's no validation on the type when creating relationships across documents. It is the client's responsibility to validate that the `Book.authorID` is populated with the docID of a `Person` document.
+:::
+
+#### Many-to-many {/* #relationships-many-to-many */}
+
+Many-to-many relationships link multiple documents of one type to multiple documents of another type, allowing the same on the other side. To create many-to-many relationships, use two [one-to-many relationships](#relationships-one-to-many) and a join type.
+
+For example: a student can enroll in many courses, and a course can have many students enrolled:
+
+```graphql title='Type "Student" with many:many relationship with "Course"'
+type Student {
+  name: String!
+  age: Int
+  enrollment: [Enrollment]
+}
+
+type Course {
+  title: String!
+  code: String!
+  enrollment: [Enrollment]
+}
+
+type Enrollment {  # the join type
+  student: Student!
+  course: Course!
+}
+```
+
+#### Multiple relationships of same type {/* #relationships-rename */}
+
+A type defining multiple relationships to the same type requires extra directives to disambiguate their targets. For example, if a book has both an author and a reviewer, the following definitions would be ambiguous:
+
+```graphql title="Invalid &ndash; Ambiguous definition of multiple relationships" test-fail invalid
+type Book {
+  title: String
+  author: Person
+  reviewer: Person
+}
+
+type Person {
+  name: String
+  authoredBooks: [Book]
+  reviewedBooks: [Book]
+}
+```
+
+At query time, the database cannot infer whether `Person.authoredBooks` is linked to `Book.author` or `Book.reviewer`. To clarify which fields should get paired, use the `@relation(name: String)` directive, coupling each relationship together with the same name:
+
+```graphql title="Valid &ndash; Unambiguous definition of multiple relationships" valid
+type Book {
+  title: String
+  author: Person @relation(name: "author")
+  reviewer: Person @relation(name: "reviewer")
+}
+
+type Person {
+  name: String
+  authoredBooks: [Book] @relation(name: "author")
+  reviewedBooks: [Book] @relation(name: "reviewer")
+}
+```
+
+
 ## Create collections {/* #create */}
 
 <Tabs groupId="defra">
@@ -205,130 +331,6 @@ creation: DateTime @default(value: UTC_NOW)
   </TabItem>
 </Tabs>
 
-### Relationships {/* #relationships */}
-
-To create a relationship between two types, define a field having the other side of the relationship as type.
-The way in which you define relationships depends on their kind:
-
-- [One-to-one](#relationships-one-to-one) &ndash; Each document of type `A` is linked to one document of type `B`, and viceversa.
-- [One-to-many](#relationships-one-to-many) &ndash; Each document of type `A` is linked to one document of type `B`. Each document of type `B` is linked to one or more documents of type `A`.
-- [Many-to-many](#relationships-many-to-many) &ndash; Each document of type `A` is linked to one or more documents of type `B`, and viceversa.
-
-This section shows how to create relationships. For information on how to populate and query them, see [Create documents with relationships](/dql/mutation-create.md#relationships) and [Query the database](/dql/mutation-query.md#relationships).
-
-:::note
-As all other fields, relationship fields can be null. For example, defining a one-to-one relationship doesn't guarantee that each document of type `A` will be linked to a document of type `B`: a document can leave the relationship undefined.
-:::
-
-#### One-to-one {/* #relationships-one-to-one */}
-
-One-to-one relationships are such that each document of type `A` is linked to one and only one document of type `B`.
-In practice, type `A` defines a field of type `B`, and type `B` defines a field of type `A`.
-
-For example, each `Husband` is married to one `Wife` and viceversa. At least disregarding avant-garde polyamorous relationships.
-
-```graphql title='Type "Husband" with 1:1 relationship with "Wife"'
-type Husband {
-  name: String
-  wife: Wife
-}
-
-type Wife {
-  name: String
-  husband: Husband @primary
-}
-```
-
-The type holding the `@primary` directive stores a direct pointer to the other end of the relationship, resulting in faster queries. `@primary` fields also get automatically [indexed](indexes.md). In the example above, `Wife` contains a (implicit) field `_husbandID`, so retrieving a _wife's husband_ is quick. On the other hand, documents of type `Husband` do not contain any pointer to the relative `Wife`, so a collection scan is needed to retrieve a _husband's wife_. Wifes are just harder to find. Which side should have the `@primary` directive depends on your query patterns.
-
-:::note
-One-to-one relationships are enforced via [unique indexes](indexes.md#unique) under the hood. The index must not be dropped, or the 1:1 nature of the relationship will not be fulfilled anymore.
-:::
-
-:::warning
-There's no validation on the type when creating relationships across documents. It is the client's responsibility to validate that the `Wife.husbandID` is populated with the docID of a `Husband` document. It's up to you to marry humans.
-:::
-
-#### One-to-many {/* #relationships-one-to-many */}
-
-One-to-many relationships link one document of type `A` with one document of type `B`, but allows documents of type `B` to be linked to multiple documents of type `A`. In practice, type `A` defines a field of type `B`, whereas type `B` defines a field of type `[A]` (_list_ of `A`).
-
-For example: each book has one author, whereas one person can author multiple books:
-
-```graphql title='Type "Book" with 1:many relationship with "Person"'
-type Book {
-  title: String!
-  author: Person
-}
-
-type Person {
-  name: String!
-  authoredBooks: [Book]
-}
-```
-
-:::warning
-There's no validation on the type when creating relationships across documents. It is the client's responsibility to validate that the `Book.authorID` is populated with the docID of a `Person` document.
-:::
-
-#### Many-to-many {/* #relationships-many-to-many */}
-
-Many-to-many relationships link multiple documents of one type to multiple documents of another type, allowing the same on the other side. To create many-to-many relationships, use two [one-to-many relationships](#relationships-one-to-many) and a join type.
-
-For example: a student can enroll in many courses, and a course can have many students enrolled:
-
-```graphql title='Type "Student" with many:many relationship with "Course"'
-type Student {
-  name: String!
-  age: Int
-  enrollment: [Enrollment]
-}
-
-type Course {
-  title: String!
-  code: String!
-  enrollment: [Enrollment]
-}
-
-type Enrollment {  # the join type
-  student: Student!
-  course: Course!
-}
-```
-
-#### Multiple relationships of same type {/* #relationships-rename */}
-
-A type defining multiple relationships to the same type requires extra directives to disambiguate their targets. For example, if a book has both an author and a reviewer, the following definitions would be ambiguous:
-
-```graphql title="Invalid &ndash; Ambiguous definition of multiple relationships" test-fail invalid
-type Book {
-  title: String
-  author: Person
-  reviewer: Person
-}
-
-type Person {
-  name: String
-  authoredBooks: [Book]
-  reviewedBooks: [Book]
-}
-```
-
-At query time, the database cannot infer whether `Person.authoredBooks` is linked to `Book.author` or `Book.reviewer`. To clarify which fields should get paired, use the `@relation(name: String)` directive, coupling each relationship together with the same name:
-
-```graphql title="Valid &ndash; Unambiguous definition of multiple relationships" valid
-type Book {
-  title: String
-  author: Person @relation(name: "author")
-  reviewer: Person @relation(name: "reviewer")
-}
-
-type Person {
-  name: String
-  authoredBooks: [Book] @relation(name: "author")
-  reviewedBooks: [Book] @relation(name: "reviewer")
-}
-```
 
 ## Show collections {/* #show */}
 

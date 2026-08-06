@@ -10,7 +10,7 @@ import type { MouseEvent, ReactNode } from 'react';
 
 type Props = WrapperProps<typeof DocsVersionDropdownNavbarItemType>;
 
-const PLUGIN_IDS = ['defradb', 'sourcehub', 'orbis', 'lensvm'];
+const PLUGIN_IDS = ['defradb', 'orbis', 'lensvm'];
 
 function ProductVersionDropdown({
   props,

@@ -4,9 +4,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-This is the Source Network documentation site, built with Docusaurus 3. It hosts documentation for four main products:
+This is the Source Network documentation site, built with Docusaurus 3. It hosts documentation for three main products:
 - **DefraDB**: A peer-to-peer database with Merkle CRDTs
-- **SourceHub**: Access control and policy management
 - **Orbis**: Multi-party computation and encryption
 - **LensVM**: Virtual machine component
 
@@ -44,7 +43,6 @@ npm run import-defradb-cli-docs develop
 
 Documentation is organized by product in the `/docs` directory:
 - `/docs/defradb/` - DefraDB database documentation
-- `/docs/sourcehub/` - SourceHub access control documentation
 - `/docs/orbis/` - Orbis cryptography documentation
 - `/docs/lensvm/` - LensVM documentation
 
@@ -59,11 +57,11 @@ Each product section typically contains:
 
 Sidebars come from two files:
 - `docs/sidebars/defra.js` - `defraSidebar`, written by hand, with one auto-generated block for `docs/defradb/references/`
-- `sidebars.js` - `sourcehubSidebar` (auto-generated + API link), `orbisSidebar` and `lensvmSidebar` (auto-generated)
+- `sidebars.js` - `orbisSidebar` and `lensvmSidebar` (auto-generated)
 
 ### API Documentation
 
-OpenAPI specification is stored in `openapi.yml` at the root. The SourceHub API docs are served at `/sourcehub/api` via the `docusaurus-preset-openapi` plugin configuration.
+The DefraDB OpenAPI specification is stored in `docs/defradb/references/http/openapi.json` and served at `/defradb/references/http/api` via the `docusaurus-preset-openapi` plugin configuration.
 
 ### Theme Customization
 

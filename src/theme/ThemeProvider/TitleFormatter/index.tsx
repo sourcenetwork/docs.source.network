@@ -8,8 +8,6 @@ const formatter: FormatterProp = (params) => {
   let project = undefined
   if (params.plugin.id == 'defradb') {
     project = 'DefraDB';
-  } else if (params.plugin.id == 'sourcehub') {
-    project = 'SourceHub';
   } else if (params.plugin.id == 'orbis') {
     project = 'Orbis';
   } else if (params.plugin.id == 'lensvm') {
