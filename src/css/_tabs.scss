@@ -14,6 +14,10 @@
     font-size: rem(14px);
   }
 
+  .tabs__item {
+    border-bottom-width: rem(2px);
+  }
+
   // Infima's hover is a 5% overlay with no colour change; match the sidebar.
   .tabs__item:not(.tabs__item--active):hover {
     background-color: var(--src-hover-overlay);

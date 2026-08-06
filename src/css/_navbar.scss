@@ -3,26 +3,83 @@
 .navbar {
   box-shadow: none;
   border-bottom: rem(1px) solid var(--docs-title-border);
+
   &__inner {
     padding: 0 var(--site-gutter-horizontal);
+
+    @media (max-width: 996px) {
+      padding-right: 60px;
+      min-width: 0px;
+    }
   }
 
-  &-sidebar__brand {
-    padding-left: var(--ifm-spacing-horizontal);
-    padding-right: var(--ifm-spacing-horizontal);
+  &__toggle {
+    height: 34px;
+    width: 34px;
+
+    svg {
+      margin: auto;
+      width: rem(24px);
+      height: rem(24px);
+    }
+
+    @media (max-width: 996px) {
+      display: flex;
+    }
+  }
+
+  &-sidebar {
+    .navbar__brand {
+      margin-right: auto;
+    }
+
+    .header-github-link,
+    .menu__list-item:has(> .header-github-link) {
+      display: none;
+    }
+
+    .color-mode-toggle {
+      display: none;
+    }
+
+    &__brand {
+      padding-left: var(--ifm-spacing-horizontal);
+      padding-right: var(--ifm-spacing-horizontal);
+    }
+
+    &__close {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: rem(34px);
+      height: rem(34px);
+      margin: 0;
+
+      svg {
+        width: rem(24px);
+        height: rem(24px);
+      }
+    }
   }
 
   &__brand {
-    margin-right: rem(40px);
-    flex-shrink: 0;
+    margin-right: rem(30px);
+
+    @media (max-width: 996px) {
+      margin-right: 0;
+    }
   }
 
   &__logo {
-    max-width: rem(230px);
+    flex: 1;
+    display: flex;
+    height: auto;
+    max-width: rem(200px);
   }
 
   &__link {
     font-size: rem(14px);
+
     &--active {
       color: var(--ifm-navbar-link-color);
     }
@@ -58,6 +115,19 @@
   // Flip the chevron while the menu is open, matching the markdown dropdown.
   &__item.dropdown.dropdown--show .navbar__link:after {
     transform: rotate(180deg);
+  }
+
+  .version-picker--inert {
+    cursor: default;
+  }
+
+  .navbar__link.version-picker--inert:hover {
+    color: var(--ifm-navbar-link-color);
+  }
+
+  .menu__link.version-picker--inert:hover {
+    color: var(--ifm-menu-color);
+    background: none;
   }
 
   // Match the "Open Markdown" dropdown's card look (see _markdown.scss).

@@ -6,6 +6,7 @@ body .DocSearch {
   &-Button-Placeholder {
     font-size: 0.8rem;
     padding-right: 10rem;
+
     &:after {
       content: " ...";
     }
@@ -20,6 +21,8 @@ body .DocSearch {
   &-Button {
     border: 1px solid var(--card-border-color);
     margin-left: 0.5rem;
+    height: 32px;
+    padding: 0 rem(6px);
 
     &-Keys {
       min-width: 0;
@@ -47,6 +50,7 @@ body .DocSearch {
       font-family: "Funnel Display", sans-serif;
       color: var(--ifm-font-color-base);
     }
+
     &[aria-selected="true"] a {
       background-color: var(--docsearch-hit-background-active);
     }
@@ -60,6 +64,12 @@ body .DocSearch {
     box-shadow: none;
     background: var(--ifm-background-color);
     color: var(--ifm-color-primary);
+  }
+}
+
+@media (max-width: 996px) {
+  .navbar .DocSearch-Button {
+    margin-right: var(--site-gutter-horizontal);
   }
 }
 

@@ -141,6 +141,7 @@ html[data-theme="dark"],
 html[data-theme="light"] {
   --feedback-button-text-font-size: 0.875rem; // same as text size
   --feedback-button-text-font-weight: 400;
+  --feedback-button-z-index: 150;
   --feedback-background: var(--code-background);
   --feedback-button-dark-bg-color: var(--feedback-background);
   --feedback-button-dark-text-color: var(--feedback-primary-color);
@@ -256,6 +257,9 @@ html[data-theme="light"] {
   --ifm-color-warning-dark: var(--src-amber);
   --ifm-color-warning-contrast-background: #fbf6ef;
   --ifm-color-warning-contrast-foreground: #5c3700;
+
+  --ifm-color-danger: var(--src-red);
+  --ifm-color-danger-dark: var(--src-red);
 
   // The only mapping needed: --ifm-color-emphasis-* alias onto this ramp,
   // declared in :root and again inverted under [data-theme='dark'], so both
