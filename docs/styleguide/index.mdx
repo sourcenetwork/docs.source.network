@@ -9,12 +9,13 @@ description: Every text element the docs theme renders, in one place.
   <meta name="robots" content="noindex, nofollow" />
 </head>
 
-An unlisted page for reviewing site styles. It isn't linked from the navbar or any product sidebar — reach it at `/styleguide`. Everything below is rendered by the real doc layout, so the surrounding chrome (navbar, sidebar, breadcrumbs, table of contents, pagination, "Edit this page", feedback widget) is on display here too.
+An unlisted page for reviewing site styles. It isn't linked from the navbar or any product sidebar; reach it at `/styleguide`. Everything below is rendered by the real doc layout, so the surrounding chrome (navbar, sidebar, breadcrumbs, table of contents, pagination, "Edit this page", feedback widget) is on display here too.
 
 ## Headings
 
 Sized by `--ifm-h1-font-size` … `--ifm-h4-font-size` in `variables.scss`, with `--h1-base-font-size` as the shared h1 token. The page title above is the `h1`.
 
+:::demo
 ## Heading level 2
 
 ### Heading level 3
@@ -24,23 +25,29 @@ Sized by `--ifm-h1-font-size` … `--ifm-h4-font-size` in `variables.scss`, with
 ##### Heading level 5
 
 ###### Heading level 6
+:::
 
 ## Body copy
 
-Body text uses `--ifm-font-family-base` (Inter) at `--ifm-font-size-base`, with line height from `--ifm-leading-desktop`. This paragraph exists to show how a longer run of prose sets, wraps, and breathes between block elements — long enough to wrap onto several lines at the site's content width so leading and measure are both visible.
+:::demo
+Body text uses `--ifm-font-family-base` (Inter) at `--ifm-font-size-base`, with line height from `--ifm-leading-desktop`. This paragraph exists to show how a longer run of prose sets, wraps, and breathes between block elements, long enough to wrap onto several lines at the site's content width so leading and measure are both visible.
 
 Text can be **bold** (`--ifm-font-weight-bold`), *italic*, ***both at once***, ~~struck through~~, or marked as `inline code`, which picks up `--ifm-code-background`, `--ifm-code-font-size`, and `--ifm-code-border-radius`.
 
 You can also use <kbd>Cmd</kbd> + <kbd>K</kbd> for keyboard keys, H<sub>2</sub>O for subscript, and x<sup>2</sup> for superscript.
+:::
 
 ## Links
 
+:::demo
 An [internal link to another styleguide page](./components.mdx) sits inline in a sentence. An [external link](https://github.com/sourcenetwork) gets the arrow icon appended by the `.theme-doc-markdown a[target="_blank"]::after` rule in `_markdown.scss`, which masks `/img/icon-external-link.svg` and tints it with `currentColor`.
+:::
 
 ## Lists
 
-Unordered:
+Unordered, ordered with nesting, a task list, and a list containing a code block; the last of which the `li div.theme-code-block` rule in `_code-blocks.scss` reins in.
 
+:::demo
 - First item
 - Second item, with enough text that it wraps to a second line and shows how the hanging indent behaves against the marker
 - Third item
@@ -48,20 +55,14 @@ Unordered:
   - Another nested item
     - Third level
 
-Ordered:
-
 1. First step
 2. Second step
    1. Nested step
    2. Another nested step
 3. Third step
 
-Task list:
-
 - [x] Completed item
 - [ ] Incomplete item
-
-A list containing a code block, which the `li div.theme-code-block` rule in `_code-blocks.scss` reins in:
 
 1. Run the command:
 
@@ -70,12 +71,15 @@ A list containing a code block, which the `li div.theme-code-block` rule in `_co
    ```
 
 2. Then check the result.
+:::
 
 ## Blockquote
 
+:::demo
 > A blockquote holds a pulled-out passage. It can run to several sentences, and should show its left border, padding, and background treatment clearly.
 >
-> — Attribution line
+> Attribution line
+:::
 
 ## Horizontal rule
 
@@ -85,28 +89,35 @@ Colored by `--ifm-hr-background-color`, which differs between light and dark.
 
 ## Tables
 
+:::demo
 | Column | Type | Default | Description |
 | --- | --- | --- | --- |
 | `name` | `string` | — | The field name, which is required |
 | `type` | `string` | `String` | The scalar or object type |
 | `index` | `boolean` | `false` | Whether to index the field |
 | `unique` | `boolean` | `false` | Whether values must be unique |
+:::
 
 Left, center, and right alignment:
 
+:::demo
 | Left | Center | Right |
 | :--- | :----: | ----: |
 | a | b | c |
 | longer cell | longer cell | longer cell |
+:::
 
 ## Images
 
+:::demo
 ![Source Network logo](/img/source-docs-logo_v2.svg)
+:::
 
 ## Side-by-side utility
 
 The `.sidebyside-*` classes in `_markdown.scss` only engage above 800px.
 
+:::demo
 <div className="sidebyside-left">
 
 **Left column.** This content floats left at 49% width on wide viewports and stacks on narrow ones.
@@ -120,3 +131,4 @@ The `.sidebyside-*` classes in `_markdown.scss` only engage above 800px.
 </div>
 
 <div className="sidebyside-clear"></div>
+:::

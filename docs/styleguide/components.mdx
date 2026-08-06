@@ -12,8 +12,9 @@ description: Admonitions, details, tabs, and every code block variant.
 
 All five Infima variants. Styled by `_admonitions.scss`, which lays the icon out in its own column, drops the default type label, and gives each variant a full rounded border toned halfway to its background with `color-mix`. The icons are Lucide replacements from `src/theme/Admonition/Icon/`.
 
+::::demo
 :::note
-A note admonition. Contains **bold text**, `inline code`, and a [link](https://github.com/sourcenetwork) to check inherited colors — `.alert` sets its own `--ifm-link-color`.
+A note admonition. Contains **bold text**, `inline code`, and a [link](https://github.com/sourcenetwork) to check inherited colors; `.alert` sets its own `--ifm-link-color`.
 :::
 
 :::tip
@@ -21,7 +22,7 @@ A tip admonition.
 :::
 
 :::info
-An info admonition. This is the variant Docusaurus reuses for `<details>` — see below, where `_details.scss` neutralises the inherited green accent.
+An info admonition. This is the variant Docusaurus reuses for `<details>`. See below, where `_details.scss` neutralises the inherited green accent.
 :::
 
 :::warning
@@ -35,11 +36,13 @@ A danger admonition.
 :::note[Custom title]
 An admonition with a custom title instead of the variant name.
 :::
+::::
 
 ## Details / accordion
 
-Rendered by the `Details` theme component, which hardcodes `alert alert--info` onto every block — so these inherit admonition styling. The stable selector is `details.alert`; both classes in the DOM are hashed CSS modules.
+Rendered by the `Details` theme component, which hardcodes `alert alert--info` onto every block, so these inherit admonition styling. The stable selector is `details.alert`; both classes in the DOM are hashed CSS modules.
 
+:::demo
 <details>
 <summary>A collapsed details block</summary>
 
@@ -64,11 +67,13 @@ query {
 ```
 
 </details>
+:::
 
 ## Tabs
 
 Registered globally in `src/theme/MDXComponents.tsx`. The left border and label weight come from the `.tabs-container` rule in `_admonitions.scss`.
 
+:::demo
 <Tabs>
 <TabItem value="cli" label="CLI">
 
@@ -96,36 +101,36 @@ mutation {
 
 </TabItem>
 </Tabs>
+:::
 
 ## Code blocks
 
-The wrapper at `src/theme/CodeBlock/index.tsx` parses bare-word flags off the fence metastring. Each variant below is labeled with the fence that produced it.
+The wrapper at `src/theme/CodeBlock/index.tsx` parses the bare-word flags off a code block's metastring; the `key="value"` pairs are Docusaurus's own. Each variant below is shown with the code block that produced it.
 
-### Plain
+### Plain, and with a title
 
+A bare code block, then the same one with `title="…"` on its metastring.
+
+:::demo
 ```go
 func main() {
 	fmt.Println("hello")
 }
 ```
 
-### With a title
-
-````
-```go title="main.go"
-````
-
 ```go title="main.go"
 func main() { fmt.Println("hello")
 }
 ```
+:::
 
 ### Highlighted lines
 
-Magic comments, configured under `prism.magicComments` in `docusaurus.config.js` — preferred over the `{2-3}` range metastring, whose line numbers go stale as soon as the example is edited. The marker follows the block's own language: `//` here, `#` for GraphQL and shell. Markers are stripped from the rendered output, so unlike the variants above they can't be shown in a literal fence.
+Magic comments, configured under `prism.magicComments` in `docusaurus.config.js`. Preferred over the `{2-3}` range metastring, whose line numbers go stale as soon as the example is edited. The marker follows the block's own language: `//` here, `#` for GraphQL and shell. Markers are stripped from the rendered output, so unlike the variants above they can't be shown in a literal code block.
 
-`// highlight-next-line` marks the line below it:
+`// highlight-next-line` marks the line below it; `// highlight-start` and `// highlight-end` mark a chunk:
 
+:::demo
 ```go
 func main() {
 	// highlight-next-line
@@ -133,8 +138,6 @@ func main() {
 	fmt.Println("hello")
 }
 ```
-
-`// highlight-start` and `// highlight-end` mark a chunk:
 
 ```go
 func main() {
@@ -145,13 +148,13 @@ func main() {
 	fmt.Println("hello")
 }
 ```
+:::
 
-### Valid example
+### Valid and invalid examples
 
-````
-```graphql title="Correct" valid
-````
+The bare-word `valid` and `invalid` flags tint the block's border; see `--codeblock-valid-border` and `--codeblock-invalid-border`.
 
+:::demo
 ```graphql title="Correct" valid
 mutation {
   create_Book(input: { title: "Dune" }) {
@@ -160,12 +163,6 @@ mutation {
 }
 ```
 
-### Invalid example
-
-````
-```graphql title="Incorrect" invalid
-````
-
 ```graphql title="Incorrect" invalid
 mutation {
   create_Book(title: "Dune") {
@@ -173,16 +170,13 @@ mutation {
   }
 }
 ```
+:::
 
 ### Query followed by a result
 
 The `.theme-code-block:has(+ .codeblock-result)` rule squashes the gap between the pair.
 
-````
-```graphql
-```json title="Result" result
-````
-
+:::demo
 ```graphql
 query {
   Book {
@@ -198,13 +192,13 @@ query {
   }
 }
 ```
+:::
 
-### Collapsible
+### Collapsing
 
-````
-```json title="A long response" collapse
-````
+The `collapse` flag forces the collapse UI on at any length; `expanded` starts a collapsing block open.
 
+:::demo
 ```json title="A long response" collapse
 {
   "data": {
@@ -219,12 +213,6 @@ query {
 }
 ```
 
-### Collapsible, starting expanded
-
-````
-```json title="Expanded by default" collapse expanded
-````
-
 ```json title="Expanded by default" collapse expanded
 {
   "data": {
@@ -232,11 +220,13 @@ query {
   }
 }
 ```
+:::
 
 ### Syntax highlighting per language
 
 Token colors come from the `--code-token-*` variables and `src/code-theme/code-theme.js`.
 
+:::demo
 ```javascript
 // A comment
 const greeting = "hello";
@@ -267,14 +257,4 @@ SELECT title, author FROM books WHERE year > 1980 ORDER BY year;
 - const old = true;
 + const new = false;
 ```
-
-## Buttons
-
-Infima button classes. Note that `.button--primary` isn't used anywhere in the site today, and its hover state resolves through `--ifm-color-primary-dark`.
-
-<div style={{ display: "flex", gap: "0.75rem", flexWrap: "wrap" }}>
-  <button className="button button--primary">Primary</button>
-  <button className="button button--secondary">Secondary</button>
-  <button className="button button--outline button--primary">Outline</button>
-  <button className="button button--link">Link</button>
-</div>
+:::

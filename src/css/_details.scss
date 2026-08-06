@@ -41,3 +41,44 @@ details.alert {
     -webkit-mask: url("/img/icon-chevron-right.svg") no-repeat center / contain;
   }
 }
+
+details.alert.demo-source {
+  --details-caret-size: #{rem(13px)};
+
+  margin-top: rem(20px);
+  margin-bottom: rem(56px);
+  padding: rem(16px) 0 0;
+  border: none;
+  border-top: rem(1px) solid var(--docs-title-border);
+  border-radius: 0;
+
+  > summary {
+    width: fit-content;
+    margin: 0 auto;
+    padding: rem(6px) rem(14px);
+    border: rem(1px) solid var(--ifm-color-emphasis-300);
+    border-radius: rem(8px);
+    background-color: var(--ifm-background-surface-color);
+    color: var(--ifm-color-content-secondary);
+    font-size: rem(12px);
+    transition:
+      border-color 0.2s ease,
+      background-color 0.2s ease;
+
+    &::before {
+      display: none;
+    }
+
+    &:hover {
+      border-color: var(--ifm-color-primary);
+      color: var(--ifm-color-primary);
+      text-decoration: none;
+    }
+  }
+
+  [class*="collapsibleContent"] {
+    margin-top: 0;
+    border-top: none;
+    padding-top: rem(8px);
+  }
+}
