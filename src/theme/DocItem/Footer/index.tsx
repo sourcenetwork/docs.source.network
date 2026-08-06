@@ -1,4 +1,5 @@
 import type { WrapperProps } from "@docusaurus/types";
+import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 import Footer from "@theme-original/DocItem/Footer";
 import type FooterType from "@theme/DocItem/Footer";
 import { FeedbackButton } from "pushfeedback-react";
@@ -45,7 +46,20 @@ const ButtonThumbsDown = () => (
 
 type FeedbackStatus = "idle" | "sent" | "failed";
 
-function FeedbackWidget(): ReactNode {
+function usePushfeedbackProjectId(): string | undefined {
+  const { siteConfig } = useDocusaurusContext();
+
+  return (
+    (siteConfig.customFields?.pushfeedbackProjectId as string | null) ??
+    undefined
+  );
+}
+
+function FeedbackWidget({
+  projectId,
+}: {
+  projectId: string | undefined;
+}): ReactNode {
   const [status, setStatus] = useState<FeedbackStatus>("idle");
 
   useEffect(() => {
@@ -71,6 +85,10 @@ function FeedbackWidget(): ReactNode {
     };
   }, []);
 
+  if (!projectId) {
+    return null;
+  }
+
   return (
     <div className="feedback-widget">
       <div className="feedback-widget__title">Was this helpful?</div>
@@ -90,7 +108,7 @@ function FeedbackWidget(): ReactNode {
       >
         <span className="feedback-widget__vote feedback-widget__vote--positive">
           <FeedbackButton
-            project={process.env.PUSHFEEDBACK_PROJECT_ID}
+            project={projectId}
             submit={true}
             rating={1}
             custom-font="True"
@@ -108,7 +126,7 @@ function FeedbackWidget(): ReactNode {
         </span>
         <span className="feedback-widget__vote feedback-widget__vote--negative">
           <FeedbackButton
-            project={process.env.PUSHFEEDBACK_PROJECT_ID}
+            project={projectId}
             hide-screenshot-button="True"
             message-placeholder="A place to praise and to rant."
             rating={0}
@@ -133,13 +151,11 @@ function FeedbackWidget(): ReactNode {
 }
 
 export default function FooterWrapper(props: Props): ReactNode {
+  const projectId = usePushfeedbackProjectId();
+
   return (
     <>
-      {/* Skip mounting entirely without a project ID: the pushfeedback
-          custom element fetches project data as soon as it connects,
-          regardless of whether `project` is set, so mounting it with an
-          empty ID always 404s. */}
-      {process.env.PUSHFEEDBACK_PROJECT_ID && <FeedbackWidget />}
+      <FeedbackWidget projectId={projectId} />
       <Footer {...props} />
     </>
   );

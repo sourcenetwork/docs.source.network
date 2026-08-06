@@ -35,7 +35,7 @@ function ColorModeToggle({ className, value, onChange }: Props): ReactNode {
   return (
     <button
       type="button"
-      className={clsx(styles.toggleButton, className)}
+      className={clsx("color-mode-toggle", styles.toggleButton, className)}
       disabled={!isBrowser}
       title={title}
       aria-label={title}

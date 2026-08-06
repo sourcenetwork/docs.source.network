@@ -429,6 +429,7 @@ const config = {
   ],
   customFields: {
     docsData: {},
+    pushfeedbackProjectId: process.env.PUSHFEEDBACK_PROJECT_ID ?? null,
   },
 };
 

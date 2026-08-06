@@ -41,7 +41,7 @@
   }
 }
 
-[data-theme="light"] .dark,
+html:not([data-theme="dark"]) .dark,
 [data-theme="dark"] .light {
   display: none;
 }
