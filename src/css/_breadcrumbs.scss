@@ -11,8 +11,19 @@
   margin: 0;
   font-size: rem(12px);
   opacity: 0.7;
+  display: flex;
+  flex-wrap: nowrap;
 
   &__item {
+    display: flex;
+    align-items: center;
+    min-width: 0;
+    flex-shrink: 1;
+
+    &--active {
+      flex-shrink: 0;
+    }
+
     &:nth-child(2) {
       .breadcrumbs__link {
         padding-left: 0;
@@ -28,30 +39,13 @@
       display: inline-block;
       color: var(--ifm-color-emphasis-500);
       opacity: 1;
+      height: auto;
     }
   }
 
-  // Infima's inline-block items wrap the trail rather than truncating. A vw
-  // max-width can't fix it — that's viewport-relative, not container-relative.
-  @media (max-width: 1199px) {
-    display: flex;
-    flex-wrap: nowrap;
-
-    &__item {
-      display: flex;
-      align-items: center;
-      min-width: 0;
-      flex-shrink: 1;
-
-      &--active {
-        flex-shrink: 0;
-      }
-    }
-
-    &__link {
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
+  &__link {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 }

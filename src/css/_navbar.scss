@@ -6,14 +6,11 @@
 
   &__inner {
     padding: 0 var(--site-gutter-horizontal);
-
-    @media (max-width: 996px) {
-      padding-right: 60px;
-      min-width: 0px;
-    }
+    min-width: 0;
   }
 
   &__toggle {
+    display: flex;
     height: 34px;
     width: 34px;
 
@@ -23,8 +20,8 @@
       height: rem(24px);
     }
 
-    @media (max-width: 996px) {
-      display: flex;
+    @media (min-width: $bp-lg) {
+      display: none;
     }
   }
 
@@ -63,10 +60,10 @@
   }
 
   &__brand {
-    margin-right: rem(30px);
+    margin-right: 0;
 
-    @media (max-width: 996px) {
-      margin-right: 0;
+    @media (min-width: $bp-lg) {
+      margin-right: rem(30px);
     }
   }
 
@@ -172,7 +169,7 @@
   }
 
   .header-docs-link {
-    @media (min-width: 996px) {
+    @media (min-width: $bp-lg) {
       display: none;
     }
   }

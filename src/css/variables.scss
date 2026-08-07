@@ -84,6 +84,10 @@
   --codeblock-valid-border: var(--src-primary);
   --codeblock-invalid-border: var(--src-red);
   --codeblock-highlighted-line-background: var(--src-gray-200);
+
+  @media (min-width: $bp-lg) {
+    --site-gutter-horizontal: calc(var(--ifm-spacing-horizontal) * 2);
+  }
 }
 
 // Docusaurus declares --doc-sidebar-width in :root as well, and its module CSS
@@ -361,11 +365,6 @@ html[data-theme="light"] {
   --ifm-tabs-padding-vertical: 0.75rem;
 }
 
-@media (min-width: 997px) {
-  :root {
-    --site-gutter-horizontal: calc(var(--ifm-spacing-horizontal) * 2);
-  }
-}
 
 html[data-theme="dark"] {
   --ifm-color-primary: var(--src-highlight);

@@ -1,8 +1,9 @@
+@use "../css/functions" as *;
+
 .theme-edit-this-page {
   color: var(--ifm-menu-color);
   font-weight: 500;
-  // Matches Infima's .table-of-contents, which this sits beneath. A literal
-  // there too, so there's no token to alias.
+  // Matches Infima's .table-of-contents, which this sits beneath.
   font-size: 0.8rem;
   display: flex;
   align-items: center;
@@ -10,8 +11,8 @@
 
 // Redundant with the copy under the ToC — but only where that column exists.
 // DocItem/Layout hides it below 1200px, so the footer row takes over there.
-@media (min-width: 1200px) {
-  .theme-doc-footer-edit-meta-row {
-    display: none;
+.theme-doc-footer-edit-meta-row {
+  @media (min-width: $bp-xl) {
+    display: none; 
   }
 }

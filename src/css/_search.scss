@@ -1,5 +1,10 @@
 @use "./functions" as *;
 
+// Reset search container to static display. This allows it to flow properly in the header
+.navbar__items--right > :has(.DocSearch-Button) {
+  position: static;
+}
+
 body .DocSearch {
   --docsearch-modal-width: 800px;
 
@@ -11,16 +16,18 @@ body .DocSearch {
       content: " ...";
     }
 
-    // Shrink the search bar so the navbar items keep their natural width.
-    // 996px not 997px, else a sub-pixel gap falls through both rules.
-    @media (min-width: 996px) and (max-width: 1200px) {
+    @media (min-width: $bp-lg) {
       padding-right: 2rem;
+    }
+    @media (min-width: $bp-xl) {
+      padding-right: 10rem;
     }
   }
 
   &-Button {
     border: 1px solid var(--card-border-color);
     margin-left: 0.5rem;
+    margin-right: 0;
     height: 32px;
     padding: 0 rem(6px);
 
@@ -64,12 +71,6 @@ body .DocSearch {
     box-shadow: none;
     background: var(--ifm-background-color);
     color: var(--ifm-color-primary);
-  }
-}
-
-@media (max-width: 996px) {
-  .navbar .DocSearch-Button {
-    margin-right: var(--site-gutter-horizontal);
   }
 }
 

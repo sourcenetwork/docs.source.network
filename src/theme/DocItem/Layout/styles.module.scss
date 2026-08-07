@@ -1,22 +1,19 @@
 @use "../../../css/functions" as *;
 
-@media (min-width: 997px) {
-  .docItemContainer {
+.docItemContainer {
+  @media (min-width: $bp-lg) {
     padding-top: rem(55px);
     padding-left: rem(40px);
   }
-
-  .sidebar {
-    padding-left: rem(55px);
-  }
 }
 
-// The whole column goes, not just the ToC list inside it: .sidebar is a
-// col--4, so it holds a third of the row either way, and it also carries the
-// ToC icon and the edit link.
-@media (max-width: 1199px) {
-  .sidebar {
-    display: none;
+.sidebar {
+  position: relative;
+  display: none;
+
+  @media (min-width: $bp-xl) {
+    display: block;
+    padding-left: rem(55px);
   }
 }
 
@@ -25,23 +22,21 @@
   align-items: center;
   gap: rem(16px);
   min-width: 0;
+  padding-right: rem(50px);
+  min-height: rem(44px);
 
   > nav {
     min-width: 0;
   }
 
-  @media (max-width: 1199px) {
-    padding-right: rem(50px);
-    min-height: rem(44px);
+  @media (min-width: $bp-xl) {
+    padding-right: 0;
+    min-height: 0;
   }
 }
 
 .docBody {
   min-width: 0;
-}
-
-.sidebar {
-  position: relative;
 }
 
 .sidebarItems {

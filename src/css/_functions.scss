@@ -7,3 +7,8 @@ $html-font-size: 16px;
 @function rem($pxValue) {
   @return #{math.div(stripUnit($pxValue), stripUnit($html-font-size))}rem;
 }
+
+// Breakpoint sass variables — use mobile-first <> min-width only.
+
+$bp-lg: 997px; // Matches Infima's default desktop breakpoint. Infima's mobile rules end with max-width: 996px, 997 is the mobile first inverse
+$bp-xl: 1200px; // Custom extra large breakpoint

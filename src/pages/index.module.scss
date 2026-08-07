@@ -10,7 +10,7 @@
 }
 
 .heroBanner {
-  padding-top: rem(100px);
+  padding-top: rem(50px);
   position: relative;
   display: flex;
   align-items: center;
@@ -25,46 +25,51 @@
   }
 
   .heroTitle {
-    font-size: rem(48px);
+    font-size: rem(26px);
     line-height: 1;
   }
 
   .heroSubTitle {
-    font-size: rem(20px);
+    font-size: rem(16px);
+
+    br {
+      display: none;
+    }
   }
 
-  @media screen and (max-width: 996px) {
-    padding-top: rem(50px);
+  @media (min-width: $bp-lg) {
+    padding-top: rem(100px);
 
     .heroTitle {
-      font-size: rem(26px);
+      font-size: rem(48px);
     }
 
     .heroSubTitle {
-      font-size: rem(16px);
+      font-size: rem(20px);
+
       br {
-        display: none;
+        display: inline;
       }
     }
   }
 }
 
 .features {
-  padding: rem(32px) 0;
+  padding: 0 0 rem(32px);
 
-  @media screen and (max-width: 996px) {
-    padding: 0 0 rem(32px);
+  @media (min-width: $bp-lg) {
+    padding: rem(32px) 0;
   }
 }
 
 .featuresGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
-  gap: rem(20px);
+  grid-template-columns: 1fr;
+  gap: rem(10px);
 
-  @media (max-width: 1199px) {
-    grid-template-columns: 1fr;
-    gap: rem(10px);
+  @media (min-width: $bp-xl) {
+    grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
+    gap: rem(20px);
   }
 }
 
@@ -74,14 +79,12 @@
 }
 
 .card {
-  // A grid item, so the container's default `align-items: stretch` sizes
-  // this box to the row's tallest card directly — no height: 100% needed.
-  display: block;
+  display: flex;
+  text-align: left;
   background-color: var(--card-color);
   border: rem(1px) solid var(--card-border-color);
   border-radius: rem(5px);
   padding: rem(32px);
-  text-align: center;
   color: var(--ifm-font-color-base);
   box-shadow: var(--card-box-shadow);
   transition: all 0.3s ease;
@@ -91,15 +94,19 @@
     margin-bottom: 0;
   }
 
+  h3 {
+    font-size: rem(16px);
+  }
+
   p {
     font-size: rem(14px);
     color: var(--src-text-muted);
   }
 
   img {
-    width: rem(60px);
-    margin-bottom: rem(10px);
-    padding: rem(10px);
+    width: rem(35px);
+    margin: auto rem(15px) auto 0;
+    padding: rem(5px);
   }
 
   &:hover {
@@ -114,17 +121,19 @@
     }
   }
 
-  @media screen and (max-width: 1199px) {
-    display: flex;
-    text-align: left;
+  @media (min-width: $bp-xl) {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
 
     img {
-      width: rem(35px);
-      margin: auto rem(15px) auto 0;
-      padding: rem(5px);
+      width: rem(60px);
+      margin: 0 0 rem(10px);
+      padding: rem(10px);
     }
+
     h3 {
-      font-size: rem(16px);
+      font-size: var(--ifm-h3-font-size);
     }
   }
 }

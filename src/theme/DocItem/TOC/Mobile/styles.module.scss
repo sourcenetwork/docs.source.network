@@ -6,7 +6,7 @@
   right: var(--site-gutter-horizontal);
   z-index: 100;
 
-  @media (min-width: 1200px) {
+  @media (min-width: $bp-xl) {
     display: none;
   }
 }

@@ -8,7 +8,7 @@
   }
 
   &__links {
-    @media (min-width: 997px) {
+    @media (min-width: $bp-lg) {
       margin-bottom: rem(100px);
     }
   }

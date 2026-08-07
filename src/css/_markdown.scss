@@ -52,14 +52,15 @@ article .markdown header {
 }
 
 .markdown-actions-container {
+  display: none;
   flex-shrink: 0;
   margin-left: auto;
   position: relative;
   vertical-align: top;
   align-self: start;
 
-  @media (max-width: 996px) {
-    display: none;
+  @media (min-width: $bp-lg) {
+    display: block;
   }
 
   .dropdown {
@@ -132,9 +133,6 @@ article .markdown header {
     transform: rotate(180deg);
   }
 
-  @media (max-width: 768px) {
-    display: none;
-  }
 
   // RTL language support
   [dir="rtl"] & {
