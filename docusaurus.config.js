@@ -339,7 +339,7 @@ const config = {
         sidebarPath: require.resolve("./docs/sidebars/styleguide.js"),
         editUrl:
           "https://github.com/sourcenetwork/docs.source.network/edit/master/",
-        // `:::demo` shows an example's own markdown above the rendered result.
+        // `:::demo` shows an example's own markdown below the rendered result.
         remarkPlugins: [require("./src/remark/demo").default],
       },
     ],
