@@ -1,0 +1,303 @@
+---
+title: Design tokens
+sidebar_position: 3
+description: Every custom property declared in variables.scss, rendered as swatches.
+---
+
+<head>
+  <meta name="robots" content="noindex, nofollow" />
+</head>
+
+{/* Styled inline rather than with classes: this page is internal, and anything it puts in a stylesheet ships to every product page too. */}
+
+export const Swatch = ({ name, from }) => (
+  <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", padding: "0.3rem 0", minWidth: 0 }}>
+    <span
+      aria-hidden="true"
+      style={{
+        width: "2.25rem",
+        height: "2.25rem",
+        flexShrink: 0,
+        borderRadius: "6px",
+        background: `var(${name})`,
+        border: "1px solid var(--ifm-color-emphasis-300)",
+      }}
+    />
+    <div style={{ minWidth: 0 }}>
+      <code style={{ fontSize: "0.75rem", wordBreak: "break-all" }}>{name}</code>
+      {from && (
+        <div style={{ fontSize: "0.7rem", opacity: 0.6, marginTop: "0.15rem", wordBreak: "break-all" }}>
+          ↳ {from}
+        </div>
+      )}
+    </div>
+  </div>
+);
+
+export const Swatches = ({ names }) => (
+  <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(240px, 1fr))", gap: "0.25rem 1.5rem", marginBottom: "1.5rem" }}>
+    {names.map((n) => {
+      const [name, from] = Array.isArray(n) ? n : [n, null];
+      return <Swatch key={name} name={name} from={from} />;
+    })}
+  </div>
+);
+
+Every colour token declared in `src/css/variables.scss`. Each swatch shows the token's real value, so switching the theme updates the whole page. Spacing, type and sizing tokens are in the table at the end.
+
+Some tokens are aliases: they point at another token rather than holding a colour themselves. When that's the case, the token it points at is listed underneath, after a `↳`.
+
+A token can point at different things in each theme. Those are written `light / dark`. A `—` on one side means the token is not an alias in that theme; it holds a value of its own, either an Infima default we haven't changed or a one-off colour with no brand token behind it.
+
+## Brand
+
+`--src-amber` is the LensVM product accent, reused as the semantic warning colour, a deliberate departure from the brand's "keep accents isolated to their contexts" guidance.
+
+<Swatches names={[
+  "--src-primary",
+  "--src-highlight",
+  "--src-red",
+  "--src-amber",
+]} />
+
+## Brand color scales
+
+The green and grey ramps from the Source brand system, using the brand's own step numbers.
+
+`--src-green-400` is the same colour as `--src-primary`. In light mode, `--ifm-color-primary` and its shades all resolve through `--src-green-*`.
+
+Every grey in the site resolves back to this grey ramp. The mapping onto Infima's `--ifm-color-gray-*` happens in `variables.scss`. `--src-gray-50` has no Infima slot and is currently unused.
+
+<Swatches names={[
+  "--src-green-50",
+  "--src-green-100",
+  "--src-green-200",
+  "--src-green-300",
+  "--src-green-400",
+  "--src-green-500",
+  "--src-green-600",
+  "--src-green-700",
+  "--src-green-800",
+  "--src-green-900",
+]} />
+
+<Swatches names={[
+  "--src-white",
+  "--src-gray-50",
+  "--src-gray-100",
+  "--src-gray-200",
+  "--src-gray-300",
+  "--src-gray-400",
+  "--src-gray-500",
+  "--src-gray-600",
+  "--src-gray-700",
+  "--src-gray-800",
+  "--src-gray-900",
+  "--src-ink",
+  "--src-obsidian",
+  "--src-black",
+]} />
+
+## Interaction overlays
+
+These are translucent, so the swatches below show the page background through them.
+
+The sidebar menu and the tab bar share them. They are kept separate from Infima's `--ifm-hover-overlay`, which stays at 5% and is used by breadcrumbs, dropdowns, pagination and pills.
+
+<Swatches names={["--src-hover-overlay", "--src-active-overlay"]} />
+
+## Infima primary
+
+`--ifm-color-primary` is `--src-green-500` in light and `--src-highlight` in dark.
+
+Light mode uses the darker step because the brand green itself, `--src-primary`, reaches only 2.8:1 on white. Text needs 4.5:1.
+
+The `-dark` through `-lightest` variants are each a step on the brand's green scale, not a ramp generated from the base colour. Infima uses `-dark` and `-darker` for the hover and active states on `.button--primary`.
+
+<Swatches names={[
+  ["--ifm-color-primary", "--src-green-500 / --src-highlight"],
+  ["--ifm-color-primary-dark", "--src-green-600"],
+  ["--ifm-color-primary-darker", "--src-green-700"],
+  ["--ifm-color-primary-darkest", "--src-green-800"],
+  ["--ifm-color-primary-light", "--src-green-400"],
+  ["--ifm-color-primary-lighter", "--src-green-300"],
+  ["--ifm-color-primary-lightest", "--src-green-200"],
+]} />
+
+## Surfaces and text
+
+<Swatches names={[
+  ["--ifm-background-color", "— / --src-black"],
+  ["--ifm-background-surface-color", "— / --src-black"],
+  ["--ifm-font-color-base", "--ifm-color-emphasis-900"],
+  "--ifm-color-content-secondary",
+  ["--ifm-menu-color", "--ifm-color-emphasis-700 / --ifm-color-emphasis-600"],
+  ["--ifm-menu-color-active", "--ifm-color-primary"],
+  ["--ifm-footer-background-color", "— / --src-black"],
+  ["--ifm-table-border-color", "--ifm-color-emphasis-200"],
+  ["--src-text-muted", "--src-gray-500 / —"],
+  ["--src-text-subtitle", "--src-gray-600 / —"],
+  ["--docs-title-border", "--src-gray-200 / --src-gray-900"],
+  ["--ifm-hr-background-color", "--ifm-color-emphasis-300 / --ifm-color-emphasis-200"],
+  ["--menu-indicator-color", "--src-gray-300"],
+  ["--ifm-scrollbar-thumb-background-color", "--ifm-color-emphasis-400 / --ifm-color-emphasis-300"],
+]} />
+
+## Infima gray ramp
+
+A straight alias onto the brand neutrals, identical in both themes; this is the single mapping that the emphasis scale below is built from.
+
+<Swatches names={[
+  ["--ifm-color-gray-0", "--src-white"],
+  ["--ifm-color-gray-100", "--src-gray-100"],
+  ["--ifm-color-gray-200", "--src-gray-200"],
+  ["--ifm-color-gray-300", "--src-gray-300"],
+  ["--ifm-color-gray-400", "--src-gray-400"],
+  ["--ifm-color-gray-500", "--src-gray-500"],
+  ["--ifm-color-gray-600", "--src-gray-600"],
+  ["--ifm-color-gray-700", "--src-gray-700"],
+  ["--ifm-color-gray-800", "--src-gray-800"],
+  ["--ifm-color-gray-900", "--src-gray-900"],
+  ["--ifm-color-gray-1000", "--src-obsidian"],
+]} />
+
+## Emphasis scale
+
+The ramp used for borders and fills, aliased onto the grey ramp above.
+
+It is **inverted** in dark mode, so each step points at the opposite end of the grey ramp: `emphasis-0` is `gray-0` in light and `gray-1000` in dark. `emphasis-500` is the midpoint and lands on `gray-500` either way. `emphasis-200` is the step the partials use most.
+
+<Swatches names={[
+  ["--ifm-color-emphasis-0", "--ifm-color-gray-0 / --ifm-color-gray-1000"],
+  ["--ifm-color-emphasis-100", "--ifm-color-gray-100 / --ifm-color-gray-900"],
+  ["--ifm-color-emphasis-200", "--ifm-color-gray-200 / --ifm-color-gray-800"],
+  ["--ifm-color-emphasis-300", "--ifm-color-gray-300 / --ifm-color-gray-700"],
+  ["--ifm-color-emphasis-400", "--ifm-color-gray-400 / --ifm-color-gray-600"],
+  ["--ifm-color-emphasis-500", "--ifm-color-gray-500"],
+  ["--ifm-color-emphasis-600", "--ifm-color-gray-600 / --ifm-color-gray-400"],
+  ["--ifm-color-emphasis-700", "--ifm-color-gray-700 / --ifm-color-gray-300"],
+  ["--ifm-color-emphasis-800", "--ifm-color-gray-800 / --ifm-color-gray-200"],
+  ["--ifm-color-emphasis-900", "--ifm-color-gray-900 / --ifm-color-gray-100"],
+  ["--ifm-color-emphasis-1000", "--ifm-color-gray-1000 / --ifm-color-gray-0"],
+]} />
+
+## Cards
+
+Declared globally but only consumed by `src/pages/index.module.scss`, so these apply to the homepage rather than to docs.
+
+<Swatches names={["--card-color", ["--card-border-color", "--src-gray-200 / —"]]} />
+
+## Alerts and admonitions
+
+Each admonition variant is drawn with one of Infima's alert colour families, so the families below are what `:::note` and friends actually resolve through:
+
+| Admonition | Alert family |
+| --- | --- |
+| `:::note` | `--secondary` |
+| `:::tip` | `--success` |
+| `:::info` | `--info` |
+| `:::warning` and `:::caution` | `--warning` |
+| `:::danger` | `--danger` |
+
+Info uses tip's fill. Warning and danger take their accent from a brand colour, but keep Infima's own contrast pairs, which differ per theme.
+
+<Swatches names={[
+  "--ifm-color-info-dark",
+  "--ifm-color-info-darker",
+  "--ifm-color-info-darkest",
+  ["--ifm-color-info-contrast-background", "--ifm-color-success-contrast-background"],
+  ["--ifm-color-info-contrast-foreground", "--src-black / --src-white"],
+  "--ifm-color-success-contrast-background",
+  ["--ifm-color-secondary-dark", "--src-gray-300"],
+  ["--ifm-color-secondary-contrast-background", "--src-gray-100 / --src-obsidian"],
+  ["--ifm-color-secondary-contrast-foreground", "--src-gray-800 / --src-white"],
+  ["--ifm-color-warning", "--src-amber"],
+  ["--ifm-color-warning-dark", "--src-amber"],
+  "--ifm-color-warning-contrast-background",
+  "--ifm-color-warning-contrast-foreground",
+  ["--ifm-color-danger", "--src-red"],
+  ["--ifm-color-danger-dark", "--src-red"],
+  "--ifm-color-danger-contrast-background",
+  "--ifm-color-danger-contrast-foreground",
+  "--ifm-alert-border-color",
+]} />
+
+## Code blocks
+
+<Swatches names={[
+  "--code-foreground",
+  ["--code-background", "--src-gray-100 / --src-gray-900"],
+  ["--ifm-code-background", "--src-gray-200"],
+  ["--code-highlight-color", "— / --src-ink"],
+  ["--codeblock-title-border", "--src-gray-300 / —"],
+  ["--codeblock-valid-border", "--src-primary"],
+  ["--codeblock-invalid-border", "--src-red"],
+  ["--codeblock-highlighted-line-background", "--src-gray-200 / —"],
+]} />
+
+## Syntax tokens
+
+<Swatches names={[
+  "--code-token-keyword",
+  "--code-token-constant",
+  "--code-token-string",
+  "--code-token-comment",
+  "--code-token-parameter",
+  "--code-token-function",
+  "--code-token-string-expression",
+  "--code-token-punctuation",
+  "--code-token-link",
+  "--code-token-number",
+  "--code-token-property",
+]} />
+
+## Feedback widget
+
+pushfeedback's own variables, overridden in `variables.scss`. See `src/css/_feedback.scss` for the `::part()` rules that reach into its shadow DOM.
+
+<Swatches names={[
+  ["--feedback-background", "--code-background"],
+  ["--feedback-primary-color", "--src-black / --ifm-font-color-base"],
+  ["--feedback-button-dark-bg-color", "--feedback-background"],
+  ["--feedback-button-dark-text-color", "--feedback-primary-color"],
+]} />
+
+## Non-color tokens
+
+| Token | Value | Used for |
+| --- | --- | --- |
+| `--root-wrapper-width` | `110rem` | Max width of navbar, footer, and main wrapper |
+| `--doc-sidebar-width` | `18.75rem` | Doc sidebar width |
+| `--h1-base-font-size` | `2.25rem` | Shared `h1` size token |
+| `--ifm-h4-font-size` | `1.313rem` | Heading level 4 |
+| `--ifm-font-size-base` | `1rem` | Body copy |
+| `--ifm-font-weight-bold` | `800` | Bold text |
+| `--ifm-leading-desktop` | `1.75` | Line height multiplier |
+| `--ifm-navbar-height` | `80px` | Navbar height |
+| `--ifm-global-radius` | `0rem` | Global corner radius |
+| `--ifm-code-border-radius` | `0.375rem` | Inline code, code blocks, admonitions |
+| `--ifm-alert-border-left-width` | `1px` | Admonition border (matches the other sides) |
+| `--ifm-container-width-xl` | `1400px` | Wide container breakpoint |
+
+## Fonts
+
+<div style={{ marginBottom: "1.5rem" }}>
+  <p style={{ fontFamily: "var(--ifm-heading-font-family)", fontSize: "2rem", margin: "0 0 0.25rem" }}>
+    Funnel Display for headings
+  </p>
+  <code style={{ fontSize: "0.75rem" }}>--ifm-heading-font-family</code>
+</div>
+
+<div style={{ marginBottom: "1.5rem" }}>
+  <p style={{ fontFamily: "var(--ifm-font-family-base)", fontSize: "1.25rem", margin: "0 0 0.25rem" }}>
+    Inter for body copy
+  </p>
+  <code style={{ fontSize: "0.75rem" }}>--ifm-font-family-base</code>
+</div>
+
+<div>
+  <p style={{ fontFamily: "var(--ifm-font-family-monospace)", fontSize: "1.25rem", margin: "0 0 0.25rem" }}>
+    Monospace for code
+  </p>
+  <code style={{ fontSize: "0.75rem" }}>--ifm-font-family-monospace</code>
+</div>

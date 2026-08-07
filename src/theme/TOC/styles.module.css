@@ -1,16 +1,38 @@
+/* No sticky/scroll positioning here: this TOC is always rendered inside our
+   own .sidebarItems wrapper (DocItem/Layout/styles.module.scss), which
+   already owns sticky positioning + scroll clipping for the whole group
+   (title + TOC + edit-this-page link). Duplicating it here, nested inside
+   an already-sticky, already-clipped ancestor with the same offset, breaks
+   layout instead of being a no-op. */
+
+/* Nothing hides this here: DocItem/Layout drops the entire .sidebar column
+   below 1200px, which takes the ToC with it. */
+
 .tableOfContents {
-  /* max-height: calc(100vh - (var(--ifm-navbar-height) + 2rem));
-  overflow-y: auto;
-  position: sticky;
-  top: calc(var(--ifm-navbar-height) + 1rem); */
+  padding: 0;
+  position: relative;
+  border-left: 1px solid var(--ifm-color-emphasis-100);
+
+  ul {
+    padding: 0;
+  }
 }
 
-@media (max-width: 996px) {
-  .tableOfContents {
-    display: none;
-  }
-
-  .docItemContainer {
-    padding: 0 0.3rem;
-  }
+/* Single shared indicator, slid into place by index.tsx based on the
+   active link's real bounding box. This means alignment doesn't depend on
+   heading nesting depth at all - unlike a per-link ::before, it never
+   needs to account for indentation math. top/height are set inline; only
+   the animation and shape live here. */
+.tocIndicator {
+  position: absolute;
+  left: -1px;
+  width: 1px;
+  border-radius: 999px;
+  background: var(--ifm-color-primary);
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    top 0.25s ease,
+    height 0.25s ease,
+    opacity 0.15s ease;
 }

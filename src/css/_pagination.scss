@@ -1,0 +1,47 @@
+@use "./functions" as *;
+
+.pagination-nav {
+padding-bottom: 3rem;
+
+
+  &__link {
+    border: none;
+    transition: all 0.3s ease;
+    color: var(--ifm-font-color-base);
+
+    &--next:hover .pagination-nav__label {
+      transform: translateX(5px);
+    }
+    &--prev:hover .pagination-nav__label {
+      transform: translateX(-5px);
+    }
+  }
+
+  &__label {
+    display: flex;
+    line-height: 1;
+    font-size: rem(14px);
+    transition: all 0.3s ease;
+    span {
+      line-height: 1;
+      vertical-align: middle;
+      margin: 0 rem(10px);
+      order: 1;
+      width: 100%;
+    }
+    &:before,
+    &:after {
+      display: none;
+    }
+  }
+
+  &__arrow {
+    &--next {
+      order: 2;
+    }
+  }
+
+  &__sublabel {
+    display: none;
+  }
+}

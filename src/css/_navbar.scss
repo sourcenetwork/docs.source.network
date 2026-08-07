@@ -1,0 +1,176 @@
+@use "./functions" as *;
+
+.navbar {
+  box-shadow: none;
+  border-bottom: rem(1px) solid var(--docs-title-border);
+
+  &__inner {
+    padding: 0 var(--site-gutter-horizontal);
+    min-width: 0;
+  }
+
+  &__toggle {
+    display: flex;
+    height: 34px;
+    width: 34px;
+
+    svg {
+      margin: auto;
+      width: rem(24px);
+      height: rem(24px);
+    }
+
+    @media (min-width: $bp-lg) {
+      display: none;
+    }
+  }
+
+  &-sidebar {
+    .navbar__brand {
+      margin-right: auto;
+    }
+
+    .header-github-link,
+    .menu__list-item:has(> .header-github-link) {
+      display: none;
+    }
+
+    .color-mode-toggle {
+      display: none;
+    }
+
+    &__brand {
+      padding-left: var(--ifm-spacing-horizontal);
+      padding-right: var(--ifm-spacing-horizontal);
+    }
+
+    &__close {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: rem(34px);
+      height: rem(34px);
+      margin: 0;
+
+      svg {
+        width: rem(24px);
+        height: rem(24px);
+      }
+    }
+  }
+
+  &__brand {
+    margin-right: 0;
+
+    @media (min-width: $bp-lg) {
+      margin-right: rem(30px);
+    }
+  }
+
+  &__logo {
+    flex: 1;
+    display: flex;
+    height: auto;
+    max-width: rem(200px);
+  }
+
+  &__link {
+    font-size: rem(14px);
+
+    &--active {
+      color: var(--ifm-navbar-link-color);
+    }
+  }
+
+  &__list-item-icon {
+    display: inline-block;
+    width: rem(25px);
+    height: rem(25px);
+    vertical-align: middle;
+  }
+
+  // Color for the version selector
+  &__item.dropdown .navbar__link {
+    color: var(--ifm-navbar-link-color);
+
+    // Infima draws this marker as a border triangle; all the border
+    // properties need clearing or it shows through the mask.
+    &:after {
+      border: none;
+      width: 0.875em;
+      height: 0.875em;
+      vertical-align: -0.15em;
+      top: 0;
+      transform: none; // Infima nudges the triangle with translateY(-50%)
+      background-color: currentColor;
+      mask: url("/img/icon-chevron-down.svg") no-repeat center / contain;
+      -webkit-mask: url("/img/icon-chevron-down.svg") no-repeat center / contain;
+      transition: transform 0.2s ease;
+    }
+  }
+
+  // Flip the chevron while the menu is open, matching the markdown dropdown.
+  &__item.dropdown.dropdown--show .navbar__link:after {
+    transform: rotate(180deg);
+  }
+
+  .version-picker--inert {
+    cursor: default;
+  }
+
+  .navbar__link.version-picker--inert:hover {
+    color: var(--ifm-navbar-link-color);
+  }
+
+  .menu__link.version-picker--inert:hover {
+    color: var(--ifm-menu-color);
+    background: none;
+  }
+
+  // Match the "Open Markdown" dropdown's card look (see _markdown.scss).
+  &__item.dropdown .dropdown__menu {
+    right: 0;
+    left: auto;
+    min-width: rem(160px);
+    border-radius: rem(8px);
+    border: rem(1px) solid var(--ifm-color-emphasis-200);
+    box-shadow: none;
+    padding: rem(8px);
+  }
+
+  &__item.dropdown .dropdown__link {
+    border-radius: rem(6px);
+    opacity: 0.7;
+    font-size: rem(14px);
+
+    &:hover {
+      opacity: 1;
+      background-color: var(--ifm-dropdown-hover-background-color);
+      color: var(--ifm-font-color-base);
+    }
+  }
+
+  .header-github-link {
+    &:hover {
+      opacity: 0.6;
+    }
+
+    &:before {
+      content: "";
+      background: url("/img/icon-github.svg") no-repeat center / contain;
+      display: flex;
+      height: rem(20px);
+      width: rem(20px);
+
+      [data-theme="dark"] & {
+        background: url("/img/icon-github-dark.svg") no-repeat center / contain;
+      }
+    }
+  }
+
+  .header-docs-link {
+    @media (min-width: $bp-lg) {
+      display: none;
+    }
+  }
+}

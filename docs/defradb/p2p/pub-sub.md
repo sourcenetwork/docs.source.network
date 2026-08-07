@@ -111,7 +111,7 @@ Note how you don't specify *to what peer's* collection you subscribe to: Node2 w
 
 When a document update is submitted to Node1, Node2 receives the update and will then broadcast the message further to any peers connected to it. This chatty architecture allows updates to travel across the P2P network wide and far, regardless of whether two specific peers are connected or not and any node's connectivity status at any one moment.
 
-:::info instance shutdown
+:::info Instance shutdown
 An instance's list of peers is cleared on shutdown, so you will need to reconnect peers when restarting it. Pub-Sub subscriptions are instead retained across restarts.
 :::
 

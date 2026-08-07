@@ -1,0 +1,42 @@
+@use "./functions" as *;
+
+.footer>.container,
+.navbar__inner,
+.main-wrapper {
+  width: 100%;
+  max-width: var(--root-wrapper-width);
+  margin: auto;
+}
+
+.block-section {
+  padding-top: rem(50px);
+  padding-bottom: rem(50px);
+  border-top: rem(1px) solid var(--docs-title-border);
+}
+
+// Docusaurus puts this on the doc sidebar, the ToC and code blocks. Declaring
+// scrollbar-color at all opts out of the OS overlay scrollbar, which is why
+// these read as permanently drawn; hiding the thumb until hover gets that
+// back. There's no CSS equivalent of "while scrolling", so hover only.
+.thin-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
+  transition: scrollbar-color 0.2s ease;
+
+  // focus-within keeps the thumb visible while keyboard-navigating the list.
+  &:hover,
+  &:focus-within {
+    scrollbar-color: var(--ifm-scrollbar-thumb-background-color) transparent;
+  }
+
+  // Safari only shipped scrollbar-color in 18.2; covers older WebKit.
+  &::-webkit-scrollbar-thumb {
+    background-color: transparent;
+    border-radius: rem(4px);
+  }
+
+  &:hover::-webkit-scrollbar-thumb,
+  &:focus-within::-webkit-scrollbar-thumb {
+    background-color: var(--ifm-scrollbar-thumb-background-color);
+  }
+}

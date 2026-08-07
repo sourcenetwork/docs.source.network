@@ -1,0 +1,110 @@
+@use "./functions" as *;
+
+// Reset search container to static display. This allows it to flow properly in the header
+.navbar__items--right > :has(.DocSearch-Button) {
+  position: static;
+}
+
+body .DocSearch {
+  --docsearch-modal-width: 800px;
+
+  &-Button-Placeholder {
+    font-size: 0.8rem;
+    padding-right: 10rem;
+
+    &:after {
+      content: " ...";
+    }
+
+    @media (min-width: $bp-lg) {
+      padding-right: 2rem;
+    }
+    @media (min-width: $bp-xl) {
+      padding-right: 10rem;
+    }
+  }
+
+  &-Button {
+    border: 1px solid var(--card-border-color);
+    margin-left: 0.5rem;
+    margin-right: 0;
+    height: 32px;
+    padding: 0 rem(6px);
+
+    &-Keys {
+      min-width: 0;
+      align-items: center;
+    }
+
+    &-Key {
+      padding: 0;
+      box-shadow: none;
+      background: var(--ifm-background-color);
+      color: var(--card-border-color);
+      width: auto;
+      font-size: 0.8rem;
+      height: auto;
+      top: 0;
+    }
+  }
+
+  &-Search-Icon {
+    height: 1rem;
+  }
+
+  &-Hit {
+    &-source {
+      font-family: "Funnel Display", sans-serif;
+      color: var(--ifm-font-color-base);
+    }
+
+    &[aria-selected="true"] a {
+      background-color: var(--docsearch-hit-background-active);
+    }
+  }
+
+  &-Logo {
+    filter: grayscale(100%);
+  }
+
+  &-Commands-Key {
+    box-shadow: none;
+    background: var(--ifm-background-color);
+    color: var(--ifm-color-primary);
+  }
+}
+
+.search-page-wrapper {
+  --ifm-toc-border-color: var(--docs-title-border);
+
+  a[aria-label="Search by Algolia"] {
+    opacity: 0.5;
+    filter: grayscale(100%);
+  }
+
+  main {
+    --ifm-h2-font-size: 1rem;
+
+    article {
+      border-top: 1px solid var(--docs-title-border);
+
+      a {
+        color: inherit;
+      }
+    }
+
+    .breadcrumbs {
+      margin: 0;
+
+      &__item {
+        &:after {
+          padding: 0 0.5rem;
+        }
+
+        &:first-child {
+          display: inline-block;
+        }
+      }
+    }
+  }
+}

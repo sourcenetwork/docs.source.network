@@ -1,19 +1,15 @@
-import React from 'react';
 import Translate from '@docusaurus/Translate';
 import { ThemeClassNames } from '@docusaurus/theme-common';
-import IconEdit from '@theme/Icon/Edit';
-import { VscGithub } from "react-icons/vsc";
+import type { Props } from '@theme/EditThisPage';
+import { type ReactNode } from 'react';
 
-export default function EditThisPage({ editUrl }) {
+export default function EditThisPage({ editUrl }: Props): ReactNode {
   return (
     <a
       href={editUrl}
       target="_blank"
       rel="noreferrer noopener"
       className={ThemeClassNames.common.editThisPage}>
-      {/* <IconEdit /> */}
-      <VscGithub />
-
       <Translate
         id="theme.common.editThisPage"
         description="The link label to edit the current page">

@@ -1,0 +1,135 @@
+@use "../../../../css/functions" as *;
+
+.tocMobile {
+  position: fixed;
+  top: calc(var(--ifm-navbar-height) + 1rem);
+  right: var(--site-gutter-horizontal);
+  z-index: 100;
+
+  @media (min-width: $bp-xl) {
+    display: none;
+  }
+}
+
+.toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: rem(34px);
+  height: rem(34px);
+  padding: 0;
+  border: rem(1px) solid var(--ifm-color-emphasis-200);
+  border-radius: rem(8px);
+  background-color: var(--ifm-background-surface-color);
+  color: var(--ifm-color-content-secondary);
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease;
+
+  &:hover {
+    background-color: var(--ifm-color-emphasis-100);
+    color: var(--ifm-font-color-base);
+  }
+
+  &:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 rem(2px) var(--ifm-color-primary);
+  }
+
+  &[aria-expanded="true"] {
+    background-color: var(--ifm-color-emphasis-100);
+    border-color: var(--ifm-color-primary);
+    color: var(--ifm-color-primary);
+  }
+}
+
+.icon {
+  width: rem(16px);
+  height: rem(16px);
+}
+
+.panel {
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  right: 0;
+  z-index: 1000;
+  width: max(65vw, rem(280px));
+  max-width: min(rem(560px), calc(100vw - var(--site-gutter-horizontal) * 2));
+  max-height: min(
+    rem(640px),
+    calc(100vh - var(--ifm-navbar-height) - rem(74px))
+  );
+  overflow-y: auto;
+  padding: 0.5rem;
+  border: rem(1px) solid var(--ifm-color-emphasis-200);
+  border-radius: rem(8px);
+  background-color: var(--ifm-background-surface-color);
+
+  transform: translateY(rem(-6px)) scale(0.98);
+  transform-origin: top right;
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity 0.15s ease,
+    transform 0.15s ease,
+    visibility 0s linear 0.15s;
+}
+
+.panelOpen {
+  transform: translateY(0) scale(1);
+  opacity: 1;
+  visibility: visible;
+  transition:
+    opacity 0.15s ease,
+    transform 0.15s ease,
+    visibility 0s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .panel,
+  .panelOpen {
+    transition: none;
+  }
+}
+
+.heading {
+  padding: rem(6px) rem(10px);
+  color: var(--ifm-color-content-secondary);
+  font-size: rem(11px);
+  font-weight: 600;
+  letter-spacing: rem(0.6px);
+  text-transform: uppercase;
+}
+
+.list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  ul {
+    margin: 0;
+    padding-left: rem(12px);
+    list-style: none;
+  }
+}
+
+.link {
+  display: block;
+  padding: rem(6px) rem(10px);
+  border-radius: rem(6px);
+  color: var(--ifm-font-color-base);
+  font-size: rem(14px);
+  line-height: 1.4;
+
+  &:hover {
+    background-color: var(--ifm-dropdown-hover-background-color);
+    text-decoration: none;
+  }
+}
+
+.linkActive {
+  color: var(--ifm-color-primary);
+  font-weight: 500;
+}

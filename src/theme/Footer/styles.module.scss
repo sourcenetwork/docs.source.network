@@ -1,11 +1,13 @@
+@use "../../css/functions" as *;
+
 .footerMenu {
-  @media (min-width: 997px) {
+  @media (min-width: $bp-lg) {
     display: flex;
   }
 
   .footerMenuLogo {
-    margin-bottom: 40px;
-    @media (min-width: 997px) {
+    margin-bottom: rem(40px);
+    @media (min-width: $bp-lg) {
       width: var(--doc-sidebar-width);
     }
 

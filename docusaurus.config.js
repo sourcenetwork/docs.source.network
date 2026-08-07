@@ -38,7 +38,7 @@ const config = {
           lastmod: "date",
           changefreq: "weekly",
           priority: 0.5,
-          ignorePatterns: ["/defradb/0.20.0/**", "/blog*"],
+          ignorePatterns: ["/defradb/0.20.0/**", "/blog*", "/styleguide/**"],
           filename: "sitemap.xml",
         },
       },
@@ -57,7 +57,7 @@ const config = {
         defaultMode: "dark",
       },
       navbar: {
-        title: null,
+        title: undefined,
         hideOnScroll: false,
         logo: {
           alt: "Source Network Documentation",
@@ -172,7 +172,7 @@ const config = {
       },
       image: "img/source-logo.jpg",
     }),
-  clientModules: [],
+  clientModules: [require.resolve("./src/clientModules/fonts.ts")],
   plugins: [
     [
       require.resolve("./src/plugins/plausible"),
@@ -224,7 +224,9 @@ const config = {
         // plugin-llms expects, so we can't pair them and link to md files in llms.txt.
         generateMarkdownFiles: false,
         addMdExtension: false,
-        ignoreFiles: ["BSL-License.md"],
+        // The internal styleguide is not public documentation; keep it out of
+        // the site-wide llms.txt, which otherwise sweeps all of docsDir.
+        ignoreFiles: ["BSL-License.md", "styleguide/**"],
         customLLMFiles: [
           {
             filename: "defradb/llms.txt",
@@ -275,11 +277,6 @@ const config = {
             label: "1.0 (Latest)",
           },
         },
-        // Reorder changelog sidebar
-        async sidebarItemsGenerator({ defaultSidebarItemsGenerator, ...args }) {
-          const sidebarItems = await defaultSidebarItemsGenerator(args);
-          return reverseSidebarChangelog(sidebarItems);
-        },
       },
     ],
     // Orbis instance
@@ -302,11 +299,6 @@ const config = {
             path: "next",
             banner: "unreleased",
           },
-        },
-        // Reorder changelog sidebar
-        async sidebarItemsGenerator({ defaultSidebarItemsGenerator, ...args }) {
-          const sidebarItems = await defaultSidebarItemsGenerator(args);
-          return reverseSidebarChangelog(sidebarItems);
         },
       },
     ],
@@ -331,29 +323,31 @@ const config = {
             banner: "unreleased",
           },
         },
-        // Reorder changelog sidebar
-        async sidebarItemsGenerator({ defaultSidebarItemsGenerator, ...args }) {
-          const sidebarItems = await defaultSidebarItemsGenerator(args);
-          return reverseSidebarChangelog(sidebarItems);
-        },
+      },
+    ],
+    // Internal styleguide. Deliberately not linked from the navbar or any
+    // product sidebar — visit /styleguide directly. Kept as its own docs
+    // instance so it renders in the real doc layout without appearing in a
+    // product's sidebar. Excluded from the sitemap below; each page also
+    // carries a robots noindex tag.
+    [
+      "@docusaurus/plugin-content-docs",
+      {
+        id: "styleguide",
+        path: "docs/styleguide",
+        routeBasePath: "styleguide",
+        sidebarPath: require.resolve("./docs/sidebars/styleguide.js"),
+        editUrl:
+          "https://github.com/sourcenetwork/docs.source.network/edit/master/",
+        // `:::demo` shows an example's own markdown below the rendered result.
+        remarkPlugins: [require("./src/remark/demo").default],
       },
     ],
   ],
   customFields: {
     docsData: {},
+    pushfeedbackProjectId: process.env.PUSHFEEDBACK_PROJECT_ID ?? null,
   },
 };
 
 module.exports = config;
-
-// Reverse the sidebar items ordering (including nested category items)
-function reverseSidebarChangelog(items) {
-  // Reverse items in categories
-  const result = items.map((item) => {
-    if (item.type === "category" && item.label == "Release Notes") {
-      return { ...item, items: item.items.reverse() };
-    }
-    return item;
-  });
-  return result;
-}

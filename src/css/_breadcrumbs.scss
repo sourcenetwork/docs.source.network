@@ -1,0 +1,51 @@
+@use "./functions" as *;
+
+// A hidden Home item starts every trail, so two items means one visible crumb
+// — the page title, already the h1 below. Hiding in CSS rather than swizzling
+// leaves the structured data intact.
+.theme-doc-breadcrumbs:has(.breadcrumbs__item:nth-child(2):last-child) {
+  display: none;
+}
+
+.theme-doc-breadcrumbs .breadcrumbs {
+  margin: 0;
+  font-size: rem(12px);
+  opacity: 0.7;
+  display: flex;
+  flex-wrap: nowrap;
+
+  &__item {
+    display: flex;
+    align-items: center;
+    min-width: 0;
+    flex-shrink: 1;
+
+    &--active {
+      flex-shrink: 0;
+    }
+
+    &:nth-child(2) {
+      .breadcrumbs__link {
+        padding-left: 0;
+      }
+    }
+
+    &:first-child {
+      display: none;
+    }
+
+    &:not(:last-child):after {
+      content: " /";
+      display: inline-block;
+      color: var(--ifm-color-emphasis-500);
+      opacity: 1;
+      height: auto;
+    }
+  }
+
+  &__link {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}

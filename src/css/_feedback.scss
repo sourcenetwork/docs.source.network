@@ -1,0 +1,80 @@
+@use "./functions" as *;
+
+// Our own "Was this helpful?" widget in the doc footer.
+
+.feedback-widget {
+  margin-top: 3rem;
+  text-align: center;
+
+  &__title {
+    margin-bottom: 0.5rem;
+    font-size: 1rem;
+    opacity: 80%;
+  }
+
+  &__status {
+    margin-top: 0.5rem;
+    font-size: 0.875rem;
+
+    &--error {
+      color: var(--src-red);
+    }
+  }
+
+  &__buttons {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+
+  &__vote {
+    &--positive:hover .feedback-widget__button {
+      color: var(--ifm-color-primary);
+    }
+
+    &--negative:hover .feedback-widget__button {
+      color: var(--src-red);
+    }
+  }
+
+  &__button {
+    border: none;
+    background: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: rem(40px);
+    height: rem(40px);
+    opacity: 0.8;
+    transition: all 0.3s ease;
+    cursor: pointer;
+
+    &:hover {
+      opacity: 1;
+    }
+
+    svg {
+      display: block;
+      width: rem(18px);
+      height: rem(18px);
+    }
+  }
+}
+
+// pushfeedback's floating button renders in a shadow root, so class selectors
+// can't reach it: theme via the --feedback-* vars in variables.scss, and
+// ::part() for the rest. Parts here are `button` and `icon`.
+
+feedback-button::part(button) {
+  box-shadow: none;
+  border: 1px solid var(--ifm-color-emphasis-200);
+  padding: rem(5px) rem(10px);
+  right: rem(15px);
+  bottom: rem(15px);
+}
+
+feedback-button::part(icon) {
+  opacity: 0.4;
+}

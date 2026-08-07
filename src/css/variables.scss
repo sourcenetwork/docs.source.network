@@ -1,0 +1,398 @@
+@use "./functions" as *;
+
+// All CSS custom properties for the site; rules live in the partials. Ours
+// and Infima's are kept in separate blocks.
+
+// =========================================================================
+// Theme variables
+// =========================================================================
+
+:root {
+  // Brand
+  --src-primary: #06b250;
+  --src-highlight: #39e265;
+  --src-red: #ff7777;
+  // The LensVM product accent, reused below as the semantic warning colour —
+  // a deliberate departure from the brand's "keep accents isolated" guidance.
+  --src-amber: #ffa011;
+  --src-white: #ffffff;
+  --src-black: #000000;
+  --src-obsidian: #0b0b0b;
+  --src-ink: #222222;
+
+  // Brand color scales, on the brand's own step labels; --src-gray-* is
+  // mapped onto --ifm-color-gray-* in the Infima overrides below.
+  --src-green-50: #e6f9ef;
+  --src-green-100: #adedca;
+  --src-green-200: #6ddb9b;
+  --src-green-300: #2dc96e;
+  --src-green-400: #06b250;
+  --src-green-500: #058041;
+  --src-green-600: #046634;
+  --src-green-700: #034d26;
+  --src-green-800: #023319;
+  --src-green-900: #011a0b;
+  --src-gray-50: #fafafa;
+  --src-gray-100: #f5f5f5;
+  --src-gray-200: #e5e5e5; // the brand's designated border gray
+  --src-gray-300: #d4d4d4;
+  --src-gray-400: #a3a3a3;
+  --src-gray-500: #737373;
+  --src-gray-600: #525252;
+  --src-gray-700: #404040;
+  --src-gray-800: #262626;
+  --src-gray-900: #171717;
+
+  --src-text-muted: var(--src-gray-500);
+  --src-text-subtitle: var(--src-gray-600);
+
+  // Layout
+  // --root-wrapper-width is set on body below, with --doc-sidebar-width.
+  --menu-indicator-color: var(--src-gray-300);
+  --docs-title-border: var(--src-gray-200);
+  // --doc-sidebar-width is set on body below, not here.
+
+  --h1-base-font-size: 2.25rem;
+
+  // Shared by the sidebar menu and tab bar. Separate from Infima's
+  // --ifm-hover-overlay, which stays at 5% for breadcrumbs, dropdowns etc.
+  --src-hover-overlay: rgba(0, 0, 0, 0.08);
+  --src-active-overlay: rgba(0, 0, 0, 0.05);
+
+  // Cards
+  --card-color: rgb(255, 255, 255, 0.9);
+  --card-border-color: var(--src-gray-200);
+  --card-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  --card-box-shadow-highlight: 0 2px 25px rgba(31, 96, 233, 0.05);
+
+  // Code blocks / syntax highlighting
+  --code-foreground: #000000;
+  --code-background: var(--src-gray-100);
+  --code-token-keyword: #5a2cbc;
+  --code-token-constant: #1a7032;
+  --code-token-string: #d18c0c;
+  --code-token-comment: #7e7e7e;
+  --code-token-parameter: #000000;
+  --code-token-function: #1a7032;
+  --code-token-string-expression: #f1a10d;
+  --code-token-punctuation: #000000;
+  --code-token-link: #000000;
+  --code-token-number: #000000;
+  --code-token-property: rgb(105, 76, 156);
+  --code-highlight-color: #1c1c1c;
+  --codeblock-title-border: var(--src-gray-300);
+  --codeblock-valid-border: var(--src-primary);
+  --codeblock-invalid-border: var(--src-red);
+  --codeblock-highlighted-line-background: var(--src-gray-200);
+
+  @media (min-width: $bp-lg) {
+    --site-gutter-horizontal: calc(var(--ifm-spacing-horizontal) * 2);
+  }
+}
+
+// Docusaurus declares --doc-sidebar-width in :root as well, and its module CSS
+// lands later in the bundle — so a :root declaration here loses the tie and is
+// silently ignored. On body it wins by inheritance instead, no specificity
+// games.
+//
+// --root-wrapper-width sits here rather than in :root so its calc resolves
+// against the sidebar width above, not Docusaurus'. It's derived so the navbar,
+// footer and doc content share one right edge: the content column is capped by
+// Infima's .container, and anything wider up here only leaves it centred in
+// slack it can't use.
+body {
+  --doc-sidebar-width: #{rem(300px)};
+  --root-wrapper-width: calc(
+    var(--ifm-container-width-xl) + var(--doc-sidebar-width)
+  );
+}
+
+html[data-theme="dark"] {
+  // Layout
+  --docs-title-border: var(--src-gray-900);
+
+  // Interaction overlays — same alphas, lifted off black instead of white
+  --src-hover-overlay: rgba(255, 255, 255, 0.08);
+  --src-active-overlay: rgba(255, 255, 255, 0.05);
+
+  // Cards
+  --card-color: rgb(29, 29, 29, 0.4);
+  --card-border-color: #313131;
+  --card-box-shadow: 0 2px 25px rgba(238, 238, 238, 0.05);
+
+  // Code blocks / syntax highlighting
+  --code-foreground: #ffffff;
+  --code-background: var(--src-gray-900);
+  --code-token-keyword: #aca4ff;
+  --code-token-constant: #3ecf6e;
+  --code-token-string: #e7bb94;
+  --code-token-comment: #7e7e7e;
+  --code-token-parameter: #ffffff;
+  --code-token-function: #3ecf6e;
+  --code-token-string-expression: #ffcda1;
+  --code-token-punctuation: #ffffff;
+  --code-token-link: #ffffff;
+  --code-token-number: #ffffff;
+  --code-token-property: rgb(180, 148, 234);
+  --code-highlight-color: var(--src-ink);
+  --codeblock-title-border: #323232;
+  --codeblock-highlighted-line-background: rgb(47 47 47);
+}
+
+// pushfeedback's own vars. It ships defaults at (0,1,0), so a plain :root
+// would tie on load order; html[data-theme=...] is (0,1,1) and always wins.
+html[data-theme="dark"],
+html[data-theme="light"] {
+  --feedback-button-text-font-size: 0.875rem; // same as text size
+  --feedback-button-text-font-weight: 400;
+  --feedback-button-z-index: 150;
+  --feedback-background: var(--code-background);
+  --feedback-button-dark-bg-color: var(--feedback-background);
+  --feedback-button-dark-text-color: var(--feedback-primary-color);
+  --feedback-button-dark-icon-color: var(--feedback-primary-color);
+  --feedback-modal-button-submit-bg-color: var(--feedback-background);
+  --feedback-modal-button-submit-bg-color-hover: var(--feedback-background);
+  --feedback-modal-button-border-color-active: var(--feedback-background);
+  --feedback-modal-button-submit-border-color-hover: var(--feedback-primary-color);
+  --feedback-modal-button-submit-text-color: var(--feedback-primary-color);
+  --feedback-modal-button-submit-text-color-hover: var(--feedback-primary-color);
+  --feedback-modal-rating-button-selected-color: var(--feedback-primary-color);
+  --feedback-modal-rating-button-positive-selected-color: var(--ifm-color-primary);
+  --feedback-modal-rating-button-negative-selected-color: var(--src-red);
+  --feedback-button-border-radius: 0.5rem;
+}
+
+html[data-theme="dark"] {
+  --feedback-primary-color: var(--ifm-font-color-base);
+}
+
+html[data-theme="light"] {
+  --feedback-primary-color: var(--src-black);
+}
+
+// DocSearch theming (its own CSS custom properties, not ours)
+
+[data-theme="light"] .DocSearch {
+  --docsearch-muted-color: var(--ifm-color-secondary-darkest);
+  --docsearch-container-background: rgba(36, 36, 36, 0.8);
+  --docsearch-primary-color: var(--ifm-color-primary);
+  --docsearch-highlight-color: var(--ifm-color-primary);
+  --docsearch-hit-highlight-color: color-mix(
+    in srgb,
+    var(--ifm-color-primary) 12%,
+    transparent
+  );
+  // Modal
+  --docsearch-modal-background: var(--ifm-color-secondary-lighter);
+  // Search box
+  --docsearch-searchbox-background: var(--ifm-color-secondary);
+  --docsearch-searchbox-focus-background: var(--ifm-color-white);
+  // Hit
+  --docsearch-hit-color: var(--ifm-font-color-base);
+  --docsearch-hit-active-color: var(--ifm-color-white);
+  --docsearch-hit-background: var(--ifm-color-white);
+  --docsearch-hit-background-active: rgba(94, 100, 112, 0.7);
+  // Footer
+  --docsearch-footer-background: var(--ifm-color-white);
+  --docsearch-search-button-background: var(--ifm-background-color);
+}
+
+[data-theme="dark"] .DocSearch {
+  --docsearch-text-color: var(--ifm-font-color-base);
+  --docsearch-muted-color: var(--ifm-color-secondary-darkest);
+  --docsearch-container-background: rgba(24, 24, 24, 0.7);
+  --docsearch-primary-color: var(--ifm-color-primary);
+  --docsearch-highlight-color: var(--ifm-color-primary);
+  --docsearch-hit-highlight-color: color-mix(
+    in srgb,
+    var(--ifm-color-primary) 18%,
+    transparent
+  );
+
+  // Modal
+  --docsearch-modal-background: var(--ifm-background-color);
+  // Search box
+  --docsearch-searchbox-background: var(--ifm-background-color);
+  --docsearch-searchbox-focus-background: var(--ifm-color-black);
+  // Hit
+  --docsearch-hit-color: var(--ifm-font-color-base);
+  --docsearch-hit-active-color: var(--ifm-color-white);
+  --docsearch-hit-background: var(--ifm-color-emphasis-100);
+  --docsearch-hit-background-active: rgba(124, 124, 124, 0.7);
+
+  // Footer
+  --docsearch-footer-background: var(--ifm-background-surface-color);
+  --docsearch-key-gradient: linear-gradient(-26.5deg,
+      var(--ifm-color-emphasis-200) 0%,
+      var(--ifm-color-emphasis-100) 100%);
+  --docsearch-search-button-background: var(--ifm-background-color);
+}
+
+// =========================================================================
+// Infima overrides
+// =========================================================================
+
+:root {
+  // Colors
+  --ifm-color-primary: var(--src-green-500);
+  --ifm-color-primary-dark: var(--src-green-600);
+  --ifm-color-primary-darker: var(--src-green-700);
+  --ifm-color-primary-darkest: var(--src-green-800);
+  --ifm-color-primary-light: var(--src-green-400);
+  --ifm-color-primary-lighter: var(--src-green-300);
+  --ifm-color-primary-lightest: var(--src-green-200);
+  // .alert--secondary (:::note) maps onto this family, which Infima hardcodes
+  // rather than aliasing the greys. -dark is theme-invariant upstream.
+  --ifm-color-secondary-dark: var(--src-gray-300);
+  --ifm-color-secondary-contrast-background: var(--src-gray-100);
+  --ifm-color-secondary-contrast-foreground: var(--src-gray-800);
+
+  --ifm-color-info-dark: rgb(0, 205, 80);
+  --ifm-color-info-darker: rgb(7, 160, 66);
+  --ifm-color-info-darkest: rgb(4, 146, 59);
+  // Info shares tip's fill. Also reaches <details>; _details.scss opts out.
+  --ifm-color-info-contrast-background: var(
+    --ifm-color-success-contrast-background
+  );
+  --ifm-color-info-contrast-foreground: var(--src-black);
+
+  // -dark is what .alert--warning maps --ifm-alert-border-color to.
+  --ifm-color-warning: var(--src-amber);
+  --ifm-color-warning-dark: var(--src-amber);
+  --ifm-color-warning-contrast-background: #fbf6ef;
+  --ifm-color-warning-contrast-foreground: #5c3700;
+
+  --ifm-color-danger: var(--src-red);
+  --ifm-color-danger-dark: var(--src-red);
+
+  // The only mapping needed: --ifm-color-emphasis-* alias onto this ramp,
+  // declared in :root and again inverted under [data-theme='dark'], so both
+  // themes follow. The brand's 100-900 line up with Infima's labels.
+  --ifm-color-gray-0: var(--src-white);
+  --ifm-color-gray-100: var(--src-gray-100);
+  --ifm-color-gray-200: var(--src-gray-200);
+  --ifm-color-gray-300: var(--src-gray-300);
+  --ifm-color-gray-400: var(--src-gray-400);
+  --ifm-color-gray-500: var(--src-gray-500);
+  --ifm-color-gray-600: var(--src-gray-600);
+  --ifm-color-gray-700: var(--src-gray-700);
+  --ifm-color-gray-800: var(--src-gray-800);
+  --ifm-color-gray-900: var(--src-gray-900);
+  --ifm-color-gray-1000: var(--src-obsidian);
+
+  // Layout
+  --ifm-container-width-xl: 1400px;
+  // Shared gutter for the navbar, footer and .spacing-horz (homepage), so
+  // they stay flush with each other instead of drifting via separate
+  // per-component overrides. Doubles on desktop below.
+  --site-gutter-horizontal: var(--ifm-spacing-horizontal);
+
+  // Fonts
+  // "… Variable" is what the Fontsource packages declare; the plain names
+  // would silently fall through to system-ui.
+  --ifm-font-family-base:
+    "Inter Variable", system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell,
+    Noto Sans, sans-serif, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial,
+    sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  --ifm-font-size-base: 1rem;
+  --ifm-font-weight-bold: 800;
+  --ifm-heading-font-family: "Funnel Display Variable", sans-serif;
+  --ifm-heading-font-weight: 400;
+  --ifm-h1-font-size: var(--h1-base-font-size);
+  --ifm-h4-font-size: 1.313rem;
+
+  --ifm-leading-desktop: 1.75;
+  --ifm-leading: calc(var(--ifm-leading-desktop) * 1rem);
+
+  // Base
+  --ifm-global-radius: 0rem;
+
+  // Code
+  --ifm-code-background: var(--src-gray-200);
+  --ifm-code-border-radius: #{rem(6px)};
+  --ifm-code-font-size: 80%;
+  --ifm-pre-padding: 1rem;
+
+  // Tables (structure lives in _tables.scss)
+  --ifm-table-cell-padding: 0.75rem 1rem;
+  --ifm-table-stripe-background: transparent; // flat, no zebra striping
+  --ifm-table-border-color: var(--ifm-color-emphasis-200);
+  // Decoupled from --ifm-font-weight-bold, 800 here and too heavy.
+  --ifm-table-head-font-weight: 600;
+
+  // Table of contents
+  --ifm-toc-border-color: transparent;
+  --ifm-toc-padding-vertical: 0.5rem;
+  --ifm-toc-padding-horizontal: 1rem;
+
+  // Menu / sidebar
+  --ifm-menu-color: var(--ifm-color-emphasis-700);
+  --ifm-menu-color-active: var(--ifm-color-primary);
+  // Per-menu, not via --ifm-hover-overlay which Infima shares more widely.
+  --ifm-menu-color-background-active: var(--src-active-overlay);
+  --ifm-menu-color-background-hover: var(--src-hover-overlay);
+  --ifm-menu-link-padding-horizontal: 1rem;
+  --ifm-menu-link-padding-vertical: 0.5rem;
+
+  // Navbar
+  --ifm-navbar-height: 80px;
+  --ifm-navbar-padding-horizontal: 0;
+  --ifm-navbar-padding-vertical: calc(var(--ifm-spacing-vertical) * 0.5);
+
+  // Footer
+  --ifm-footer-background-color: var(--ifm-background-color);
+  --ifm-footer-padding-horizontal: 0;
+
+  // Alerts
+  // Infima defaults these to 0 and 5px. Both must be set and must match, or
+  // the rounded corners come out lopsided.
+  --ifm-alert-border-radius: var(--ifm-code-border-radius); // match code blocks
+  --ifm-alert-border-width: 1px;
+  --ifm-alert-border-left-width: 1px;
+
+  // Breadcrumbs
+  --ifm-breadcrumb-spacing: 0rem;
+  --ifm-breadcrumb-color-active: inherit;
+  --ifm-breadcrumb-item-background-active: transparent;
+  --ifm-breadcrumb-separator: none;
+
+  // Scrollbar
+  --ifm-scrollbar-thumb-background-color: var(--ifm-color-emphasis-400);
+
+  --ifm-hr-background-color: var(--ifm-color-emphasis-300);
+
+  --ifm-tabs-padding-horizontal: 1rem;
+  --ifm-tabs-padding-vertical: 0.75rem;
+}
+
+
+html[data-theme="dark"] {
+  --ifm-color-primary: var(--src-highlight);
+  --src-text-muted: #939598;
+  --src-text-subtitle: #adadad;
+  --ifm-background-color: var(--src-black);
+  --ifm-background-surface-color: var(--ifm-background-color);
+
+  --ifm-color-content-secondary: rgb(174 174 174);
+  // Ascending elevation: page #000 < admonition #0b0b0b < code --src-gray-900.
+  --ifm-color-secondary-contrast-background: var(--src-obsidian);
+  --ifm-color-secondary-contrast-foreground: var(--src-white);
+
+  --ifm-color-info-contrast-background: var(
+    --ifm-color-success-contrast-background
+  );
+  --ifm-color-info-contrast-foreground: var(--src-white);
+
+  --ifm-toc-border-color: transparent;
+  // Two steps up: on the brand ramp, emphasis-400 lands on #525252 — too dark
+  // against black.
+  --ifm-menu-color: var(--ifm-color-emphasis-600);
+  --ifm-scrollbar-thumb-background-color: var(--ifm-color-emphasis-300);
+
+  // Infima re-declares this under dark at our specificity, so repeat it.
+  --ifm-table-stripe-background: transparent;
+
+  --ifm-color-success-contrast-background: #011a0b;
+
+  --ifm-hr-background-color: var(--ifm-color-emphasis-200);
+}

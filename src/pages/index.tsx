@@ -10,14 +10,12 @@ import styles from './index.module.scss';
 const HomepageHeader: FC<{}> = () => {
   return (
     <header className={clsx(styles.heroBanner)}>
-      <div className="spacing-horz">
-        <div className={styles.heroContent}>
-          <div className={styles.heroText}>
-            <h1 className={styles.heroTitle}>Source Network Developer Hub</h1>
-            <p className={styles.heroSubTitle}>Your guide to building with the Source Network stack. <br />Get started, explore the docs, and discover the power of distributed data management.</p>
-          </div>
-          <div className={styles.heroImageContainer}>
-          </div>
+      <div className={styles.heroContent}>
+        <div className={styles.heroText}>
+          <h1 className={styles.heroTitle}>Source Network Developer Hub</h1>
+          <p className={styles.heroSubTitle}>Your guide to building with the Source Network stack. <br />Get started, explore the docs, and discover the power of distributed data management.</p>
+        </div>
+        <div className={styles.heroImageContainer}>
         </div>
       </div>
     </header>
@@ -52,20 +50,16 @@ const HomepageFeatures: FC<{}> = () => {
 
   return (
     <section className={styles.features}>
-      <div className="spacing-horz">
-        <div className={clsx("row")}>
-          {features.map((feature, i) => {
-            return <div key={i} className={clsx(`col col--${12 / features.length}`)}>
-              <Link className={styles.card} to={feature.link}>
-                <img src={colorMode === 'light' ? feature.imageLight : feature.image} />
-                <div>
-                  <h3>{feature.title} <IconThemeArrow className={styles.arrow} dir='right' /></h3>
-                  <p className={styles.subTitle}>{feature.subTitle}</p>
-                </div>
-              </Link>
+      <div className={styles.featuresGrid}>
+        {features.map((feature, i) => {
+          return <Link key={i} className={styles.card} to={feature.link}>
+            <img src={colorMode === 'light' ? feature.imageLight : feature.image} />
+            <div>
+              <h3>{feature.title} <IconThemeArrow className={styles.arrow} dir='right' /></h3>
+              <p className={styles.subTitle}>{feature.subTitle}</p>
             </div>
-          })}
-        </div>
+          </Link>
+        })}
       </div>
     </section>
   );
@@ -74,23 +68,21 @@ const HomepageFeatures: FC<{}> = () => {
 const HomepageReferenceLinks: FC<{}> = () => {
   return (
     <section className={clsx('block-section')}>
-      <div className="spacing-horz">
-        <h2>Quick Reference</h2>
-        <p>A collection of guides and references to help you navigate the Source Network.</p>
+      <h2>Quick Reference</h2>
+      <p>A collection of guides and references to help you navigate the Source Network.</p>
 
-        <div className={clsx("row")}>
-          <div className={clsx("col col-4", styles.linkList)}>
-            <Link to="/defradb/">DefraDB Quickstart </Link>
-            <Link to="/defradb/dql/">DefraDB Query Language overview </Link>
-            <Link to="/defradb/p2p/">DefraDB Peer-to-Peer Setup </Link>
-            <Link to="/defradb/security/document-access-control">DefraDB Document Access Control setup </Link>
-          </div>
-          <div className={clsx("col col-4", styles.linkList)}>
-            <Link to="/orbis/getting-started/install">Orbis Installation </Link>
-            <Link to="/orbis/getting-started/policy">Orbis Setup Authorization Policy </Link>
-          </div>
-          <div className={clsx("col col-4", styles.linkList)}>
-          </div>
+      <div className={clsx("row")}>
+        <div className={clsx("col col-4", styles.linkList)}>
+          <Link to="/defradb/">DefraDB Quickstart </Link>
+          <Link to="/defradb/dql/">DefraDB Query Language overview </Link>
+          <Link to="/defradb/p2p/">DefraDB Peer-to-Peer Setup </Link>
+          <Link to="/defradb/security/document-access-control">DefraDB Document Access Control setup </Link>
+        </div>
+        <div className={clsx("col col-4", styles.linkList)}>
+          <Link to="/orbis/getting-started/install">Orbis Installation </Link>
+          <Link to="/orbis/getting-started/policy">Orbis Setup Authorization Policy </Link>
+        </div>
+        <div className={clsx("col col-4", styles.linkList)}>
         </div>
       </div>
     </section>
@@ -117,7 +109,7 @@ const HomepageCommunity: FC<{}> = () => {
   ]
 
   return (
-    <div className={clsx("spacing-horz block-section", styles.community)}>
+    <div className={clsx("block-section", styles.community)}>
       <h2>Join Our Community</h2>
       <p>Engage with our developer community and the Source team to get help, exchange ideas & collaborate.</p>
       <div className={clsx('row', styles.communityLinks)}>

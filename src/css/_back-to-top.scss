@@ -1,0 +1,5 @@
+// Shifted up so it clears the pushfeedback button (see _feedback.scss).
+button.theme-back-to-top-button {
+  bottom: 3.6rem;
+  background-color: var(--ifm-background-color);
+}

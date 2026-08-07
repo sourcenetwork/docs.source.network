@@ -1,0 +1,84 @@
+@use "./functions" as *;
+
+// Docusaurus hardcodes `alert alert--info` onto every <details>. details.alert
+// is (0,1,1) and outranks .alert--info without touching :::info admonitions.
+details.alert {
+  --details-caret-size: #{rem(16px)};
+  --details-border-color: var(--ifm-color-emphasis-300);
+  // Inverts per theme. Caret only; the divider follows the border.
+  --docusaurus-details-decoration-color: var(--ifm-color-emphasis-1000);
+
+  // Set directly to opt out of the 50% color-mix on admonition borders.
+  border-color: var(--details-border-color);
+  background-color: transparent; // don't inherit tip's fill via alert--info
+
+  // Divider above the expanded content. (0,2,1) beats theme-common's (0,1,0).
+  [class*="collapsibleContent"] {
+    border-top-color: var(--details-border-color);
+  }
+
+  // [class] is a no-op lifting this to (0,2,2), beating theme-common's (0,1,2).
+  &[class] > summary {
+    padding-left: #{rem(26px)};
+  }
+
+  > summary:hover {
+    text-decoration: underline;
+    text-underline-offset: 0.2em; // matches the global `a` rule
+  }
+
+  // Replaces theme-common's border-drawn triangle. The asset points right so
+  // no rotation is needed at rest — its open-state rotate(90deg) at (0,3,2)
+  // outranks anything sane here, so it must read correctly after that too.
+  > summary::before {
+    border: none;
+    width: var(--details-caret-size);
+    height: var(--details-caret-size);
+    top: #{rem(7px)};
+    background-color: var(--docusaurus-details-decoration-color);
+    transform-origin: center; // theme-common offsets this for the triangle
+    mask: url("/img/icon-chevron-right.svg") no-repeat center / contain;
+    -webkit-mask: url("/img/icon-chevron-right.svg") no-repeat center / contain;
+  }
+}
+
+details.alert.demo-source {
+  --details-caret-size: #{rem(13px)};
+
+  margin-top: rem(20px);
+  margin-bottom: rem(56px);
+  padding: rem(16px) 0 0;
+  border: none;
+  border-top: rem(1px) solid var(--docs-title-border);
+  border-radius: 0;
+
+  > summary {
+    width: fit-content;
+    margin: 0 auto;
+    padding: rem(6px) rem(14px);
+    border: rem(1px) solid var(--ifm-color-emphasis-300);
+    border-radius: rem(8px);
+    background-color: var(--ifm-background-surface-color);
+    color: var(--ifm-color-content-secondary);
+    font-size: rem(12px);
+    transition:
+      border-color 0.2s ease,
+      background-color 0.2s ease;
+
+    &::before {
+      display: none;
+    }
+
+    &:hover {
+      border-color: var(--ifm-color-primary);
+      color: var(--ifm-color-primary);
+      text-decoration: none;
+    }
+  }
+
+  [class*="collapsibleContent"] {
+    margin-top: 0;
+    border-top: none;
+    padding-top: rem(8px);
+  }
+}

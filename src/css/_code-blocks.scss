@@ -1,0 +1,44 @@
+@use "./functions" as *;
+
+.docusaurus-highlight-code-line {
+  background-color: rgba(0, 0, 0, 0.1);
+  display: block;
+  margin: 0 calc(-1 * var(--ifm-pre-padding));
+  padding: 0 var(--ifm-pre-padding);
+
+  [data-theme="dark"] & {
+    background-color: rgba(0, 0, 0, 0.3);
+  }
+}
+
+.theme-code-block {
+  border: 1px solid var(--codeblock-title-border);
+
+  // Color for highlighted lines in code blocks
+  .theme-code-block-highlighted-line {
+    border-left: 3px var(--ifm-color-primary) solid;
+    background-color: var(--codeblock-highlighted-line-background);
+  }
+
+  // Squash query and result blocks together
+  &:has(+ .codeblock-result) {
+    margin-bottom: rem(5px);
+  }
+
+  // Docusaurus' margin-bottom stacks on the container's padding when this is
+  // last. (0,2,0) beats codeBlockContainer at (0,1,0).
+  &:last-child {
+    margin-bottom: 0;
+  }
+
+  // Override the title border
+  & [class*="codeBlockTitle"] {
+    border-bottom-color: var(--codeblock-title-border);
+    color: var(--ifm-color-content-secondary);
+  }
+}
+
+// Override the large margin bottom on code blocks within list elements
+li div.theme-code-block {
+  margin-bottom: 0;
+}

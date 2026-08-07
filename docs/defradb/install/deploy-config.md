@@ -44,7 +44,7 @@ To enable TLS with keys located in custom paths, start the instance providing th
 defradb start --pubkeypath ~/.defradb/certs/pubkey.crt --privkeypath ~/.defradb/certs/privkey.key
 ```
 
-:::tip generate a self-signed certificate
+:::tip Generate a self-signed certificate
 ```shell
 mkdir -p ~/.defradb/certs
 openssl ecparam -genkey -name secp384r1 -out ~/.defradb/certs/server.key
@@ -60,7 +60,7 @@ The `defradb` CLI commands don't support connection to instances with TLS enable
 
 By default, DefraDB starts with its P2P features active. For information on how to set up P2P, see [Synchronize documents across multiple nodes](/p2p/index.md).
 
-:::note disable p2p
+:::note Disable P2P
 Disable P2P on an instance by starting it with the `--no-p2p` flag.
 
 ```bash

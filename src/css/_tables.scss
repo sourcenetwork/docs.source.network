@@ -1,0 +1,71 @@
+@use "./functions" as *;
+
+// Flat, borderless, full-width tables.
+//
+// Infima styles tables with bare element selectors at (0,0,1)–(0,0,2), so
+// scoping to `.markdown` is enough to win without !important. The colour and
+// spacing tokens it exposes are set in variables.scss; what's left here is the
+// structure, which no variable reaches.
+
+// Wrapper added by the `table` mapping in src/theme/MDXComponents.tsx. It owns
+// the horizontal scrolling that Infima's `display: block` used to provide, so
+// the table itself is free to be a real full-width table.
+.markdown-table-wrapper {
+  overflow-x: auto;
+  margin-bottom: var(--ifm-spacing-vertical);
+}
+
+.markdown table {
+  display: table;
+  width: 100%;
+  margin-bottom: 0; // the wrapper owns the outer spacing
+  border: none;
+  border-collapse: collapse;
+
+  // Infima draws a box around every cell and a 2px rule under the head.
+  th,
+  td {
+    border: none;
+    padding: var(--ifm-table-cell-padding);
+    vertical-align: top;
+  }
+
+  thead {
+    background-color: transparent;
+  }
+
+  thead tr {
+    border-top: none; // Infima puts a border-top on every tr, thead included
+    border-bottom: 1px solid var(--ifm-table-border-color);
+  }
+
+  thead th {
+    font-size: 0.875rem;
+    font-weight: var(--ifm-table-head-font-weight);
+    color: var(--ifm-font-color-base);
+    text-align: left;
+    white-space: nowrap;
+  }
+
+  // Without a surrounding box, the first column reads better flush with the
+  // body copy rather than inset by the cell padding.
+  th:first-child,
+  td:first-child {
+    padding-left: 0;
+  }
+
+  th:last-child,
+  td:last-child {
+    padding-right: 0;
+  }
+
+  // Hairline row separators. Delete this block for a completely bare table.
+  tbody tr {
+    border-top: none;
+    border-bottom: 1px solid var(--ifm-table-border-color);
+  }
+
+  tbody tr:last-child {
+    border-bottom: none;
+  }
+}

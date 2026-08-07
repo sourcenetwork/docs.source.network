@@ -3,4 +3,8 @@ Allow: /
 
 Disallow: /defradb/0.20.0/*
 
+# Internal styleguide. The HTML pages also carry a noindex meta tag, but the
+# build emits .md source files alongside them which can't be disabled.
+Disallow: /styleguide/
+
 Sitemap: https://docs.source.network/sitemap.xml

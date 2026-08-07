@@ -14,7 +14,9 @@
    The mask fades the code itself out at the bottom, so it works with any
    code theme background. */
 .collapsed pre {
-  max-height: 150px;
+  /* rem so the collapsed height tracks the code's font size. Plain CSS module,
+     so no rem() helper here. */
+  max-height: 9.375rem;
   overflow: hidden;
   mask-image: linear-gradient(to bottom, black 0%, transparent 90%);
 }
@@ -33,6 +35,18 @@
   &:hover {
     text-decoration: underline;
   }
+}
+
+/* An expanded block can run well past the viewport, leaving the control
+   somewhere off-screen. Sticky keeps it at the bottom edge until the end of
+   the block scrolls into view, then it settles into place. Needs an opaque
+   background, since it now sits over the code rather than below it. */
+.collapsibleBlock:not(.collapsed) .toggleButton {
+  position: sticky;
+  bottom: 0;
+  z-index: 1;
+  background: var(--prism-background-color);
+  border-top: 1px solid var(--codeblock-title-border);
 }
 
 /* When collapsed, the button overlays the whole block so clicking anywhere

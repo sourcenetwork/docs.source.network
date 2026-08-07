@@ -1,0 +1,187 @@
+@use "./functions" as *;
+
+.main-wrapper {
+  .menu__list {
+    transition-duration: var(--ifm-transition-fast) !important;
+
+    .menu__list {
+      position: relative;
+
+      &:before {
+        content: "";
+        display: block;
+        width: rem(1px);
+        background: var(--docs-title-border);
+        position: absolute;
+        left: rem(15px);
+        top: 0;
+        bottom: 0;
+      }
+
+      .menu__link--active:not(.menu__link--sublist) {
+        position: relative;
+
+        &:before {
+          content: "";
+          display: block;
+          width: rem(1px);
+          background: var(--ifm-color-primary);
+          position: absolute;
+          left: 0;
+          top: 0;
+          bottom: 0;
+        }
+      }
+    }
+  }
+
+  .menu {
+    $self: &;
+
+    padding: calc(var(--ifm-navbar-padding-vertical) * 7)
+      calc(var(--site-gutter-horizontal) / 2);
+
+    &__link {
+      font-size: rem(14px);
+      border-radius: 0;
+
+      // Infima's hover only swaps the background; there's no
+      // --ifm-menu-color-hover. Active is excluded to keep its accent.
+      &:not(.menu__link--active):hover {
+        color: var(--ifm-font-color-base);
+      }
+
+      &--active {
+        font-weight: 500;
+      }
+
+      &--sublist {
+        position: relative;
+        padding-right: 20px;
+
+        &.menu__link--active {
+          color: var(--ifm-menu-color);
+
+          // Active categories are muted, not accented, so they brighten too.
+          &:hover {
+            color: var(--ifm-font-color-base);
+          }
+        }
+
+        &:after {
+          content: " ";
+          transition: all 0.3s ease;
+          display: inline-block;
+          width: 0;
+          height: 0;
+          position: absolute;
+          top: 50%;
+          right: rem(5px);
+          margin-top: rem(-4px);
+          background: none;
+          min-width: 0;
+          border: solid var(--menu-indicator-color);
+          border-width: 0 rem(2px) rem(2px) 0;
+          padding: rem(3px);
+          transform: rotate(-135deg);
+        }
+      }
+    }
+
+    &__list-item {
+      &--collapsed {
+        .menu__link--sublist {
+          &:after {
+            transform: rotate(45deg);
+          }
+        }
+      }
+    }
+
+    ul {
+      font-weight: 400;
+    }
+
+    .menu__list-item__bottom-hr {
+      .menu__link {
+        border-bottom: 1px solid var(--docs-title-border);
+        padding-bottom: calc(var(--ifm-menu-link-padding-vertical) + 0.25rem);
+        margin-bottom: calc(var(--ifm-menu-link-padding-vertical) + 0.25rem);
+      }
+    }
+
+    .menu__caret {
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      width: rem(40px);
+      padding: 0;
+
+      &:before {
+        display: none;
+      }
+    }
+  }
+}
+
+.navbar-sidebar {
+  .menu {
+    font-weight: 400;
+  }
+
+  .menu__link {
+    padding: rem(10px) rem(8px);
+    border-radius: 0;
+    font-size: rem(15px);
+
+    &:hover {
+      background: none;
+      color: var(--ifm-font-color-base);
+    }
+
+    &--active {
+      background: none;
+      color: var(--ifm-color-primary);
+      font-weight: 500;
+    }
+  }
+
+  .menu__link--sublist-caret:after,
+  .menu__caret:before {
+    min-width: rem(16px);
+    background-size: rem(20px) rem(20px);
+    opacity: 1;
+  }
+
+  .menu__caret:hover,
+  .menu__list-item-collapsible:hover,
+  .menu__list-item-collapsible--active {
+    background: none;
+  }
+
+  .navbar-sidebar__back {
+    display: flex;
+    align-items: center;
+    gap: rem(6px);
+    top: 0;
+    width: 100%;
+    margin: 0 0 rem(8px);
+    padding: rem(10px) rem(8px);
+    border-bottom: rem(1px) solid var(--docs-title-border);
+    background: none;
+    color: var(--ifm-color-content-secondary);
+    font-size: rem(15px);
+    font-weight: 500;
+
+    &:before {
+      content: "";
+      width: rem(16px);
+      height: rem(16px);
+      background-color: currentColor;
+      mask: url("/img/icon-chevron-right.svg") no-repeat center / contain;
+      -webkit-mask: url("/img/icon-chevron-right.svg") no-repeat center / contain;
+      transform: rotate(180deg);
+    }
+  }
+}

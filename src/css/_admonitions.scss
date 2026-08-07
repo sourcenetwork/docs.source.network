@@ -1,0 +1,136 @@
+@use "./functions" as *;
+
+// Icon column + indented body; the type label is dropped. Authored titles are
+// tagged .admonition--titled by src/theme/Admonition/index.tsx.
+// Heading/icon/content classes are hashed modules, hence the substring match.
+.theme-admonition {
+  // Definite width: in the titled layout the heading spans both columns, so an
+  // `auto` column would collapse. The flex gap below must match.
+  --admonition-icon-size: #{rem(18px)};
+  --admonition-gap: #{rem(14px)};
+
+  display: grid;
+  grid-template-columns: var(--admonition-icon-size) 1fr;
+  column-gap: var(--admonition-gap);
+  align-items: start;
+
+  [class*="admonitionContent"] {
+    min-width: 0; // else a code block stretches the column past the box
+    font-size: rem(14px);
+    color: var(--admonition-text-color);
+
+    // Infima sizes pre/code as a % of their container. Inline code is left to
+    // track its text.
+    .theme-code-block {
+      font-size: var(--ifm-font-size-base);
+    }
+  }
+
+  [class*="admonitionIcon"] {
+    display: block;
+    margin-right: 0;
+    margin-top: 0.15rem; // sit on the first line of body text
+
+    svg {
+      display: block;
+      width: var(--admonition-icon-size);
+      height: var(--admonition-icon-size);
+    }
+
+    // The module CSS sets `fill` on every icon svg, which beats the
+    // `fill="none"` attribute and floods these stroke-based icons solid.
+    svg.admonition-icon--stroke {
+      fill: none;
+      stroke: var(--admonition-icon-color, var(--ifm-alert-border-color));
+    }
+  }
+
+  // The label is a bare text node with no element to hide, so collapsing the
+  // heading's type is the only way to reach it — hence the icon in rem, not em.
+  &:not(.admonition--titled) [class*="admonitionHeading"] {
+    font-size: 0;
+    line-height: 0;
+    margin-bottom: 0;
+  }
+
+  // Titled: icon and title share row one, body indents beneath.
+  &.admonition--titled {
+    [class*="admonitionHeading"] {
+      grid-column: 1 / -1;
+      display: flex;
+      align-items: center;
+      gap: var(--admonition-gap); // must match column-gap
+      margin-bottom: 0.5rem;
+      text-transform: none;
+      color: var(--admonition-text-color);
+      font-family: var(--ifm-font-family-base); // module CSS sets a heading font
+    }
+
+    [class*="admonitionIcon"] {
+      margin-top: 0;
+    }
+
+    [class*="admonitionContent"] {
+      grid-column: 2;
+    }
+  }
+}
+
+.alert {
+  --ifm-link-color: var(--ifm-color-primary);
+
+  // Separate names: a custom property can't reference itself.
+  --admonition-border-color: color-mix(
+    in srgb,
+    var(--ifm-alert-border-color) 50%,
+    var(--ifm-alert-background-color)
+  );
+
+  // 75%/10% are the most accent each theme carries with every variant still
+  // at 4.5:1 — dark capped by danger, light by note.
+  --admonition-text-accent: 75%;
+  --admonition-text-color: color-mix(
+    in srgb,
+    var(--admonition-icon-color, var(--ifm-alert-border-color))
+      var(--admonition-text-accent),
+    var(--ifm-alert-foreground-color)
+  );
+
+  border-color: var(--admonition-border-color);
+
+  a {
+    text-decoration-color: var(--ifm-color-primary);
+  }
+}
+
+// Per-variant icon accents, each replacing an Infima default that failed
+// contrast.
+.theme-admonition-tip {
+  --admonition-icon-color: var(--ifm-color-primary);
+}
+
+.theme-admonition-note {
+  --admonition-icon-color: var(--ifm-color-emphasis-700);
+}
+
+html[data-theme="light"] {
+  // Both greens fall under the 3:1 non-text minimum on the light fill.
+  .theme-admonition-info,
+  .theme-admonition-tip {
+    --admonition-icon-color: var(--ifm-color-info-darkest);
+  }
+
+  // Under the 25% AA ceiling; Infima's foreground is itself variant-hued.
+  .alert {
+    --admonition-text-accent: 10%;
+  }
+}
+
+// Derived from the accent so the fill tracks it. Dark only.
+html[data-theme="dark"] .alert--warning {
+  --ifm-alert-background-color: color-mix(
+    in srgb,
+    var(--src-amber) 18%,
+    var(--src-black)
+  );
+}

@@ -1,0 +1,260 @@
+---
+title: Components
+sidebar_position: 2
+description: Admonitions, details, tabs, and every code block variant.
+---
+
+<head>
+  <meta name="robots" content="noindex, nofollow" />
+</head>
+
+## Admonitions
+
+All five Infima variants. Styled by `_admonitions.scss`, which lays the icon out in its own column, drops the default type label, and gives each variant a full rounded border toned halfway to its background with `color-mix`. The icons are Lucide replacements from `src/theme/Admonition/Icon/`.
+
+::::demo
+:::note
+A note admonition. Contains **bold text**, `inline code`, and a [link](https://github.com/sourcenetwork) to check inherited colors; `.alert` sets its own `--ifm-link-color`.
+:::
+
+:::tip
+A tip admonition.
+:::
+
+:::info
+An info admonition. This is the variant Docusaurus reuses for `<details>`. See below, where `_details.scss` neutralises the inherited green accent.
+:::
+
+:::warning
+A warning admonition.
+:::
+
+:::danger
+A danger admonition.
+:::
+
+:::note[Custom title]
+An admonition with a custom title instead of the variant name.
+:::
+::::
+
+## Details / accordion
+
+Rendered by the `Details` theme component, which hardcodes `alert alert--info` onto every block, so these inherit admonition styling. The stable selector is `details.alert`; both classes in the DOM are hashed CSS modules.
+
+:::demo
+<details>
+<summary>A collapsed details block</summary>
+
+Content revealed on expand. The chevron in the summary is a masked SVG colored by `--docusaurus-details-decoration-color`; the divider above this text follows `--details-border-color` instead, so it matches the box.
+
+- A list inside details
+- To check nested spacing
+
+</details>
+
+<details open>
+<summary>A details block that starts open</summary>
+
+This one carries the `open` attribute, so it renders expanded. Note the arrow rotation, driven by `--docusaurus-details-transition`.
+
+```graphql
+query {
+  Book {
+    title
+  }
+}
+```
+
+</details>
+:::
+
+## Tabs
+
+Registered globally in `src/theme/MDXComponents.tsx`. The left border and label weight come from the `.tabs-container` rule in `_admonitions.scss`.
+
+:::demo
+<Tabs>
+<TabItem value="cli" label="CLI">
+
+```bash
+defradb client collection create --name Book
+```
+
+</TabItem>
+<TabItem value="http" label="HTTP">
+
+```bash
+curl -X POST http://localhost:9181/api/v0/collections
+```
+
+</TabItem>
+<TabItem value="graphql" label="GraphQL">
+
+```graphql
+mutation {
+  create_Book(input: { title: "Dune" }) {
+    _docID
+  }
+}
+```
+
+</TabItem>
+</Tabs>
+:::
+
+## Code blocks
+
+The wrapper at `src/theme/CodeBlock/index.tsx` parses the bare-word flags off a code block's metastring; the `key="value"` pairs are Docusaurus's own. Each variant below is shown with the code block that produced it.
+
+### Plain, and with a title
+
+A bare code block, then the same one with `title="…"` on its metastring.
+
+:::demo
+```go
+func main() {
+	fmt.Println("hello")
+}
+```
+
+```go title="main.go"
+func main() { fmt.Println("hello")
+}
+```
+:::
+
+### Highlighted lines
+
+Magic comments, configured under `prism.magicComments` in `docusaurus.config.js`. Preferred over the `{2-3}` range metastring, whose line numbers go stale as soon as the example is edited. The marker follows the block's own language: `//` here, `#` for GraphQL and shell. Markers are stripped from the rendered output, so unlike the variants above they can't be shown in a literal code block.
+
+`// highlight-next-line` marks the line below it; `// highlight-start` and `// highlight-end` mark a chunk:
+
+:::demo
+```go
+func main() {
+	// highlight-next-line
+	client := NewClient()
+	fmt.Println("hello")
+}
+```
+
+```go
+func main() {
+	// highlight-start
+	client := NewClient()
+	defer client.Close()
+	// highlight-end
+	fmt.Println("hello")
+}
+```
+:::
+
+### Valid and invalid examples
+
+The bare-word `valid` and `invalid` flags tint the block's border; see `--codeblock-valid-border` and `--codeblock-invalid-border`.
+
+:::demo
+```graphql title="Correct" valid
+mutation {
+  create_Book(input: { title: "Dune" }) {
+    _docID
+  }
+}
+```
+
+```graphql title="Incorrect" invalid
+mutation {
+  create_Book(title: "Dune") {
+    _docID
+  }
+}
+```
+:::
+
+### Query followed by a result
+
+The `.theme-code-block:has(+ .codeblock-result)` rule squashes the gap between the pair.
+
+:::demo
+```graphql
+query {
+  Book {
+    title
+  }
+}
+```
+
+```json title="Result" result
+{
+  "data": {
+    "Book": [{ "title": "Dune" }]
+  }
+}
+```
+:::
+
+### Collapsing
+
+The `collapse` flag forces the collapse UI on at any length; `expanded` starts a collapsing block open.
+
+:::demo
+```json title="A long response" collapse
+{
+  "data": {
+    "Book": [
+      { "title": "Dune", "author": "Frank Herbert", "year": 1965 },
+      { "title": "Neuromancer", "author": "William Gibson", "year": 1984 },
+      { "title": "Snow Crash", "author": "Neal Stephenson", "year": 1992 },
+      { "title": "Hyperion", "author": "Dan Simmons", "year": 1989 },
+      { "title": "Blindsight", "author": "Peter Watts", "year": 2006 }
+    ]
+  }
+}
+```
+
+```json title="Expanded by default" collapse expanded
+{
+  "data": {
+    "Book": [{ "title": "Dune" }]
+  }
+}
+```
+:::
+
+### Syntax highlighting per language
+
+Token colors come from the `--code-token-*` variables and `src/code-theme/code-theme.js`.
+
+:::demo
+```javascript
+// A comment
+const greeting = "hello";
+export function greet(name = "world") {
+  return `${greeting}, ${name}! ${1 + 2}`;
+}
+```
+
+```python
+# A comment
+def greet(name: str = "world") -> str:
+    return f"hello, {name}"
+```
+
+```yaml
+# A comment
+service:
+  name: defradb
+  port: 9181
+  enabled: true
+```
+
+```sql
+SELECT title, author FROM books WHERE year > 1980 ORDER BY year;
+```
+
+```diff
+- const old = true;
++ const new = false;
+```
+:::
