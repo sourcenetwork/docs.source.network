@@ -274,8 +274,11 @@ const config = {
         lastVersion: "current",
         versions: {
           current: {
-            label: "1.0 (Latest)",
+            label: "1.1 (Latest)",
           },
+          "1.0": {
+            banner: "none"
+          }
         },
       },
     ],
