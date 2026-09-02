@@ -280,6 +280,39 @@ const config = {
             banner: "none"
           }
         },
+        // Reorder changelog sidebar
+        async sidebarItemsGenerator({ defaultSidebarItemsGenerator, ...args }) {
+          const sidebarItems = await defaultSidebarItemsGenerator(args);
+          return reverseSidebarChangelog(sidebarItems);
+        },
+      },
+    ],
+    // SourceHub instance
+    [
+      "@docusaurus/plugin-content-docs",
+      {
+        id: "sourcehub",
+        path: "docs/sourcehub",
+        routeBasePath: "sourcehub",
+        sidebarPath: require.resolve("./sidebars.js"),
+        editUrl:
+          "https://github.com/sourcenetwork/docs.source.network/edit/master/",
+        lastVersion: "0.3.2",
+        versions: {
+          "0.3.2": {
+            banner: "none",
+          },
+          current: {
+            label: "Next",
+            path: "next",
+            banner: "unreleased",
+          },
+        },
+        // Reorder changelog sidebar
+        async sidebarItemsGenerator({ defaultSidebarItemsGenerator, ...args }) {
+          const sidebarItems = await defaultSidebarItemsGenerator(args);
+          return reverseSidebarChangelog(sidebarItems);
+        },
       },
     ],
     // Orbis instance
