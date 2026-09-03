@@ -8,15 +8,21 @@ Indexes allow queries to quickly locate data without having to look through each
 By default, every collection has an index on the `_docID` property and on `@primary` relationship fields.
 The `@index` directive allows you to set up further indexes on selected properties when creating a collection.
 
-## Syntax {/* #syntax */}
+DefraDB supports two types of indexes:
+- **[Ordered indexes](#ordered-indexes)** &ndash; Faster search for one or more document fields.
+- **[Vector indexes](#vector-indexes)** &ndash; Similarity queries for vector embeddings.
 
-```graphql title="Syntax &ndash; @index directive"
-@index(
+## Ordered indexes {/* #ordered-indexes */}
+
+### Syntax {/* #ordered-syntax */}
+
+```graphql title="Syntax &ndash; Ordered @index directive"
+@index(ordered: {
   name: String,
   unique: Boolean,
   direction: ORDERING,
   includes: [{ field: String, direction: ORDERING }]
-)
+})
 ```
 - `name` &ndash; Index name.  
 Default: concatenation of _collection name, field names, direction_.
@@ -27,23 +33,27 @@ Valid values: `ASC` or `DESC`.
 Default: `ASC`.
 - `includes` &ndash; List of fields the index is created on (not required when the directive is used on a field).
 
-## Index single fields {/* #single */}
+:::tip
+The syntax `@index(kind: ordered)` is a shorthand for creating an ordered index with the default values.
+:::
+
+### Index single fields {/* #single */}
 
 To create an index for a specific field, use the `@index` directive on the field when creating the collection.
 
 ```graphql title='Index the "title" property using default values'
 type Book {
   # highlight-next-line
-  title: String @index
+  title: String @index(kind: ordered)
 }
 ```
 
 ```graphql title='Index multiple properties, individually, overriding defaults for "name"'
 type Book {
   # highlight-next-line
-  title: String @index(name: "book_title")
+  title: String @index(ordered: {name: "book_title"})
   # highlight-next-line
-  plot: String @index(name: "book_plot")
+  plot: String @index(ordered: {name: "book_plot"})
 }
 ```
 
@@ -51,7 +61,7 @@ type Book {
 type Book {
     title: String
     # highlight-next-line
-    author: Person @primary @index
+    author: Person @primary @index(kind: ordered)
 }
 
 type Person {
@@ -60,14 +70,14 @@ type Person {
 }
 ```
 
-## Unique indexes {/* #unique */}
+### Unique indexes {/* #unique */}
 
 An indexed unique field ensures that no two documents have the same value for one field. Multiple documents can have the `null` value for a unique field.
 
 ```graphql title="Index the title property and enforce value uniqueness"
 type Book {
 # highlight-next-line
-  title: String @index(unique: true)
+  title: String @index(ordered: {unique: true})
 }
 ```
 
@@ -75,13 +85,15 @@ type Book {
 Unique indexes are used under the hood to enforce [one-to-one relationships](collections.md#relationships-one-to-one). The index must not be dropped, or the 1:1 nature of the relationship will not be fulfilled anymore.
 :::
 
-## Index multiple fields (composite) {/* #composite */}
+### Index multiple fields (composite) {/* #composite */}
 
 To create an index on the combination of multiple fields (composite index), use the `@index` directive at the collection level.
 
 ```graphql title="Index for (genre, author)"
 # highlight-next-line
-type Book @index(includes: [{ field: "genre" }, { field: "author" }]) {
+type Book @index(ordered: {
+  includes: [{ field: "genre" }, { field: "author" }]
+}) {
   genre: String
   author: String
 }
@@ -100,13 +112,45 @@ Physics/Richard Feynman/docID5
 
 Although there is a partial benefit to queries filtering only on `genre`, there is no benefit if a query skips fields.
 
-## JSON fields {/* #json-fields */}
+### JSON fields {/* #json-fields */}
 
 If a `JSON` field is indexed, queries can traverse the JSON structure and filter by its inner properties. See [Filter documents -> JSON fields](/dql/filter.md#json-fields).
 
 Scalar types (ex. integers) are normalized to DefraDB types (ex. int64).
 
-## Show indexes
+## Vector indexes {/* #vector-indexes */}
+
+Create them on a [Float32] field type, maybe pair with @embedding, use for similarity
+
+### Syntax {/* #vector-syntax */}
+
+```graphql title="Syntax &ndash; Vector @index directive"
+@index(vector: {
+  name: String,
+  dimensions: Int!,
+  alg: String,
+  metric: String,
+  hnsw: { 
+    M: Int, 
+    efConstruction: Int,
+    efSearch: Int
+  }
+})
+```
+- `name` &ndash; Index name.  
+Default: concatenation of _collection name, field name, direction_.
+- `dimensions` &ndash;
+- `metric` &ndash; COSINE, EUCLIDEAN, DOT
+- `alg` &ndash; `ivfflat` or `hnsw`
+- `hnsw` &ndash; Enforce uniqueness constraint (i.e. no two documents can have the same value for the given fields).  
+Default: `false`.
+  - `M` &ndash; maximum number of connections per node. Higher values improve recall at the cost of memory and build time. Default 16
+  - `efConstruction` &ndash; build-time exploration factor. Higher values improve graph quality (recall) at the cost of build time. Default 128
+  - `efSearch` &ndash; query-time exploration factor. Higher values improve recall at the cost of query latency; it may be overridden per query Default: 64
+
+## Index operations
+
+### Show indexes
 
 <Tabs groupId="defra">
   <TabItem value="cli" label="CLI" default>
@@ -135,7 +179,7 @@ Scalar types (ex. integers) are normalized to DefraDB types (ex. int64).
   </TabItem>
 </Tabs>
 
-## Delete indexes
+### Delete indexes
 
 <Tabs groupId="defra">
   <TabItem value="cli" label="CLI" default>
