@@ -1,11 +1,15 @@
 ---
 title: Vector embeddings
-description: .
+description: With the @embedding directive you can entirely delegate the generation of embeddings to the database. Vectors allow you to query for documents basing on their similarity to other documents or to specific vector embeddings.
 ---
 
-Vector embeddings represent data as lists of numbers, which allow for similarity queries to work.
+Vector embeddings represent data (ex. text) as lists of numbers (vectors). Vectors allow you to query for documents basing on their similarity to other documents or to specific vector embeddings (see [Vector indexes](schema/indexes.md#vector-indexes) and [Query similar documents](dql/similarity.md)).
 
-Create an embedding field with the `embedding` directive
+You can create an embedding field with the `@embedding` directive on a collection field of type `Float32`. Fields marked with `@embedding` become a vector *mirror* of the document's fields: when a document is added or updated, the corresponding vector embedding is regenerated to match the new content.
+
+:::tip
+The `@embedding` directive is useful to entirely delegate the generation of embeddings to the database. If you plan to manually generate vector embeddings, use a field of type `[Float32]` and don't mark it with the `@embedding` directive &ndash; you'll still be able to create vector indexes on it and run similarity queries.
+:::
 
 ## Syntax {/* #syntax */}
 
@@ -14,148 +18,117 @@ Create an embedding field with the `embedding` directive
   fields: [String]!,
   provider: String!,
   model: String!,
-  template: String,
   url: String
 )
 ```
-- `fields` &ndash; Collection fields to create embeddings of.
-- `provider` &ndash; Embedding provider (either `ollama` or `openai`).
-- `model` &ndash; Model to use to generate embeddings (ex. `embeddinggemma`, `text-embedding-3-small`).
-- `template` &ndash; (Optional) Template for combining fields. The resulting string is the input to the embedding model.
-- `url` &ndash; (Optional) URL of the provider's API.  
+- `fields` &ndash; Collection fields to create embeddings of.  
+Supported field types are: `Float32`, `Float64`, `Int`, `String`.
+- `provider` &ndash; Embedding provider.  
+Supported values: `ollama`, `openai`.
+- `model` &ndash; Embedding model (ex. `embeddinggemma`, `text-embedding-3-small`).
+- `url` &ndash; (Optional) URL of provider's API.  
 Default: `https://api.openai.com/v1` for `openai`; `http://localhost:11434/api` for `ollama`.
 
 :::note
-If multiple fields are provided, documents missing some will still get an embedding
+If `fields` contains several entries, embeddings will be generated even if a document lacks value for some of the fields.
 :::
 
-fields used for embedding generation
-// are of supported type.
-//
-// Currently, the supported types are Float32, Float64, Int and String
+## Providers
 
-## OpenAI
+### Ollama
 
-```graphql title="Embedding field with OpenAI model" test-setup-collection
+Use the `ollama` provider to generate [embeddings with Ollama](https://docs.ollama.com/capabilities/embeddings). The `url` field is only needed if you use Ollama models hosted elsewhere than the default `http://localhost:11434/api`.
+
+```graphql title="Embedding field with Ollama provider" test-setup-collection
 type Book {
   title: String
   plot: String
   about_v: [Float32!] @embedding(
-    fields: ["title", "plot"], 
-    provider: "openai", 
-    model: "text-embedding-3-small", 
-    url: "https://api.openai.com/v1"
-  )
-}
-```
-
-```
-export OPENAI_API_KEY=sk-...
-```
-
-## Ollama
-
-```graphql title="Embedding field with Ollama model" test-setup-collection
-type Book {
-  title: String
-  plot: String
-  about_v: [Float32!] @embedding(
-    fields: ["title", "plot"], 
-    provider: "ollama", 
-    model: "embeddinggemma", 
-    url: "http://localhost:11434/api"
+    fields: ["title", "plot"],
+    provider: "ollama",
+    model: "embeddinggemma"
   )
 }
 ```
 
 :::tip
-The model must be installed ahead
+The selected embedding model must be available in the Ollama instance ahead of usage.  
+For example, to install `embeddinggemma`:
 
 ```
 ollama pull embeddinggemma
 ```
 :::
 
-## Using templates
+### OpenAI
 
-Template for combining fields, formatted as [Go template](https://pkg.go.dev/text/template#hdr-Actions) (ex. `{{ .name }} is {{ .age }} years old.`). The resulting string is the input to the embedding model.
+Use the `openai` provider to generate [embeddings using OpenAI](https://developers.openai.com/api/docs/guides/embeddings). The `url` field is only needed if you use OpenAI models hosted elsewhere than the default `https://api.openai.com/v1`.
+
+Provide your OpenAI API key via the environment variable `OPENAI_API_KEY`. The variable must be defined in the environment in which `defradb` runs.
+
+```graphql title="Embedding field with OpenAI provider" test-setup-collection
+type Book {
+  title: String
+  plot: String
+  about_v: [Float32!] @embedding(
+    fields: ["title", "plot"],
+    provider: "openai",
+    model: "text-embedding-3-small"
+  )
+}
+```
 
 ## Storing embedding vectors
 
-```go title="Autogen vectors"
-&action.AddDoc{
-    // Doc with both embedding fields
-    Doc: `{
-        "name": "John",
-        "about": "He loves tacos."
-    }`,
-},
-&action.AddDoc{
-    // Doc with only one embedding field
-    Doc: `{
-        "name": "John"
-    }`,
-},
-&action.Request{
-    Request: `
-        query {
-            User {
-                name_v
-            }
-        }
-    `,
-    Results: map[string]any{
-        "User": []map[string]any{
-            {
-                "name_v": gomega.And(
-                    gomega.BeAssignableToTypeOf([]float32{}),
-                    gomega.HaveLen(768),
-                ),
-            },
-            {
-                "name_v": gomega.And(
-                    gomega.BeAssignableToTypeOf([]float32{}),
-                    gomega.HaveLen(768),
-                ),
-            },
-        },
-    },
-},
+An embedding field is a vector mirror of the fields it encodes:
+- when a new document is created, the embedding field gets populated with a vector encoding the content fields
+- when a document is updated, the embedding field is regenerated to account for changes in the content fields
+
+The embedding is generated even if a document lacks value for one or more of the embedding fields. 
+
+```graphql title='Creating a new "Book" results in the embedding field "about_v" to be populated'" test-result-skip
+mutation {
+  add_Book(input: {
+    title: "Infinite Jest"
+  }) { 
+    title
+    plot
+    about_v
+  }
+}
+```
+```json result title="Result output capped"
+{
+  "data": {
+    "add_Book": [
+      {
+        "about_v": [
+          -0.14905636,
+          -0.012006985,
+          0.030906163,
+          ...
+          (768 entries)
+        ],
+        "plot": "",
+        "title": null
+      }
+    ]
+  }
+}   
 ```
 
-```go title="Explicit vector values"
-&action.AddCollection{
-    SDL: `
-        type User {
-            name: String
-            about: String
-            name_v: [Float32!] @embedding(fields: ["name", "about"], provider: "ollama", model: "nomic-embed-text",  url: "http://localhost:11434/api")
-        }
-    `,
-},
-&action.AddDoc{
-    Doc: `{
-        "name": "John",
-        "about": "He loves tacos.",
-        "name_v": [1, 2, 3]
-    }`,
-},
-&action.Request{
-    Request: `
-        query {
-            User {
-                _docID
-                name_v
-            }
-        }
-    `,
-    Results: map[string]any{
-        "User": []map[string]any{
-            {
-                "_docID": testUtils.NewDocIndex(0, 0),
-                "name_v": []float32{1, 2, 3},
-            },
-        },
-    },
-},
+### Explicit values
+
+You can also set an embedding value to an explicit vector value. However, the vector value will be overwritten if the document is updated, as the database will sync the source content fields with the embedding value.
+
+```graphql title="Set an explicit vector value"
+mutation {
+  update_Book(
+    filter: { title: { _eq: "Infinite Jest" } },
+    input: { about_v: [1,2,3] }
+  ) {
+    title
+    about_v
+  }
+}
 ```
