@@ -5,7 +5,7 @@ description: The `@index` directive allows you to create indexes on selected pro
 
 Indexes allow queries to quickly locate data without having to look through each document in a collection.
 
-By default, every collection has an index on the `_docID` property and on `@primary` relationship fields.
+By default, every collection has an index on the `_docID` property and on `@primary` [relationship fields](schema/collections.md#relationships).
 The `@index` directive allows you to set up further indexes on selected properties when creating a collection.
 
 ## Syntax {/* #syntax */}
