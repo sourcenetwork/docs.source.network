@@ -90,10 +90,11 @@ Unique indexes are used under the hood to enforce [one-to-one relationships](col
 To create an index on the combination of multiple fields (composite index), use the `@index` directive at the collection level.
 
 ```graphql title="Index for (genre, author)"
-# highlight-next-line
+# highlight-start
 type Book @index(ordered: {
   includes: [{ field: "genre" }, { field: "author" }]
 }) {
+# highlight-end
   genre: String
   author: String
 }
@@ -120,7 +121,7 @@ Scalar types (ex. integers) are normalized to DefraDB types (ex. int64).
 
 ## Vector indexes {/* #vector-indexes */}
 
-Create them on a [Float32] field type, maybe pair with @embedding, use for similarity
+Vector indexes speed up [similarity queries](/dql/similarity.md). You can create vector indexes on fields of type `[Float32!]`. Pairing a vector index with [the `@embedding` directive](embeddings.md) is possible but not required: the index works even if you manually manage the generation of embeddings.
 
 ### Syntax {/* #vector-syntax */}
 
@@ -129,24 +130,35 @@ Create them on a [Float32] field type, maybe pair with @embedding, use for simil
   name: String,
   dimensions: Int!,
   alg: String,
-  metric: String,
-  hnsw: { 
-    M: Int, 
+  hnsw: {
+    metric: String,
+    M: Int,
     efConstruction: Int,
     efSearch: Int
   }
 })
 ```
 - `name` &ndash; Index name.  
-Default: concatenation of _collection name, field name, direction_.
-- `dimensions` &ndash;
-- `metric` &ndash; COSINE, EUCLIDEAN, DOT
-- `alg` &ndash; `ivfflat` or `hnsw`
-- `hnsw` &ndash; Enforce uniqueness constraint (i.e. no two documents can have the same value for the given fields).  
-Default: `false`.
-  - `M` &ndash; maximum number of connections per node. Higher values improve recall at the cost of memory and build time. Default 16
-  - `efConstruction` &ndash; build-time exploration factor. Higher values improve graph quality (recall) at the cost of build time. Default 128
-  - `efSearch` &ndash; query-time exploration factor. Higher values improve recall at the cost of query latency; it may be overridden per query Default: 64
+Default: concatenation of _collection name, field name_.
+- `dimensions` &ndash; Number of vector entries.
+- `alg` &ndash; Algorithm backing the vector index.  
+Possible values: `hnsw` (default).
+- `hnsw` &ndash; Configuration map if `alg` is `hnsw`.
+  - `metric` &ndash; Metric to calculate vector distances.  
+  Possible values: `COSINE` (default), `EUCLIDEAN`, `DOT`.
+  - `M` &ndash; Maximum number of connections per node. Higher values improve graph quality (recall) at the cost of memory and build time. Default: 16.
+  - `efConstruction` &ndash; Build-time exploration factor. Higher values improve graph quality (recall) at the cost of build time. Default: 128.
+  - `efSearch` &ndash; Query-time exploration factor. Higher values improve graph quality (recall) at the cost of query latency; can be overridden per query. Default: 64.
+
+### Examples {/* #vector-examples */}
+
+```graphql title="Create a vector index on book title and plot"
+type Book {
+  title: String!
+  plot: String
+  about_v: [Float32!] @index(vector: {dimensions: 768, hnsw: {metric: COSINE}})
+}
+```
 
 ## Index operations
 

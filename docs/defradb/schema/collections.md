@@ -20,7 +20,7 @@ type Book {
 
 - `Int`: Signed 32‐bit integer.
 - `Float` (alias `Float64`): Signed double-precision floating-point value.
-- `Float32`: Signed single-precision floating-point value. Can be used with [the `@embedding` directive](embeddings.md) to automate generation of vector embeddings.
+- `Float32`: Signed single-precision floating-point value.
 - `String`: UTF‐8 character sequence.
 - `Boolean`: `true` or `false`.
 - `ID`: Unique identifier.
@@ -28,6 +28,10 @@ type Book {
 - `JSON`: JSON data (ex. `{ privacy: { is: "sexy" } }`). Query filters extend to JSON inner properties if the field is [indexed](indexes.md#json-fields).
 - `Blob`: Hex string (ex. `00FF`).
 - List: Array of another type (ex. `[String]`). Lists can not be nested.
+
+:::tip
+Fields of type `[Float32!]` support [the `@embedding` directive](embeddings.md) to automate generation of vector embeddings.
+:::
 
 ### Non-null fields
 
