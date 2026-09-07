@@ -65,7 +65,7 @@ SIMILARITY(
   field: {
     vector: [Float32!]
   }
-})
+}): Float
 ```
 - `field` &ndash; Collection field name on which to run the similarity search.
 - `vector` &ndash; Vector value to calculate distance from.
