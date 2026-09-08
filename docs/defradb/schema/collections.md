@@ -444,6 +444,15 @@ Truncating a collection means deleting all documents belonging to it, including 
     content-type: application/json
     ```
   </TabItem>
+  <TabItem value="graphql" label="GraphQL">
+    Truncate a collection with the mutation `truncate_<name>`, where `<name>` is a collection name.
+
+    ```graphql title='Truncate collection "Book"'
+    mutation {
+      truncate_Book
+    }
+    ```
+  </TabItem>
 </Tabs>
 
 

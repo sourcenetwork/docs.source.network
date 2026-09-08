@@ -1,30 +1,12 @@
 ---
 title: Delete documents
-description: How to use the delete_<type> GraphQL mutation to delete documents in DefraDB.
+description: How to use the delete_<type> and truncate_<TYPE> GraphQL mutations to delete documents in DefraDB.
 ---
 
-**Deletion in DefraDB works differently** than in most other databases. Because the history of documents is append-only, the deletion of a document is registered just as another record in the history. Queries don't return deleted documents though, unless the query explicitly requests deleted documents. In other words: the details of a deleted document are still available, but queries ignore its existence when retrieving results. The only way to permanently delete a document is to [truncate the collection](/schema/collections.md#truncate) it belongs to.
+Because the history of documents is append-only, **deletion in DefraDB works differently** than in most other databases. There's two ways of deleting a document:
 
-## Syntax  {/* #syntax */}
-
-Similarly to the `update_TYPE` mutation to [update documents](mutation-update.md), you delete documents via the `delete_TYPE` mutation. The mutation returns the deleted documents.
-
-```graphql title="Syntax &ndash; Delete mutation" test-skip
-mutation {
-  delete_TYPE(docID: [ID], filter: filterObj)
-}
-```
-- `TYPE` &ndash; Name of the [collection](schema/collections.md) to query.
-- `docID` &ndash; DocID of the document(s) to delete. Either a string or a list of strings.
-- `filter` &ndash; Criteria for selecting documents to delete (see [Filter documents](filter.md)).
-
-If both `filter` and `docID` are given, both criteria must be fulfilled for a document to be selected.
-
-:::note
-You cannot restore a deleted document, nor re-create a document with the exact same content as a previously deleted one, because the `docID` would conflict. In case you need to re-create a deleted document, create a new document with only _some_ of the fields of the deleted document, and then update it to include all the wished information.
-:::
-
-## Examples  { /* #examples */ }
+1. **[Soft-delete](#soft-delete)** &ndash; The deletion is registered as another record in the document history. Queries won't return deleted documents, unless the query explicitly requests them. The details of deleted documents are still available, but queries ignore their existence when retrieving results.
+2. **[Truncate](#truncate)** &ndash; Permanently delete a document, including its history.
 
 <details>
   <summary>Display database setup</summary>
@@ -137,6 +119,29 @@ You cannot restore a deleted document, nor re-create a document with the exact s
   ```
 </details>
 
+## Soft-delete (`delete_TYPE` mutation) {/* #soft-delete */}
+
+### Syntax  {/* #syntax */}
+
+Similarly to the `update_TYPE` mutation to [update documents](mutation-update.md), you delete documents via the `delete_TYPE` mutation. The mutation returns the deleted documents.
+
+```graphql title="Syntax &ndash; Delete mutation" test-skip
+mutation {
+  delete_TYPE(docID: [ID], filter: filterObj)
+}
+```
+- `TYPE` &ndash; Name of the [collection](schema/collections.md) the documents belong to.
+- `docID` &ndash; DocID of the document(s) to delete. Either a string or a list of strings.
+- `filter` &ndash; Criteria for selecting documents to delete (see [Filter documents](filter.md)).
+
+If both `filter` and `docID` are given, both criteria must be fulfilled for a document to be selected.
+
+:::note
+You cannot restore a deleted document, nor re-create a document with the exact same content as a previously deleted one, because the `docID` would conflict. In case you need to re-create a deleted document, create a new document with only _some_ of the fields of the deleted document, and then update it to include all the wished information.
+:::
+
+### Examples  { /* #examples */ }
+
 ```graphql title="Eliminate the dystopians"
 mutation {
   delete_Person(
@@ -208,6 +213,88 @@ True dystopians are however never erased. Deleted documents show up if the query
         "name": "William Golding"
       }
     ]
+  }
+}
+```
+
+## Permanently delete (`truncate_TYPE` mutation) {/* #truncate */}
+
+### Syntax
+
+```graphql title="Syntax &ndash; Truncate mutation" test-skip
+mutation {
+  truncate_TYPE(docID: [ID], filter: filterObj)
+}
+```
+- `TYPE` &ndash; Name of the [collection](schema/collections.md) the documents belong to.
+- `docID` &ndash; DocID of the document(s) to delete. Either a string or a list of strings.
+- `filter` &ndash; Criteria for selecting documents to delete (see [Filter documents](filter.md)). If filter is an empty object, **all documents are truncated**.
+
+If both `filter` and `docID` are given, both criteria must be fulfilled for a document to be selected.
+
+:::note
+Only history blocks that are linked to the selected document are deleted. Blocks shared with other documents are preserved.
+:::
+
+:::important
+Document truncation is a local operation and doesn't propagate to other nodes via [P2P](p2p/index.md).
+:::
+
+### Examples
+
+#### Truncate some documents
+
+```graphql title="Effectively eliminate the dystopians"
+mutation {
+  truncate_Person(
+    filter: { authoredBooks: { genre: { _eq: "Dystopia" } } }
+  )
+}
+```
+```json result
+{
+  "data": {
+    "truncate_Person": true
+  }
+}
+```
+
+Dystopians got fully erased, and they don't show up even if the query includes `showDeleted: true`.
+
+```graphql title="The dystopians are gone"
+{
+  Person(
+    filter: { authoredBooks: { genre: { _eq: "Dystopia"} } },
+    showDeleted: true
+  ) {
+    name
+  }
+}
+```
+```json result
+{
+  "data": {
+    "Person": []
+  }
+}
+```
+
+#### Truncate all documents
+
+If the filter is empty, all documents are truncated. This is equivalent to [truncating the collection](schema/collections.md#truncate).
+
+```graphql
+mutation {
+  truncate_Person(
+    # highlight-next-line
+    filter: {}
+  )
+}
+```
+```json result
+{
+  "data": {
+    "truncate_Person": true
   }
 }
 ```

@@ -95,7 +95,7 @@ mutation {
     The HTTP API doesn't support creating and *returning* documents in the same request. You need to [query for documents](mutation-query.md) separately.
     :::
   </TabItem>
-  <TabItem value="graphql" label="GraphQL API">
+  <TabItem value="graphql" label="GraphQL">
     To create a document of a given `<type>`, use the mutation `add_<type>`. For example, to create a document in the `Book` collection, use `add_Book`.
 
     Every `add_<type>` mutation must return some of the inserted information. Because GraphQL queries only return the exact fields requested, you have to provide a list of return fields (there is no equivalent of the SQL `SELECT *` syntax).
@@ -204,7 +204,7 @@ The field `_docID` contains the document's unique identifier. The document data 
     ]
     ```
   </TabItem>
-  <TabItem value="graphql" label="GraphQL API">
+  <TabItem value="graphql" label="GraphQL">
     You can create multiple documents in the same request by concatenating several `add_<type>` statements.
     To avoid clashes, you need to [alias](aliases.md) the results (`b1` and `b2` in the example). The aliases are used as keys in the result JSON.
 
