@@ -153,7 +153,7 @@ DefraDB stores data in _documents_. You can think that a document is of a specif
     ]
     ```
   </TabItem>
-  <TabItem value="graphql" label="GraphQL API">
+  <TabItem value="graphql" label="GraphQL">
     Create documents of a given `<type>` with the function `add_<type>`. For example, use `add_Book` to create documents in the `Book` collection.
 
     ```graphql title='Create two new documents of type "Book", returning their title and plot'
@@ -259,7 +259,7 @@ The basic skeleton of a query is made of the collection you want to fetch from (
     }
     ```
   </TabItem>
-  <TabItem value="graphql" label="GraphQL API">
+  <TabItem value="graphql" label="GraphQL">
     ```graphql title="Retrieve all documents of type Book, returning title and plot"
     {
       Book {

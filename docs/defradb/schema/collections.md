@@ -456,6 +456,10 @@ Truncating a collection means deleting all documents belonging to it, including 
       truncate_Book
     }
     ```
+
+    :::tip
+    The same mutation can also be used to truncate individual documents. See [Delete documents -> Permanently delete](dql/mutation-delete.md#truncate).
+    :::
   </TabItem>
 </Tabs>
 
