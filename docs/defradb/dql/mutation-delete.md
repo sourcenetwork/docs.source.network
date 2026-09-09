@@ -223,14 +223,11 @@ True dystopians are however never erased. Deleted documents show up if the query
 
 ```graphql title="Syntax &ndash; Truncate mutation" test-skip
 mutation {
-  truncate_TYPE(docID: [ID], filter: filterObj)
+  truncate_TYPE(filter: filterObj)
 }
 ```
 - `TYPE` &ndash; Name of the [collection](schema/collections.md) the documents belong to.
-- `docID` &ndash; DocID of the document(s) to delete. Either a string or a list of strings.
 - `filter` &ndash; Criteria for selecting documents to delete (see [Filter documents](filter.md)). If filter is an empty object, **all documents are truncated**.
-
-If both `filter` and `docID` are given, both criteria must be fulfilled for a document to be selected.
 
 :::note
 Only history blocks that are linked to the selected document are deleted. Blocks shared with other documents are preserved.
