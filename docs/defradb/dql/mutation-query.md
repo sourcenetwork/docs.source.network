@@ -265,7 +265,7 @@ The basic skeleton of a query is made of the type/collection you want to fetch f
     }
     ```
   </TabItem>
-  <TabItem value="graphql" label="GraphQL API">
+  <TabItem value="graphql" label="GraphQL">
     ```graphql title="Retrieve all documents of type Book, returning docID, title, plot"
     {
       Book {

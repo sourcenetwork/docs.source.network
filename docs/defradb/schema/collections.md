@@ -29,6 +29,10 @@ type Book {
 - `Blob`: Hex string (ex. `00FF`).
 - List: Array of another type (ex. `[String]`). Lists can not be nested.
 
+:::tip
+Fields of type `[Float32!]` support [the `@embedding` directive](embeddings.md) to automate generation of vector embeddings.
+:::
+
 ### Non-null fields
 
 An exclamation mark `!` after a type (ex. `Int!`) specifies that it should be non-null. Also supported with lists:
@@ -171,8 +175,9 @@ type Person {
 }
 ```
 
+## Collection operations
 
-## Create collections {/* #create */}
+### Create collections {/* #create */}
 
 <Tabs groupId="defra">
   <TabItem value="cli" label="CLI" default>
@@ -200,8 +205,8 @@ type Person {
           {
             "FieldID": "bafyreihqzhiz3iwro4jozp6kphq4sosg6ccoqcbiaf7rg5dmvea7aux55a",
             "Name": "_docID",
-            "Kind": 1,
-            "Typ": 0,
+            "Kind": "ID",
+            "Typ": "none",
             "RelationName": null,
             "IsPrimary": false,
             "DefaultValue": null,
@@ -210,8 +215,8 @@ type Person {
           {
             "FieldID": "bafyreibxx5wzp4iagt3jifid2r7hfzvbtzp2fuq26vku6t6ptk3ppwgxl4",
             "Name": "plot",
-            "Kind": 11,
-            "Typ": 1,
+            "Kind": "String",
+            "Typ": "lww",
             "RelationName": null,
             "IsPrimary": false,
             "DefaultValue": null,
@@ -220,8 +225,8 @@ type Person {
           {
             "FieldID": "bafyreibbxpehr5radbbkkmsau5uuscoif4dxu6j3ef4by6f445fyx7pl3y",
             "Name": "rating",
-            "Kind": 6,
-            "Typ": 1,
+            "Kind": "Float",
+            "Typ": "lww",
             "RelationName": null,
             "IsPrimary": false,
             "DefaultValue": null,
@@ -230,8 +235,8 @@ type Person {
           {
             "FieldID": "bafyreifhl4p32tbcum4353gigaz7cqrribrgxlbzbps7ec24i5ydxoxewm",
             "Name": "title",
-            "Kind": 26,
-            "Typ": 1,
+            "Kind": "String",
+            "Typ": "lww",
             "RelationName": null,
             "IsPrimary": false,
             "DefaultValue": null,
@@ -278,8 +283,8 @@ type Person {
           {
             "FieldID": "bafyreihqzhiz3iwro4jozp6kphq4sosg6ccoqcbiaf7rg5dmvea7aux55a",
             "Name": "_docID",
-            "Kind": 1,
-            "Typ": 0,
+            "Kind": "ID",
+            "Typ": "none",
             "RelationName": null,
             "IsPrimary": false,
             "DefaultValue": null,
@@ -288,8 +293,8 @@ type Person {
           {
             "FieldID": "bafyreibxx5wzp4iagt3jifid2r7hfzvbtzp2fuq26vku6t6ptk3ppwgxl4",
             "Name": "plot",
-            "Kind": 11,
-            "Typ": 1,
+            "Kind": "String",
+            "Typ": "lww",
             "RelationName": null,
             "IsPrimary": false,
             "DefaultValue": null,
@@ -298,8 +303,8 @@ type Person {
           {
             "FieldID": "bafyreibbxpehr5radbbkkmsau5uuscoif4dxu6j3ef4by6f445fyx7pl3y",
             "Name": "rating",
-            "Kind": 6,
-            "Typ": 1,
+            "Kind": "Float",
+            "Typ": "lww",
             "RelationName": null,
             "IsPrimary": false,
             "DefaultValue": null,
@@ -308,8 +313,8 @@ type Person {
           {
             "FieldID": "bafyreifhl4p32tbcum4353gigaz7cqrribrgxlbzbps7ec24i5ydxoxewm",
             "Name": "title",
-            "Kind": 26,
-            "Typ": 1,
+            "Kind": "String",
+            "Typ": "lww",
             "RelationName": null,
             "IsPrimary": false,
             "DefaultValue": null,
@@ -332,7 +337,7 @@ type Person {
 </Tabs>
 
 
-## Show collections {/* #show */}
+### Show collections {/* #show */}
 
 <Tabs groupId="defra">
   <TabItem value="cli" label="CLI" default>
@@ -371,8 +376,8 @@ type Person {
       {
         "FieldID": "bafyreihqzhiz3iwro4jozp6kphq4sosg6ccoqcbiaf7rg5dmvea7aux55a",
         "Name": "_docID",
-        "Kind": 1,
-        "Typ": 0,
+        "Kind": "ID",
+        "Typ": "none",
         "RelationName": null,
         "IsPrimary": false,
         "DefaultValue": null,
@@ -381,8 +386,8 @@ type Person {
       {
         "FieldID": "bafyreibxx5wzp4iagt3jifid2r7hfzvbtzp2fuq26vku6t6ptk3ppwgxl4",
         "Name": "plot",
-        "Kind": 11,
-        "Typ": 1,
+        "Kind": "String",
+        "Typ": "lww",
         "RelationName": null,
         "IsPrimary": false,
         "DefaultValue": null,
@@ -391,8 +396,8 @@ type Person {
       {
         "FieldID": "bafyreibbxpehr5radbbkkmsau5uuscoif4dxu6j3ef4by6f445fyx7pl3y",
         "Name": "rating",
-        "Kind": 6,
-        "Typ": 1,
+        "Kind": "Float",
+        "Typ": "lww",
         "RelationName": null,
         "IsPrimary": false,
         "DefaultValue": null,
@@ -401,8 +406,8 @@ type Person {
       {
         "FieldID": "bafyreifhl4p32tbcum4353gigaz7cqrribrgxlbzbps7ec24i5ydxoxewm",
         "Name": "title",
-        "Kind": 26,
-        "Typ": 1,
+        "Kind": "String",
+        "Typ": "lww",
         "RelationName": null,
         "IsPrimary": false,
         "DefaultValue": null,
@@ -422,7 +427,7 @@ type Person {
 ]
 ```
 
-## Truncate collections {/* #truncate */}
+### Truncate collections {/* #truncate */}
 
 Truncating a collection means deleting all documents belonging to it, including their histories. It's an **irreversible operation** that clears the collection's contents entirely.
 
@@ -443,10 +448,19 @@ Truncating a collection means deleting all documents belonging to it, including 
     content-type: application/json
     ```
   </TabItem>
+  <TabItem value="graphql" label="GraphQL">
+    Truncate a collection with the mutation `truncate_<name>`, where `<name>` is a collection name.
+
+    ```graphql title='Truncate collection "Book"'
+    mutation {
+      truncate_Book
+    }
+    ```
+  </TabItem>
 </Tabs>
 
 
-## Delete collections {/* #delete */}
+### Delete collections {/* #delete */}
 
 The delete command takes one or more collection names and erases their schema from the database. Collections linked together through relationships must be deleted together.
 

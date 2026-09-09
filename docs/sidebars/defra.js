@@ -23,6 +23,7 @@ export default {
       items: [
         'schema/collections',
         'schema/indexes',
+        'schema/embeddings',
       ]
     },
     {
@@ -41,6 +42,7 @@ export default {
         'dql/aliases',
         'dql/group',
         'dql/aggregating-functions',
+        'dql/similarity',
         'dql/profile-query-explain',
       ],
     },

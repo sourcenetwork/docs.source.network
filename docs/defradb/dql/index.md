@@ -35,3 +35,20 @@ In case of error, the `data` object is `null` and the `error` object contains a 
   "data": null
 }
 ```
+
+An extra field `extensions` might be present in responses if extra information (such as warnings) is surfaced by the server.
+
+```json title='Result containing "extensions" field'
+"extensions": {
+  "warnings": [
+    {
+      "code": "VECTOR_INDEX_UNUSED",
+      "message": "similarity query on field 'about_v' did not use the vector index and read the whole collection",
+      "detail": {
+        "field": "about_v",
+        "reason": "notOrderedBySimilarityDesc"
+      }
+    }
+  ]
+}
+```
