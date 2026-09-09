@@ -29,6 +29,10 @@ type Book {
 - `Blob`: Hex string (ex. `00FF`).
 - List: Array of another type (ex. `[String]`). Lists can not be nested.
 
+:::tip
+Fields of type `[Float32!]` support [the `@embedding` directive](embeddings.md) to automate generation of vector embeddings.
+:::
+
 ### Non-null fields
 
 An exclamation mark `!` after a type (ex. `Int!`) specifies that it should be non-null. Also supported with lists:

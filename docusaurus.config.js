@@ -280,7 +280,7 @@ const config = {
             banner: "none"
           }
         },
-      },
+      }
     ],
     // Orbis instance
     [
