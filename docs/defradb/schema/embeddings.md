@@ -5,10 +5,10 @@ description: With the @embedding directive you can entirely delegate the generat
 
 Vector embeddings represent data (ex. text) as lists of numbers (vectors). Vectors allow you to query for documents basing on their similarity to other documents or to specific vector embeddings (see [Vector indexes](schema/indexes.md#vector-indexes) and [Query similar documents](dql/similarity.md)).
 
-You can create an embedding field with the `@embedding` directive on a collection field of type `Float32`. Fields marked with `@embedding` become a vector *mirror* of the document's fields: when a document is added or updated, the corresponding vector embedding is regenerated to match the new content.
+You can create an embedding field with the `@embedding` directive on a collection field of type `[Float32!]`. Fields marked with `@embedding` become a vector *mirror* of the document's fields: when a document is added or updated, the corresponding vector embedding is regenerated to match the new content.
 
 :::tip
-The `@embedding` directive is useful to entirely delegate the generation of embeddings to the database. If you plan to manually generate vector embeddings, use a field of type `[Float32]` and don't mark it with the `@embedding` directive &ndash; you'll still be able to create vector indexes on it and run similarity queries.
+The `@embedding` directive is useful to entirely delegate the generation of embeddings to the database. If you plan to manually generate vector embeddings, use a field of type `[Float32!]` and don't mark it with the `@embedding` directive &ndash; you'll still be able to create vector indexes on it and run similarity queries.
 :::
 
 ## Syntax {/* #syntax */}
@@ -110,7 +110,7 @@ mutation {
           (768 entries)
         ],
         "plot": "",
-        "title": null
+        "title": "Infinite Jest"
       }
     ]
   }
