@@ -38,7 +38,7 @@ const config = {
           lastmod: "date",
           changefreq: "weekly",
           priority: 0.5,
-          ignorePatterns: ["/defradb/0.20.0/**", "/blog*", "/styleguide/**"],
+          ignorePatterns: ["/defradb/1.*/**", "/blog*", "/styleguide/**"],
           filename: "sitemap.xml",
         },
       },
