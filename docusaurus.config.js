@@ -166,8 +166,8 @@ const config = {
         ],
       },
       algolia: {
-        appId: "N3M9YBYYQY",
-        apiKey: "909584ed5214e2d24ae2a85a5cd8664a",
+        appId: "93CHSA6YCG",
+        apiKey: "371166177365fd3004ea41fd9bc68387",
         indexName: "source-docs",
       },
       image: "img/source-logo.jpg",
