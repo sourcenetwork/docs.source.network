@@ -348,8 +348,11 @@ const config = {
     ],
   ],
   customFields: {
-    docsData: {},
     pushfeedbackProjectId: process.env.PUSHFEEDBACK_PROJECT_ID ?? null,
+    noIndexUrls: [
+      '/defradb/references/http/api',
+      '/defradb/references/cli',
+    ],
   },
 };
 
