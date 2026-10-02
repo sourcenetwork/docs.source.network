@@ -1,7 +1,7 @@
 # Create a Secret Ring
 
 ***To skip ahead to <u>using an existing</u> Secret Ring deployment,
-proceed to [Storing a Secret](./secrets).***
+proceed to [Storing a Secret](./4-secrets.md).***
 
 ---
 

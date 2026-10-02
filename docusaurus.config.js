@@ -292,15 +292,10 @@ const config = {
         sidebarPath: require.resolve("./sidebars.js"),
         editUrl:
           "https://github.com/sourcenetwork/docs.source.network/edit/master/",
-        lastVersion: "0.2.3",
+        lastVersion: "current",
         versions: {
-          "0.2.3": {
-            banner: "none",
-          },
           current: {
-            label: "Next",
-            path: "next",
-            banner: "unreleased",
+            label: "0.2.3 (Latest)",
           },
         },
       },
@@ -315,15 +310,10 @@ const config = {
         sidebarPath: require.resolve("./sidebars.js"),
         editUrl:
           "https://github.com/sourcenetwork/docs.source.network/edit/master/",
-        lastVersion: "0.9.3",
+        lastVersion: "current",
         versions: {
-          "0.9.3": {
-            banner: "none",
-          },
           current: {
-            label: "Next",
-            path: "next",
-            banner: "unreleased",
+            label: "0.9.3 (Latest)",
           },
         },
       },
