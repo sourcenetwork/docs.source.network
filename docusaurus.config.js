@@ -343,7 +343,7 @@ const config = {
       // regex syntax
       '^/defradb/references/http/api',
       '^/defradb/references/cli',
-      '^/defradb/[0-9]+\.[0-9]+'
+      '^/defradb/[0-9]+\\.[0-9]+/?'
     ],
   },
 };
