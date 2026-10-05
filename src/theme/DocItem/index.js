@@ -4,19 +4,23 @@ import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 
 import DocItem from '@theme-original/DocItem';
 
-export default function DocItemWrapper(props) {
+export function shouldNoIndex(url) {
   const {siteConfig} = useDocusaurusContext();
-  const permalink = props.content?.metadata?.permalink;
 
   const patterns = siteConfig.customFields?.noIndexUrls ?? [];
 
-  const noIndex = patterns.some(
-    pattern => permalink.startsWith(pattern)
-  );
+  const noIndex = patterns.some(pattern => {
+    const regex = new RegExp(pattern);
+    return regex.test(url);
+  });
 
+  return noIndex;
+}
+
+export default function DocItemWrapper(props) {
   return (
     <>
-      {noIndex && (
+      {shouldNoIndex(props.content?.metadata?.permalink) && (
         <Head>
           <meta name="robots" content="noindex" />
         </Head>

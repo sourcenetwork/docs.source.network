@@ -340,8 +340,10 @@ const config = {
   customFields: {
     pushfeedbackProjectId: process.env.PUSHFEEDBACK_PROJECT_ID ?? null,
     noIndexUrls: [
-      '/defradb/references/http/api',
-      '/defradb/references/cli',
+      // regex syntax
+      '^/defradb/references/http/api',
+      '^/defradb/references/cli',
+      '^/defradb/[0-9]+\.[0-9]+'
     ],
   },
 };

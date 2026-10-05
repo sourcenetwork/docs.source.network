@@ -1,22 +1,14 @@
 import React from 'react';
 import Head from '@docusaurus/Head';
-import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 
 import ApiItem from '@theme-original/ApiItem';
 
+import { shouldNoIndex } from '../DocItem';
+
 export default function ApiItemWrapper(props) {
-  const {siteConfig} = useDocusaurusContext();
-  const permalink = props.content?.metadata?.permalink;
-
-  const patterns = siteConfig.customFields?.noIndexUrls ?? [];
-
-  const noIndex = patterns.some(
-    pattern => permalink.startsWith(pattern)
-  );
-
   return (
     <>
-      {noIndex && (
+      {shouldNoIndex(props.content?.metadata?.permalink) && (
         <Head>
           <meta name="robots" content="noindex" />
         </Head>
