@@ -10,17 +10,10 @@ DefraDB's data model is based on MerkleCRDTs. Each document has a graph of all o
   To reproduce the example results from this page, your database needs the following setup.
 
   ```graphql title="Database schema" test-setup-collection
-  type Person {
-    name: String!
-    authoredBooks: [Book]
-  }
-
   type Book {
     title: String!
     genre: String
     plot: String
-    rating: Float
-    author: Person
   }
   ```
 </details>
@@ -40,10 +33,10 @@ query {
 
 - `cid` &ndash; Unique identifier of one (or more) commit.
 - `collectionVersionId` &ndash; ID of the collection version that the commit targeted. Allows you to determine the state of the data model when the change was committed.
-- `depth` &ndash; Position within the chain of commits this one commit is located at.
+- `depth` &ndash; Position within the chain of commits this one commit is located at (counting from the latest commit). Commits at levels _up to_ the given depth are included.
 - `docID` &ndash; ID of document involved in the commits.
 - `filter` &ndash; Restrict which commit blocks to retrieve. See [filter](#filter)
-- `groupBy` &ndash; Organize returned commits into groups. See [group](#group)
+- `groupBy` &ndash; Organize returned commits into groups. See [DQL -> Group results](./dql/group.md) for usage.
 - `limit` &ndash; Maximum number of commits to return.
 - `offset` &ndash; Number of commits to skip from the return list (pagination).
 
@@ -71,7 +64,7 @@ type Commit {
 - `delta` &ndash; base64 encoded CBOR payload value (the _content_ of the commit).
 - `fieldName` &ndash; Name of the field that this commit was committed against. The value is `"_C"` for composite blocks and null for collection blocks.
 - `heads` &ndash; Parent commits in the DAG that build the history of this piece of data. Linked blocks are at different depths, and of the same type.
-- `height` &ndash; Location of the commit in the DAG. All commits from _add_ operations have a height of `1`;  subsequent local _update_ increments the counter by one for the new commits.
+- `height` &ndash; Location of the commit in the DAG (counting from the root commit). All commits from _add_ operations have a height of `1`;  subsequent local _update_ increments the counter by one for the new commits.
 - `links` &ndash; Child commits in the DAG that contribute to the composition of this commit. Linked blocks are at the same depth, and of different types. Composite commits link to the field commits for the fields that the mutation altered; collection commits link to composite commits.
 - `signature` &ndash; Commit's signature, if one exists. Used to verify the commit's integrity. See [signature](#signature).
 
@@ -81,23 +74,22 @@ type Commit {
 </Tabs>
 
 
-## Obtain document commits {/* #obtain-document-commits */}
+## Document commits on creation {/* #obtain-document-commits */}
 
 Create a doc
 
-```
+```graphql
 mutation {
-  b11:add_Book(input: {
+  add_Book(input: {
     title: "1984",
-    genre: "Dystopia",
     plot: "A masterpiece of rebellion and imprisonment where war is peace, freedom is slavery, and Big Brother is watching."
   }) { _docID title }
 }
 ```
-```
+```json result
 {
   "data": {
-    "b11": [
+    "add_Book": [
       {
         "_docID": "bae-53e80819-b7b4-5fc4-a681-b183b64a8262",
         "title": "1984"
@@ -108,136 +100,166 @@ mutation {
 ```
 
 retrieve its commits
-```
+```graphql
 query {
-    _commits(docID: "bae-53e80819-b7b4-5fc4-a681-b183b64a8262") {
-      fieldName
+  _commits(docID: "bae-53e80819-b7b4-5fc4-a681-b183b64a8262") {
+    fieldName
+    cid
+    delta
+    height
+    links {
       cid
-      delta
-      height
-      links {
-        cid
-        fieldName
-      }
+      fieldName
+    }
+    heads {
+      cid
+      fieldName
+    }
+    signature {
+      identity
+      type
+      value
     }
   }
+}
 ```
-```
+```json result
 {
   "data": {
     "_commits": [
       {
-        "cid": "bafyreib4ouiqmyqdjbtaqbpbcq6u4kifakc4jk5ivvueq7lgwal44wv3my",
-        "delta": "aER5c3RvcGlh",
-        "fieldName": "genre",
-        "height": 1,
-        "links": []
-      },
-      {
-        "cid": "bafyreic66sbaqtcnbohw2j2mbqzckcfvih2r6cqi3n4rakocq22kxw6srq",
+        "cid": "bafyreigfmpvezc4efqf27qjlmdvhoiewjbzzfhbphrjcbn5np3azgys3pa",
         "delta": "eHBBIG1hc3RlcnBpZWNlIG9mIHJlYmVsbGlvbiBhbmQgaW1wcmlzb25tZW50IHdoZXJlIHdhciBpcyBwZWFjZSwgZnJlZWRvbSBpcyBzbGF2ZXJ5LCBhbmQgQmlnIEJyb3RoZXIgaXMgd2F0Y2hpbmcu",
+        // highlight-next-line
         "fieldName": "plot",
+        "heads": [],
         "height": 1,
-        "links": []
+        "links": [],
+        "signature": {
+          "identity": "023531430d1053f4eeab4bf520522186698d7e16d53cf0e80df35a158c7a74261e",
+          "type": "ES256K",
+          "value": "MEUCIQDd0qjbTLAWH2egv3qMKE7afW8O/Ki1Wgum2bwBP/ziHAIgBBtDcYgqdBCUs1P+pV2ZYr/awSd10FkXiGCPKCDk944="
+        }
       },
       {
-        "cid": "bafyreiaktcbiphslxp6fy3qicjc4kys4tfcwhechqvoeyfx4waw2knj6ge",
+        "cid": "bafyreifeswomzh7doh34t6pcukrktrf4vimazuf32uywrststovczq45ua",
         "delta": "ZDE5ODQ=",
+        // highlight-next-line
         "fieldName": "title",
+        "heads": [],
         "height": 1,
-        "links": []
+        "links": [],
+        "signature": {
+          "identity": "023531430d1053f4eeab4bf520522186698d7e16d53cf0e80df35a158c7a74261e",
+          "type": "ES256K",
+          "value": "MEUCIQD+lDOW0s823sHqR0BSOTXirlQNAqgsE1nHf2EIgNaLdAIgQ/K+kUExpeu8B9He1Mt2mS4dJB8Qu+Ux07/Xg9Ce6CE="
+        }
       },
       {
-        "cid": "bafyreiecms7bufflyxthf4ij2h6janohai77oyh4ulbek5jjzef5757wpe",
+        "cid": "bafyreidgr7rwyheskxqrmm6lwfacgc7vbiukenv2ppah562avd25rljkcu",
         "delta": null,
+        // highlight-next-line
         "fieldName": "_C",
+        "heads": [],
         "height": 1,
         "links": [
           {
-            "cid": "bafyreiaktcbiphslxp6fy3qicjc4kys4tfcwhechqvoeyfx4waw2knj6ge",
+            "cid": "bafyreifeswomzh7doh34t6pcukrktrf4vimazuf32uywrststovczq45ua",
             "fieldName": "title"
           },
           {
-            "cid": "bafyreib4ouiqmyqdjbtaqbpbcq6u4kifakc4jk5ivvueq7lgwal44wv3my",
-            "fieldName": "genre"
-          },
-          {
-            "cid": "bafyreic66sbaqtcnbohw2j2mbqzckcfvih2r6cqi3n4rakocq22kxw6srq",
+            "cid": "bafyreigfmpvezc4efqf27qjlmdvhoiewjbzzfhbphrjcbn5np3azgys3pa",
             "fieldName": "plot"
-          }
-        ]
+          },
+        ],
+        "signature": {
+          "identity": "023531430d1053f4eeab4bf520522186698d7e16d53cf0e80df35a158c7a74261e",
+          "type": "ES256K",
+          "value": "MEQCIF+kaBWv+EBm4148UXrAmDICrMqBOe0fsaVedfG4ugZBAiA8VenGRQdlp8oGqr+0pZ90VhgDgRwG5mnNY0KRc237LA=="
+        }
       }
     ]
   }
 }
 ```
 
-To look at the commits for the first `User` document, let's store its docID in a shell variable:
+## Document commits on update {/* #obtain-document-commits */}
 
-```shell
-FIRST_DOC_ID=$(defradb client query '
-  query {
-    User(filter: {points: {_geq: 50}}) {
-      _docID
-      age
-      name
-      points
+Update a doc
+
+```graphql
+mutation {
+  update_Book(
+    docID: "bae-53e80819-b7b4-5fc4-a681-b183b64a8262",
+    input: {
+      genre: "Dystopia"
     }
-  }
-' | jq -r '.data.User[0]._docID')
-
-echo "The first _docID is: $FIRST_DOC_ID"
+  ) { _docID title }
+}
 ```
-
-To get the most recent commit in the MerkleDAG for this document:
-
-```shell
-defradb client query "
-  query {
-    _commits(docID: \"$FIRST_DOC_ID\") {
-      cid
-      delta
-      height
-      links {
-        cid
-        fieldName
+```json result
+{
+  "data": {
+    "add_Book": [
+      {
+        "_docID": "bae-53e80819-b7b4-5fc4-a681-b183b64a8262",
+        "title": "1984"
       }
-    }
+    ]
   }
-"
+}
 ```
 
-The list of commits shows, for each,
+We could query like
+```
+query {
+  _commits(docID: "bae-1da55608-e747-572b-8271-2ef35b66520d", depth: 1) {
+```
+but that will surface also title and plot at height = height(genre)-1
 
-* `cid` -- The unique identifier
-* `delta` -- The base64-encoded content (the commit's payload)
-* `height` -- The height of the Merkle DAG at that specific node
-* `links` -- Any connection to other entities (`links`)
+so instead pick the latest composite and fetch links
 
-```json
+```
+query {
+  _commits(
+    docID: "bae-1da55608-e747-572b-8271-2ef35b66520d", 
+    filter: {fieldName: { _eq: "_C"}},
+    depth: 1
+  ) {
+    fieldName
+    cid
+    height
+    links {
+      cid
+      fieldName
+      delta
+    }
+    heads {
+      cid
+      fieldName
+    }
+  }
+}
+```
+```json result
 {
   "data": {
     "_commits": [
       {
-        "cid": "bafybeifhtfs6vgu7cwbhkojneh7gghwwinh5xzmf7nqkqqdebw5rqino7u",
-        "delta": "pGNhZ2UYH2RuYW1lY0JvYmZwb2ludHMYWmh2ZXJpZmllZPU=",
-        "height": 1,
+        "cid": "bafyreidapjfuskkddbuu5eevkf5usgv6biot7dqlmxau7g5copqr2ax6ha",
+        "fieldName": "_C",
+        "heads": [
+          {
+            "cid": "bafyreidgr7rwyheskxqrmm6lwfacgc7vbiukenv2ppah562avd25rljkcu",
+            "fieldName": "_C"
+          }
+        ],
+        "height": 2,
         "links": [
           {
-            "cid": "bafybeiet6foxcipesjurdqi4zpsgsiok5znqgw4oa5poef6qtiby5hlpzy",
-            "fieldName": "age"
-          },
-          {
-            "cid": "bafybeielahxy3r3ulykwoi5qalvkluojta4jlg6eyxvt7lbon3yd6ignby",
-            "fieldName": "name"
-          },
-          {
-            "cid": "bafybeia3tkpz52s3nx4uqadbm7t5tir6gagkvjkgipmxs2xcyzlkf4y4dm",
-            "fieldName": "points"
-          },
-          {
-            "cid": "bafybeia4off4javopmxcdyvr6fgb5clo7m5bblxic5sqr2vd52s6khyksm",
-            "fieldName": "verified"
+            "cid": "bafyreihqf7xoxfeqpukhzlrat3quh6qajm7zjbkvrrqvbw6poaohhqdow4",
+            "delta": "aER5c3RvcGlh",
+            "fieldName": "genre"
           }
         ]
       }
@@ -246,39 +268,6 @@ The list of commits shows, for each,
 }
 ```
 
-You can also obtain a specific commit by its content identifier (`cid`). First let's store the `cid` of the selected user in a shell variable:
-
-```shell
-FIRST_CID=$(defradb client query "
-  query {
-    _commits(docID: \"$FIRST_DOC_ID\") {
-      cid
-      delta
-      height
-      links {
-        cid
-        fieldName
-      }
-    }
-  }
-" | jq -r '.data._commits[0].cid')
-
-echo "The first CID is: $FIRST_CID"
-```
-to obtain the specific commit from this content identifier:
-
-```shell
-defradb client query "
-  query {
-    _commits(cid:\"$FIRST_CID\") {
-      cid
-      delta
-      height
-      links {
-        cid
-        fieldName
-      }
-    }
-  }
-"
-```
+:::note
+at height > 1, only composites are signed. field blocks are signed at height 1 only to seed entropy for cids, but not needed cryptographically.
+:::
