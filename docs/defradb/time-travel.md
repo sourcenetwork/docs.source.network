@@ -43,7 +43,7 @@ query {
 {/* Need an extra element after list due to https://github.com/facebook/docusaurus/issues/12583 */}
 
   </TabItem>
-  <TabItem value="commits-obj" label="Commit objects" default>
+  <TabItem value="commits-obj" label="Commit object" default>
 ```graphql
 type Commit {
   docID: ID
@@ -99,7 +99,10 @@ mutation {
 }
 ```
 
-retrieve its commits
+To retrieve the commits that resulted from the document creation, use a `_commits` query with the ID of the document.
+
+In this case, there are three commit blocks: two are for the individual fields `title` and `plot`; the third is the composite (`_C`) block, which references the field blocks through the `links` list. You can think of the composite block as a directory containing files. Each commit is uniquely identified by its `cid` field, with the `delta` field containing the data payload that was saved into the storage. In this first layer, all blocks are signed by the identity which submitted the query (see [signature](#signature)).
+
 ```graphql
 query {
   _commits(docID: "bae-53e80819-b7b4-5fc4-a681-b183b64a8262") {
@@ -185,7 +188,9 @@ query {
 
 ## Document commits on update {/* #obtain-document-commits */}
 
-Update a doc
+When a document is updated or deleted, its commits blocks are not updated. Written commits remain unaltered (unless the document is [truncated](./dql/mutation-delete.md#truncate), in which case all corresponding blocks are removed) and _more commits_ are appended to the old ones, creating a history of changes that leads to the present moment. These commit blocks create a _Direct Acyclic Graph (DAG)_. The latest version of each document is cached, so the database never has to read through the history chain to build the present version of the the data: the latest version is just the tip of such history.
+
+Update the previous document, adding a value for the field `genre`.
 
 ```graphql
 mutation {
@@ -210,20 +215,15 @@ mutation {
 }
 ```
 
-We could query like
-```
-query {
-  _commits(docID: "bae-1da55608-e747-572b-8271-2ef35b66520d", depth: 1) {
-```
-but that will surface also title and plot at height = height(genre)-1
+To retrieve the commits resulting from the update mutation, pick the latest composite and fetch its linked blocks. The result shows the field block for `genre` connected to the returned top composite block, and the previous composite block in the history referenced in the `heads` list. 
 
-so instead pick the latest composite and fetch links
+Blocks for the same field name at different heights build a history chain via their `heads`, each new one referencing the previous one via its `cid`. Because the `cid` is a cryptograhically secure value (the hash of the whole block), the structure of the chain guarantees data integrity by itself: if any part of the data was tampered, the history chain would become invalid.
 
 ```
 query {
   _commits(
     docID: "bae-1da55608-e747-572b-8271-2ef35b66520d", 
-    filter: {fieldName: { _eq: "_C"}},
+    filter: { fieldName: { _eq: "_C" } },
     depth: 1
   ) {
     fieldName
@@ -267,6 +267,48 @@ query {
   }
 }
 ```
+
+:::tip
+The example above queries for the top composite blocks and fetches its links.
+However, wishing to inspect commits generated from the latest update, it can feel natural to query for commits at `depth: 1`. 
+
+```graphql
+query {
+  _commits(docID: "bae-1da55608-e747-572b-8271-2ef35b66520d", depth: 1) {
+    fieldName
+    height
+  }
+}
+```
+```json result
+{
+  "data": {
+    "_commits": [
+      {
+        "fieldName": "genre",
+        "height": 2
+      },
+      {
+        "fieldName": "plot",
+        "height": 1
+      },
+      {
+        "fieldName": "title",
+        "height": 1
+      },
+      {
+        "fieldName": "_C",
+        "height": 2
+      }
+    ]
+  }
+}
+```
+
+This type of query makes sense to get a view of the latest state of the document, as it returns the top layer for blocks of all types, regardless of their `height` value. 
+
+In the example, `genre` was updated in the second query and has `height: 2` (corresponding to `depth: 1`). On the other hand, `title` and `plot` were not changed in the second query and have `height: 1`, and they are surfaced when querying for `depth: 1` because there are no blocks on top of them.
+:::
 
 :::note
 at height > 1, only composites are signed. field blocks are signed at height 1 only to seed entropy for cids, but not needed cryptographically.
