@@ -14,7 +14,7 @@ Generate a new identity with the CLI command [`defradb identity new`](/reference
 ```shell
 defradb identity new
 ```
-```json
+```json result
 {
   "PrivateKey": "b17a7b973f629b900cf23654db9c4be935f90281707dd3e2cd7a56bdd2c1bf4f",
   "PublicKey": "0363f224bfddb641bd0cd4b5409bc921c405460727f864f6dba33da5dd7b061bcf",
@@ -22,3 +22,51 @@ defradb identity new
   "KeyType": "secp256k1"
 }
 ```
+
+## Retrieve node identity {/* #retrieve-node-identity */}
+
+When you [start a node](./install.md#start) for the first time, an identity is automatically created (from which [private keys](./references/private-keys.md) are derived). You can extract both public and private keys on an existing node.
+
+### Public key
+
+<Tabs groupId="defra">
+  <TabItem value="cli" label="CLI" default>
+    Retrieve a node's identity with the CLI command [`defradb client node-identity`](references/cli/defradb_client_node-identity.md). The node must be online.
+
+    ```shell
+    defradb client node-identity
+    ```
+    ```json result
+    {
+      "PublicKey": "0363f224bfddb641bd0cd4b5409bc921c405460727f864f6dba33da5dd7b061bcf",
+      "DID": "did:key:z7r8oqUcSm6xwwxfpBZ5R6CWQiPRnYpXouwgeXkbWgVcWBF19QDndBBWzgHcvvHhaUe7qcTz7ayJVXksND37rvV7GAUAv"
+    }
+    ```
+  </TabItem>
+  <TabItem value="http" label="HTTP API">
+    Retrieve a node's identity by submitting a `GET` request to the HTTP endpoint [`/node/identity`](/defradb/references/http/api/get-node-identity/). The request doesn't need to be authenticated. The node must be online.
+
+    ```http 
+    GET http://localhost:9181/node/identity HTTP/2
+    accept: application/json
+    ```
+    ```json result
+    {
+      "PublicKey": "0363f224bfddb641bd0cd4b5409bc921c405460727f864f6dba33da5dd7b061bcf",
+      "DID": "did:key:z7r8oqUcSm6xwwxfpBZ5R6CWQiPRnYpXouwgeXkbWgVcWBF19QDndBBWzgHcvvHhaUe7qcTz7ayJVXksND37rvV7GAUAv"
+    }
+    ```
+  </TabItem>
+</Tabs>
+
+### Private keys
+
+The node doesn't have to be online.
+
+Retrieve a node's identity with the CLI command [`defradb client node-identity`](references/cli/defradb_client_node-identity.md).
+
+defradb keyring get peer-key
+Enter keyring secret: 
+0b0201e3c3f15aa4cd2a0d8e287f2d6a38d644474898268e89fd43d67540758214a2b8208c315d3cab9d3f73071213e2ccd17bd64b48b67e2610a94a7971c5c5
+
+required .env or env var for keyring
