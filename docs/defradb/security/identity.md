@@ -9,7 +9,7 @@ In DefraDB, identity keys are hex-encoded, of type either `secp256k1` or `ed2551
 
 ## Generate identities {/* #generate-identity */}
 
-Generate a new identity with the CLI command [`defradb identity new`](/references/cli/defradb_identity_new.md). You will need the `PrivateKey` to [authenticate](authentication.md) in CLI commands and HTTP requests.
+Generate a new identity with the CLI command [`defradb identity new`](/references/cli/defradb_identity_new.md). You will need the `PrivateKey` to [authenticate](authentication.md) in CLI commands and HTTP requests, whereas the `DID` key is the identity's public identifier.
 
 ```shell
 defradb identity new
@@ -25,7 +25,7 @@ defradb identity new
 
 ## Retrieve node identity {/* #retrieve-node-identity */}
 
-When you [start a node](./install.md#start) for the first time, an identity is automatically created (from which [private keys](./references/private-keys.md) are derived). You can extract both public and private keys on an existing node.
+When you [start a node](./install.md#start) for the first time, an identity is automatically created (from which [the node's private keys](./references/private-keys.md) are derived). You can extract both public and private keys on an existing node.
 
 ### Public key
 
@@ -61,12 +61,24 @@ When you [start a node](./install.md#start) for the first time, an identity is a
 
 ### Private keys
 
-The node doesn't have to be online.
+List a node's available [private keys](./references/private-keys.md) with the CLI command [`defradb keyring list`](references/cli/defradb_keyring_list.md). The keyring is sourced from the default root directory, unless a different path is given with the option `--rootdir`.
 
-Retrieve a node's identity with the CLI command [`defradb client node-identity`](references/cli/defradb_client_node-identity.md).
+```shell title="List available private keys"
+defradb keyring list
+```
+```text result
+Keys in the keyring:
+- encryption-key
+- node-identity-key
+- peer-key
+- searchable-encryption-key
+```
 
+Retrieve any of the listed private keys with the CLI command [`defradb keyring get <key-name>`](references/cli/defradb_keyring_get.md). The node doesn't have to be online, but the [keyring's secret](references/keys.md#keyring) must be provided.
+
+```shell title="Export the node's peer-key"
 defradb keyring get peer-key
-Enter keyring secret: 
+```
+```text result
 0b0201e3c3f15aa4cd2a0d8e287f2d6a38d644474898268e89fd43d67540758214a2b8208c315d3cab9d3f73071213e2ccd17bd64b48b67e2610a94a7971c5c5
-
-required .env or env var for keyring
+```
