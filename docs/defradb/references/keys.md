@@ -1,7 +1,13 @@
 ---
-title: Private keys
-description: Information on the private keys DefraDB uses to encrypt or sign data.
+title: Private keys and keyring
+description: Information on the private keys DefraDB uses to encrypt or sign data, and the keyring that stores them.
 ---
+
+## Keyring
+
+Keys are stored in the `defradb` keyring, which is initialized and unlocked via the `DEFRA_KEYRING_SECRET` environment variable. The variable can also be defined in a `.env` file located in the working directory, or at a filepath defined by the `--secret-file` flag. The secret must be provided every time the node is started.
+
+## Private keys
 
 DefraDB relies on a number of private keys to encrypt or sign data:
 
@@ -13,8 +19,6 @@ Used to encrypt data at rest.
 Used to produce searchable encrypted artifacts.
 - `node-identity-key`: secp256k1 or ed25519 key (defined by [`datastore.defaultkeytype`](/references/config.md#datastore-defaultkeytype)).  
 Used for [access control](/security/identity.md) and signatures.
-
-Keys are stored in the `defradb` keyring, which is initialized and unlocked via the `DEFRA_KEYRING_SECRET` environment variable. The variable can also be defined in a `.env` file located in the working directory, or at a filepath defined by the `--secret-file` flag. The secret must be provided every time the node is started.
 
 The databases creates keys automatically on startup if they are not found, but you can also generate or import keys manually:
 
