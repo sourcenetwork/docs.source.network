@@ -27,7 +27,7 @@ defradb identity new
 
 When you [start a node](./install.md#start) for the first time, an identity is automatically created (from which [the node's private keys](./references/private-keys.md) are derived). You can extract both public and private keys on an existing node.
 
-### Public key
+### Public key  {/* #export-public-key */}
 
 <Tabs groupId="defra">
   <TabItem value="cli" label="CLI" default>
@@ -59,7 +59,7 @@ When you [start a node](./install.md#start) for the first time, an identity is a
   </TabItem>
 </Tabs>
 
-### Private keys
+### Private keys  {/* #export-private-key */}
 
 List a node's available [private keys](./references/private-keys.md) with the CLI command [`defradb keyring list`](references/cli/defradb_keyring_list.md). The keyring is sourced from the default root directory, unless a different path is given with the option `--rootdir`.
 
