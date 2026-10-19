@@ -33,7 +33,7 @@ query {
 
 - `cid` &ndash; Unique identifier of one (or more) commit.
 - `collectionVersionId` &ndash; ID of the collection version that the commit targeted. Allows you to determine the state of the data model when the change was committed.
-- `depth` &ndash; Position within the chain of commits this one commit is located at (counting from the latest commit). Commits at levels _up to_ the given depth are included.
+- `depth` &ndash; Position within the chain of commits this one commit is located at (counting from the latest commit). Commits at levels _up to_ the given depth are included. `-1` returns blocks at any depth.
 - `docID` &ndash; ID of document involved in the commits.
 - `filter` &ndash; Restrict which commit blocks to retrieve. See [filter](#filter)
 - `groupBy` &ndash; Organize returned commits into groups. See [DQL -> Group results](./dql/group.md) for usage.
@@ -66,7 +66,7 @@ type Commit {
 - `heads` &ndash; Parent commits in the DAG that build the history of this piece of data. Linked blocks are at different depths, and of the same type.
 - `height` &ndash; Location of the commit in the DAG (counting from the root commit). All commits from _add_ operations have a height of `1`;  subsequent local _update_ increments the counter by one for the new commits.
 - `links` &ndash; Child commits in the DAG that contribute to the composition of this commit. Linked blocks are at the same depth, and of different types. Composite commits link to the field commits for the fields that the mutation altered; collection commits link to composite commits.
-- `signature` &ndash; Commit's signature, if one exists. Used to verify the commit's integrity. See [signature](#signature).
+- `signature` &ndash; Commit's signature. Used to verify the commit's integrity. See [signature](#signatures).
 
 {/* Need an extra element after list due to https://github.com/facebook/docusaurus/issues/12583 */}
 
@@ -74,9 +74,9 @@ type Commit {
 </Tabs>
 
 
-## Document commits on creation {/* #obtain-document-commits */}
+## Commits on document creation {/* #obtain-document-commits */}
 
-Create a doc
+Create a new document to observe what commits this generates.
 
 ```graphql
 mutation {
@@ -186,9 +186,9 @@ query {
 }
 ```
 
-## Document commits on update {/* #obtain-document-commits */}
+## Commits on document update {/* #obtain-document-commits */}
 
-When a document is updated or deleted, its commits blocks are not updated. Written commits remain unaltered (unless the document is [truncated](./dql/mutation-delete.md#truncate), in which case all corresponding blocks are removed) and _more commits_ are appended to the old ones, creating a history of changes that leads to the present moment. These commit blocks create a _Direct Acyclic Graph (DAG)_. The latest version of each document is cached, so the database never has to read through the history chain to build the present version of the the data: the latest version is just the tip of such history.
+When a document is updated or deleted, its commits blocks are not updated. Written commits remain unaltered (unless the document is [truncated](./dql/mutation-delete.md#truncate), in which case all corresponding blocks are removed) and _more commits_ are appended to the old ones, creating a history of changes that leads to the present moment. These commit blocks create a _Direct Acyclic Graph (DAG)_. The latest version of each document is cached, so the database never has to read through the history chain to build the present version of the data: the latest version is just the tip of such history.
 
 Update the previous document, adding a value for the field `genre`.
 
@@ -269,8 +269,9 @@ query {
 ```
 
 :::tip
-The example above queries for the top composite blocks and fetches its links.
-However, wishing to inspect commits generated from the latest update, it can feel natural to query for commits at `depth: 1`. 
+The example above queries for the top composite blocks and fetches its links. This ensures that only blocks created as result of the latest database operation are returned.
+
+It can feel natural to query for commits at `depth: 1`. This type of query makes sense to get a view of the _latest state_ of the document, as it returns the top layer for blocks of all types, regardless of their `height` value.
 
 ```graphql
 query {
@@ -305,11 +306,35 @@ query {
 }
 ```
 
-This type of query makes sense to get a view of the latest state of the document, as it returns the top layer for blocks of all types, regardless of their `height` value. 
-
 In the example, `genre` was updated in the second query and has `height: 2` (corresponding to `depth: 1`). On the other hand, `title` and `plot` were not changed in the second query and have `height: 1`, and they are surfaced when querying for `depth: 1` because there are no blocks on top of them.
 :::
 
+## Signatures {/* #signatures */}
+
+Commit blocks are signed by the [actor's identity](./security/identity.md) responsible of the database mutation that created such blocks. 
+
+
+<Tabs groupId="defra">
+  <TabItem value="cli" label="CLI" default>
+    You can verify that the signature is valid for a block with the CLI command [`defradb client block verify-signature <public-key> <cid>`](./references/cli/defradb_client_block_verify-signature.md).
+
+    ```shell title='Verify signature for a commit block'
+    defradb client block verify-signature 023531430d1053f4eeab4bf520522186698d7e16d53cf0e80df35a158c7a74261e bafyreidapjfuskkddbuu5eevkf5usgv6biot7dqlmxau7g5copqr2ax6ha
+    ```
+    ```text result
+    Block's signature verified
+    ```
+  </TabItem>
+  <TabItem value="http" label="HTTP API">
+    You can verify that the signature is valid for a block by submitting a `GET` request to the HTTP endpoint [`/block/verify-signature`](/defradb/references/http/api/verify-block/), providing `public-key` and `cid` as parameters. The request doesn't need to be authenticated. Successful verification yields no output.
+
+    ```http
+    GET http://localhost:9181/block/verify-signature?public-key=<public-key>&cid=<cid> HTTP/2
+    accept: application/json
+    ```
+  </TabItem>
+</Tabs>
+
 :::note
-at height > 1, only composites are signed. field blocks are signed at height 1 only to seed entropy for cids, but not needed cryptographically.
+At `height > 1`, only composite blocks are signed. Field blocks are only signed at `height = 1` to seed entropy for the upcoming chain of commits. There's no cryptographic need to sign field blocks at every height; signing composites is enough to guarantee integrity.
 :::

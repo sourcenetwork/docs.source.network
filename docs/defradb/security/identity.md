@@ -44,7 +44,7 @@ When you [start a node](./install.md#start) for the first time, an identity is a
     ```
   </TabItem>
   <TabItem value="http" label="HTTP API">
-    Retrieve a node's identity by submitting a `GET` request to the HTTP endpoint [`/node/identity`](/defradb/references/http/api/get-node-identity/). The request doesn't need to be authenticated. The node must be online.
+    Retrieve a node's identity by submitting a `GET` request to the HTTP endpoint [`/node/identity`](/defradb/references/http/api/get-node-identity/). The request doesn't need to be authenticated.
 
     ```http 
     GET http://localhost:9181/node/identity HTTP/2
