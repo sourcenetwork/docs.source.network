@@ -474,9 +474,6 @@ When [grouping on multiple fields](group.md#multiple-fields), you can run an agg
         ],
         // highlight-next-line
         "MAX": 4.21,
-        "author": {
-          "name": "Victor Hugo"
-        },
         "genre": "Fiction"
       },
       {
@@ -496,9 +493,6 @@ When [grouping on multiple fields](group.md#multiple-fields), you can run an agg
         ],
         // highlight-next-line
         "MAX": 4.09,
-        "author": {
-          "name": "George Orwell"
-        },
         "genre": "Memoir"
       },
       {
@@ -518,9 +512,6 @@ When [grouping on multiple fields](group.md#multiple-fields), you can run an agg
         ],
         // highlight-next-line
         "MAX": 4.18,
-        "author": {
-          "name": "David Foster Wallace"
-        },
         "genre": "Nonfiction"
       }
     ]
