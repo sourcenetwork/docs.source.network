@@ -319,7 +319,6 @@ To create groups basing on the value of multiple fields, you have two options:
 {
   Book(groupBy: [genre]) {
     genre
-    author { name }
     # highlight-next-line
     GROUP(groupBy: [author]) {
       author { name }
