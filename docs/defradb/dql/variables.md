@@ -280,3 +280,10 @@ query ($title: String = "%%", $minRating: Float64) {
   }
 }
 ```
+{ /*
+```json title="Variables"
+{
+  "minRating": 3.8
+}
+```
+*/ }
