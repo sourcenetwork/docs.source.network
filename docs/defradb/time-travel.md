@@ -22,54 +22,48 @@ DefraDB's data model is based on MerkleCRDTs. Each document has a graph of all o
 
 <Tabs groupId="commits-syntax">
   <TabItem value="commits-query" label="_commits query" default>
-```graphql
-query {
-  _commits(
-    docID: ID, cid: [ID], filter: CommitsFilterArg, depth: Int, limit: Int, offset: Int,
-    collectionVersionId: String, order: [commitsOrderArg], groupBy: [commitFields]
-  ) [Commit]
-}
-```
+    ```graphql
+    query {
+      _commits(
+        docID: ID, cid: [ID], filter: CommitsFilterArg, depth: Int, limit: Int, offset: Int,
+        collectionVersionId: String, order: [commitsOrderArg], groupBy: [commitFields]
+      ) [Commit]
+    }
+    ```
 
-- `cid` &ndash; Unique identifier of one (or more) commit.
-- `collectionVersionId` &ndash; ID of the collection version that the commit targeted. Allows you to determine the state of the data model when the change was committed.
-- `depth` &ndash; Position within the chain of commits this one commit is located at (counting from the latest commit). Commits at levels _up to_ the given depth are included. `-1` returns blocks at any depth.
-- `docID` &ndash; ID of document involved in the commits.
-- `filter` &ndash; Restrict which commit blocks to retrieve. See [filter](#filter)
-- `groupBy` &ndash; Organize returned commits into groups. See [DQL -> Group results](./dql/group.md) for usage.
-- `limit` &ndash; Maximum number of commits to return.
-- `offset` &ndash; Number of commits to skip from the return list (pagination).
-
-{/* Need an extra element after list due to https://github.com/facebook/docusaurus/issues/12583 */}
-
+    - `cid` &ndash; Unique identifier of one (or more) commit.
+    - `collectionVersionId` &ndash; ID of the collection version that the commit targeted. Allows you to determine the state of the data model when the change was committed.
+    - `depth` &ndash; Position within the chain of commits this one commit is located at (counting from the latest commit). Commits at levels _up to_ the given depth are included. `-1` returns blocks at any depth.
+    - `docID` &ndash; ID of document involved in the commits.
+    - `filter` &ndash; Restrict which commit blocks to retrieve. See [filter](#filter)
+    - `groupBy` &ndash; Organize returned commits into groups. See [DQL -> Group results](./dql/group.md) for usage.
+    - `limit` &ndash; Maximum number of commits to return.
+    - `offset` &ndash; Number of commits to skip from the return list (pagination).
   </TabItem>
-  <TabItem value="commits-obj" label="Commit object" default>
-```graphql
-type Commit {
-  docID: ID
-  cid: ID
-  delta: String
-  height: Int
-  fieldName: String
-  collectionVersionId: String
-  links(docID, cid, filter, groupBy, order): [Commit]
-  heads(docID, cid, filter, groupBy, order): [Commit]
-  signature: Signature
-}
-```
+  <TabItem value="commits-obj" label="Commit object">
+    ```graphql
+    type Commit {
+      docID: ID
+      cid: ID
+      delta: String
+      height: Int
+      fieldName: String
+      collectionVersionId: String
+      links(docID, cid, filter, groupBy, order): [Commit]
+      heads(docID, cid, filter, groupBy, order): [Commit]
+      signature: Signature
+    }
+    ```
 
-- `cid` &ndash; Unique identifier of a commit.
-- `collectionVersionId` &ndash; ID of the [collection](./schema/collections.md) version that the commit targeted. Determines the state of the data model when the change was committed.
-- `docID` &ndash; ID of document involved in the commits.
-- `delta` &ndash; base64 encoded CBOR payload value (the _content_ of the commit).
-- `fieldName` &ndash; Name of the field that this commit was committed against. The value is `"_C"` for composite blocks and null for collection blocks.
-- `heads` &ndash; Parent commits in the DAG that build the history of this piece of data. Linked blocks are at different depths, and of the same type.
-- `height` &ndash; Location of the commit in the DAG (counting from the root commit). All commits from _add_ operations have a height of `1`;  subsequent local _update_ increments the counter by one for the new commits.
-- `links` &ndash; Child commits in the DAG that contribute to the composition of this commit. Linked blocks are at the same depth, and of different types. Composite commits link to the field commits for the fields that the mutation altered; collection commits link to composite commits.
-- `signature` &ndash; Commit's signature. Used to verify the commit's integrity. See [signature](#signatures).
-
-{/* Need an extra element after list due to https://github.com/facebook/docusaurus/issues/12583 */}
-
+    - `cid` &ndash; Unique identifier of a commit.
+    - `collectionVersionId` &ndash; ID of the [collection](./schema/collections.md) version that the commit targeted. Determines the state of the data model when the change was committed.
+    - `docID` &ndash; ID of document involved in the commits.
+    - `delta` &ndash; base64 encoded CBOR payload value (the _content_ of the commit).
+    - `fieldName` &ndash; Name of the field that this commit was committed against. The value is `"_C"` for composite blocks and null for collection blocks.
+    - `heads` &ndash; Parent commits in the DAG that build the history of this piece of data. Linked blocks are at different depths, and of the same type.
+    - `height` &ndash; Location of the commit in the DAG (counting from the root commit). All commits from _add_ operations have a height of `1`;  subsequent local _update_ increments the counter by one for the new commits.
+    - `links` &ndash; Child commits in the DAG that contribute to the composition of this commit. Linked blocks are at the same depth, and of different types. Composite commits link to the field commits for the fields that the mutation altered; collection commits link to composite commits.
+    - `signature` &ndash; Commit's signature. Used to verify the commit's integrity. See [signature](#signatures).
   </TabItem>
 </Tabs>
 
