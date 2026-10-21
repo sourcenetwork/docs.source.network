@@ -9,17 +9,25 @@ In the cruel life out there, anybody can trip you up and deny it was them, or al
 
 The `signature` object is available for every commit object:
 
-```json
-"signature": {
-  "identity": "023531430d1053f4eeab4bf520522186698d7e16d53cf0e80df35a158c7a74261e",
-  "type": "ES256K",
-  "value": "MEUCIQDd0qjbTLAWH2egv3qMKE7afW8O/Ki1Wgum2bwBP/ziHAIgBBtDcYgqdBCUs1P+pV2ZYr/awSd10FkXiGCPKCDk944="
+```graphql
+type Signature {
+    identity: String,
+    type: String,
+    value: String
 }
 ```
 
 - `identity` &ndash; Public key of the signing [identity](./security/identity.md).
 - `type` &ndash; Type of key used for signing.
 - `value` &ndash; Signature value.
+
+```json title='Example signature'
+"signature": {
+  "identity": "023531430d1053f4eeab4bf520522186698d7e16d53cf0e80df35a158c7a74261e",
+  "type": "ES256K",
+  "value": "MEUCIQDd0qjbTLAWH2egv3qMKE7afW8O/Ki1Wgum2bwBP/ziHAIgBBtDcYgqdBCUs1P+pV2ZYr/awSd10FkXiGCPKCDk944="
+}
+```
 
 ## Verify a block's signature {/* #verify */}
 
