@@ -65,12 +65,12 @@ DefraDB's data model is based on MerkleCRDTs. Each document has a graph of all o
     - `heads` &ndash; Parent commits in the DAG that build the history of this piece of data. Linked blocks are at different depths, and of the same type.
     - `height` &ndash; Location of the commit in the DAG (counting from the root commit). All commits from _add_ operations have a height of `1`;  subsequent local _update_ increments the counter by one for the new commits.
     - `links` &ndash; Child commits in the DAG that contribute to the composition of this commit. Linked blocks are at the same depth, and of different types. Composite commits link to the field commits for the fields that the mutation altered; collection commits link to composite commits.
-    - `signature` &ndash; Commit's signature. Used to verify the commit's integrity. See [signature](#signatures).
+    - `signature` &ndash; Commit's signature. Used to verify the commit's integrity. See [signature](./security/signatures.md).
   </TabItem>
 </Tabs>
 
 
-## Commits on document creation {/* #obtain-document-commits */}
+## Commits on document creation {/* #doc-create */}
 
 Create a new document to observe what commits this generates.
 
@@ -97,7 +97,7 @@ mutation {
 
 To retrieve the commits that resulted from the document creation, use a `_commits` query with the ID of the document.
 
-In this case, there are three commit blocks: two are for the individual fields `title` and `plot`; the third is the composite (`_C`) block, which references the field blocks through the `links` list. You can think of the composite block as a directory containing files. Each commit is uniquely identified by its `cid` field, with the `delta` field containing the data payload that was saved into the storage. In this first layer, all blocks are signed by the identity which submitted the query (see [signature](#signature)).
+In this case, there are three commit blocks: two are for the individual fields `title` and `plot`; the third is the composite (`_C`) block, which references the field blocks through the `links` list. You can think of the composite block as a directory containing files. Each commit is uniquely identified by its `cid` field, with the `delta` field containing the data payload that was saved into the storage. In this first layer, all blocks are [signed](./security/signatures.md) by the identity which submitted the query.
 
 ```graphql
 query {
@@ -182,7 +182,7 @@ query {
 }
 ```
 
-## Commits on document update {/* #obtain-document-commits */}
+## Commits on document update {/* #doc-update */}
 
 When a document is updated or deleted, its commits blocks are not updated. Written commits remain unaltered (unless the document is [truncated](./dql/mutation-delete.md#truncate), in which case all corresponding blocks are removed) and _more commits_ are appended to the old ones, creating a history of changes that leads to the present moment. These commit blocks create a _Direct Acyclic Graph (DAG)_. The latest version of each document is cached, so the database never has to read through the history chain to build the present version of the data: the latest version is just the tip of such history.
 
@@ -303,34 +303,4 @@ query {
 ```
 
 In the example, `genre` was updated in the second query and has `height: 2` (corresponding to `depth: 1`). On the other hand, `title` and `plot` were not changed in the second query and have `height: 1`, and they are surfaced when querying for `depth: 1` because there are no blocks on top of them.
-:::
-
-## Signatures {/* #signatures */}
-
-Commit blocks are signed by the [actor's identity](./security/identity.md) responsible of the database mutation that created such blocks. 
-
-
-<Tabs groupId="defra">
-  <TabItem value="cli" label="CLI" default>
-    You can verify that the signature is valid for a block with the CLI command [`defradb client block verify-signature <public-key> <cid>`](./references/cli/defradb_client_block_verify-signature.md).
-
-    ```shell title='Verify signature for a commit block'
-    defradb client block verify-signature 023531430d1053f4eeab4bf520522186698d7e16d53cf0e80df35a158c7a74261e bafyreidapjfuskkddbuu5eevkf5usgv6biot7dqlmxau7g5copqr2ax6ha
-    ```
-    ```text result
-    Block's signature verified
-    ```
-  </TabItem>
-  <TabItem value="http" label="HTTP API">
-    You can verify that the signature is valid for a block by submitting a `GET` request to the HTTP endpoint [`/block/verify-signature`](/defradb/references/http/api/verify-block/), providing `public-key` and `cid` as parameters. The request doesn't need to be authenticated. Successful verification yields no output.
-
-    ```http
-    GET http://localhost:9181/block/verify-signature?public-key=<public-key>&cid=<cid> HTTP/2
-    accept: application/json
-    ```
-  </TabItem>
-</Tabs>
-
-:::note
-At `height > 1`, only composite blocks are signed. Field blocks are only signed at `height = 1` to seed entropy for the upcoming chain of commits. There's no cryptographic need to sign field blocks at every height; signing composites is enough to guarantee integrity.
 :::
