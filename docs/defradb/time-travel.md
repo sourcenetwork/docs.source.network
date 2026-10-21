@@ -184,7 +184,7 @@ query {
 
 ## Commits on document update {/* #doc-update */}
 
-When a document is updated or deleted, its commits blocks are not updated. Written commits remain unaltered (unless the document is [truncated](./dql/mutation-delete.md#truncate), in which case all corresponding blocks are removed) and _more commits_ are appended to the old ones, creating a history of changes that leads to the present moment. These commit blocks create a _Direct Acyclic Graph (DAG)_. The latest version of each document is cached, so the database never has to read through the history chain to build the present version of the data: the latest version is just the tip of such history.
+When a document is updated or deleted, its commits blocks are not updated. Written commits remain unaltered (unless the document is [truncated](./dql/mutation-delete.md#truncate), in which case all corresponding blocks are removed) and _more commits_ are appended to the old ones, creating a history of changes that leads to the present moment. These commit blocks create a _Directed Acyclic Graph (DAG)_. The latest version of each document is cached, so the database never has to read through the history chain to build the present version of the data: the latest version is just the tip of such history.
 
 Update the previous document, adding a value for the field `genre`.
 
@@ -201,7 +201,7 @@ mutation {
 ```json result
 {
   "data": {
-    "add_Book": [
+    "update_Book": [
       {
         "_docID": "bae-53e80819-b7b4-5fc4-a681-b183b64a8262",
         "title": "1984"
@@ -218,7 +218,7 @@ Blocks for the same field name at different heights build a history chain via th
 ```
 query {
   _commits(
-    docID: "bae-1da55608-e747-572b-8271-2ef35b66520d", 
+    docID: "bae-53e80819-b7b4-5fc4-a681-b183b64a8262", 
     filter: { fieldName: { _eq: "_C" } },
     depth: 1
   ) {
