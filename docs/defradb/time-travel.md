@@ -4,6 +4,8 @@ title: Explore the history of documents (time traveling queries)
 
 DefraDB's data model is based on MerkleCRDTs. Each document has a graph of all of its updates, similar to Git. The updates are called `commit`s and are identified by `cid`s (content identifiers). Each commit references its parents by their `cid`s.
 
+![Commit blocks](./media/commit-blocks/commit-blocks.png)
+
 <details>
   <summary>Display database setup</summary>
 
