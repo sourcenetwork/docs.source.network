@@ -304,3 +304,147 @@ query {
 
 In the example, `genre` was updated in the second query and has `height: 2` (corresponding to `depth: 1`). On the other hand, `title` and `plot` were not changed in the second query and have `height: 1`, and they are surfaced when querying for `depth: 1` because there are no blocks on top of them.
 :::
+
+## Filter commits {/* #filter */}
+
+You can restrict the commits result to a subset via the `filter` argument to `_commits` queries.
+
+
+### Single filter {/* #filter-single */}
+
+```text title="Syntax"
+filter: { fieldName: { <scalar-operator>: <field> } }
+```
+
+- `<scalar-operator>` &ndash; Operator to use for comparison. Supported values: `_eq`, `_neq`, `_in`, `_nin`. For more information, see [DQL -> Filter operators](dql/filter.md#scalar-operators).
+- `<field>` &ndash; Field value to filter against (`_C` for composite blocks).
+
+```graphql title='Retrieve only composite blocks at certain depth'
+query {
+  _commits(
+    docID: "bae-1da55608-e747-572b-8271-2ef35b66520d",
+    depth: 1,
+    # highlight-next-line
+    filter: { fieldName: { _eq: "_C" } }
+  ) {
+    fieldName
+    cid
+    height
+  }
+}
+```
+```json result
+{
+  "data": {
+    "_commits": [
+      {
+        "cid": "bafyreicwrhqj2hffnukwgsgabn6kvt3ugselh3jopj3hjn2h6r6jjddb7y",
+        "fieldName": "_C",
+        "height": 3
+      }
+    ]
+  }
+}
+```
+
+```graphql title='Retrieve only blocks for field "title" at certain depth'
+query {
+  _commits(
+    docID: "bae-1da55608-e747-572b-8271-2ef35b66520d",
+    depth: 1,
+    # highlight-next-line
+    filter: { fieldName: { _eq: "title" } }
+  ) {
+    fieldName
+    cid
+    height
+  }
+}
+```
+```json result
+{
+  "data": {
+    "_commits": [
+      {
+        "cid": "bafyreiaop4astmiumafndbxyxfba7n4nnkvdig6khhhs6ahd6mog3fklxi",
+        "fieldName": "title",
+        "height": 2
+      }
+    ]
+  }
+}
+```
+
+### Composite filter {/* #filter-composite */}
+
+```text title="Syntax"
+filter: { <logical-operator>: [{ fieldName: { <scalar-operator>: <value> } }, ...] }
+```
+
+- `<logical-operator>` &ndash; Logical operator to combine the list of field conditions. Supported values: `_or`, `_and`.
+- `<scalar-operator>` &ndash; Operator to use for comparison. Supported values: `_eq`, `_neq`, `_in`, `_nin`. For more information, see [DQL -> Filter operators](dql/filter.md#scalar-operators).
+- `<field>` &ndash; Field value to filter against (`_C` for composite blocks).
+
+```graphql title='Retrieve blocks for field "title" or "plot" at certain depth'
+query {
+  _commits(
+    docID: "bae-1da55608-e747-572b-8271-2ef35b66520d",
+    depth: 1,
+    # highlight-next-line
+    filter: { _or: [{ fieldName: { _eq: "title" } }, { fieldName: { _eq: "plot" } }] }
+  ) {
+    fieldName
+    cid
+    height
+  }
+}
+```
+```json result
+{
+  "data": {
+    "_commits": [
+      {
+        "cid": "bafyreifgevb75flatgzvwgz5qgq6c3mb5i3sh6lw47lhkka5vv2ptkqlbe",
+        "fieldName": "plot",
+        "height": 2
+      },
+      {
+        "cid": "bafyreiaop4astmiumafndbxyxfba7n4nnkvdig6khhhs6ahd6mog3fklxi",
+        "fieldName": "title",
+        "height": 2
+      }
+    ]
+  }
+}
+```
+
+
+```
+query {
+  Book {
+    _docID 
+    title
+    _version {
+      cid
+      fieldName
+      links {
+        fieldName
+        delta
+      }
+    }
+  }
+}
+```
+
++ remark on cached latest state
+
+also
+```
+query {
+  User(cid:"-whatever-") {
+    _version {
+      cid height signature { __typename }
+    }
+  }
+}
+```
