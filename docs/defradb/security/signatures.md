@@ -3,7 +3,7 @@ title: Signatures
 ---
 
 Signatures allow you to track _who_ did _which_ changes, for every document.
-In the cruel life out there, anybody can trip you up and deny it was them, or alter the content of your files and deny any involvement. In DefraDB, each change is not only logged as a [commit block](./time-travel.md), but also signed with the [actor's identity](./security/identity.md) responsible of the database mutation.
+In the cruel life out there, anybody can trip you up and deny it was them, or alter the content of your files and deny any involvement. In DefraDB, each change is not only logged as a [commit block](time-travel.md), but also signed with the [actor's identity](security/identity.md) responsible of the database mutation.
 
 ## Signature object {/* #signature-obj */}
 
@@ -17,7 +17,7 @@ type Signature {
 }
 ```
 
-- `identity` &ndash; Public key of the signing [identity](./security/identity.md).
+- `identity` &ndash; Public key of the signing [identity](security/identity.md).
 - `type` &ndash; Type of key used for signing.
 - `value` &ndash; Signature value.
 
@@ -33,7 +33,7 @@ type Signature {
 
 <Tabs groupId="defra">
   <TabItem value="cli" label="CLI" default>
-    You can verify that the signature is valid for a block with the CLI command [`defradb client block verify-signature <public-key> <cid>`](./references/cli/defradb_client_block_verify-signature.md).
+    You can verify that the signature is valid for a block with the CLI command [`defradb client block verify-signature <public-key> <cid>`](references/cli/defradb_client_block_verify-signature.md).
 
     ```shell title='Verify signature for a commit block'
     defradb client block verify-signature 023531430d1053f4eeab4bf520522186698d7e16d53cf0e80df35a158c7a74261e bafyreidapjfuskkddbuu5eevkf5usgv6biot7dqlmxau7g5copqr2ax6ha

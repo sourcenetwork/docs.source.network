@@ -4,7 +4,7 @@ title: Explore the history of documents (time traveling queries)
 
 DefraDB's data model is based on MerkleCRDTs. Each document has a graph of all of its updates, similar to Git. The updates are called `commit`s and are identified by `cid`s (content identifiers). Each commit references its parents by their `cid`s.
 
-![Commit blocks](./media/commit-blocks/commit-blocks.png)
+![Commit blocks](media/commit-blocks/commit-blocks.png)
 
 <details>
   <summary>Display database setup</summary>
@@ -34,11 +34,11 @@ DefraDB's data model is based on MerkleCRDTs. Each document has a graph of all o
     ```
 
     - `cid` &ndash; Unique identifier of one (or more) commit.
-    - `collectionVersionId` &ndash; ID of the collection version that the commit targeted. Allows you to determine the state of the data model when the change was committed.
+    - `collectionVersionId` &ndash; ID of the [collection](schema/collections.md) version that the commit targeted. Allows you to determine the state of the data model when the change was committed.
     - `depth` &ndash; Position within the chain of commits this one commit is located at (counting from the latest commit). Commits at levels _up to_ the given depth are included. `-1` returns blocks at any depth.
     - `docID` &ndash; ID of document involved in the commits.
     - `filter` &ndash; Restrict which commit blocks to retrieve. See [filter](#filter)
-    - `groupBy` &ndash; Organize returned commits into groups. See [DQL -> Group results](./dql/group.md) for usage.
+    - `groupBy` &ndash; Organize returned commits into groups. See [DQL -> Group results](dql/group.md) for usage.
     - `limit` &ndash; Maximum number of commits to return.
     - `offset` &ndash; Number of commits to skip from the return list (pagination).
   </TabItem>
@@ -58,14 +58,14 @@ DefraDB's data model is based on MerkleCRDTs. Each document has a graph of all o
     ```
 
     - `cid` &ndash; Unique identifier of a commit.
-    - `collectionVersionId` &ndash; ID of the [collection](./schema/collections.md) version that the commit targeted. Determines the state of the data model when the change was committed.
+    - `collectionVersionId` &ndash; ID of the [collection](schema/collections.md) version that the commit targeted. Determines the state of the data model when the change was committed.
     - `docID` &ndash; ID of document involved in the commits.
     - `delta` &ndash; base64 encoded CBOR payload value (the _content_ of the commit).
     - `fieldName` &ndash; Name of the field that this commit was committed against. The value is `"_C"` for composite blocks and null for collection blocks.
     - `heads` &ndash; Parent commits in the DAG that build the history of this piece of data. Linked blocks are at different depths, and of the same type.
     - `height` &ndash; Location of the commit in the DAG (counting from the root commit). All commits from _add_ operations have a height of `1`;  subsequent local _update_ increments the counter by one for the new commits.
     - `links` &ndash; Child commits in the DAG that contribute to the composition of this commit. Linked blocks are at the same depth, and of different types. Composite commits link to the field commits for the fields that the mutation altered; collection commits link to composite commits.
-    - `signature` &ndash; Commit's signature. Used to verify the commit's integrity. See [signature](./security/signatures.md).
+    - `signature` &ndash; Commit's signature. Used to verify the commit's integrity. See [signature](security/signatures.md).
   </TabItem>
 </Tabs>
 
@@ -97,7 +97,7 @@ mutation {
 
 To retrieve the commits that resulted from the document creation, use a `_commits` query with the ID of the document.
 
-In this case, there are three commit blocks: two are for the individual fields `title` and `plot`; the third is the composite (`_C`) block, which references the field blocks through the `links` list. You can think of the composite block as a directory containing files. Each commit is uniquely identified by its `cid` field, with the `delta` field containing the data payload that was saved into the storage. In this first layer, all blocks are [signed](./security/signatures.md) by the identity which submitted the query.
+In this case, there are three commit blocks: two are for the individual fields `title` and `plot`; the third is the composite (`_C`) block, which references the field blocks through the `links` list. You can think of the composite block as a directory containing files. Each commit is uniquely identified by its `cid` field, with the `delta` field containing the data payload that was saved into the storage. In this first layer, all blocks are [signed](security/signatures.md) by the identity which submitted the query.
 
 ```graphql
 query {
@@ -184,7 +184,7 @@ query {
 
 ## Commits on document update {/* #doc-update */}
 
-When a document is updated or deleted, its commits blocks are not updated. Written commits remain unaltered (unless the document is [truncated](./dql/mutation-delete.md#truncate), in which case all corresponding blocks are removed) and _more commits_ are appended to the old ones, creating a history of changes that leads to the present moment. These commit blocks create a _Directed Acyclic Graph (DAG)_. The latest version of each document is cached, so the database never has to read through the history chain to build the present version of the data: the latest version is just the tip of such history.
+When a document is updated or deleted, its commits blocks are not updated. Written commits remain unaltered (unless the document is [truncated](dql/mutation-delete.md#truncate), in which case all corresponding blocks are removed) and _more commits_ are appended to the old ones, creating a history of changes that leads to the present moment. These commit blocks create a _Directed Acyclic Graph (DAG)_. The latest version of each document is cached, so the database never has to read through the history chain to build the present version of the data: the latest version is just the tip of such history.
 
 Update the previous document, adding a value for the field `genre`.
 
@@ -213,9 +213,9 @@ mutation {
 
 To retrieve the commits resulting from the update mutation, pick the latest composite and fetch its linked blocks. The result shows the field block for `genre` connected to the returned top composite block, and the previous composite block in the history referenced in the `heads` list. 
 
-Blocks for the same field name at different heights build a history chain via their `heads`, each new one referencing the previous one via its `cid`. Because the `cid` is a cryptograhically secure value (the hash of the whole block), the structure of the chain guarantees data integrity by itself: if any part of the data was tampered, the history chain would become invalid.
+Blocks for the same field name at different heights build a history chain via their `heads`, each new one referencing the previous one via its `cid`. Because the `cid` is a cryptographically secure value (the hash of the whole block), the structure of the chain guarantees data integrity by itself: if any part of the data was tampered, the history chain would become invalid.
 
-```
+```graphql
 query {
   _commits(
     docID: "bae-53e80819-b7b4-5fc4-a681-b183b64a8262", 
