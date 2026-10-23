@@ -247,11 +247,11 @@ filter: {
     # highlight-start
     filter: {
       _or: [
-	{ genre: { _eq: "Fiction" } },
-	{ _and: [
-	  { rating: { _geq: 4 } },
-	  { rating: { _leq: 5 } },
-	] },
+        { genre: { _eq: "Fiction" } },
+	      { _and: [
+	        { rating: { _geq: 4 } },
+	        { rating: { _leq: 5 } },
+	      ] },
       ]
     }
     # highlight-end
