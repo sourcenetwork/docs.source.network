@@ -121,20 +121,24 @@ Once you have [created some documents](mutation-create.md), you can query the da
 ```graphql title="Syntax &ndash; Query block" test-skip
 {
   TYPE(
-    filter: object, docID: [ID],
-    order: [object],
-    limit: int, offset: int,
-    orderBy: [object]
+    filter: Object, docID: [ID],
+    cid: String,
+    order: [Object],
+    limit: Int, offset: Int,
+    orderBy: [Object],
+    showDeleted: Boolean
   ) {
-    [returnfield]
+    [field]
   }
 }
 ```
 - `TYPE` &ndash; Name of the [collection](schema/collections.md) to query.
 - `filter`, `docID` &ndash; Criteria for documents to select, see [Filter documents](filter.md).
+- `cid` &ndash; Commit identifier from which documents should be sourced, see [Explore the history of documents](time-travel.md#query-by-cid).
 - `order` &ndash; Results sorting fields, see [Sort results](order.md).
 - `limit`, `offset` &ndash; Number of results to return/skip, see [Limit and paginate results](limit-paginate.md).
 - `groupBy` &ndash; Fields to group results by, see [Group results](group.md).
+- `showDeleted` &ndash; Whether to include soft-deleted documents, see [Delete documents -> Soft-delete](dql/mutation-delete.md/#soft-delete).
 - `[field]` &ndash; List of fields to return for the selected documents. Queries return the exact fields requested (GraphQL has no equivalent of the SQL `SELECT *` syntax).
 
 ```graphql title="Example query &ndash; Filter books by genre and author's name; return 3 ordered by title"

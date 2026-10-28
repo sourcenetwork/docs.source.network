@@ -20,7 +20,9 @@ DefraDB's data model is based on MerkleCRDTs. Each document has a graph of all o
   ```
 </details>
 
-## Syntax
+## Query for commits (`_commits` queries) {/* #_commits-queries*/ }
+
+### Syntax {/* #_commits-syntax*/}
 
 <Tabs groupId="commits-syntax">
   <TabItem value="commits-query" label="_commits query" default>
@@ -70,7 +72,7 @@ DefraDB's data model is based on MerkleCRDTs. Each document has a graph of all o
 </Tabs>
 
 
-## Commits on document creation {/* #doc-create */}
+### Commits on document creation {/* #_commits-doc-create */}
 
 Create a new document to observe what commits this generates.
 
@@ -182,7 +184,7 @@ query {
 }
 ```
 
-## Commits on document update {/* #doc-update */}
+### Commits on document update {/* #_commits-doc-update */}
 
 When a document is updated or deleted, its commits blocks are not updated. Written commits remain unaltered (unless the document is [truncated](dql/mutation-delete.md#truncate), in which case all corresponding blocks are removed) and _more commits_ are appended to the old ones, creating a history of changes that leads to the present moment. These commit blocks create a _Directed Acyclic Graph (DAG)_. The latest version of each document is cached, so the database never has to read through the history chain to build the present version of the data: the latest version is just the tip of such history.
 
@@ -309,11 +311,17 @@ In the example, `genre` was updated in the second query and has `height: 2` (cor
 
 You can restrict the commits result to a subset via the `filter` argument to `_commits` queries.
 
+- [Single filter](#filter-single) &ndash; Restrict blocks to a specific field name (or composite/collection blocks).
+- [Composite filter](#filter-composite) &ndash; Restrict blocks to an `and`/`or` combination of fields.
 
 ### Single filter {/* #filter-single */}
 
 ```text title="Syntax"
-filter: { fieldName: { <scalar-operator>: <field> } }
+filter: {
+  fieldName: {
+    <scalar-operator>: <field>
+  }
+}
 ```
 
 - `<scalar-operator>` &ndash; Operator to use for comparison. Supported values: `_eq`, `_neq`, `_in`, `_nin`. For more information, see [DQL -> Filter operators](dql/filter.md#scalar-operators).
@@ -378,7 +386,16 @@ query {
 ### Composite filter {/* #filter-composite */}
 
 ```text title="Syntax"
-filter: { <logical-operator>: [{ fieldName: { <scalar-operator>: <value> } }, ...] }
+filter: {
+  <logical-operator>: [
+    {
+      fieldName: {
+        <scalar-operator>: <value>
+      }
+    }, 
+    ...
+  ]
+}
 ```
 
 - `<logical-operator>` &ndash; Logical operator to combine the list of field conditions. Supported values: `_or`, `_and`.
@@ -418,11 +435,63 @@ query {
 }
 ```
 
+## Get document or field at specific commit {/* #query-by-cid */}
 
-```
+To retrieve a document from a previous state, get the `cid` of the composite block referencing that state, and use it to query the document type.
+
+```graphql title='Get document in the state it was at the given (composite) commit ID'
 query {
-  Book {
-    _docID 
+  Book(cid: "bafyreidgr7rwyheskxqrmm6lwfacgc7vbiukenv2ppah562avd25rljkcu") { 
+    title
+    plot
+  }
+}
+```
+```json result
+{
+  "data": {
+    "Book": [
+      {
+        "plot": "A masterpiece of rebellion and imprisonment where war is peace, freedom is slavery, and Big Brother is watching.",
+        "title": "1984"
+      }
+    ]
+  }
+}
+```
+
+:::note
+You can also use the commit ID of a field block, but information about other fields won't be shown. For example, querying `Book` with a `cid` relating to an update for `title` shows the field `plot` has value `null`. To include the state of all fields, use the composite commit at the same height.
+
+```graphql title='Get document state using cid for a specific field'
+query {
+  Book(cid: "bafyreifeswomzh7doh34t6pcukrktrf4vimazuf32uywrststovczq45ua") { 
+    title
+    plot
+  }
+}
+```
+```json result
+{
+  "data": {
+    "Book": [
+      {
+        "plot": null,
+        "title": "1984"
+      }
+    ]
+  }
+}
+```
+:::
+
+## Get commit history for a document {/* #query-commits-for-doc-type */}
+
+Include the `_version` sub-object in the return set to retrieve the document commit history. The whole commit chain is surfaced in this way, although it only includes composite blocks (from which you can return the related field commits by returning its `links`).
+
+```graphql title='Retrieve document and its commit history'
+query {
+  Book { 
     title
     _version {
       cid
@@ -435,16 +504,63 @@ query {
   }
 }
 ```
-
-+ remark on cached latest state
-
-also
-```
-query {
-  User(cid:"-whatever-") {
-    _version {
-      cid height signature { __typename }
-    }
+```json result
+{
+  "data": {
+    "Book": [
+      {
+        "_version": [
+          {
+            "cid": "bafyreicwrhqj2hffnukwgsgabn6kvt3ugselh3jopj3hjn2h6r6jjddb7y",
+            "fieldName": "_C",
+            "links": [
+              {
+                "delta": "ZDE5ODU=",
+                "fieldName": "title"
+              },
+              {
+                "delta": "cUEgY2hlZXJmdWwgc3Rvcnku",
+                "fieldName": "plot"
+              }
+            ]
+          },
+          {
+            "cid": "bafyreidapjfuskkddbuu5eevkf5usgv6biot7dqlmxau7g5copqr2ax6ha",
+            "fieldName": "_C",
+            "links": [
+              {
+                "delta": "aER5c3RvcGlh",
+                "fieldName": "genre"
+              }
+            ]
+          },
+          {
+            "cid": "bafyreidgr7rwyheskxqrmm6lwfacgc7vbiukenv2ppah562avd25rljkcu",
+            "fieldName": "_C",
+            "links": [
+              {
+                "delta": "ZDE5ODQ=",
+                "fieldName": "title"
+              },
+              {
+                "delta": "eHBBIG1hc3RlcnBpZWNlIG9mIHJlYmVsbGlvbiBhbmQgaW1wcmlzb25tZW50IHdoZXJlIHdhciBpcyBwZWFjZSwgZnJlZWRvbSBpcyBzbGF2ZXJ5LCBhbmQgQmlnIEJyb3RoZXIgaXMgd2F0Y2hpbmcu",
+                "fieldName": "plot"
+              },
+              {
+                "delta": "aER5c3RvcGlh",
+                "fieldName": "genre"
+              }
+            ]
+          }
+        ],
+        "title": "1985"
+      }
+    ]
   }
 }
 ```
+
++ remark on cached latest state
++ trace backward to root, replay forward
+
+Time travelling queries return a single document's historical state. They cannot automatically include related documents at that same point in time.
