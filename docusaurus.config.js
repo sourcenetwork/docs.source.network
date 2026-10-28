@@ -199,6 +199,7 @@ const config = {
       "docusaurus-markdown-source-plugin",
       {
         docsPath: "/", // Show dropdown on all pages
+        aiProviders: false, // hide "Open in [chatgpt,claude,...]"
       },
     ],
     [
