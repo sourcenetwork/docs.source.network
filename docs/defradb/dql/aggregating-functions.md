@@ -399,7 +399,6 @@ When [grouping on multiple fields](group.md#multiple-fields), you can run an agg
 {
   Book(groupBy: [genre]) {
     genre
-    author { name }
     # highlight-next-line
     MAX(GROUP: { field: AVG })
     GROUP (groupBy: [author]) {
