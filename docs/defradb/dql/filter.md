@@ -573,7 +573,7 @@ It is possible to _filter_ for a JSON field's inner properties, but it's not pos
         love
       }
     }
-  {
+  }
 }
 ```
 :::
