@@ -393,7 +393,8 @@ Note how the following example result differs from the previous one only in the 
 
 ### Multiple fields {/* #multiple-fields */}
 
-When [grouping on multiple fields](group.md#multiple-fields), you can run an aggregating function _inside_ a `GROUP` sub-object, and use its output as input to another, higher-level aggregating function:
+When [grouping on multiple fields](group.md#multiple-fields), you can run an aggregating function _inside_ a `GROUP` sub-object, and use its output as input to another, higher-level aggregating function.
+For example, you can group books by genre, compute the average rating for each author (and each genre), and get the maximum of such average ratings:
 
 ```graphql title="Compute the maximum of group averages"
 {
@@ -401,7 +402,7 @@ When [grouping on multiple fields](group.md#multiple-fields), you can run an agg
     genre
     # highlight-next-line
     MAX(GROUP: { field: AVG })
-    GROUP (groupBy: [author]) {
+    GROUP(groupBy: [author]) {
       author { name }
       # highlight-next-line
       AVG(GROUP: { field: rating })
@@ -474,9 +475,6 @@ When [grouping on multiple fields](group.md#multiple-fields), you can run an agg
         ],
         // highlight-next-line
         "MAX": 4.21,
-        "author": {
-          "name": "Victor Hugo"
-        },
         "genre": "Fiction"
       },
       {
@@ -496,9 +494,6 @@ When [grouping on multiple fields](group.md#multiple-fields), you can run an agg
         ],
         // highlight-next-line
         "MAX": 4.09,
-        "author": {
-          "name": "George Orwell"
-        },
         "genre": "Memoir"
       },
       {
@@ -518,9 +513,6 @@ When [grouping on multiple fields](group.md#multiple-fields), you can run an agg
         ],
         // highlight-next-line
         "MAX": 4.18,
-        "author": {
-          "name": "David Foster Wallace"
-        },
         "genre": "Nonfiction"
       }
     ]
