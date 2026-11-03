@@ -12,7 +12,7 @@ If no order is specified for the field, the default value will be "ASC"
 
 The --vector flag makes a vector index (on a single field, never unique). Its value is the index
 config as JSON. Give the config for the algorithm you want under its own key; HNSW is the only one
-today, e.g. '{"Metric":"COSINE","Dimensions":3,"HNSW":{}}'. Metric and Dimensions are the essentials
+today, e.g. `{"Metric":"COSINE","Dimensions":3,"HNSW":{}}`. Metric and Dimensions are the essentials
 (Metric is the distance metric, one of COSINE, EUCLIDEAN or DOT; Dimensions is the vector length).
 The metric cannot be changed later without dropping and recreating the index. The HNSW tuning
 params are optional and default if omitted:
