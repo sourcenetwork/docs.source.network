@@ -128,6 +128,10 @@ Whether to include the stacktrace in error and fatal log entries. Default: `fals
 
 List of addresses for the P2P network to listen on. Default: `[/ip4/127.0.0.1/tcp/9171]`.
 
+## `net.p2pblocksynctimeout` {/* #net-p2pblocksynctimeout */}
+
+Timeout in seconds for fetching each block during P2P DAG sync. Default: `30`.
+
 ## `net.p2pdisabled` {/* #net-p2pdisabled */}
 
 Whether P2P networking is disabled. Default: `false`.
