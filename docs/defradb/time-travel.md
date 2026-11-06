@@ -2,7 +2,7 @@
 title: Explore the history of documents (time traveling queries)
 ---
 
-DefraDB's data model is based on MerkleCRDTs. Each document has a graph of all of its updates, similar to Git. The updates are called `commit`s and are identified by `cid`s (content identifiers). Each commit references its parents by their `cid`s.
+DefraDB's data model is based on MerkleCRDTs: each document has a graph of all of its updates, similar to Git. Every update creates _commits_, forming a history of changes that leads to the document's current state. The way in which commits are chained is cryptographically secure, so the structure of the chain guarantees data integrity by design.
 
 ![Commit blocks](media/commit-blocks/commit-blocks.png)
 
@@ -26,11 +26,18 @@ DefraDB's data model is based on MerkleCRDTs. Each document has a graph of all o
 
 <Tabs groupId="commits-syntax">
   <TabItem value="commits-query" label="_commits query" default>
-    ```graphql
+    ```graphql test-skip
     query {
       _commits(
-        docID: ID, cid: [ID], filter: CommitsFilterArg, depth: Int, limit: Int, offset: Int,
-        collectionVersionId: String, order: [commitsOrderArg], groupBy: [commitFields]
+        cid: [ID],
+        collectionVersionId: String,
+        depth: Int,
+        docID: ID,
+        filter: CommitsFilterArg,
+        groupBy: [commitFields],
+        limit: Int,
+        offset: Int,
+        order: [commitsOrderArg]
       ) [Commit]
     }
     ```
@@ -39,22 +46,23 @@ DefraDB's data model is based on MerkleCRDTs. Each document has a graph of all o
     - `collectionVersionId` &ndash; ID of the [collection](schema/collections.md) version that the commit targeted. Allows you to determine the state of the data model when the change was committed.
     - `depth` &ndash; Position within the chain of commits this one commit is located at (counting from the latest commit). Commits at levels _up to_ the given depth are included. `-1` returns blocks at any depth.
     - `docID` &ndash; ID of document involved in the commits.
-    - `filter` &ndash; Restrict which commit blocks to retrieve. See [filter](#filter)
+    - `filter` &ndash; Restrict which commit blocks to retrieve. See [Filter commits](#filter) for usage.
     - `groupBy` &ndash; Organize returned commits into groups. See [DQL -> Group results](dql/group.md) for usage.
     - `limit` &ndash; Maximum number of commits to return.
     - `offset` &ndash; Number of commits to skip from the return list (pagination).
+    - `order` &ndash; How to sort results. See [DQL -> Order results](dql/order.md) for usage.
   </TabItem>
   <TabItem value="commits-obj" label="Commit object">
-    ```graphql
+    ```graphql test-skip
     type Commit {
-      docID: ID
       cid: ID
-      delta: String
-      height: Int
-      fieldName: String
       collectionVersionId: String
-      links(docID, cid, filter, groupBy, order): [Commit]
+      docID: ID
+      delta: String
+      fieldName: String
       heads(docID, cid, filter, groupBy, order): [Commit]
+      height: Int
+      links(docID, cid, filter, groupBy, order): [Commit]
       signature: Signature
     }
     ```
@@ -62,21 +70,21 @@ DefraDB's data model is based on MerkleCRDTs. Each document has a graph of all o
     - `cid` &ndash; Unique identifier of a commit.
     - `collectionVersionId` &ndash; ID of the [collection](schema/collections.md) version that the commit targeted. Determines the state of the data model when the change was committed.
     - `docID` &ndash; ID of document involved in the commits.
-    - `delta` &ndash; base64 encoded CBOR payload value (the _content_ of the commit).
+    - `delta` &ndash; The content of the commit, as a base64-encoded CBOR value.
     - `fieldName` &ndash; Name of the field that this commit was committed against. The value is `"_C"` for composite blocks and null for collection blocks.
     - `heads` &ndash; Parent commits in the DAG that build the history of this piece of data. Linked blocks are at different depths, and of the same type.
-    - `height` &ndash; Location of the commit in the DAG (counting from the root commit). All commits from _add_ operations have a height of `1`;  subsequent local _update_ increments the counter by one for the new commits.
-    - `links` &ndash; Child commits in the DAG that contribute to the composition of this commit. Linked blocks are at the same depth, and of different types. Composite commits link to the field commits for the fields that the mutation altered; collection commits link to composite commits.
-    - `signature` &ndash; Commit's signature. Used to verify the commit's integrity. See [signature](security/signatures.md).
+    - `height` &ndash; Location of the commit in the DAG (counting from the root commit). All commits from _add_ operations have a height of `1`;  subsequent _updates_ increment the counter by one for new commits.
+    - `links` &ndash; Child commits in the DAG that contribute to the composition of this commit. Linked blocks are at the same depth, and of different types. Composite commits link to the field commits for the fields that the mutation altered; collection commits link to collection commits.
+    - `signature` &ndash; Commit's signature. Used to verify the commit's integrity. See [Security -> Signatures](security/signatures.md).
   </TabItem>
 </Tabs>
 
 
 ### Commits on document creation {/* #_commits-doc-create */}
 
-Create a new document to observe what commits this generates.
+Create a new document to observe what commits the operation generates.
 
-```graphql
+```graphql title='Create a new Book document'
 mutation {
   add_Book(input: {
     title: "1984",
@@ -89,7 +97,7 @@ mutation {
   "data": {
     "add_Book": [
       {
-        "_docID": "bae-53e80819-b7b4-5fc4-a681-b183b64a8262",
+        "_docID": "bae-8a8a0eca-7fe4-5ea4-964e-bbf708253d96",
         "title": "1984"
       }
     ]
@@ -97,13 +105,11 @@ mutation {
 }
 ```
 
-To retrieve the commits that resulted from the document creation, use a `_commits` query with the ID of the document.
-
-In this case, there are three commit blocks: two are for the individual fields `title` and `plot`; the third is the composite (`_C`) block, which references the field blocks through the `links` list. You can think of the composite block as a directory containing files. Each commit is uniquely identified by its `cid` field, with the `delta` field containing the data payload that was saved into the storage. In this first layer, all blocks are [signed](security/signatures.md) by the identity which submitted the query.
+To retrieve the commits that resulted from the document creation, use a `_commits` query with the ID of the created document.
 
 ```graphql
 query {
-  _commits(docID: "bae-53e80819-b7b4-5fc4-a681-b183b64a8262") {
+  _commits(docID: "bae-8a8a0eca-7fe4-5ea4-964e-bbf708253d96") {
     fieldName
     cid
     delta
@@ -124,7 +130,16 @@ query {
   }
 }
 ```
-```json result
+
+In this case, there are three commit blocks:
+
+- two are for the individual fields `title` and `plot`; 
+- the third is the composite (`_C`) block, which references the field blocks through the `links` list. You can think of the composite block as a directory containing files. 
+
+Each commit is uniquely identified by its `cid` (_Content ID_) field. The `delta` field contains the data payload that was saved into the storage. In this first layer, all blocks are [signed](security/signatures.md) by the identity who submitted the query.
+
+
+```json result title="Commit query result" test-result-skip
 {
   "data": {
     "_commits": [
@@ -186,18 +201,18 @@ query {
 
 ### Commits on document update {/* #_commits-doc-update */}
 
-When a document is updated or deleted, its commits blocks are not updated. Written commits remain unaltered (unless the document is [truncated](dql/mutation-delete.md#truncate), in which case all corresponding blocks are removed) and _more commits_ are appended to the old ones, creating a history of changes that leads to the present moment. These commit blocks create a _Directed Acyclic Graph (DAG)_. The latest version of each document is cached, so the database never has to read through the history chain to build the present version of the data: the latest version is just the tip of such history.
+When a document is updated or deleted, its commits blocks are not updated. Written commits remain unaltered (unless the document is [truncated](dql/mutation-delete.md#truncate), in which case all corresponding blocks are removed) and _more commits_ are appended to the old ones, creating a history of changes that leads to the present moment. These commit blocks create a _Directed Acyclic Graph (DAG)_.
 
-Update the previous document, adding a value for the field `genre`.
+Update the previous document, adding a value for the field `genre`, to see what blocks are appended to the history when the document is altered.
 
 ```graphql
 mutation {
   update_Book(
-    docID: "bae-53e80819-b7b4-5fc4-a681-b183b64a8262",
+    docID: "bae-8a8a0eca-7fe4-5ea4-964e-bbf708253d96",
     input: {
       genre: "Dystopia"
     }
-  ) { _docID title }
+  ) { _docID title genre }
 }
 ```
 ```json result
@@ -205,7 +220,8 @@ mutation {
   "data": {
     "update_Book": [
       {
-        "_docID": "bae-53e80819-b7b4-5fc4-a681-b183b64a8262",
+        "_docID": "bae-8a8a0eca-7fe4-5ea4-964e-bbf708253d96",
+        "genre": "Dystopia",
         "title": "1984"
       }
     ]
@@ -213,27 +229,22 @@ mutation {
 }
 ```
 
-To retrieve the commits resulting from the update mutation, pick the latest composite and fetch its linked blocks. The result shows the field block for `genre` connected to the returned top composite block, and the previous composite block in the history referenced in the `heads` list. 
-
-Blocks for the same field name at different heights build a history chain via their `heads`, each new one referencing the previous one via its `cid`. Because the `cid` is a cryptographically secure value (the hash of the whole block), the structure of the chain guarantees data integrity by itself: if any part of the data was tampered, the history chain would become invalid.
+To retrieve the commits resulting from the update mutation, select the latest composite and return its linked blocks. The result shows the `genre` field block connected to the top composite block, and the previous composite block in the history referenced in the `heads` list. 
 
 ```graphql
 query {
   _commits(
-    docID: "bae-53e80819-b7b4-5fc4-a681-b183b64a8262", 
+    docID: "bae-8a8a0eca-7fe4-5ea4-964e-bbf708253d96", 
     filter: { fieldName: { _eq: "_C" } },
     depth: 1
   ) {
     fieldName
-    cid
     height
     links {
-      cid
       fieldName
       delta
     }
     heads {
-      cid
       fieldName
     }
   }
@@ -244,19 +255,18 @@ query {
   "data": {
     "_commits": [
       {
-        "cid": "bafyreidapjfuskkddbuu5eevkf5usgv6biot7dqlmxau7g5copqr2ax6ha",
         "fieldName": "_C",
         "heads": [
           {
-            "cid": "bafyreidgr7rwyheskxqrmm6lwfacgc7vbiukenv2ppah562avd25rljkcu",
+            // highlight-next-line
             "fieldName": "_C"
           }
         ],
         "height": 2,
         "links": [
           {
-            "cid": "bafyreihqf7xoxfeqpukhzlrat3quh6qajm7zjbkvrrqvbw6poaohhqdow4",
             "delta": "aER5c3RvcGlh",
+            // highlight-next-line
             "fieldName": "genre"
           }
         ]
@@ -266,14 +276,16 @@ query {
 }
 ```
 
+>>>>>>>>>>>>>>>>>> why does genre have a null delta in tests??
+
+Blocks for the same field name at different heights build a history chain via their `heads`, each new one referencing the previous one via its `cid`. Because the `cid` is a cryptographically secure value (the hash of the whole block), **the structure of the chain guarantees data integrity by itself**: if any part of the data is tampered with, the history chain becomes invalid.
+
 :::tip
-The example above queries for the top composite blocks and fetches its links. This ensures that only blocks created as result of the latest database operation are returned.
+The example above queries for the top composite blocks and fetches its links. This ensures that only blocks created as result of the latest database operation are returned. This is different from querying for commits at `depth: 1`: such a query returns a view of the _latest state_ of the document, as it yields the top layer for blocks of all types, regardless of their `height` value.
 
-It can feel natural to query for commits at `depth: 1`. This type of query makes sense to get a view of the _latest state_ of the document, as it returns the top layer for blocks of all types, regardless of their `height` value.
-
-```graphql
+```graphql title="Get commits for document's latest state"
 query {
-  _commits(docID: "bae-1da55608-e747-572b-8271-2ef35b66520d", depth: 1) {
+  _commits(docID: "bae-8a8a0eca-7fe4-5ea4-964e-bbf708253d96", depth: 1) {
     fieldName
     height
   }
@@ -285,7 +297,7 @@ query {
     "_commits": [
       {
         "fieldName": "genre",
-        "height": 2
+        "height": 1
       },
       {
         "fieldName": "plot",
@@ -304,7 +316,7 @@ query {
 }
 ```
 
-In the example, `genre` was updated in the second query and has `height: 2` (corresponding to `depth: 1`). On the other hand, `title` and `plot` were not changed in the second query and have `height: 1`, and they are surfaced when querying for `depth: 1` because there are no blocks on top of them.
+Even if `genre` was updated in the second query, it has `height: 1` because it is the first block for the field. On the other hand, `title` and `plot` have `height: 1` because they were not changed in the second query, so there are no blocks on top of them. The top composite block has instead `height: 2`, because the current state was built over two operations.
 :::
 
 ## Filter commits {/* #filter */}
@@ -325,18 +337,17 @@ filter: {
 ```
 
 - `<scalar-operator>` &ndash; Operator to use for comparison. Supported values: `_eq`, `_neq`, `_in`, `_nin`. For more information, see [DQL -> Filter operators](dql/filter.md#scalar-operators).
-- `<field>` &ndash; Field value to filter against (`_C` for composite blocks).
+- `<field>` &ndash; Field value to filter against (`"_C"` for composite blocks, empty string `""` for collection blocks).
 
 ```graphql title='Retrieve only composite blocks at certain depth'
 query {
   _commits(
-    docID: "bae-1da55608-e747-572b-8271-2ef35b66520d",
+    docID: "bae-8a8a0eca-7fe4-5ea4-964e-bbf708253d96",
     depth: 1,
     # highlight-next-line
     filter: { fieldName: { _eq: "_C" } }
   ) {
     fieldName
-    cid
     height
   }
 }
@@ -346,7 +357,6 @@ query {
   "data": {
     "_commits": [
       {
-        "cid": "bafyreicwrhqj2hffnukwgsgabn6kvt3ugselh3jopj3hjn2h6r6jjddb7y",
         "fieldName": "_C",
         "height": 3
       }
@@ -358,13 +368,12 @@ query {
 ```graphql title='Retrieve only blocks for field "title" at certain depth'
 query {
   _commits(
-    docID: "bae-1da55608-e747-572b-8271-2ef35b66520d",
+    docID: "bae-8a8a0eca-7fe4-5ea4-964e-bbf708253d96",
     depth: 1,
     # highlight-next-line
     filter: { fieldName: { _eq: "title" } }
   ) {
     fieldName
-    cid
     height
   }
 }
@@ -374,7 +383,6 @@ query {
   "data": {
     "_commits": [
       {
-        "cid": "bafyreiaop4astmiumafndbxyxfba7n4nnkvdig6khhhs6ahd6mog3fklxi",
         "fieldName": "title",
         "height": 2
       }
@@ -400,18 +408,23 @@ filter: {
 
 - `<logical-operator>` &ndash; Logical operator to combine the list of field conditions. Supported values: `_or`, `_and`.
 - `<scalar-operator>` &ndash; Operator to use for comparison. Supported values: `_eq`, `_neq`, `_in`, `_nin`. For more information, see [DQL -> Filter operators](dql/filter.md#scalar-operators).
-- `<field>` &ndash; Field value to filter against (`_C` for composite blocks).
+- `<field>` &ndash; Field value to filter against (`"_C"` for composite blocks, empty string `""` for collection blocks).
 
 ```graphql title='Retrieve blocks for field "title" or "plot" at certain depth'
 query {
   _commits(
-    docID: "bae-1da55608-e747-572b-8271-2ef35b66520d",
+    docID: "bae-8a8a0eca-7fe4-5ea4-964e-bbf708253d96",
     depth: 1,
-    # highlight-next-line
-    filter: { _or: [{ fieldName: { _eq: "title" } }, { fieldName: { _eq: "plot" } }] }
+    # highlight-start
+    filter: {
+      _or: [
+        { fieldName: { _eq: "title" } },
+        { fieldName: { _eq: "plot" } }
+      ] 
+    }
+    # highlight-end
   ) {
     fieldName
-    cid
     height
   }
 }
@@ -421,12 +434,10 @@ query {
   "data": {
     "_commits": [
       {
-        "cid": "bafyreifgevb75flatgzvwgz5qgq6c3mb5i3sh6lw47lhkka5vv2ptkqlbe",
         "fieldName": "plot",
         "height": 2
       },
       {
-        "cid": "bafyreiaop4astmiumafndbxyxfba7n4nnkvdig6khhhs6ahd6mog3fklxi",
         "fieldName": "title",
         "height": 2
       }
@@ -437,7 +448,7 @@ query {
 
 ## Get document or field at specific commit {/* #query-by-cid */}
 
-To retrieve a document from a previous state, get the `cid` of the composite block referencing that state, and use it to query the document type.
+To retrieve a document as it was in a previous state, get the `cid` of the composite block referencing that state, and use it to query the document type.
 
 ```graphql title='Get document in the state it was at the given (composite) commit ID'
 query {
@@ -460,10 +471,14 @@ query {
 }
 ```
 
-:::note
-You can also use the commit ID of a field block, but information about other fields won't be shown. For example, querying `Book` with a `cid` relating to an update for `title` shows the field `plot` has value `null`. To include the state of all fields, use the composite commit at the same height.
+:::important
+Querying a document by its `cid` returns that single document's historical state. Any linked documents, for example via relationships, are not sourced from the same point in time.
+:::
 
-```graphql title='Get document state using cid for a specific field'
+:::note
+You can also use the `cid` of a field block, but information about other fields won't be shown. For example, querying `Book` with a `cid` relating to an update for `title` shows the field `plot` has value `null`. To include the state of all fields, use the composite commit at the same height.
+
+```graphql title='Query with a field cid does not know about other fields' test-skip
 query {
   Book(cid: "bafyreifeswomzh7doh34t6pcukrktrf4vimazuf32uywrststovczq45ua") { 
     title
@@ -487,14 +502,13 @@ query {
 
 ## Get commit history for a document {/* #query-commits-for-doc-type */}
 
-Include the `_version` sub-object in the return set to retrieve the document commit history. The whole commit chain is surfaced in this way, although it only includes composite blocks (from which you can return the related field commits by returning its `links`).
+Include the `_version` sub-object in the return set to retrieve the document commit history. The whole commit chain is surfaced in this way. Although the return only includes composite blocks, you can include the related field commits by returning the composite's `links`.
 
 ```graphql title='Retrieve document and its commit history'
 query {
   Book { 
     title
     _version {
-      cid
       fieldName
       links {
         fieldName
@@ -511,7 +525,6 @@ query {
       {
         "_version": [
           {
-            "cid": "bafyreicwrhqj2hffnukwgsgabn6kvt3ugselh3jopj3hjn2h6r6jjddb7y",
             "fieldName": "_C",
             "links": [
               {
@@ -525,7 +538,6 @@ query {
             ]
           },
           {
-            "cid": "bafyreidapjfuskkddbuu5eevkf5usgv6biot7dqlmxau7g5copqr2ax6ha",
             "fieldName": "_C",
             "links": [
               {
@@ -535,7 +547,6 @@ query {
             ]
           },
           {
-            "cid": "bafyreidgr7rwyheskxqrmm6lwfacgc7vbiukenv2ppah562avd25rljkcu",
             "fieldName": "_C",
             "links": [
               {
@@ -560,7 +571,7 @@ query {
 }
 ```
 
-+ remark on cached latest state
-+ trace backward to root, replay forward
+## Performance remarks {/* #performance */}
 
-Time travelling queries return a single document's historical state. They cannot automatically include related documents at that same point in time.
+- The latest version of each document is cached, so the database never has to read through the history chain to build the present version of the data. The performance for retrieval of a document's latest state is independent of the size of its history.
+- When a document's historical state is requested, the database follows the commit chain backwards until its root and then replays forward all the changes until the requested `cid`. The complexity of retrieving an historical state is thus proportional to the size of the document's history.
