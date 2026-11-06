@@ -129,9 +129,10 @@ Vector indexes speed up [similarity queries](/dql/similarity.md). You can create
 @index(vector: {
   name: String,
   dimensions: Int!,
-  alg: String,
+  alg: Enum,
+  maintenance: Enum,
   hnsw: {
-    metric: String,
+    metric: Enum,
     M: Int,
     efConstruction: Int,
     efSearch: Int
@@ -143,6 +144,7 @@ Default: concatenation of _collection name, field name_.
 - `dimensions` &ndash; Number of vector entries.
 - `alg` &ndash; Algorithm backing the vector index.  
 Possible values: `hnsw` (default).
+- `maintenance` &ndash; When to apply index changes: `SYNC` (default) applies changes during the documents write transaction; `DEFERRED` records changes in a pending list and delegates the index writing to a later background operation (index searches write the pending list, so committed writes are searchable right away).
 - `hnsw` &ndash; Configuration map if `alg` is `hnsw`.
   - `metric` &ndash; Metric to calculate vector distances.  
   Possible values: `COSINE` (default), `EUCLIDEAN`, `DOT`.
@@ -152,11 +154,15 @@ Possible values: `hnsw` (default).
 
 ### Examples {/* #vector-examples */}
 
-```graphql title="Create a vector index on book title and plot"
+```graphql title="Create a vector index on book title and plot" test-setup-collection
 type Book {
   title: String!
   plot: String
-  about_v: [Float32!] @index(vector: {dimensions: 768, hnsw: {metric: COSINE}})
+  about_v: [Float32!] @index(vector: {
+    dimensions: 768,
+    maintenance: DEFERRED,
+    hnsw: { metric: COSINE }
+  })
 }
 ```
 
