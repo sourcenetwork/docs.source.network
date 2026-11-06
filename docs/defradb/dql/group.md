@@ -319,7 +319,6 @@ To create groups basing on the value of multiple fields, you have two options:
 {
   Book(groupBy: [genre]) {
     genre
-    author { name }
     # highlight-next-line
     GROUP(groupBy: [author]) {
       author { name }
@@ -378,9 +377,6 @@ To create groups basing on the value of multiple fields, you have two options:
             }
           }
         ],
-        "author": {
-          "name": "Victor Hugo"
-        },
         "genre": "Fiction"
       },
       {
@@ -396,9 +392,6 @@ To create groups basing on the value of multiple fields, you have two options:
             }
           }
         ],
-        "author": {
-          "name": "George Orwell"
-        },
         "genre": "Memoir"
       },
       {
@@ -414,9 +407,6 @@ To create groups basing on the value of multiple fields, you have two options:
             }
           }
         ],
-        "author": {
-          "name": "David Foster Wallace"
-        },
         "genre": "Nonfiction"
       }
     ]
