@@ -247,11 +247,11 @@ filter: {
     # highlight-start
     filter: {
       _or: [
-	{ genre: { _eq: "Fiction" } },
-	{ _and: [
-	  { rating: { _geq: 4 } },
-	  { rating: { _leq: 5 } },
-	] },
+        { genre: { _eq: "Fiction" } },
+	      { _and: [
+	        { rating: { _geq: 4 } },
+	        { rating: { _leq: 5 } },
+	      ] },
       ]
     }
     # highlight-end
@@ -573,7 +573,7 @@ It is possible to _filter_ for a JSON field's inner properties, but it's not pos
         love
       }
     }
-  {
+  }
 }
 ```
 :::

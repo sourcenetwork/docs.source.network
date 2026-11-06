@@ -9,14 +9,14 @@ By default, every collection has an index on the `_docID` property and on `@prim
 The `@index` directive allows you to set up further indexes on selected properties when creating a collection.
 
 DefraDB supports two types of indexes:
-- **[Ordered indexes](#ordered-indexes)** &ndash; Faster search for one or more document fields.
-- **[Vector indexes](#vector-indexes)** &ndash; Similarity queries for vector embeddings.
+- [Ordered indexes](#ordered-indexes) &ndash; Faster search for one or more document fields.
+- [Vector indexes](#vector-indexes) &ndash; Similarity queries for vector embeddings.
 
 ## Ordered indexes {/* #ordered-indexes */}
 
 ### Syntax {/* #ordered-syntax */}
 
-```graphql title="Syntax &ndash; Ordered @index directive"
+```graphql title="Syntax &ndash; Ordered @index directive" test-skip
 @index(ordered: {
   name: String,
   unique: Boolean,
@@ -41,27 +41,27 @@ The syntax `@index(kind: ordered)` is a shorthand for creating an ordered index 
 
 To create an index for a specific field, use the `@index` directive on the field when creating the collection.
 
-```graphql title='Index the "title" property using default values'
+```graphql title='Index the "title" property using default values' test-setup-collection
 type Book {
   # highlight-next-line
-  title: String @index(kind: ordered)
+  title: String @index
 }
 ```
 
-```graphql title='Index multiple properties, individually, overriding defaults for "name"'
+```graphql title='Index multiple properties, individually, overriding defaults for "name"' test-setup-collection
 type Book {
   # highlight-next-line
-  title: String @index(ordered: {name: "book_title"})
+  title: String @index(name: "book_title")
   # highlight-next-line
-  plot: String @index(ordered: {name: "book_plot"})
+  plot: String @index(name: "book_plot")
 }
 ```
 
-```graphql title="Index a relationship property"
+```graphql title="Index a relationship property" test-setup-collection
 type Book {
     title: String
     # highlight-next-line
-    author: Person @primary @index(kind: ordered)
+    author: Person @primary @index
 }
 
 type Person {
@@ -74,7 +74,7 @@ type Person {
 
 An indexed unique field ensures that no two documents have the same value for one field. Multiple documents can have the `null` value for a unique field.
 
-```graphql title="Index the title property and enforce value uniqueness"
+```graphql title="Index the title property and enforce value uniqueness" test-setup-collection
 type Book {
 # highlight-next-line
   title: String @index(ordered: {unique: true})
@@ -89,7 +89,7 @@ Unique indexes are used under the hood to enforce [one-to-one relationships](col
 
 To create an index on the combination of multiple fields (composite index), use the `@index` directive at the collection level.
 
-```graphql title="Index for (genre, author)"
+```graphql title="Index for (genre, author)" test-setup-collection
 # highlight-start
 type Book @index(ordered: {
   includes: [{ field: "genre" }, { field: "author" }]
@@ -125,13 +125,14 @@ Vector indexes speed up [similarity queries](/dql/similarity.md). You can create
 
 ### Syntax {/* #vector-syntax */}
 
-```graphql title="Syntax &ndash; Vector @index directive"
+```graphql title="Syntax &ndash; Vector @index directive" test-skip
 @index(vector: {
   name: String,
   dimensions: Int!,
-  alg: String,
+  alg: Enum,
+  maintenance: Enum,
   hnsw: {
-    metric: String,
+    metric: Enum,
     M: Int,
     efConstruction: Int,
     efSearch: Int
@@ -143,6 +144,7 @@ Default: concatenation of _collection name, field name_.
 - `dimensions` &ndash; Number of vector entries.
 - `alg` &ndash; Algorithm backing the vector index.  
 Possible values: `hnsw` (default).
+- `maintenance` &ndash; When to apply index changes: `SYNC` (default) applies changes during the documents write transaction; `DEFERRED` records changes in a pending list and delegates the index writing to a later background operation (index searches write the pending list, so committed writes are searchable right away).
 - `hnsw` &ndash; Configuration map if `alg` is `hnsw`.
   - `metric` &ndash; Metric to calculate vector distances.  
   Possible values: `COSINE` (default), `EUCLIDEAN`, `DOT`.
@@ -152,11 +154,15 @@ Possible values: `hnsw` (default).
 
 ### Examples {/* #vector-examples */}
 
-```graphql title="Create a vector index on book title and plot"
+```graphql title="Create a vector index on book title and plot" test-setup-collection
 type Book {
   title: String!
   plot: String
-  about_v: [Float32!] @index(vector: {dimensions: 768, hnsw: {metric: COSINE}})
+  about_v: [Float32!] @index(vector: {
+    dimensions: 768,
+    maintenance: DEFERRED,
+    hnsw: { metric: COSINE }
+  })
 }
 ```
 

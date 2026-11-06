@@ -199,6 +199,8 @@ const config = {
       "docusaurus-markdown-source-plugin",
       {
         docsPath: "/", // Show dropdown on all pages
+        aiProviders: false, // hide "Open in [chatgpt,claude,...]"
+        llmsTxt: false, // disable generation of llms.txt as there is another plugin
       },
     ],
     [
@@ -274,7 +276,10 @@ const config = {
         lastVersion: "current",
         versions: {
           current: {
-            label: "1.1 (Latest)",
+            label: "1.2 (Latest)",
+          },
+          "1.1": {
+            banner: "none"
           },
           "1.0": {
             banner: "none"
