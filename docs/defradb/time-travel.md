@@ -107,7 +107,7 @@ mutation {
 
 To retrieve the commits that resulted from the document creation, use a `_commits` query with the ID of the created document.
 
-```graphql
+```graphql test-result-skip
 query {
   _commits(docID: "bae-8a8a0eca-7fe4-5ea4-964e-bbf708253d96") {
     fieldName
@@ -139,7 +139,7 @@ In this case, there are three commit blocks:
 Each commit is uniquely identified by its `cid` (_Content ID_) field. The `delta` field contains the data payload that was saved into the storage. In this first layer, all blocks are [signed](security/signatures.md) by the identity who submitted the query.
 
 
-```json result title="Commit query result" test-result-skip
+```json result title="Commit query result"
 {
   "data": {
     "_commits": [
@@ -276,8 +276,6 @@ query {
 }
 ```
 
->>>>>>>>>>>>>>>>>> why does genre have a null delta in tests??
-
 Blocks for the same field name at different heights build a history chain via their `heads`, each new one referencing the previous one via its `cid`. Because the `cid` is a cryptographically secure value (the hash of the whole block), **the structure of the chain guarantees data integrity by itself**: if any part of the data is tampered with, the history chain becomes invalid.
 
 :::tip
@@ -358,7 +356,7 @@ query {
     "_commits": [
       {
         "fieldName": "_C",
-        "height": 3
+        "height": 2
       }
     ]
   }
@@ -384,7 +382,7 @@ query {
     "_commits": [
       {
         "fieldName": "title",
-        "height": 2
+        "height": 1
       }
     ]
   }
@@ -435,11 +433,11 @@ query {
     "_commits": [
       {
         "fieldName": "plot",
-        "height": 2
+        "height": 1
       },
       {
         "fieldName": "title",
-        "height": 2
+        "height": 1
       }
     ]
   }
@@ -450,7 +448,7 @@ query {
 
 To retrieve a document as it was in a previous state, get the `cid` of the composite block referencing that state, and use it to query the document type.
 
-```graphql title='Get document in the state it was at the given (composite) commit ID'
+```graphql title='Get document in the state it was at the given (composite) commit ID' test-skip
 query {
   Book(cid: "bafyreidgr7rwyheskxqrmm6lwfacgc7vbiukenv2ppah562avd25rljkcu") { 
     title
@@ -528,19 +526,6 @@ query {
             "fieldName": "_C",
             "links": [
               {
-                "delta": "ZDE5ODU=",
-                "fieldName": "title"
-              },
-              {
-                "delta": "cUEgY2hlZXJmdWwgc3Rvcnku",
-                "fieldName": "plot"
-              }
-            ]
-          },
-          {
-            "fieldName": "_C",
-            "links": [
-              {
                 "delta": "aER5c3RvcGlh",
                 "fieldName": "genre"
               }
@@ -556,15 +541,11 @@ query {
               {
                 "delta": "eHBBIG1hc3RlcnBpZWNlIG9mIHJlYmVsbGlvbiBhbmQgaW1wcmlzb25tZW50IHdoZXJlIHdhciBpcyBwZWFjZSwgZnJlZWRvbSBpcyBzbGF2ZXJ5LCBhbmQgQmlnIEJyb3RoZXIgaXMgd2F0Y2hpbmcu",
                 "fieldName": "plot"
-              },
-              {
-                "delta": "aER5c3RvcGlh",
-                "fieldName": "genre"
               }
             ]
           }
         ],
-        "title": "1985"
+        "title": "1984"
       }
     ]
   }
