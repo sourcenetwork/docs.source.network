@@ -63,6 +63,7 @@ export default {
         'security/authentication',
         'security/document-access-control',
         'security/node-access-control',
+        'security/signatures',
       ]
     },
     'transactions',

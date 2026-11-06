@@ -25,7 +25,7 @@ defradb identity new
 
 ## Retrieve node identity {/* #retrieve-node-identity */}
 
-When you [start a node](./install.md#start) for the first time, an identity is automatically created (from which [the node's private keys](./references/private-keys.md) are derived). You can extract both public and private keys on an existing node.
+When you [start a node](install/index.md#start) for the first time, an identity is automatically created (from which [the node's private keys](references/keys.md) are derived). You can extract both public and private keys on an existing node.
 
 ### Public key  {/* #export-public-key */}
 
@@ -44,7 +44,7 @@ When you [start a node](./install.md#start) for the first time, an identity is a
     ```
   </TabItem>
   <TabItem value="http" label="HTTP API">
-    Retrieve a node's identity by submitting a `GET` request to the HTTP endpoint [`/node/identity`](/defradb/references/http/api/get-node-identity/). The request doesn't need to be authenticated. The node must be online.
+    Retrieve a node's identity by submitting a `GET` request to the HTTP endpoint [`/node/identity`](/defradb/references/http/api/get-node-identity/). The request doesn't need to be authenticated.
 
     ```http 
     GET http://localhost:9181/node/identity HTTP/2
@@ -61,7 +61,7 @@ When you [start a node](./install.md#start) for the first time, an identity is a
 
 ### Private keys  {/* #export-private-key */}
 
-List a node's available [private keys](./references/private-keys.md) with the CLI command [`defradb keyring list`](references/cli/defradb_keyring_list.md). The keyring is sourced from the default root directory, unless a different path is given with the option `--rootdir`.
+List a node's available [private keys](references/keys.md) with the CLI command [`defradb keyring list`](references/cli/defradb_keyring_list.md). The keyring is sourced from the default root directory, unless a different path is given with the option `--rootdir`.
 
 ```shell title="List available private keys"
 defradb keyring list
