@@ -8,7 +8,7 @@ Collections represent groups of documents with similar structures, like tables f
 
 A collection has a name (ex. `Book`) and a number of typed fields (ex. `title: String`).
 
-```graphql title='Example &ndash; Collection "Book"'
+```graphql title='Example &ndash; Collection "Book"' test-setup-collection
 type Book {
   title: String
   plot: String
@@ -45,9 +45,11 @@ An exclamation mark `!` after a type (ex. `Int!`) specifies that it should be no
 
 Specify a default value for a field with the `@default` directive. `UTC_NOW` is a special value for the current timestamp.
 
-```graphql
-active: Boolean @default(value: true)
-creation: DateTime @default(value: UTC_NOW)
+```graphql test-setup-collection
+type User {
+  active: Boolean @default(value: true)
+  creation: DateTime @default(value: UTC_NOW)
+}
 ```
 
 ### Relationships {/* #relationships */}
@@ -72,7 +74,7 @@ In practice, type `A` defines a field of type `B`, and type `B` defines a field 
 
 For example, each `Husband` is married to one `Wife` and viceversa. At least disregarding avant-garde polyamorous relationships.
 
-```graphql title='Type "Husband" with 1:1 relationship with "Wife"'
+```graphql title='Type "Husband" with 1:1 relationship with "Wife"' test-setup-collection
 type Husband {
   name: String
   wife: Wife
@@ -100,7 +102,7 @@ One-to-many relationships link one document of type `A` with one document of typ
 
 For example: each book has one author, whereas one person can author multiple books:
 
-```graphql title='Type "Book" with 1:many relationship with "Person"'
+```graphql title='Type "Book" with 1:many relationship with "Person"' test-setup-collection
 type Book {
   title: String!
   author: Person
@@ -122,7 +124,7 @@ Many-to-many relationships link multiple documents of one type to multiple docum
 
 For example: a student can enroll in many courses, and a course can have many students enrolled:
 
-```graphql title='Type "Student" with many:many relationship with "Course"'
+```graphql title='Type "Student" with many:many relationship with "Course"' test-setup-collection
 type Student {
   name: String!
   age: Int
@@ -145,7 +147,7 @@ type Enrollment {  # the join type
 
 A type defining multiple relationships to the same type requires extra directives to disambiguate their targets. For example, if a book has both an author and a reviewer, the following definitions would be ambiguous:
 
-```graphql title="Invalid &ndash; Ambiguous definition of multiple relationships" test-fail invalid
+```graphql title="Invalid &ndash; Ambiguous definition of multiple relationships" invalid test-setup-collection test-error
 type Book {
   title: String
   author: Person
@@ -161,7 +163,7 @@ type Person {
 
 At query time, the database cannot infer whether `Person.authoredBooks` is linked to `Book.author` or `Book.reviewer`. To clarify which fields should get paired, use the `@relation(name: String)` directive, coupling each relationship together with the same name:
 
-```graphql title="Valid &ndash; Unambiguous definition of multiple relationships" valid
+```graphql title="Valid &ndash; Unambiguous definition of multiple relationships" valid test-setup-collection
 type Book {
   title: String
   author: Person @relation(name: "author")

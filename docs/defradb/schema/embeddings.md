@@ -13,7 +13,7 @@ The `@embedding` directive is useful to entirely delegate the generation of embe
 
 ## Syntax {/* #syntax */}
 
-```graphql title="Syntax &ndash; @embedding directive"
+```graphql title="Syntax &ndash; @embedding directive" test-skip
 @embedding(
   fields: [String]!,
   provider: String!,
