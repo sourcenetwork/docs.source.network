@@ -22,6 +22,16 @@ function ProductVersionDropdown({
   isActive: boolean;
 }): ReactNode {
   const versions = useVersions(pluginId);
+
+  // Sort by version DESC
+  versions.sort((a, b) => {
+    if (a.label.trim().split(' ')[0] < b.label.trim().split(' ')[0]) {
+      return 1;
+    } else {
+      return -1;
+    }
+  });
+
   const itemCount =
     versions.length +
     props.dropdownItemsBefore.length +
