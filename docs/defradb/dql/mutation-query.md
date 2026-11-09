@@ -138,7 +138,7 @@ Once you have [created some documents](mutation-create.md), you can query the da
 - `order` &ndash; Results sorting fields, see [Sort results](order.md).
 - `limit`, `offset` &ndash; Number of results to return/skip, see [Limit and paginate results](limit-paginate.md).
 - `groupBy` &ndash; Fields to group results by, see [Group results](group.md).
-- `showDeleted` &ndash; Whether to include soft-deleted documents, see [Delete documents -> Soft-delete](dql/mutation-delete.md/#soft-delete).
+- `showDeleted` &ndash; Whether to include soft-deleted documents, see [Delete documents -> Soft-delete](dql/mutation-delete.md#soft-delete).
 - `[field]` &ndash; List of fields to return for the selected documents. Queries return the exact fields requested (GraphQL has no equivalent of the SQL `SELECT *` syntax).
 
 ```graphql title="Example query &ndash; Filter books by genre and author's name; return 3 ordered by title"

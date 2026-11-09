@@ -74,7 +74,7 @@ DefraDB's data model is based on MerkleCRDTs: each document has a graph of all o
     - `fieldName` &ndash; Name of the field that this commit was committed against. The value is `"_C"` for composite blocks and null for collection blocks.
     - `heads` &ndash; Parent commits in the DAG that build the history of this piece of data. Linked blocks are at different depths, and of the same type.
     - `height` &ndash; Location of the commit in the DAG (counting from the root commit). All commits from _add_ operations have a height of `1`;  subsequent _updates_ increment the counter by one for new commits.
-    - `links` &ndash; Child commits in the DAG that contribute to the composition of this commit. Linked blocks are at the same depth, and of different types. Composite commits link to the field commits for the fields that the mutation altered; collection commits link to collection commits.
+    - `links` &ndash; Child commits in the DAG that contribute to the composition of this commit. Linked blocks are at the same depth, and of different types. Composite commits link to the field commits for the fields that the mutation altered; collection commits link to composite commits.
     - `signature` &ndash; Commit's signature. Used to verify the commit's integrity. See [Security -> Signatures](security/signatures.md).
   </TabItem>
 </Tabs>
