@@ -5,8 +5,8 @@ description: How to use the delete_<type> and truncate_<TYPE> GraphQL mutations 
 
 Because the history of documents is append-only, **deletion in DefraDB works differently** than in most other databases. There's two ways of deleting a document:
 
-1. **[Soft-delete](#soft-delete)** &ndash; The deletion is registered as another record in the document history. Queries won't return deleted documents, unless the query explicitly requests them. The details of deleted documents are still available, but queries ignore their existence when retrieving results.
-2. **[Truncate](#truncate)** &ndash; Permanently delete a document, including its history.
+1. **[Soft-delete](#soft-delete)** &ndash; The deletion is registered as another record in the [document history](time-travel.md). Queries don't return deleted documents, unless the query explicitly requests them. The details of deleted documents are still available, but queries ignore their existence when retrieving results.
+2. **[Truncate](#truncate)** &ndash; Permanently delete a document, including its [commit history](time-travel.md).
 
 <details>
   <summary>Display database setup</summary>
@@ -121,9 +121,9 @@ Because the history of documents is append-only, **deletion in DefraDB works dif
 
 ## Soft-delete (`delete_TYPE` mutation) {/* #soft-delete */}
 
-### Syntax  {/* #syntax */}
+Similarly to the `update_TYPE` mutation to [update documents](mutation-update.md), you delete documents via the `delete_TYPE` mutation. The mutation returns the deleted documents. Soft-deleted documented don't appear in query results, unless the `showDeleted: true` option is provided.
 
-Similarly to the `update_TYPE` mutation to [update documents](mutation-update.md), you delete documents via the `delete_TYPE` mutation. The mutation returns the deleted documents.
+### Syntax  {/* #syntax */}
 
 ```graphql title="Syntax &ndash; Delete mutation" test-skip
 mutation {
@@ -219,6 +219,8 @@ True dystopians are however never erased. Deleted documents show up if the query
 
 ## Permanently delete (`truncate_TYPE` mutation) {/* #truncate */}
 
+Truncated documents are permanently erased from storage, alongside their [commit history](time-travel.md).
+
 ### Syntax
 
 ```graphql title="Syntax &ndash; Truncate mutation" test-skip
@@ -231,7 +233,7 @@ mutation {
 - `filter` &ndash; Criteria for selecting documents to delete (see [Filter documents](filter.md)). If filter is an empty object, **all documents are truncated**.
 
 :::note
-Only history blocks that are linked to the selected document are deleted. Blocks shared with other documents are preserved.
+Only history blocks that are linked exclusively to the selected document are deleted. Blocks shared with other documents are preserved.
 :::
 
 :::important

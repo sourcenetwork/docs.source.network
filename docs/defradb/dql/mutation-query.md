@@ -134,7 +134,7 @@ Once you have [created some documents](mutation-create.md), you can query the da
 ```
 - `TYPE` &ndash; Name of the [collection](schema/collections.md) to query.
 - `filter`, `docID` &ndash; Criteria for documents to select, see [Filter documents](filter.md).
-- `cid` &ndash; Commit identifier from which documents should be sourced, see [Explore the history of documents](time-travel.md#query-by-cid).
+- `cid` &ndash; Commit identifier from which a document should be sourced, see [Explore the history of documents](time-travel.md#query-by-cid).
 - `order` &ndash; Results sorting fields, see [Sort results](order.md).
 - `limit`, `offset` &ndash; Number of results to return/skip, see [Limit and paginate results](limit-paginate.md).
 - `groupBy` &ndash; Fields to group results by, see [Group results](group.md).

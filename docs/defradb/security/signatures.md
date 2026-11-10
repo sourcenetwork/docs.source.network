@@ -2,12 +2,12 @@
 title: Signatures
 ---
 
-Signatures allow you to track _who_ did _which_ changes, for every document.
-In the cruel life out there, anybody can trip you up and deny it was them, or alter the content of your files and deny any involvement. In DefraDB, each change is not only logged as a [commit block](time-travel.md), but also signed with the [actor's identity](security/identity.md) responsible of the database mutation.
+Signatures allow you to track _who_ did _what_, for every document.
+In the cruel life out there, anybody can trip you up and deny it was them, or alter the content of your files and blame your dog. In DefraDB, each change is not only logged as a [commit block](time-travel.md), but also signed with the [actor's identity](security/identity.md) responsible of the database mutation.
 
 ## Signature object {/* #signature-obj */}
 
-The `signature` object is available for every commit object:
+The `signature` object is available for every [`Commit` object](time-travel.md#_commits-syntax):
 
 ```graphql
 type Signature {
@@ -30,6 +30,8 @@ type Signature {
 ```
 
 ## Verify a block's signature {/* #verify */}
+
+If a block's signature is correctly verified, you have a cryptographic guarantee that the commit was authored by the identity saved in the signature.
 
 <Tabs groupId="defra">
   <TabItem value="cli" label="CLI" default>
