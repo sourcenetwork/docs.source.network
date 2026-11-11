@@ -212,6 +212,7 @@ DefraDB stores data in _documents_. You can think that a document is of a specif
 
 ## Query documents {/* #query-documents */}
 
+The DefraDB Query Language (DQL) is a rich GraphQL-based language supporting relationships, filtering, limiting, sorting, and grouping.
 The basic skeleton of a query is made of the collection you want to fetch from (ex. `Book`) and the fields you want to return (ex. `title`, `plot`).
 
 <Tabs groupId="defra">
@@ -298,28 +299,9 @@ The basic skeleton of a query is made of the collection you want to fetch from (
   </TabItem>
 </Tabs>
 
-The DefraDB Query Language (DQL) is a rich GraphQL-based language supporting relationships, filtering, limiting, sorting, and grouping.
-
-```graphql title="Example query – Filter books by genre and author's name; return 3 ordered by title"
-{
-  Book(
-    filter: {
-      genre: { _eq: "Fiction" },
-      author: { name: { _eq: "George Orwell" } }
-    },
-    limit: 3,
-    order: { "title": ASC }
-  ) {
-    title
-    plot
-    author {
-      name
-    }
-  }
-}
-```
-<UmamiEvent eventName="quickstart-complete" />
 [-> More information on querying documents](/dql/mutation-query.md)
+
+<UmamiEvent eventName="quickstart-complete" />
 
 ## Next steps {/* #next-steps */}
 
