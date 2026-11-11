@@ -307,8 +307,67 @@ The DefraDB Query Language (DQL) is a rich GraphQL-based language supporting rel
   }
 }
 ```
-<UmamiEvent eventName="quickstart-complete" />
+
 [-> More information on querying documents](/dql/mutation-query.md)
+
+## Explore the history of documents
+
+In DefraDB, each document has a tree of all of its updates: every update creates _commits_, forming a history of changes that leads to the document's current state. Because commits are linked with cryptographically secure identifiers, the structure of the chain guarantees data integrity by design. The `_version` field allows you to inspect and navigate to earlier versions of every document.
+
+```graphql
+{
+  Book(
+    filter: { title: { _eq: "1984" } }
+  ) {
+    title
+    _version {
+      fieldName
+      cid
+      height
+      links {
+        fieldName
+        delta
+      }
+    }
+  }
+}
+```
+```json result
+{
+  "data": {
+    "Book": [
+      {
+        "_version": [
+          {
+            "cid": "bafyreicnnmfpjj7gcpzhr7sdtwsyroheuy4ecev4gkaw5zqth7x7ptfyni",
+            "fieldName": "_C",
+            "height": 1,
+            "links": [
+              {
+                "delta": "ZDE5ODQ=",
+                "fieldName": "title"
+              },
+              {
+                "delta": "eHBBIG1hc3RlcnBpZWNlIG9mIHJlYmVsbGlvbiBhbmQgaW1wcmlzb25tZW50IHdoZXJlIHdhciBpcyBwZWFjZSwgZnJlZWRvbSBpcyBzbGF2ZXJ5LCBhbmQgQmlnIEJyb3RoZXIgaXMgd2F0Y2hpbmcu",
+                "fieldName": "plot"
+              },
+              {
+                "delta": "+0AQzMzMzMzN",
+                "fieldName": "rating"
+              }
+            ]
+          }
+        ],
+        "title": "1984"
+      }
+    ]
+  }
+}
+```
+
+[-> More information on time traveling queries](/time-travel.md)
+
+<UmamiEvent eventName="quickstart-complete" />
 
 ## Next steps {/* #next-steps */}
 
