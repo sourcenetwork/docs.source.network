@@ -53,6 +53,17 @@ You can interact with DefraDB in a few ways. Most actions can be run with all to
 
 Collections are the _types_ into which documents fit: they describe the database schema. You need to create collections before you can insert any data. A collection has a name and a number of typed fields.
 
+<!--
+Needed for graphql examples to be tested later, as testing doesn't run CLI/HTTP requests yet.
+```graphql test-setup-collection
+  type Book {
+    title: String!
+    plot: String
+    rating: Float
+  }
+```
+-->
+
 <Tabs groupId="defra">
   <TabItem value="cli" label="CLI" default>
     ```shell title='Create a collection named "Book"'
