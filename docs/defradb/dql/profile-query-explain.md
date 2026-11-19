@@ -4,42 +4,219 @@ title: Profile and explain queries
 
 This guide shows you how to run Explain requests in DefraDB to understand query execution and identify optimization opportunities.
 
-## Prerequisites
-
-- A running DefraDB instance
-- Access to the GraphQL API
-- An existing schema with collections (the examples use an `Author` collection)
-
-## Run a Regular Request
-
-A standard GraphQL request returns data directly from the database:
-
-```graphql
-query {
-  Author {
-    _docID
-    name
-    age
-  }
-}
-```
-
-This executes the query and returns the matching author records.
-
 ## Run a Simple Explain Request
 
 A Simple Explain request shows the execution plan without running the query. Add the `@explain` directive to your query:
 
-### Request
-
 ```graphql
 query @explain {
-  Author {
-    name
-    age
+  Book(
+    filter: { author: { name: { _like: "%vid%" } } }
+  ) {
+    title
   }
 }
 ```
+```json result
+{
+  "data": {
+    "explain": {
+      "operationNode": [
+        {
+          "selectTopNode": {
+            "selectNode": {
+              "docID": null,
+              "filter": {
+                "author": {
+                  "name": {
+                    "_like": "%vid%"
+                  }
+                }
+              },
+              "typeIndexJoin": {
+                "direction": "primary",
+                "joinType": "typeJoinOne",
+                "root": {
+                  "scanNode": {
+                    "collectionID": "bafyreidtmanygfdkfs6y56vt4ibztix6zwxrpek6qssnhmlvgd56vg7onm",
+                    "collectionName": "Book",
+                    "filter": null,
+                    "prefixes": [
+                      "/1"
+                    ]
+                  }
+                },
+                "rootName": "authoredBooks",
+                "subType": {
+                  "selectTopNode": {
+                    "selectNode": {
+                      "docID": null,
+                      "filter": null,
+                      "scanNode": {
+                        "collectionID": "bafyreigeutmlyoyydu4e2ppsge5s52xi75ao6bu35psecfejbnk4yoftwq",
+                        "collectionName": "Person",
+                        "filter": null,
+                        "prefixes": [
+                          "/2"
+                        ]
+                      }
+                    }
+                  }
+                },
+                "subTypeName": "author"
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}
+```
+
+```graphql
+query @explain {
+  Book(
+    filter: { plot: { _like: "%love%" } },
+      limit: 3,
+      order: { title: ASC }
+  ) {
+    title   
+  }
+}
+```
+```json result
+{
+  "data": {
+    "explain": {
+      "operationNode": [
+        {
+          "selectTopNode": {
+            "limitNode": {
+              "limit": 3,
+              "offset": 0,
+              "orderNode": {
+                "orderings": [
+                  {
+                    "direction": "ASC",
+                    "fields": [
+                      "title"
+                    ]
+                  }
+                ],
+                "selectNode": {
+                  "docID": null,
+                  "filter": {
+                    "plot": {
+                      "_like": "%love%"
+                    }
+                  },
+                  "scanNode": {
+                    "collectionID": "bafyreidtmanygfdkfs6y56vt4ibztix6zwxrpek6qssnhmlvgd56vg7onm",
+                    "collectionName": "Book",
+                    "filter": {
+                      "plot": {
+                        "_like": "%love%"
+                      }
+                    },
+                    "prefixes": [
+                      "/1"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}
+```
+
+with index
+
+```graphql
+query @explain {
+  Book(
+    filter: {
+      plot: {_like: "%love%"}
+    },
+      limit: 3,
+      order: {title: ASC}
+  ) {
+    title   
+  }
+}
+```
+```json result
+{
+  "data": {
+    "explain": {
+      "operationNode": [
+        {
+          "selectTopNode": {
+            "limitNode": {
+              "limit": 3,
+              "offset": 0,
+              "selectNode": {
+                "docID": null,
+                "filter": null,
+                "scanNode": {
+                  "collectionID": "bafyreidtmanygfdkfs6y56vt4ibztix6zwxrpek6qssnhmlvgd56vg7onm",
+                  "collectionName": "Book",
+                  "filter": {
+                    "plot": {
+                      "_like": "%love%"
+                    }
+                  },
+                  "indexFetches": 0,
+                  "indexLimit": null,
+                  "indexName": "Book_title_ASC",
+                  "indexOffset": 0
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}
+```
+
+```
+{
+  "data": {
+    "explain": {
+      "executionSuccess": true,
+      "operationNode": [
+        {
+          "selectTopNode": {
+            "limitNode": {
+              "iterations": 1,
+              "selectNode": {
+                "filterMatches": 0,
+                "iterations": 1,
+                "scanNode": {
+                  "docFetches": 0,
+                  "fieldFetches": 0,
+                  "indexFetches": 7,
+                  "iterations": 1
+                }
+              }
+            }
+          }
+        }
+      ],
+      "planExecutions": 2,
+      "sizeOfResult": 1
+    }
+  }
+}
+```
+
+
 
 You can also explicitly specify the type:
 
@@ -182,11 +359,3 @@ query @explain {
   }
 }
 ```
-
-Notice that the `filter` now appears in the `selectNode`, showing that the condition will be applied after scanning. If you have an index on the `age` field, the Plan Graph would show an `indexNode` instead of or alongside the `scanNode`.
-
-## Next Steps
-
-- Review the [Explain System Concepts](../concepts/explain-systems.md) to understand Plan Graph nodes and optimization strategies
-- Experiment with adding indexes to your schema and observe how the Plan Graph changes
-- Use Execute Explain to measure actual query performance before and after optimizations
