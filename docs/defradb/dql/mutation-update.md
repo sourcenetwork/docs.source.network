@@ -30,7 +30,7 @@ To remove a field from a document, set its value to `null`.
 <details>
   <summary>Display database setup</summary>
   
-  To reproduce the example results from this page, your database needs the following setup.
+  To reproduce the example results from this page, your database needs the following setup. For `docID` values to match, start the database with the `--no-keyring` option.
 
   ```graphql title="Database schema" test-setup-collection
   type Book {
