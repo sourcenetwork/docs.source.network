@@ -8,10 +8,46 @@ This guide shows you how to run Explain requests in DefraDB to understand query 
 
 A Simple Explain request shows the execution plan without running the query. Add the `@explain` directive to your query:
 
+
 ```graphql
-query @explain {
+query @explain(type: debug) {
   Book(
-    filter: { author: { name: { _like: "%vid%" } } }
+    filter: { plot: { _like: "%love%" } },
+    order: { plot: ASC },
+    limit: 1
+  ) {
+    title
+  }
+}
+```
+```json result
+{
+  "data": {
+    "explain": {
+      "operationNode": [
+        {
+          "selectTopNode": {
+            "limitNode": {
+              "orderNode": {
+                "selectNode": {
+                  "scanNode": {}
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}
+```
+
+relations
+
+```graphql
+query @explain(type: debug) {
+  Book(
+    filter: { author: { name: { _like: "%vid%" } } },
   ) {
     title
   }
@@ -25,45 +61,19 @@ query @explain {
         {
           "selectTopNode": {
             "selectNode": {
-              "docID": null,
-              "filter": {
-                "author": {
-                  "name": {
-                    "_like": "%vid%"
-                  }
-                }
-              },
               "typeIndexJoin": {
-                "direction": "primary",
-                "joinType": "typeJoinOne",
-                "root": {
-                  "scanNode": {
-                    "collectionID": "bafyreidtmanygfdkfs6y56vt4ibztix6zwxrpek6qssnhmlvgd56vg7onm",
-                    "collectionName": "Book",
-                    "filter": null,
-                    "prefixes": [
-                      "/1"
-                    ]
-                  }
-                },
-                "rootName": "authoredBooks",
-                "subType": {
-                  "selectTopNode": {
-                    "selectNode": {
-                      "docID": null,
-                      "filter": null,
-                      "scanNode": {
-                        "collectionID": "bafyreigeutmlyoyydu4e2ppsge5s52xi75ao6bu35psecfejbnk4yoftwq",
-                        "collectionName": "Person",
-                        "filter": null,
-                        "prefixes": [
-                          "/2"
-                        ]
+                "typeJoinOne": {
+                  "root": {
+                    "scanNode": {}
+                  },
+                  "subType": {
+                    "selectTopNode": {
+                      "selectNode": {
+                        "scanNode": {}
                       }
                     }
                   }
-                },
-                "subTypeName": "author"
+                }
               }
             }
           }
@@ -74,76 +84,14 @@ query @explain {
 }
 ```
 
+## simple plans
+
 ```graphql
-query @explain {
+query @explain(type: simple) {
   Book(
-    filter: { plot: { _like: "%love%" } },
+    filter: { title: { _eq: "1984" } },
       limit: 3,
       order: { title: ASC }
-  ) {
-    title   
-  }
-}
-```
-```json result
-{
-  "data": {
-    "explain": {
-      "operationNode": [
-        {
-          "selectTopNode": {
-            "limitNode": {
-              "limit": 3,
-              "offset": 0,
-              "orderNode": {
-                "orderings": [
-                  {
-                    "direction": "ASC",
-                    "fields": [
-                      "title"
-                    ]
-                  }
-                ],
-                "selectNode": {
-                  "docID": null,
-                  "filter": {
-                    "plot": {
-                      "_like": "%love%"
-                    }
-                  },
-                  "scanNode": {
-                    "collectionID": "bafyreidtmanygfdkfs6y56vt4ibztix6zwxrpek6qssnhmlvgd56vg7onm",
-                    "collectionName": "Book",
-                    "filter": {
-                      "plot": {
-                        "_like": "%love%"
-                      }
-                    },
-                    "prefixes": [
-                      "/1"
-                    ]
-                  }
-                }
-              }
-            }
-          }
-        }
-      ]
-    }
-  }
-}
-```
-
-with index
-
-```graphql
-query @explain {
-  Book(
-    filter: {
-      plot: {_like: "%love%"}
-    },
-      limit: 3,
-      order: {title: ASC}
   ) {
     title   
   }
@@ -166,14 +114,13 @@ query @explain {
                   "collectionID": "bafyreidtmanygfdkfs6y56vt4ibztix6zwxrpek6qssnhmlvgd56vg7onm",
                   "collectionName": "Book",
                   "filter": {
-                    "plot": {
-                      "_like": "%love%"
+                    "title": {
+                      "_eq": "1984"
                     }
                   },
-                  "indexFetches": 0,
-                  "indexLimit": null,
-                  "indexName": "Book_title_ASC",
-                  "indexOffset": 0
+                  "prefixes": [
+                    "/1"
+                  ]
                 }
               }
             }
@@ -184,6 +131,79 @@ query @explain {
   }
 }
 ```
+
+
+```graphql
+query @explain(type: simple) {
+  Book(
+    filter: { author: { name: { _like: "%vid%" } } },
+  ) {
+    title
+  }
+}
+```
+```json result
+{
+  "data": {
+    "explain": {
+      "operationNode": [
+        {
+          "selectTopNode": {
+            "selectNode": {
+              "docID": null,
+              "filter": {
+                "author": {
+                  "name": {
+                    "_like": "%vid%"
+                  }
+                }
+              },
+              "typeIndexJoin": {
+                "direction": "secondary",
+                "joinType": "typeJoinOne",
+                "root": {
+                  "scanNode": {
+                    "collectionID": "bafyreidtmanygfdkfs6y56vt4ibztix6zwxrpek6qssnhmlvgd56vg7onm",
+                    "collectionName": "Book",
+                    "filter": null,
+                    "prefixes": [
+                      "/1"
+                    ]
+                  }
+                },
+                "rootName": "authoredBooks",
+                "subType": {
+                  "selectTopNode": {
+                    "selectNode": {
+                      "docID": null,
+                      "filter": null,
+                      "scanNode": {
+                        "collectionID": "bafyreigeutmlyoyydu4e2ppsge5s52xi75ao6bu35psecfejbnk4yoftwq",
+                        "collectionName": "Person",
+                        "filter": {
+                          "name": {
+                            "_like": "%vid%"
+                          }
+                        },
+                        "prefixes": [
+                          "/2"
+                        ]
+                      }
+                    }
+                  }
+                },
+                "subTypeName": "author"
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}
+```
+
+## execute
 
 ```
 {
@@ -216,40 +236,6 @@ query @explain {
 }
 ```
 
-
-
-You can also explicitly specify the type:
-
-```graphql
-query @explain(type: simple) {
-  Author {
-    name
-    age
-  }
-}
-```
-
-### Response
-
-```json
-{
-  "explain": {
-    "selectTopNode": {
-      "selectNode": {
-        "filter": null,
-        "scanNode": {
-          "filter": null,
-          "collectionID": "3",
-          "collectionName": "Author",
-          "spans": [
-            { "start": "/3", "end": "/4" }
-          ]
-        }
-      }
-    }
-  }
-}
-```
 
 ### Understanding the Response
 
@@ -320,42 +306,3 @@ The Execute Explain response includes the same Plan Graph structure plus runtime
 These metrics help identify performance bottlenecks. High `iterations` or `docFetches` values relative to `filterMatches` may indicate inefficient filtering or missing indexes.
 
 > **Tip:** Execute Explain takes longer than Simple Explain because it actually runs the query. It also adds slight overhead compared to a normal query due to metric collection. Use Simple Explain for quick structural analysis and Execute Explain when you need actual performance data.
-
-## Example: Analyzing a Filtered Query
-
-Here's an example with a filter to show how the Plan Graph changes:
-
-### Request
-
-```graphql
-query @explain {
-  Author(filter: { age: { _gt: 30 } }) {
-    name
-    age
-  }
-}
-```
-
-### Response
-
-```json
-{
-  "explain": {
-    "selectTopNode": {
-      "selectNode": {
-        "filter": {
-          "age": { "_gt": 30 }
-        },
-        "scanNode": {
-          "filter": null,
-          "collectionID": "3",
-          "collectionName": "Author",
-          "spans": [
-            { "start": "/3", "end": "/4" }
-          ]
-        }
-      }
-    }
-  }
-}
-```
