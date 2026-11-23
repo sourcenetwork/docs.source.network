@@ -7,7 +7,7 @@ This guide shows you how to run Explain requests in DefraDB to understand query 
 <details>
   <summary>Display database setup</summary>
 
-  To reproduce the example results from this page, your database needs the following setup.
+  To reproduce the example results from this page, your database needs the following setup. For `docID` values to match, start the database with the `--no-keyring` option.
 
     ```graphql title="Database schema" test-setup-collection
   type Book {
@@ -183,20 +183,30 @@ query @explain(type: simple) {
             "limitNode": {
               "limit": 3,
               "offset": 0,
-              "selectNode": {
-                "docID": null,
-                "filter": null,
-                "scanNode": {
-                  "collectionID": "bafyreidtmanygfdkfs6y56vt4ibztix6zwxrpek6qssnhmlvgd56vg7onm",
-                  "collectionName": "Book",
-                  "filter": {
-                    "title": {
-                      "_eq": "1984"
-                    }
-                  },
-                  "prefixes": [
-                    "/1"
-                  ]
+              "orderNode": {
+                "orderings": [
+                  {
+                    "direction": "ASC",
+                    "fields": [
+                      "title"
+                    ]
+                  }
+                ],
+                "selectNode": {
+                  "docID": null,
+                  "filter": null,
+                  "scanNode": {
+                    "collectionID": "bafyreidtmanygfdkfs6y56vt4ibztix6zwxrpek6qssnhmlvgd56vg7onm",
+                    "collectionName": "Book",
+                    "filter": {
+                      "title": {
+                        "_eq": "1984"
+                      }
+                    },
+                    "prefixes": [
+                      "/1"
+                    ]
+                  }
                 }
               }
             }
@@ -234,7 +244,7 @@ query @explain(type: simple) {
                 }
               },
               "typeIndexJoin": {
-                "direction": "secondary",
+                "direction": "primary",
                 "joinType": "typeJoinOne",
                 "root": {
                   "scanNode": {
@@ -255,11 +265,7 @@ query @explain(type: simple) {
                       "scanNode": {
                         "collectionID": "bafyreigeutmlyoyydu4e2ppsge5s52xi75ao6bu35psecfejbnk4yoftwq",
                         "collectionName": "Person",
-                        "filter": {
-                          "name": {
-                            "_like": "%vid%"
-                          }
-                        },
+                        "filter": null,
                         "prefixes": [
                           "/2"
                         ]
